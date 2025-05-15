@@ -1,0 +1,172 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Services', href: '/services' }
+];
+
+const services = [
+  {
+    title: "General & Preventive",
+    items: [
+      { 
+        title: "Dental Checkup",
+        description: "Comprehensive examination and cleaning to maintain oral health.",
+        url: "/services/dental-checkup"
+      },
+      { 
+        title: "Emergency Dentist",
+        description: "Immediate care for dental emergencies and severe pain.",
+        url: "/services/emergency-dentist"
+      },
+      { 
+        title: "Kid Friendly Dentist",
+        description: "Specialized dental care for children in a comfortable environment.",
+        url: "/services/kid-friendly-dentist"
+      }
+    ]
+  },
+  {
+    title: "Cosmetic Dentistry",
+    items: [
+      { 
+        title: "Teeth Whitening",
+        description: "Professional whitening treatments for a brighter smile.",
+        url: "/services/teeth-whitening"
+      },
+      { 
+        title: "Dental Veneers",
+        description: "Custom-made shells to improve tooth appearance.",
+        url: "/services/dental-veneers"
+      },
+      { 
+        title: "Dental Laminates",
+        description: "Ultra-thin porcelain shells for cosmetic enhancement.",
+        url: "/services/dental-laminates"
+      },
+      { 
+        title: "Smile Makeover",
+        description: "Comprehensive treatment plan for smile transformation.",
+        url: "/services/smile-makeover"
+      },
+      { 
+        title: "Zoom Teeth Whitening",
+        description: "Advanced in-office whitening system.",
+        url: "/services/zoom-teeth-whitening"
+      },
+      { 
+        title: "Lumineers",
+        description: "Ultra-thin veneers requiring minimal preparation.",
+        url: "/services/lumineers"
+      },
+      { 
+        title: "Snap-On Smile",
+        description: "Removable dental appliance for instant smile enhancement.",
+        url: "/services/snap-on-smile"
+      }
+    ]
+  },
+  {
+    title: "Restorative Dentistry",
+    items: [
+      { 
+        title: "Dental Implants",
+        description: "Permanent replacement for missing teeth.",
+        url: "/services/dental-implants"
+      },
+      { 
+        title: "Dental Crowns",
+        description: "Custom-made caps to restore damaged teeth.",
+        url: "/services/dental-crowns"
+      },
+      { 
+        title: "Dental Bridges",
+        description: "Fixed prosthetics to replace missing teeth.",
+        url: "/services/dental-bridges"
+      },
+      { 
+        title: "Dentures",
+        description: "Removable replacements for missing teeth.",
+        url: "/services/dentures"
+      },
+      { 
+        title: "Partial Dentures",
+        description: "Removable appliances for multiple missing teeth.",
+        url: "/services/partial-dentures"
+      },
+      { 
+        title: "Root Canal Treatment",
+        description: "Procedure to save infected or damaged teeth.",
+        url: "/services/root-canal-treatment"
+      },
+      { 
+        title: "Full Mouth Reconstruction",
+        description: "Complete restoration of all teeth.",
+        url: "/services/full-mouth-reconstruction"
+      }
+    ]
+  },
+  {
+    title: "Specialty Services",
+    items: [
+      { 
+        title: "Invisalign",
+        description: "Clear aligners for discreet teeth straightening.",
+        url: "/services/invisalign"
+      },
+      { 
+        title: "Laser Dentistry",
+        description: "Advanced treatments using dental lasers.",
+        url: "/services/laser-dentistry"
+      }
+    ]
+  }
+];
+---
+
+<Layout 
+  title="Our Dental Services | Smile Dental Clinic"
+  description="Comprehensive dental services including general, cosmetic, and restorative treatments for the whole family."
+>
+  <Hero 
+    title="Our Services"
+    subtitle="Comprehensive dental care for you and your family"
+    imageUrl="https://images.pexels.com/photos/3845729/pexels-photo-3845729.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <div class="py-12">
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">Comprehensive Dental Care</h2>
+        <p class="text-neutral-600">
+          From routine checkups to advanced procedures, we provide a full range of dental services to meet your needs.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {services.map(category => (
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">{category.title}</h3>
+            <ul class="space-y-3">
+              {category.items.map(service => (
+                <li>
+                  <a 
+                    href={service.url}
+                    class="block p-3 rounded-lg hover:bg-primary-50 transition-colors"
+                  >
+                    <div class="font-medium text-primary-600">{service.title}</div>
+                    <p class="text-sm text-neutral-600 mt-1">{service.description}</p>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>

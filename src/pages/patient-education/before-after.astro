@@ -1,0 +1,188 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Before & After Gallery', href: '/patient-education/before-after' }
+];
+
+const cases = [
+  {
+    title: "Invisalign Treatment",
+    description: "Correction of crowded teeth using Invisalign clear aligners over 18 months.",
+    before: "https://images.pexels.com/photos/3845548/pexels-photo-3845548.jpeg",
+    after: "https://images.pexels.com/photos/3845552/pexels-photo-3845552.jpeg",
+    treatment: "Invisalign Clear Aligners",
+    duration: "18 months"
+  },
+  {
+    title: "Dental Implants",
+    description: "Replacement of missing teeth with dental implants and crowns.",
+    before: "https://images.pexels.com/photos/3845557/pexels-photo-3845557.jpeg",
+    after: "https://images.pexels.com/photos/3845559/pexels-photo-3845559.jpeg",
+    treatment: "Dental Implants & Crowns",
+    duration: "6 months"
+  },
+  {
+    title: "Teeth Whitening",
+    description: "Professional teeth whitening treatment for a brighter smile.",
+    before: "https://images.pexels.com/photos/3845561/pexels-photo-3845561.jpeg",
+    after: "https://images.pexels.com/photos/3845563/pexels-photo-3845563.jpeg",
+    treatment: "Zoom! Whitening",
+    duration: "1 session"
+  }
+];
+---
+
+<Layout 
+  title="Before & After Gallery | Patient Education | Smile Dental Clinic"
+  description="View our gallery of dental transformations. See real results from our treatments."
+>
+  <Hero 
+    title="Before & After Gallery"
+    subtitle="Real results from real patients"
+    imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <div class="py-12">
+      <div class="max-w-3xl mx-auto text-center mb-12">
+        <h2 class="text-3xl font-bold mb-4">Treatment Results</h2>
+        <p class="text-neutral-600">
+          Browse our gallery of dental transformations to see the real results we achieve for our patients.
+        </p>
+      </div>
+      
+      <div class="space-y-16">
+        {cases.map((item, index) => (
+          <div class="bg-white p-8 rounded-lg shadow-md">
+            <h3 class="text-2xl font-bold mb-4">{item.title}</h3>
+            <p class="text-neutral-600 mb-6">{item.description}</p>
+            
+            <div class="before-after-container relative h-[400px] rounded-lg overflow-hidden mb-6">
+              <div class="swiper-container before-after-slider-{index} h-full">
+                <div class="swiper-wrapper">
+                  <div class="swiper-slide">
+                    <img 
+                      src={item.before} 
+                      alt={`Before ${item.title}`}
+                      class="w-full h-full object-cover"
+                    />
+                    <div class="absolute top-4 left-4 bg-black/75 text-white px-4 py-1 rounded-full text-sm">
+                      Before
+                    </div>
+                  </div>
+                  <div class="swiper-slide">
+                    <img 
+                      src={item.after} 
+                      alt={`After ${item.title}`}
+                      class="w-full h-full object-cover"
+                    />
+                    <div class="absolute top-4 left-4 bg-primary-600 text-white px-4 py-1 rounded-full text-sm">
+                      After
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Navigation -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                
+                <!-- Pagination -->
+                <div class="swiper-pagination"></div>
+              </div>
+            </div>
+            
+            <div class="flex flex-wrap gap-4">
+              <div class="bg-neutral-100 px-4 py-2 rounded-full">
+                <span class="font-medium">Treatment:</span> {item.treatment}
+              </div>
+              <div class="bg-neutral-100 px-4 py-2 rounded-full">
+                <span class="font-medium">Duration:</span> {item.duration}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+      
+      <div class="bg-primary-50 p-8 rounded-lg mt-12 text-center">
+        <h2 class="text-2xl font-bold mb-4">Ready to Transform Your Smile?</h2>
+        <p class="text-neutral-600 mb-6">
+          Schedule a consultation to discuss how we can help you achieve your dream smile.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors">
+            Book Consultation
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script is:inline src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  window.addEventListener('load', () => {
+    // Initialize Swiper for each before/after slider
+    document.querySelectorAll('[class^="before-after-slider-"]').forEach((element, index) => {
+      new Swiper(`.before-after-slider-${index}`, {
+        effect: 'fade',
+        fadeEffect: {
+          crossFade: true
+        },
+        loop: true,
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+        autoplay: {
+          delay: 3000,
+          disableOnInteraction: false,
+        },
+      });
+    });
+  });
+</script>
+
+<style>
+  .before-after-container {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  .swiper-button-next:after,
+  .swiper-button-prev:after {
+    font-size: 20px;
+  }
+
+  .swiper-pagination-bullet {
+    background: #fff;
+    opacity: 0.5;
+  }
+
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+    background: #fff;
+  }
+</style>

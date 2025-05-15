@@ -1,0 +1,143 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Root Canal Guide', href: '/patient-education/root-canal-guide' }
+];
+---
+
+<Layout 
+  title="Root Canal Treatment Guide | Patient Education | Smile Dental Clinic"
+  description="Comprehensive guide to root canal treatment. Learn what to expect, recovery tips, and aftercare instructions."
+>
+  <Hero 
+    title="Root Canal Treatment Guide"
+    subtitle="Everything you need to know about root canal therapy"
+    imageUrl="https://images.pexels.com/photos/3779709/pexels-photo-3779709.jpeg"
+    buttonText=""
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Understanding Root Canal Treatment</h2>
+        <p class="text-neutral-600 mb-4">
+          A root canal is a dental procedure that removes infected or damaged pulp from inside a tooth. Despite its reputation, modern root canal treatment is relatively comfortable and similar to getting a routine filling.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">When It's Needed</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Severe tooth decay</li>
+              <li>• Deep cracks or chips</li>
+              <li>• Repeated dental procedures</li>
+              <li>• Trauma to the tooth</li>
+              <li>• Abscess formation</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Common Symptoms</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Severe toothache</li>
+              <li>• Temperature sensitivity</li>
+              <li>• Gum swelling</li>
+              <li>• Darkening of tooth</li>
+              <li>• Pain when chewing</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">The Treatment Process</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">1.</span>
+              <div>
+                <strong>Diagnosis and Planning</strong>
+                <p class="text-neutral-600">X-rays and examination to assess the extent of damage.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">2.</span>
+              <div>
+                <strong>Preparation</strong>
+                <p class="text-neutral-600">Local anesthesia administration and isolation of the tooth.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">3.</span>
+              <div>
+                <strong>Cleaning Process</strong>
+                <p class="text-neutral-600">Removal of infected pulp and cleaning of root canals.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">4.</span>
+              <div>
+                <strong>Filling</strong>
+                <p class="text-neutral-600">Sealing the canals with special material.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">5.</span>
+              <div>
+                <strong>Final Restoration</strong>
+                <p class="text-neutral-600">Placement of permanent crown or filling.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Recovery and Aftercare</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">What to Expect</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Mild discomfort</li>
+              <li>• Temporary sensitivity</li>
+              <li>• Normal activities next day</li>
+              <li>• Full healing in days</li>
+              <li>• Long-term success</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Care Instructions</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Take prescribed medications</li>
+              <li>• Avoid hard foods</li>
+              <li>• Practice good oral hygiene</li>
+              <li>• Follow-up appointments</li>
+              <li>• Report unusual symptoms</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Have Questions About Root Canal Treatment?</h2>
+        <p class="text-neutral-600 mb-6">
+          Our experienced team is here to answer your questions and ensure you're comfortable with the procedure.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Schedule Consultation
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

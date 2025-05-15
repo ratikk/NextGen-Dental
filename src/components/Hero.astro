@@ -1,0 +1,40 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  buttonText?: string;
+  buttonUrl?: string;
+  imageUrl?: string;
+}
+
+const { 
+  title, 
+  subtitle = "", 
+  buttonText = "Book Appointment", 
+  buttonUrl = "/book-appointment",
+  imageUrl = "https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+} = Astro.props;
+---
+
+<section class="relative bg-neutral-800 text-white overflow-hidden">
+  <div class="absolute inset-0">
+    <img 
+      src={imageUrl} 
+      alt="Dental care professionals"
+      class="object-cover w-full h-full opacity-40"
+      width="1600"
+      height="800"
+    />
+    <div class="absolute inset-0 bg-gradient-to-r from-primary-900/80 to-primary-800/50 mix-blend-multiply"></div>
+  </div>
+  
+  <div class="container mx-auto px-4 py-24 md:py-32 relative z-10">
+    <div class="max-w-3xl">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
+      {subtitle && <p class="text-xl mb-8 text-white/90">{subtitle}</p>}
+      {buttonText && <a href={buttonUrl} class="inline-block bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
+        {buttonText}
+      </a>}
+    </div>
+  </div>
+</section>

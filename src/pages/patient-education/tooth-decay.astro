@@ -1,0 +1,143 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Tooth Decay', href: '/patient-education/tooth-decay' }
+];
+---
+
+<Layout 
+  title="Understanding Tooth Decay | Patient Education | Smile Dental Clinic"
+  description="Learn about the causes, prevention, and treatment of tooth decay. Get expert information on maintaining healthy teeth."
+>
+  <Hero 
+    title="Understanding Tooth Decay"
+    subtitle="Learn about causes, prevention, and treatment options"
+    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+    buttonText=""
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">What is Tooth Decay?</h2>
+        <p class="text-neutral-600 mb-4">
+          Tooth decay is damage to a tooth's surface, or enamel, that occurs when bacteria in your mouth create acids that eat away at the tooth. If left untreated, these tiny holes in your teeth (cavities) can lead to bigger problems.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Common Signs</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Toothache</li>
+              <li>• Sensitivity to hot/cold</li>
+              <li>• Visible holes</li>
+              <li>• Dark spots</li>
+              <li>• Pain when biting</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Risk Factors</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Poor oral hygiene</li>
+              <li>• Frequent snacking</li>
+              <li>• Sugary drinks</li>
+              <li>• Dry mouth</li>
+              <li>• Lack of fluoride</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Stages of Tooth Decay</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">1.</span>
+              <div>
+                <strong>Initial Demineralization</strong>
+                <p class="text-neutral-600">White spots appear as enamel loses minerals.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">2.</span>
+              <div>
+                <strong>Enamel Decay</strong>
+                <p class="text-neutral-600">The enamel begins to break down.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">3.</span>
+              <div>
+                <strong>Dentin Decay</strong>
+                <p class="text-neutral-600">Decay reaches the softer layer beneath enamel.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">4.</span>
+              <div>
+                <strong>Pulp Involvement</strong>
+                <p class="text-neutral-600">Infection reaches the tooth's nerve center.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">5.</span>
+              <div>
+                <strong>Abscess Formation</strong>
+                <p class="text-neutral-600">Infection spreads beyond the root.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Prevention and Treatment</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Prevention</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Brush twice daily</li>
+              <li>• Floss regularly</li>
+              <li>• Use fluoride products</li>
+              <li>• Limit sugary foods</li>
+              <li>• Regular checkups</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Treatment Options</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Fluoride treatments</li>
+              <li>• Fillings</li>
+              <li>• Crowns</li>
+              <li>• Root canals</li>
+              <li>• Extractions</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Protect Your Teeth</h2>
+        <p class="text-neutral-600 mb-6">
+          Early detection and treatment of tooth decay can prevent more serious dental problems. Schedule a checkup today.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Schedule Checkup
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

@@ -1,0 +1,195 @@
+#####################################################
+# Nginx Configuration for Smile Dental Clinic Website
+#####################################################
+
+# Define the user that will run the nginx processes
+user www-data;
+
+# Set number of worker processes based on CPU cores
+worker_processes auto;
+
+# Default error log location
+error_log /var/log/nginx/error.log warn;
+
+# Define where nginx should store its main process ID
+pid /var/run/nginx.pid;
+
+# Events block defines the parameters for connection processing
+events {
+    worker_connections 1024;  # Maximum number of connections per worker
+}
+
+# HTTP block contains most of the settings
+http {
+    # Basic settings
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    # Logging format for access logs
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+    access_log /var/log/nginx/access.log main;
+
+    # Optimizations
+    sendfile on;                   # Efficiently serve static files
+    tcp_nopush on;                 # Optimize data packet transmission
+    tcp_nodelay on;                # Disable Nagle's algorithm
+    keepalive_timeout 65;          # Connection timeout
+    types_hash_max_size 2048;      # Size of the types hash tables
+
+    # SSL configuration
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Enable OCSP stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+    resolver 8.8.8.8 8.8.4.4 valid=300s;
+    resolver_timeout 5s;
+
+    # Add HSTS header
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload";
+    
+    # Security headers
+    add_header X-Content-Type-Options nosniff;
+    add_header X-Frame-Options SAMEORIGIN;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header Content-Security-Policy "default-src 'self'; script-src 'self' https://www.google.com https://www.gstatic.com; img-src 'self' data: https://*.pexels.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; connect-src 'self'; frame-src https://www.google.com; object-src 'none'";
+    add_header Referrer-Policy strict-origin-when-cross-origin;
+    
+    # Enable gzip compression
+    gzip on;
+    gzip_comp_level 5;
+    gzip_min_length 256;
+    gzip_proxied any;
+    gzip_vary on;
+    gzip_types
+        application/atom+xml
+        application/javascript
+        application/json
+        application/ld+json
+        application/manifest+json
+        application/rss+xml
+        application/vnd.geo+json
+        application/vnd.ms-fontobject
+        application/x-font-ttf
+        application/x-web-app-manifest+json
+        application/xhtml+xml
+        application/xml
+        font/opentype
+        image/bmp
+        image/svg+xml
+        image/x-icon
+        text/cache-manifest
+        text/css
+        text/plain
+        text/vcard
+        text/vnd.rim.location.xloc
+        text/vtt
+        text/x-component
+        text/x-cross-domain-policy;
+
+    # Rate limiting zone definitions
+    limit_req_zone $binary_remote_addr zone=api_limit:10m rate=10r/s;
+    
+    # Main website server configuration
+    server {
+        listen 80;
+        server_name smiledentalclinic.com www.smiledentalclinic.com;
+        
+        # Redirect all HTTP requests to HTTPS
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+    
+    # HTTPS server configuration
+    server {
+        listen 443 ssl http2;
+        server_name smiledentalclinic.com www.smiledentalclinic.com;
+
+        # SSL certificates
+        ssl_certificate /etc/letsencrypt/live/smiledentalclinic.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/smiledentalclinic.com/privkey.pem;
+        
+        # Document root
+        root /var/www/smiledentalclinic.com/dist;
+        
+        # Index files
+        index index.html;
+        
+        # Favicon handling
+        location = /favicon.ico {
+            access_log off;
+            log_not_found off;
+        }
+        
+        # Robots.txt handling
+        location = /robots.txt {
+            access_log off;
+            log_not_found off;
+        }
+        
+        # Main location block for frontend assets
+        location / {
+            # Try to serve the requested URI, or fall back to index.html for SPA routing
+            try_files $uri $uri/ /index.html;
+            
+            # Cache static assets
+            location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$ {
+                expires 30d;
+                add_header Cache-Control "public, max-age=2592000";
+                access_log off;
+            }
+            
+            # Don't cache HTML files
+            location ~* \.html$ {
+                add_header Cache-Control "no-cache, no-store, must-revalidate";
+                add_header Pragma "no-cache";
+                add_header Expires "0";
+            }
+        }
+        
+        # API endpoint rate limiting
+        location /api/ {
+            # Apply rate limiting
+            limit_req zone=api_limit burst=20 nodelay;
+            
+            # Proxy to backend API server
+            proxy_pass http://localhost:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_cache_bypass $http_upgrade;
+        }
+        
+        # Media upload endpoint - strict rate limiting
+        location /api/media-upload {
+            limit_req zone=api_limit burst=5 nodelay;
+            proxy_pass http://localhost:3000;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_cache_bypass $http_upgrade;
+            
+            # Limit file size for uploads
+            client_max_body_size 10M;
+        }
+        
+        # Error pages
+        error_page 404 /404.html;
+        error_page 500 502 503 504 /50x.html;
+    }
+}

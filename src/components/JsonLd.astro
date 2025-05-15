@@ -1,0 +1,43 @@
+---
+import type { WithContext, DentistOrganization } from 'schema-dts';
+import clinicInfo from '../utils/clinicInfo';
+
+const schema: WithContext<DentistOrganization> = {
+  "@context": "https://schema.org",
+  "@type": "Dentist",
+  "name": clinicInfo.name,
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": clinicInfo.address.street,
+    "addressLocality": clinicInfo.address.city,
+    "addressRegion": clinicInfo.address.state,
+    "postalCode": clinicInfo.address.zip,
+    "addressCountry": clinicInfo.address.country
+  },
+  "telephone": clinicInfo.contact.phone,
+  "email": clinicInfo.contact.email,
+  "openingHours": Object.entries(clinicInfo.hours).map(([day, hours]) => 
+    hours === "Closed" ? null : `${day.slice(0, 2)} ${hours}`
+  ).filter(Boolean),
+  "url": import.meta.env.SITE_URL,
+  "image": `${import.meta.env.SITE_URL}/images/clinic-exterior.jpg`,
+  "priceRange": "$$",
+  "medicalSpecialty": [
+    "General Dentistry",
+    "Cosmetic Dentistry",
+    "Orthodontics",
+    "Periodontics",
+    "Endodontics"
+  ],
+  "availableService": [
+    "Dental Checkup",
+    "Teeth Cleaning",
+    "Dental Implants",
+    "Root Canal",
+    "Teeth Whitening",
+    "Invisalign"
+  ]
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

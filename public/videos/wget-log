@@ -1,0 +1,6 @@
+--2025-05-09 20:33:45--  https://player.vimeo.com/external/315811724.sd.mp4?s=066e905dd963aa8a523401f1c3d4a340d42fd14c
+Resolving player.vimeo.com (player.vimeo.com)... 162.159.138.60, 162.159.128.61
+Connecting to player.vimeo.com (player.vimeo.com)|162.159.138.60|:443... connected.
+HTTP request sent, awaiting response... 403 Forbidden
+2025-05-09 20:33:45 ERROR 403: Forbidden.
+

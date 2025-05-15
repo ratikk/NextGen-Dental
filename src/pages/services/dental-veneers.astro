@@ -1,0 +1,135 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Dental Veneers', href: '/services/dental-veneers' }
+];
+---
+
+<Layout 
+  title="Dental Veneers | Services | Smile Dental Clinic"
+  description="Transform your smile with custom dental veneers. Learn about our porcelain veneer options and how they can enhance your smile."
+>
+  <Hero 
+    title="Dental Veneers"
+    subtitle="Create your perfect smile with custom porcelain veneers"
+    imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">What Are Dental Veneers?</h2>
+        <p class="text-neutral-600 mb-4">
+          Dental veneers are thin, custom-made shells of tooth-colored materials designed to cover the front surface of teeth. They're an excellent solution for improving your smile's appearance by changing the color, shape, size, or length of your teeth.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Types of Veneers</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Porcelain veneers</li>
+              <li>• Composite resin veneers</li>
+              <li>• Minimal-prep veneers</li>
+              <li>• Traditional veneers</li>
+              <li>• Lumineers</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Common Uses</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Discolored teeth</li>
+              <li>• Worn down teeth</li>
+              <li>• Chipped or broken teeth</li>
+              <li>• Misaligned teeth</li>
+              <li>• Gaps between teeth</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">The Veneer Process</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">1.</span>
+              <div>
+                <strong>Consultation:</strong>
+                <p class="text-neutral-600">Discussion of your goals and examination to ensure veneers are right for you.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">2.</span>
+              <div>
+                <strong>Preparation:</strong>
+                <p class="text-neutral-600">Minimal removal of tooth enamel to make room for the veneer.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">3.</span>
+              <div>
+                <strong>Impressions:</strong>
+                <p class="text-neutral-600">Digital impressions taken to create your custom veneers.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">4.</span>
+              <div>
+                <strong>Placement:</strong>
+                <p class="text-neutral-600">Permanent bonding of your custom veneers for a beautiful new smile.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Benefits of Dental Veneers</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Advantages</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Natural-looking results</li>
+              <li>• Stain-resistant</li>
+              <li>• Durable and long-lasting</li>
+              <li>• Minimal tooth reduction</li>
+              <li>• Customizable appearance</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Care & Maintenance</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Regular brushing and flossing</li>
+              <li>• Avoid biting hard objects</li>
+              <li>• Regular dental checkups</li>
+              <li>• Wear nightguard if recommended</li>
+              <li>• Professional cleanings</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Transform Your Smile</h2>
+        <p class="text-neutral-600 mb-6">
+          Ready to achieve the smile you've always wanted? Schedule a consultation to learn how dental veneers can enhance your smile.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Schedule Consultation
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

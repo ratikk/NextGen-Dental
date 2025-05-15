@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Teeth Whitening', href: '/services/teeth-whitening' }
+];
+---
+
+<Layout 
+  title="Teeth Whitening | Services | Smile Dental Clinic"
+  description="Professional teeth whitening services for a brighter, more confident smile. Learn about our safe and effective whitening treatments."
+>
+  <Hero 
+    title="Teeth Whitening"
+    subtitle="Achieve a brighter, more confident smile"
+    imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Professional Teeth Whitening</h2>
+        <p class="text-neutral-600 mb-4">
+          Our professional teeth whitening treatments provide safe, effective results that can dramatically improve the appearance of your smile. We offer both in-office and take-home whitening options to suit your needs and lifestyle.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Treatment Options</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• In-office power whitening</li>
+              <li>• Custom take-home trays</li>
+              <li>• Zoom! Whitening</li>
+              <li>• Combination treatments</li>
+              <li>• Touch-up treatments</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Benefits</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Immediate results</li>
+              <li>• Safe and monitored process</li>
+              <li>• Long-lasting effects</li>
+              <li>• Professional supervision</li>
+              <li>• Customized treatment</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Our Whitening Process</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">1.</span>
+              <div>
+                <strong>Initial Consultation</strong>
+                <p class="text-neutral-600">Evaluation of your teeth and discussion of treatment options.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">2.</span>
+              <div>
+                <strong>Preparation</strong>
+                <p class="text-neutral-600">Professional cleaning and protection of sensitive areas.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">3.</span>
+              <div>
+                <strong>Treatment Application</strong>
+                <p class="text-neutral-600">Application of professional-grade whitening agents.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">4.</span>
+              <div>
+                <strong>Monitoring</strong>
+                <p class="text-neutral-600">Professional oversight throughout the process.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">5.</span>
+              <div>
+                <strong>Results & Aftercare</strong>
+                <p class="text-neutral-600">Immediate results and maintenance instructions.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Maintaining Your White Smile</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Do's</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Brush and floss regularly</li>
+              <li>• Use whitening toothpaste</li>
+              <li>• Attend regular checkups</li>
+              <li>• Use straws for dark beverages</li>
+              <li>• Follow aftercare instructions</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Don'ts</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Avoid tobacco products</li>
+              <li>• Limit staining foods/drinks</li>
+              <li>• Don't skip touch-up treatments</li>
+              <li>• Avoid excessive coffee/tea</li>
+              <li>• Don't use harsh products</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Ready for a Brighter Smile?</h2>
+        <p class="text-neutral-600 mb-6">
+          Transform your smile with our professional whitening treatments. Schedule a consultation to discuss your options.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Schedule Consultation
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

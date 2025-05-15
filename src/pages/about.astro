@@ -1,0 +1,262 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Button from '../components/Button.astro';
+---
+
+<Layout title="About Us | Smile Dental Clinic">
+  <Hero 
+    title="About Our Practice"
+    subtitle="Dedicated to providing exceptional dental care for over 20 years"
+    imageUrl="https://images.pexels.com/photos/3845798/pexels-photo-3845798.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+    buttonText=""
+  />
+  
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <h2 class="text-3xl font-bold mb-6">Our Story</h2>
+          <p class="text-neutral-600 mb-4">
+            Smile Dental Clinic was founded in 2003 with a simple mission: to provide the highest quality dental care in a comfortable, patient-centered environment. Over the years, we've grown from a small practice to a comprehensive dental center, but our commitment to personalized care has never wavered.
+          </p>
+          <p class="text-neutral-600 mb-4">
+            Our practice combines state-of-the-art technology with the expertise of our experienced dental professionals. We believe in a proactive approach to dental care, focusing not only on treating dental issues but also on preventing them and educating our patients.
+          </p>
+          <p class="text-neutral-600">
+            Today, we're proud to serve patients of all ages throughout the New York area, providing comprehensive dental services from routine cleanings to advanced cosmetic and restorative procedures.
+          </p>
+        </div>
+        
+        <div class="relative">
+          <img 
+            src="https://images.pexels.com/photos/3761163/pexels-photo-3761163.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+            alt="Smile Dental Clinic team" 
+            class="rounded-lg shadow-xl"
+            width="600"
+            height="400"
+          />
+          <div class="absolute -bottom-8 -right-8 bg-white py-4 px-6 rounded-lg shadow-lg max-w-xs hidden md:block">
+            <div class="flex items-center gap-3">
+              <div class="text-2xl font-bold text-primary-600">20+</div>
+              <div class="text-neutral-700">Years serving the New York community</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Mission & Values -->
+  <section class="py-16 bg-neutral-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-3xl font-bold mb-4">Our Mission & Values</h2>
+        <p class="text-neutral-600">
+          Our guiding principles shape everything we do, from how we interact with patients to the quality of care we provide.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+          <div class="bg-primary-100 p-4 rounded-full mb-4 text-primary-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Excellence</h3>
+          <p class="text-neutral-600">
+            We strive for excellence in every aspect of our practice, from clinical skills to patient communication and service.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+          <div class="bg-primary-100 p-4 rounded-full mb-4 text-primary-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Patient-Centered Care</h3>
+          <p class="text-neutral-600">
+            We put our patients' needs first, listening to their concerns and working together to achieve optimal dental health.
+          </p>
+        </div>
+        
+        <div class="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
+          <div class="bg-primary-100 p-4 rounded-full mb-4 text-primary-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Integrity</h3>
+          <p class="text-neutral-600">
+            We maintain the highest ethical standards in all aspects of our practice, providing honest and transparent care.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Meet Our Team -->
+  <section class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-3xl font-bold mb-4">Meet Our Team</h2>
+        <p class="text-neutral-600">
+          Our experienced team of dental professionals is dedicated to providing you with the highest quality care in a comfortable environment.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Dr. Sarah Johnson -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+          <div class="relative h-80">
+            <img 
+              src="https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+              alt="Dr. Sarah Johnson" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-1">Dr. Sarah Johnson</h3>
+            <p class="text-primary-600 font-medium mb-3">Lead Dentist & Founder</p>
+            <p class="text-neutral-600 mb-4">
+              Dr. Johnson has over 15 years of experience in general and cosmetic dentistry. She completed her dental education at NYU College of Dentistry and is passionate about providing the highest quality care to her patients.
+            </p>
+            <a href="/about/dr-sarah-johnson" class="text-primary-600 font-medium hover:text-primary-700 inline-flex items-center">
+              Learn More
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Dr. Michael Rodriguez -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+          <div class="relative h-80">
+            <img 
+              src="https://images.pexels.com/photos/6348112/pexels-photo-6348112.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+              alt="Dr. Michael Rodriguez" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-1">Dr. Michael Rodriguez</h3>
+            <p class="text-primary-600 font-medium mb-3">Orthodontist</p>
+            <p class="text-neutral-600 mb-4">
+              Dr. Rodriguez specializes in orthodontics and is certified in Invisalign treatment. With his expertise, he helps patients achieve straight, healthy smiles with treatments tailored to their unique needs.
+            </p>
+            <a href="/about/dr-michael-rodriguez" class="text-primary-600 font-medium hover:text-primary-700 inline-flex items-center">
+              Learn More
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Dr. Emily Chen -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+          <div class="relative h-80">
+            <img 
+              src="https://images.pexels.com/photos/5214969/pexels-photo-5214969.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+              alt="Dr. Emily Chen" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold mb-1">Dr. Emily Chen</h3>
+            <p class="text-primary-600 font-medium mb-3">Pediatric Dentist</p>
+            <p class="text-neutral-600 mb-4">
+              Dr. Chen specializes in pediatric dentistry and is known for her gentle approach with children. She creates a fun, comfortable environment that helps kids develop positive associations with dental care.
+            </p>
+            <a href="/about/dr-emily-chen" class="text-primary-600 font-medium hover:text-primary-700 inline-flex items-center">
+              Learn More
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-12">
+        <Button href="/about/our-team" variant="outline">
+          View Full Team
+        </Button>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Our Facilities -->
+  <section class="py-16 bg-neutral-50">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <h2 class="text-3xl font-bold mb-4">Our Modern Facilities</h2>
+        <p class="text-neutral-600">
+          We've designed our office with your comfort in mind, featuring state-of-the-art technology and a welcoming environment.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+          <div class="relative h-60">
+            <img 
+              src="https://images.pexels.com/photos/305568/pexels-photo-305568.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+              alt="Reception Area" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">Welcoming Reception Area</h3>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+          <div class="relative h-60">
+            <img 
+              src="https://images.pexels.com/photos/4687340/pexels-photo-4687340.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+              alt="Treatment Room" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">Comfortable Treatment Rooms</h3>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md overflow-hidden group">
+          <div class="relative h-60">
+            <img 
+              src="https://images.pexels.com/photos/4269694/pexels-photo-4269694.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260" 
+              alt="Advanced Technology" 
+              class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">Advanced Dental Technology</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- CTA -->
+  <section class="bg-primary-600 py-16 text-white">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl font-bold mb-4">Experience the Difference</h2>
+      <p class="max-w-2xl mx-auto mb-8 text-white/90">
+        We invite you to experience our commitment to exceptional dental care. Schedule your appointment today and see why patients choose Smile Dental Clinic.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <Button href="/book-appointment" variant="secondary" size="lg">
+          Book Your Visit
+        </Button>
+        <Button href="/contact" variant="outline" size="lg" class="bg-transparent border-white text-white hover:bg-white/10">
+          Contact Us
+        </Button>
+      </div>
+    </div>
+  </section>
+</Layout>

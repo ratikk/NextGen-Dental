@@ -1,0 +1,176 @@
+---
+import { Image } from 'astro:assets';
+import MobileMenu from './MobileMenu.astro';
+import clinicInfo from '../utils/clinicInfo';
+---
+
+<header class="bg-white shadow-sm sticky top-0 z-50 transition-all duration-300">
+  <div class="container mx-auto px-4">
+    <!-- Top Bar -->
+    <div class="py-2 border-b border-neutral-100">
+      <div class="flex justify-end gap-6 text-sm">
+        <a href={`mailto:${clinicInfo.contact.email}`} class="text-neutral-600 hover:text-primary-600 transition-colors">
+          {clinicInfo.contact.email}
+        </a>
+        <a href={`tel:${clinicInfo.contact.emergencyPhone}`} class="text-neutral-600 hover:text-primary-600 transition-colors">
+          Emergency: {clinicInfo.contact.emergencyPhone}
+        </a>
+      </div>
+    </div>
+    
+    <!-- Main Header -->
+    <div class="py-4 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="/" class="block">
+        <img 
+          src="/images/logo.png"
+          alt={clinicInfo.name}
+          width="200"
+          height="60"
+          class="h-16 w-auto"
+        />
+      </a>
+      
+      <!-- Center Navigation -->
+      <div class="hidden lg:flex items-center gap-8">
+        <a href={clinicInfo.mapUrl} target="_blank" class="flex items-center gap-2 text-neutral-700 hover:text-primary-600 transition-colors">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          Find Us on Google Maps
+        </a>
+      </div>
+      
+      <!-- Right Actions -->
+      <div class="flex items-center gap-4">
+        <a 
+          href="https://book.modento.io/lilac-dental/patient-details" 
+          data-booking="true"
+          class="hidden md:inline-flex items-center justify-center bg-primary-600 text-white px-6 py-2 rounded-lg hover:bg-primary-700 transition-colors font-medium"
+        >
+          Book Now
+        </a>
+        <button id="mobile-menu-toggle" class="lg:hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <nav class="hidden lg:block border-t border-neutral-100">
+      <ul class="flex gap-8 py-4">
+        <li><a href="/" class="text-neutral-700 hover:text-primary-600 transition-colors">Home</a></li>
+        <li><a href="/about" class="text-neutral-700 hover:text-primary-600 transition-colors">About</a></li>
+        <li class="relative group">
+          <a href="/services" class="text-neutral-700 hover:text-primary-600 transition-colors flex items-center gap-1">
+            Services
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </a>
+          <div class="absolute left-0 top-full bg-white shadow-lg rounded-lg p-6 w-[800px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10">
+            <div class="grid grid-cols-3 gap-4">
+              <div>
+                <h4 class="font-semibold mb-2 text-neutral-900">Preventive Care</h4>
+                <ul class="space-y-2">
+                  <li><a href="/services/dental-checkup" class="text-neutral-700 hover:text-primary-600 transition-colors">Dental Checkup</a></li>
+                  <li><a href="/services/teeth-cleaning" class="text-neutral-700 hover:text-primary-600 transition-colors">Teeth Cleaning</a></li>
+                  <li><a href="/services/oral-cancer-screening" class="text-neutral-700 hover:text-primary-600 transition-colors">Oral Cancer Screening</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2 text-neutral-900">Cosmetic Dentistry</h4>
+                <ul class="space-y-2">
+                  <li><a href="/services/teeth-whitening" class="text-neutral-700 hover:text-primary-600 transition-colors">Teeth Whitening</a></li>
+                  <li><a href="/services/dental-veneers" class="text-neutral-700 hover:text-primary-600 transition-colors">Dental Veneers</a></li>
+                  <li><a href="/services/lumineers" class="text-neutral-700 hover:text-primary-600 transition-colors">Lumineers</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2 text-neutral-900">Restorative Care</h4>
+                <ul class="space-y-2">
+                  <li><a href="/services/dental-implants" class="text-neutral-700 hover:text-primary-600 transition-colors">Dental Implants</a></li>
+                  <li><a href="/services/root-canal" class="text-neutral-700 hover:text-primary-600 transition-colors">Root Canal</a></li>
+                  <li><a href="/services/dentures" class="text-neutral-700 hover:text-primary-600 transition-colors">Dentures</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-neutral-100">
+              <a href="/services" class="text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1">
+                View All Services
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </li>
+        <li><a href="/patient-information" class="text-neutral-700 hover:text-primary-600 transition-colors">Patient Information</a></li>
+        <li class="relative group">
+          <a href="/patient-education" class="text-neutral-700 hover:text-primary-600 transition-colors flex items-center gap-1">
+            Patient Education
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </a>
+          <div class="absolute left-0 top-full bg-white shadow-lg rounded-lg p-6 w-[800px] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-10">
+            <div class="grid grid-cols-3 gap-4">
+              <div>
+                <h4 class="font-semibold mb-2 text-neutral-900">Oral Health</h4>
+                <ul class="space-y-2">
+                  <li><a href="/patient-education/oral-hygiene-basics" class="text-neutral-700 hover:text-primary-600 transition-colors">Oral Hygiene Basics</a></li>
+                  <li><a href="/patient-education/gum-disease" class="text-neutral-700 hover:text-primary-600 transition-colors">Gum Disease</a></li>
+                  <li><a href="/patient-education/tooth-decay" class="text-neutral-700 hover:text-primary-600 transition-colors">Tooth Decay</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2 text-neutral-900">Procedures</h4>
+                <ul class="space-y-2">
+                  <li><a href="/patient-education/root-canal-guide" class="text-neutral-700 hover:text-primary-600 transition-colors">Root Canal Guide</a></li>
+                  <li><a href="/patient-education/dental-implants-guide" class="text-neutral-700 hover:text-primary-600 transition-colors">Dental Implants Guide</a></li>
+                  <li><a href="/patient-education/orthodontics-guide" class="text-neutral-700 hover:text-primary-600 transition-colors">Orthodontics Guide</a></li>
+                </ul>
+              </div>
+              <div>
+                <h4 class="font-semibold mb-2 text-neutral-900">Resources</h4>
+                <ul class="space-y-2">
+                  <li><a href="/blog" class="text-neutral-700 hover:text-primary-600 transition-colors">Blog</a></li>
+                  <li><a href="/patient-education/faq" class="text-neutral-700 hover:text-primary-600 transition-colors">FAQ</a></li>
+                  <li><a href="/patient-education/dental-dictionary" class="text-neutral-700 hover:text-primary-600 transition-colors">Dental Dictionary</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="/financing" class="text-neutral-700 hover:text-primary-600 transition-colors">Financing</a></li>
+        <li><a href="/reviews" class="text-neutral-700 hover:text-primary-600 transition-colors">Reviews</a></li>
+        <li><a href="/contact" class="text-neutral-700 hover:text-primary-600 transition-colors">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+  
+  <MobileMenu />
+</header>
+
+<script>
+  // Add header shadow on scroll
+  const header = document.querySelector('header');
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 0) {
+      header?.classList.add('shadow');
+    } else {
+      header?.classList.remove('shadow');
+    }
+  });
+
+  mobileMenuToggle?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+    mobileMenu?.classList.toggle('flex');
+  });
+</script>

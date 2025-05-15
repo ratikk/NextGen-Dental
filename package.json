@@ -1,0 +1,40 @@
+{
+  "name": "Lilac-dental-clinic",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --host 0.0.0.0 --port 4321 --no-https",
+    "build": "astro build",
+    "preview": "astro preview --host 0.0.0.0 --port 4321",
+    "deploy": "astro build && aws s3 sync dist/ s3://lilacdentalaustintx-website --delete && aws cloudfront create-invalidation --distribution-id E1VIR3844AP3VZ --paths \"/*\"",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^3.0.10",
+    "@astrojs/sitemap": "^3.0.6",
+    "@astrojs/tailwind": "^5.1.0",
+    "@aws-sdk/client-secrets-manager": "^3.808.0",
+    "@aws-sdk/client-ses": "^3.808.0",
+    "@googlemaps/js-api-loader": "^1.16.6",
+    "astro": "^5.2.5",
+    "astro-icon": "^1.1.0",
+    "astro-seo": "^0.8.3",
+    "aws-sdk": "^2.1569.0",
+    "dotenv": "^16.4.1",
+    "image-size": "^1.1.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "schema-dts": "^1.1.2",
+    "sharp": "^0.33.2",
+    "swiper": "^11.0.5",
+    "tailwindcss": "^3.4.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.5",
+    "prettier-plugin-astro": "^0.13.0"
+  }
+}
+

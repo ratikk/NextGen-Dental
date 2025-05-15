@@ -1,0 +1,143 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Laser Dentistry', href: '/services/laser-dentistry' }
+];
+---
+
+<Layout 
+  title="Laser Dentistry | Services | Smile Dental Clinic"
+  description="Advanced laser dental treatments for precise, comfortable, and effective procedures with minimal recovery time."
+>
+  <Hero 
+    title="Laser Dentistry"
+    subtitle="State-of-the-art laser treatments for optimal dental care"
+    imageUrl="https://images.pexels.com/photos/3779709/pexels-photo-3779709.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Advanced Laser Dental Care</h2>
+        <p class="text-neutral-600 mb-4">
+          Laser dentistry represents the cutting edge of dental technology, offering precise, comfortable, and effective treatments for a wide range of dental procedures. Our advanced laser systems allow us to provide minimally invasive care with reduced recovery time.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Common Applications</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Cavity detection and treatment</li>
+              <li>• Gum disease treatment</li>
+              <li>• Crown lengthening</li>
+              <li>• Soft tissue procedures</li>
+              <li>• Root canal therapy</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Key Benefits</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Minimally invasive procedures</li>
+              <li>• Reduced recovery time</li>
+              <li>• Less discomfort</li>
+              <li>• Precise treatment</li>
+              <li>• Better healing outcomes</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Our Laser Treatments</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <strong>Soft Tissue Procedures</strong>
+                <p class="text-neutral-600">Precise treatment of gum issues with minimal bleeding and faster healing.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <strong>Cavity Detection</strong>
+                <p class="text-neutral-600">Early detection and treatment of tooth decay before it becomes severe.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <strong>Periodontal Treatment</strong>
+                <p class="text-neutral-600">Advanced treatment for gum disease with improved precision and comfort.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div>
+                <strong>Cosmetic Procedures</strong>
+                <p class="text-neutral-600">Precise gum contouring and aesthetic improvements.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Why Choose Laser Dentistry?</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Patient Benefits</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Less pain and discomfort</li>
+              <li>• Minimal bleeding</li>
+              <li>• Faster healing time</li>
+              <li>• Reduced risk of infection</li>
+              <li>• More precise treatment</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Treatment Advantages</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Preserves healthy tissue</li>
+              <li>• Often no need for anesthesia</li>
+              <li>• Immediate results</li>
+              <li>• Better accuracy</li>
+              <li>• Reduced recovery time</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Experience Advanced Dental Care</h2>
+        <p class="text-neutral-600 mb-6">
+          Discover how laser dentistry can make your dental treatments more comfortable and effective. Schedule a consultation to learn more about our laser dental services.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Schedule Consultation
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

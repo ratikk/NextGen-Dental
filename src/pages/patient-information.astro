@@ -1,0 +1,191 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Patient Information', href: '/patient-information' }
+];
+---
+
+<Layout 
+  title="Patient Information | Smile Dental Clinic"
+  description="Important information for new and existing patients. Learn about our policies, forms, and what to expect during your visit."
+>
+  <Hero 
+    title="Patient Information"
+    subtitle="Everything you need to know for your dental visit"
+    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+  />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- New Patients Section -->
+      <section class="mb-16">
+        <div class="max-w-3xl mx-auto text-center mb-12">
+          <h2 class="text-3xl font-bold text-neutral-900 mb-4">New Patients</h2>
+          <p class="text-neutral-600">
+            Welcome to Smile Dental Clinic! We're excited to help you achieve optimal oral health. Here's what you need to know for your first visit.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-neutral-50 p-6 rounded-lg">
+            <div class="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Patient Forms</h3>
+            <p class="text-neutral-600 mb-4">
+              Save time by downloading and completing our new patient forms before your visit.
+            </p>
+            <a href="#" class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
+              Download Forms
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+              </svg>
+            </a>
+          </div>
+
+          <div class="bg-neutral-50 p-6 rounded-lg">
+            <div class="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">What to Expect</h3>
+            <p class="text-neutral-600 mb-4">
+              Learn about our comprehensive exam process and what your first visit will include.
+            </p>
+            <a href="#first-visit" class="text-primary-600 hover:text-primary-700 font-medium">
+              Learn More
+            </a>
+          </div>
+
+          <div class="bg-neutral-50 p-6 rounded-lg">
+            <div class="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Payment Options</h3>
+            <p class="text-neutral-600 mb-4">
+              Review our accepted insurance plans and flexible payment options.
+            </p>
+            <a href="/financing" class="text-primary-600 hover:text-primary-700 font-medium">
+              View Options
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- First Visit Section -->
+      <section id="first-visit" class="mb-16">
+        <div class="bg-neutral-50 p-8 rounded-lg">
+          <h2 class="text-3xl font-bold mb-6">Your First Visit</h2>
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-xl font-semibold mb-4">What to Bring</h3>
+              <ul class="space-y-3 text-neutral-600">
+                <li>• Completed new patient forms</li>
+                <li>• Valid photo ID</li>
+                <li>• Insurance card (if applicable)</li>
+                <li>• List of current medications</li>
+                <li>• Previous dental records (if available)</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="text-xl font-semibold mb-4">What to Expect</h3>
+              <ul class="space-y-3 text-neutral-600">
+                <li>• Comprehensive oral examination</li>
+                <li>• Digital X-rays</li>
+                <li>• Professional cleaning</li>
+                <li>• Treatment plan discussion</li>
+                <li>• Insurance and payment consultation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Insurance & Payment Section -->
+      <section class="mb-16">
+        <h2 class="text-3xl font-bold mb-8">Insurance & Payment</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-neutral-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-4">Accepted Insurance Plans</h3>
+            <p class="text-neutral-600 mb-4">
+              We work with most major insurance providers to maximize your benefits. Some of our accepted plans include:
+            </p>
+            <ul class="space-y-2 text-neutral-600">
+              <li>• Delta Dental</li>
+              <li>• Cigna</li>
+              <li>• Aetna</li>
+              <li>• MetLife</li>
+              <li>• Guardian</li>
+              <li>• And many more...</li>
+            </ul>
+          </div>
+
+          <div class="bg-neutral-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-4">Payment Options</h3>
+            <p class="text-neutral-600 mb-4">
+              We offer various payment options to make dental care accessible:
+            </p>
+            <ul class="space-y-2 text-neutral-600">
+              <li>• Cash, check, and major credit cards</li>
+              <li>• CareCredit financing</li>
+              <li>• Flexible payment plans</li>
+              <li>• FSA/HSA accounts</li>
+              <li>• Insurance benefit maximization</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Office Policies Section -->
+      <section class="mb-16">
+        <h2 class="text-3xl font-bold mb-8">Office Policies</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-neutral-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-4">Appointment Policy</h3>
+            <p class="text-neutral-600">
+              We require 24-hour notice for cancellations. Late cancellations or missed appointments may incur a fee.
+            </p>
+          </div>
+
+          <div class="bg-neutral-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-4">Privacy Policy</h3>
+            <p class="text-neutral-600">
+              We maintain strict HIPAA compliance to protect your personal and medical information.
+            </p>
+          </div>
+
+          <div class="bg-neutral-50 p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-4">Emergency Care</h3>
+            <p class="text-neutral-600">
+              24/7 emergency dental care available for existing patients. Call our emergency line for assistance.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="bg-primary-50 p-8 rounded-lg text-center">
+        <h2 class="text-2xl font-bold mb-4">Ready to Schedule Your Visit?</h2>
+        <p class="text-neutral-600 mb-6 max-w-2xl mx-auto">
+          Whether you're a new patient or due for a checkup, we're here to help you achieve optimal oral health.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors">
+            Book Appointment
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>

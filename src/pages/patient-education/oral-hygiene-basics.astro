@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Oral Hygiene Basics', href: '/patient-education/oral-hygiene-basics' }
+];
+---
+
+<Layout 
+  title="Oral Hygiene Basics | Patient Education | Smile Dental Clinic"
+  description="Learn the fundamentals of maintaining good oral hygiene, including proper brushing techniques, flossing methods, and daily dental care routines."
+>
+  <Hero 
+    title="Oral Hygiene Basics"
+    subtitle="Essential tips and techniques for maintaining optimal oral health"
+    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+    buttonText=""
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">The Importance of Good Oral Hygiene</h2>
+        <p class="text-neutral-600 mb-4">
+          Maintaining good oral hygiene is essential for your overall health and well-being. Proper dental care helps prevent tooth decay, gum disease, and other oral health issues that can affect your quality of life.
+        </p>
+        <p class="text-neutral-600">
+          Regular dental hygiene practices not only keep your smile bright but also help prevent serious health conditions that have been linked to poor oral health, including heart disease and diabetes.
+        </p>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Daily Oral Hygiene Routine</h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Brushing Technique</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Brush at least twice daily using fluoride toothpaste</li>
+              <li>• Use soft-bristled toothbrush at a 45-degree angle</li>
+              <li>• Brush for at least two minutes</li>
+              <li>• Clean all surfaces: outer, inner, and chewing</li>
+              <li>• Don't forget to brush your tongue</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Flossing Tips</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Floss at least once daily</li>
+              <li>• Use about 18 inches of floss</li>
+              <li>• Curve floss around each tooth in a C-shape</li>
+              <li>• Use clean sections of floss for each tooth</li>
+              <li>• Be gentle to avoid damaging gums</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Essential Dental Care Products</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4 text-neutral-600">
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">1.</span>
+              <div>
+                <strong>Toothbrush:</strong> Choose a soft-bristled brush that fits comfortably in your mouth. Replace every 3-4 months.
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">2.</span>
+              <div>
+                <strong>Fluoride Toothpaste:</strong> Use ADA-approved fluoride toothpaste to prevent cavities and strengthen enamel.
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">3.</span>
+              <div>
+                <strong>Dental Floss:</strong> Regular or waxed floss, floss picks, or water flossers help clean between teeth.
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">4.</span>
+              <div>
+                <strong>Mouthwash:</strong> Antimicrobial or fluoride mouthwash can provide additional protection.
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Common Mistakes to Avoid</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4 text-error-600">What Not to Do</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>✗ Brushing too hard</li>
+              <li>✗ Using a hard-bristled toothbrush</li>
+              <li>✗ Brushing immediately after eating acidic foods</li>
+              <li>✗ Skipping flossing</li>
+              <li>✗ Using teeth as tools</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4 text-success-600">Best Practices</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>✓ Use gentle, circular motions</li>
+              <li>✓ Replace toothbrush regularly</li>
+              <li>✓ Wait 30 minutes after eating to brush</li>
+              <li>✓ Floss daily</li>
+              <li>✓ Visit dentist regularly</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Schedule Your Dental Checkup</h2>
+        <p class="text-neutral-600 mb-6">
+          Regular dental checkups and professional cleanings are essential parts of maintaining good oral health. Our team can provide personalized advice and ensure your oral hygiene routine is effective.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Book an Appointment
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

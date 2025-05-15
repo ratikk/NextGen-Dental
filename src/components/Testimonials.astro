@@ -1,0 +1,59 @@
+---
+const testimonials = [
+  {
+    content: "I've been coming to Smile Dental Clinic for years and have always received excellent care. The staff is friendly and the dentists are thorough and gentle.",
+    author: "Sarah Johnson",
+    location: "New York, NY"
+  },
+  {
+    content: "Dr. Smith transformed my smile with veneers and I couldn't be happier with the results. The whole process was smooth and everyone made me feel comfortable.",
+    author: "Michael Rodriguez",
+    location: "Brooklyn, NY"
+  },
+  {
+    content: "As someone who used to be terrified of dental visits, I can't recommend Smile Dental Clinic enough. Their compassionate approach has completely changed my experience.",
+    author: "Emily Chen",
+    location: "Queens, NY"
+  }
+];
+---
+
+<section class="py-16 bg-neutral-50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold mb-4">What Our Patients Say</h2>
+      <p class="text-neutral-600 max-w-2xl mx-auto">
+        We're proud to have helped thousands of patients achieve healthier, more beautiful smiles. Here's what some of them have to say about their experience with us.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {testimonials.map(testimonial => (
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-primary-200 mb-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+          </svg>
+          <p class="text-neutral-600 mb-6">{testimonial.content}</p>
+          <div class="flex items-center">
+            <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center text-primary-700 font-semibold mr-3">
+              {testimonial.author.charAt(0)}
+            </div>
+            <div>
+              <p class="font-semibold text-neutral-800">{testimonial.author}</p>
+              <p class="text-neutral-500 text-sm">{testimonial.location}</p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="mt-12 text-center">
+      <a href="/reviews" class="inline-flex items-center font-medium text-primary-600 hover:text-primary-700">
+        Read More Patient Reviews
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,143 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Oral Cancer Screening', href: '/services/oral-cancer-screening' }
+];
+---
+
+<Layout 
+  title="Oral Cancer Screening | Services | Smile Dental Clinic"
+  description="Early detection of oral cancer through professional screening. Learn about our comprehensive oral cancer screening process."
+>
+  <Hero 
+    title="Oral Cancer Screening"
+    subtitle="Early detection for better treatment outcomes"
+    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">What is Oral Cancer Screening?</h2>
+        <p class="text-neutral-600 mb-4">
+          Oral cancer screening is a routine examination performed by our dental professionals to detect early signs of cancer or precancerous conditions in your mouth. Early detection significantly increases the chances of successful treatment.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Screening Process</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Visual examination</li>
+              <li>• Physical examination</li>
+              <li>• Advanced imaging when needed</li>
+              <li>• Tissue analysis if required</li>
+              <li>• Comprehensive evaluation</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Risk Factors</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Tobacco use</li>
+              <li>• Heavy alcohol consumption</li>
+              <li>• Previous oral cancer history</li>
+              <li>• Significant sun exposure</li>
+              <li>• HPV infection</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Warning Signs</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                <strong>Red or white patches</strong>
+                <p class="text-neutral-600">Unusual patches in the mouth that don't heal.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                <strong>Persistent sores</strong>
+                <p class="text-neutral-600">Mouth sores that don't heal within two weeks.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                <strong>Lumps or thickening</strong>
+                <p class="text-neutral-600">Unusual tissue changes in mouth or neck.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <div>
+                <strong>Difficulty in oral functions</strong>
+                <p class="text-neutral-600">Problems with chewing, swallowing, speaking, or jaw movement.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Screening Recommendations</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Who Should Get Screened</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Adults over 18</li>
+              <li>• Tobacco users</li>
+              <li>• Heavy alcohol consumers</li>
+              <li>• Previous cancer patients</li>
+              <li>• Those with family history</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Screening Frequency</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Annual screening for most adults</li>
+              <li>• Bi-annual for high-risk patients</li>
+              <li>• As recommended by dentist</li>
+              <li>• After concerning symptoms</li>
+              <li>• During regular checkups</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Schedule Your Screening</h2>
+        <p class="text-neutral-600 mb-6">
+          Early detection is key in fighting oral cancer. Schedule your screening today for peace of mind and proactive health care.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Book a Screening
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

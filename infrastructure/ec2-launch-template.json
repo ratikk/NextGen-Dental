@@ -1,0 +1,45 @@
+{
+  "LaunchTemplateName": "LilacDental-WebServer-Prod",
+  "VersionDescription": "Production web server configuration",
+  "LaunchTemplateData": {
+    "InstanceType": "t3.medium",
+    "ImageId": "ami-0e8a34246278c21e4",
+    "NetworkInterfaces": [{
+      "DeviceIndex": 0,
+      "SubnetId": "subnet-LilacDental-PubNet-2a",
+      "Groups": ["sg-LilacDental-WebSG"],
+      "AssociatePublicIpAddress": true
+    }],
+    "BlockDeviceMappings": [{
+      "DeviceName": "/dev/xvda",
+      "Ebs": {
+        "VolumeSize": 50,
+        "VolumeType": "gp3",
+        "DeleteOnTermination": true,
+        "Encrypted": true,
+        "Iops": 3000,
+        "Throughput": 125
+      }
+    }],
+    "IamInstanceProfile": {
+      "Name": "LilacDental-WebServer-Role"
+    },
+    "MetadataOptions": {
+      "HttpTokens": "required",
+      "HttpEndpoint": "enabled",
+      "HttpPutResponseHopLimit": 1
+    },
+    "Monitoring": {
+      "Enabled": true
+    },
+    "TagSpecifications": [{
+      "ResourceType": "instance",
+      "Tags": [
+        {"Key": "Name", "Value": "LilacDental-WebServer-Prod"},
+        {"Key": "Environment", "Value": "Production"},
+        {"Key": "Project", "Value": "LilacDental"}
+      ]
+    }],
+    "UserData": "IyEvYmluL2Jhc2gKIyBFQzIgVXNlciBEYXRhIHNjcmlwdCBmb3IgTGlsYWMgRGVudGFsIHdlYnNpdGUKCiMgVXBkYXRlIHN5c3RlbSBwYWNrYWdlcwp5dW0gdXBkYXRlIC15CgojIEluc3RhbGwgTkdJTlgKYW1hem9uLWxpbnV4LWV4dHJhcyBpbnN0YWxsIG5naW54MSAteQoKIyBTdGFydCBOR0lOWApzeXN0ZW1jdGwgc3RhcnQgbmdpbngKc3lzdGVtY3RsIGVuYWJsZSBuZ2lueAoKIyBJbnN0YWxsIE5vZGUuanMgMTgueApjdXJsIC1mc1NMIGh0dHBzOi8vcnBtLm5vZGVzb3VyY2UuY29tL3NldHVwXzE4LnggfCBiYXNoIC0KeXVtIGluc3RhbGwgLXkgbm9kZWpzCgojIENyZWF0ZSB3ZWIgZGlyZWN0b3J5Cm1rZGlyIC1wIC92YXIvd3d3L2xpbGFjZGVudGFsCmNob3duIC1SIGVjMi11c2VyOmVjMi11c2VyIC92YXIvd3d3L2xpbGFjZGVudGFsCgojIENvbmZpZ3VyZSBOR0lOWApjYXQgPiAvZXRjL25naW54L2NvbmYuZC9saWxhY2RlbnRhbC5jb25mIDw8ICdFT0wnCnNlcnZlciB7CiAgICBsaXN0ZW4gODA7CiAgICBzZXJ2ZXJfbmFtZSBsaWxhY2RlbnRhbGF1c3RpbnR4LmNvbSB3d3cubGlsYWNkZW50YWxhdXN0aW50eC5jb207CiAgICByb290IC92YXIvd3d3L2xpbGFjZGVudGFsOwogICAgCiAgICBsb2NhdGlvbiAvIHsKICAgICAgICB0cnlfZmlsZXMgJHVyaSAkdXJpLyAvaW5kZXguaHRtbDsKICAgICAgICBleHBpcmVzIDMwZDsKICAgICAgICBhZGRfaGVhZGVyIENhY2hlLUNvbnRyb2wgInB1YmxpYywgbm8tdHJhbnNmb3JtIjsKICAgIH0KICAgIAogICAgbG9jYXRpb24gfiogXC4oanN8Y3NzfHBuZ3xqcGd8anBlZ3xnaWZ8aWNvfHN2ZykkIHsKICAgICAgICBleHBpcmVzIG1heDsKICAgICAgICBhZGRfaGVhZGVyIENhY2hlLUNvbnRyb2wgInB1YmxpYywgbm8tdHJhbnNmb3JtIjsKICAgIH0KICAgIAogICAgIyBTZWN1cml0eSBoZWFkZXJzCiAgICBhZGRfaGVhZGVyIFgtRnJhbWUtT3B0aW9ucyAiU0FNRU9SSUdJTiI7CiAgICBhZGRfaGVhZGVyIFgtWFNTLVByb3RlY3Rpb24gIjE7IG1vZGU9YmxvY2siOwogICAgYWRkX2hlYWRlciBYLUNvbnRlbnQtVHlwZS1PcHRpb25zICJub3NuaWZmIjsKICAgIGFkZF9oZWFkZXIgUmVmZXJyZXItUG9saWN5ICJzdHJpY3Qtb3JpZ2luLXdoZW4tY3Jvc3Mtb3JpZ2luIjsKICAgIGFkZF9oZWFkZXIgQ29udGVudC1TZWN1cml0eS1Qb2xpY3kgImRlZmF1bHQtc3JjICdzZWxmJzsgaW1nLXNyYyAnc2VsZicgZGF0YTogaHR0cHM6Ly8qLnBleGVscy5jb207IHN0eWxlLXNyYyAnc2VsZicgJ3Vuc2FmZS1pbmxpbmUnIGh0dHBzOi8vZm9udHMuZ29vZ2xlYXBpcy5jb207IGZvbnQtc3JjICdzZWxmJyBodHRwczovL2ZvbnRzLmdzdGF0aWMuY29tOyI7Cn0KRU9MCgojIFJlc3RhcnQgTkdJTlgKc3lzdGVtY3RsIHJlc3RhcnQgbmdpbng="
+  }
+}

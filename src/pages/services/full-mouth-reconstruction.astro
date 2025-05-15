@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Full Mouth Reconstruction', href: '/services/full-mouth-reconstruction' }
+];
+---
+
+<Layout 
+  title="Full Mouth Reconstruction | Services | Smile Dental Clinic"
+  description="Comprehensive full mouth reconstruction services to restore function and aesthetics to your smile."
+>
+  <Hero 
+    title="Full Mouth Reconstruction"
+    subtitle="Comprehensive restoration for optimal dental health and function"
+    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">What is Full Mouth Reconstruction?</h2>
+        <p class="text-neutral-600 mb-4">
+          Full mouth reconstruction is a comprehensive treatment plan that combines multiple dental procedures to restore and rebuild all of the teeth in both the upper and lower jaws. This process is designed to improve both the function and appearance of your smile.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Common Procedures</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Crown and bridge work</li>
+              <li>• Dental implants</li>
+              <li>• Root canal therapy</li>
+              <li>• Periodontal treatments</li>
+              <li>• Orthodontic alignment</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Ideal For Patients With</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Multiple missing teeth</li>
+              <li>• Severe tooth decay</li>
+              <li>• Advanced gum disease</li>
+              <li>• TMJ disorders</li>
+              <li>• Bite problems</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">The Reconstruction Process</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">1.</span>
+              <div>
+                <strong>Comprehensive Evaluation:</strong>
+                <p class="text-neutral-600">Detailed examination including X-rays, photos, and impressions.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">2.</span>
+              <div>
+                <strong>Treatment Planning:</strong>
+                <p class="text-neutral-600">Development of a customized treatment sequence.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">3.</span>
+              <div>
+                <strong>Preparatory Procedures:</strong>
+                <p class="text-neutral-600">Any necessary extractions or periodontal treatment.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">4.</span>
+              <div>
+                <strong>Restorative Procedures:</strong>
+                <p class="text-neutral-600">Sequential completion of planned treatments.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">5.</span>
+              <div>
+                <strong>Final Adjustments:</strong>
+                <p class="text-neutral-600">Fine-tuning bite and aesthetics.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Benefits and Considerations</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Benefits</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Improved oral function</li>
+              <li>• Enhanced appearance</li>
+              <li>• Better oral health</li>
+              <li>• Increased confidence</li>
+              <li>• Long-lasting results</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Important Considerations</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Treatment timeline</li>
+              <li>• Recovery periods</li>
+              <li>• Investment required</li>
+              <li>• Maintenance needs</li>
+              <li>• Insurance coverage</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Start Your Transformation</h2>
+        <p class="text-neutral-600 mb-6">
+          Ready to restore your smile's function and appearance? Schedule a consultation to discuss your full mouth reconstruction options.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Schedule Consultation
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

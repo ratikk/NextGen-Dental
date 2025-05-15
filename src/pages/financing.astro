@@ -1,0 +1,115 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Financing', href: '/financing' }
+];
+---
+
+<Layout 
+  title="Financing Options | Smile Dental Clinic"
+  description="Flexible financing options to help make your dental care affordable. Learn about our payment plans and insurance coverage."
+>
+  <Hero 
+    title="Financing Options"
+    subtitle="Making quality dental care accessible and affordable"
+    imageUrl="https://images.pexels.com/photos/3943883/pexels-photo-3943883.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <div class="py-12">
+      <div class="max-w-4xl mx-auto">
+        <section class="mb-12">
+          <h2 class="text-3xl font-bold mb-6">Payment Options</h2>
+          <p class="text-neutral-600 mb-8">
+            We believe that quality dental care should be accessible to everyone. That's why we offer various payment options to help make your treatment more affordable.
+          </p>
+          
+          <div class="grid md:grid-cols-2 gap-8">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h3 class="text-xl font-semibold mb-4">Insurance</h3>
+              <p class="text-neutral-600 mb-4">
+                We work with most major insurance providers to maximize your benefits.
+              </p>
+              <ul class="space-y-2 text-neutral-600">
+                <li>• Pre-treatment estimates</li>
+                <li>• Insurance claim filing</li>
+                <li>• Benefits verification</li>
+                <li>• Coverage explanation</li>
+              </ul>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h3 class="text-xl font-semibold mb-4">Payment Methods</h3>
+              <p class="text-neutral-600 mb-4">
+                We accept various forms of payment for your convenience.
+              </p>
+              <ul class="space-y-2 text-neutral-600">
+                <li>• Cash</li>
+                <li>• Credit Cards</li>
+                <li>• Personal Checks</li>
+                <li>• FSA/HSA Cards</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+        
+        <section class="mb-12">
+          <h2 class="text-3xl font-bold mb-6">Financing Plans</h2>
+          <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <h3 class="text-xl font-semibold mb-4">CareCredit®</h3>
+            <p class="text-neutral-600 mb-4">
+              We partner with CareCredit to offer flexible financing options with:
+            </p>
+            <ul class="space-y-2 text-neutral-600 mb-6">
+              <li>• 0% interest options</li>
+              <li>• Extended payment plans</li>
+              <li>• Quick application process</li>
+              <li>• Immediate approval decisions</li>
+            </ul>
+            <a 
+              href="https://www.carecredit.com/apply/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              Apply for CareCredit
+            </a>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">In-House Payment Plans</h3>
+            <p class="text-neutral-600 mb-4">
+              We offer flexible in-house payment plans to help make your treatment more manageable:
+            </p>
+            <ul class="space-y-2 text-neutral-600">
+              <li>• Customized payment schedules</li>
+              <li>• No interest options available</li>
+              <li>• Easy setup process</li>
+              <li>• Flexible terms</li>
+            </ul>
+          </div>
+        </section>
+        
+        <section class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold mb-4">Questions About Financing?</h2>
+          <p class="text-neutral-600 mb-6">
+            Our team is here to help you understand your financing options and find the best solution for your needs.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/contact" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+              Contact Us
+            </a>
+            <a href="/book-appointment" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+              Schedule Consultation
+            </a>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</Layout>

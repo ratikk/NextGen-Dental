@@ -1,0 +1,143 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Dental Implants Guide', href: '/patient-education/dental-implants-guide' }
+];
+---
+
+<Layout 
+  title="Dental Implants Guide | Patient Education | Smile Dental Clinic"
+  description="Complete guide to dental implants. Learn about the procedure, recovery, and long-term care of dental implants."
+>
+  <Hero 
+    title="Dental Implants Guide"
+    subtitle="Understanding the process and benefits of dental implants"
+    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+    buttonText=""
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">What Are Dental Implants?</h2>
+        <p class="text-neutral-600 mb-4">
+          Dental implants are titanium posts surgically placed into the jawbone to replace missing tooth roots. They provide a strong foundation for fixed or removable replacement teeth that are made to match your natural teeth.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Ideal Candidates</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Healthy gums</li>
+              <li>• Adequate bone density</li>
+              <li>• Good oral hygiene</li>
+              <li>• Non-smokers</li>
+              <li>• Committed to maintenance</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Benefits</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Natural appearance</li>
+              <li>• Improved speech</li>
+              <li>• Better comfort</li>
+              <li>• Easier eating</li>
+              <li>• Durability</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">The Implant Process</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">1.</span>
+              <div>
+                <strong>Initial Evaluation</strong>
+                <p class="text-neutral-600">Comprehensive examination and treatment planning.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">2.</span>
+              <div>
+                <strong>Implant Placement</strong>
+                <p class="text-neutral-600">Surgical insertion of the implant post.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">3.</span>
+              <div>
+                <strong>Healing Period</strong>
+                <p class="text-neutral-600">Osseointegration process (3-6 months).</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">4.</span>
+              <div>
+                <strong>Abutment Placement</strong>
+                <p class="text-neutral-600">Attachment of the connector post.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">5.</span>
+              <div>
+                <strong>Crown Placement</strong>
+                <p class="text-neutral-600">Attachment of the artificial tooth.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Recovery and Long-term Care</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Recovery Period</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Initial healing: 7-10 days</li>
+              <li>• Osseointegration: 3-6 months</li>
+              <li>• Minimal discomfort</li>
+              <li>• Gradual return to normal diet</li>
+              <li>• Regular check-ups</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Maintenance</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Regular brushing and flossing</li>
+              <li>• Professional cleanings</li>
+              <li>• Avoid hard foods</li>
+              <li>• Regular dental visits</li>
+              <li>• Monitor for changes</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Ready to Learn More?</h2>
+        <p class="text-neutral-600 mb-6">
+          Schedule a consultation to discuss whether dental implants are right for you and get answers to all your questions.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Schedule Consultation
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>

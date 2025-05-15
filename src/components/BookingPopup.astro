@@ -1,0 +1,105 @@
+---
+---
+
+<div id="booking-popup" class="fixed inset-0 bg-black/50 z-50 hidden">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+    <button id="close-popup" class="absolute top-4 right-4 text-neutral-500 hover:text-neutral-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <h2 class="text-2xl font-bold mb-6">Request An Appointment</h2>
+    
+    <form id="appointment-form" class="space-y-4">
+      <input 
+        type="text" 
+        placeholder="First & Last Name (Required)" 
+        required
+        class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+      />
+      
+      <input 
+        type="email" 
+        placeholder="Email (Required)" 
+        required
+        class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+      />
+      
+      <input 
+        type="tel" 
+        placeholder="Phone Number (Required)" 
+        required
+        class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+      />
+      
+      <select 
+        class="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
+        required
+      >
+        <option value="">How Did You Hear About Us?</option>
+        <option value="google">Google</option>
+        <option value="facebook">Facebook</option>
+        <option value="friend">Friend/Family</option>
+        <option value="other">Other</option>
+      </select>
+      
+      <div class="flex items-start gap-2">
+        <input 
+          type="checkbox" 
+          id="sms-consent"
+          class="mt-1"
+          required
+        />
+        <label for="sms-consent" class="text-sm text-neutral-600">
+          By checking this box you will be agreeing to receive text messages from Lilac Dental
+        </label>
+      </div>
+      
+      <button 
+        type="submit"
+        class="w-full bg-primary-600 text-white font-medium py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors"
+      >
+        Request Appointment
+      </button>
+      
+      <a 
+        href="https://book.modento.io/lilac-dental/patient-details"
+        target="_blank"
+        rel="noopener noreferrer" 
+        class="block w-full bg-black text-white font-medium py-3 px-6 rounded-lg hover:bg-neutral-800 transition-colors text-center"
+      >
+        Book Online Now
+      </a>
+    </form>
+  </div>
+</div>
+
+<script>
+  const popup = document.getElementById('booking-popup');
+  const closeButton = document.getElementById('close-popup');
+  const appointmentForm = document.getElementById('appointment-form');
+  const bookButtons = document.querySelectorAll('[data-booking="true"]');
+  
+  bookButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      popup?.classList.remove('hidden');
+    });
+  });
+  
+  closeButton?.addEventListener('click', () => {
+    popup?.classList.add('hidden');
+  });
+  
+  popup?.addEventListener('click', (e) => {
+    if (e.target === popup) {
+      popup.classList.add('hidden');
+    }
+  });
+  
+  appointmentForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    window.location.href = 'https://book.modento.io/lilac-dental/patient-details';
+  });
+</script>

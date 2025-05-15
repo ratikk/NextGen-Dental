@@ -1,0 +1,142 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const breadcrumbItems = [
+  { label: 'Services', href: '/services' },
+  { label: 'Dentures', href: '/services/dentures' }
+];
+---
+
+<Layout 
+  title="Dentures | Services | Smile Dental Clinic"
+  description="Custom-fitted dentures to restore your smile and confidence. Learn about our complete and partial denture options."
+>
+  <Hero 
+    title="Dentures"
+    subtitle="Restore your smile with custom-fitted dentures"
+    imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
+  />
+  
+  <div class="container mx-auto px-4">
+    <Breadcrumbs items={breadcrumbItems} />
+    
+    <article class="max-w-4xl mx-auto py-12">
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Modern Denture Solutions</h2>
+        <p class="text-neutral-600 mb-4">
+          Our custom-fitted dentures are designed to restore your smile's appearance and function. Using advanced materials and techniques, we create comfortable, natural-looking dentures that help you eat, speak, and smile with confidence.
+        </p>
+        <div class="grid md:grid-cols-2 gap-8 mt-8">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Types of Dentures</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Complete dentures</li>
+              <li>• Partial dentures</li>
+              <li>• Immediate dentures</li>
+              <li>• Implant-supported dentures</li>
+              <li>• Flexible dentures</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Benefits</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Restored smile</li>
+              <li>• Improved speech</li>
+              <li>• Better chewing ability</li>
+              <li>• Facial support</li>
+              <li>• Boosted confidence</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Getting Your Dentures</h2>
+        <div class="bg-white p-6 rounded-lg shadow-md">
+          <ul class="space-y-4">
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">1.</span>
+              <div>
+                <strong>Initial Consultation</strong>
+                <p class="text-neutral-600">Comprehensive evaluation and discussion of options.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">2.</span>
+              <div>
+                <strong>Impressions & Measurements</strong>
+                <p class="text-neutral-600">Precise measurements for custom fit.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">3.</span>
+              <div>
+                <strong>Wax Try-in</strong>
+                <p class="text-neutral-600">Preview and adjust your new smile.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">4.</span>
+              <div>
+                <strong>Final Fitting</strong>
+                <p class="text-neutral-600">Placement and adjustments for optimal comfort.</p>
+              </div>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="text-primary-600 font-bold">5.</span>
+              <div>
+                <strong>Follow-up Care</strong>
+                <p class="text-neutral-600">Regular check-ups and adjustments as needed.</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Caring for Your Dentures</h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Daily Care</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Remove and rinse after meals</li>
+              <li>• Brush dentures daily</li>
+              <li>• Soak overnight</li>
+              <li>• Clean your mouth</li>
+              <li>• Handle with care</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-semibold mb-4">Long-term Maintenance</h3>
+            <ul class="space-y-3 text-neutral-600">
+              <li>• Regular dental checkups</li>
+              <li>• Professional cleanings</li>
+              <li>• Adjustments as needed</li>
+              <li>• Watch for changes</li>
+              <li>• Replace when necessary</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-primary-50 p-8 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Restore Your Smile</h2>
+        <p class="text-neutral-600 mb-6">
+          Ready to explore your denture options? Schedule a consultation to discuss which solution is right for you.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+            Schedule Consultation
+          </a>
+          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </article>
+  </div>
+</Layout>
