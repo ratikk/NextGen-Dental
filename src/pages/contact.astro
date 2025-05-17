@@ -1,31 +1,46 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Hero from '../components/Hero.astro'; // Assuming Hero.astro is set up
+// import Breadcrumbs from '../components/Breadcrumbs.astro'; // Removed as not used in provided snippet
 
-const breadcrumbItems = [
-  { label: 'Contact', href: '/contact' }
-];
+// Constants for this page (should match your global constants if they exist)
+const address = {
+  line1: "12314 N Interstate Hwy 35 Ste 110",
+  cityStateZip: "Austin, TX 78753"
+};
+const phoneNumber = "+17372913927";
+const phoneDisplay = "(737) 291-3927";
+const emailAddress = "lilacdental24@gmail.com"; // Using the one from your provided HTML
+
+const fullAddress = `${address.line1}, ${address.cityStateZip}`;
+const googleMapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
+const googleMapsEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(fullAddress)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+
+const lambdaEndpoint = "https://7bvjump2trmhg2aemllzaoo5qu0ixytw.lambda-url.us-east-1.on.aws/"; // Same as index.astro
+
+// const breadcrumbItems = [
+//   { label: 'Contact', href: '/contact' }
+// ]; // Not used
 ---
 
-<Layout 
-  title="Contact Us | Smile Dental Clinic"
-  description="We're here to answer your questions and schedule your appointment"
+<Layout
+  title="Contact Us | Lilac Dental"
+  description="We're here to answer your questions and schedule your appointment at Lilac Dental."
 >
-  <Hero 
+  <Hero
     title="Contact Us"
-    subtitle="We're here to answer your questions and schedule your appointment"
+    subtitle="We're here to answer your questions and schedule your appointment."
     imageUrl="https://images.pexels.com/photos/305565/pexels-photo-305565.jpeg"
-    buttonText=""
+    buttonText="" {/* Assuming Hero component handles empty buttonText gracefully */}
   />
-  
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-        <!-- Contact Information -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+        {/* Contact Information */}
         <div>
           <h2 class="text-3xl font-bold text-neutral-900 mb-6">Get In Touch</h2>
-          
+
           <div class="space-y-8">
             <div class="flex items-start gap-4">
               <div class="bg-primary-100 p-3 rounded-lg text-primary-600">
@@ -35,12 +50,12 @@ const breadcrumbItems = [
                 </svg>
               </div>
               <div>
-                <h3 class="text-xl font-semibold text-neutral-900 mb-2">Office Location</h3>
+                <h3 class="text-xl font-semibold text-neutral-900 mb-1">Office Location</h3>
                 <p class="text-neutral-600">
-                  123 Dental Street<br />
-                  New York, NY 10001
+                  {address.line1}<br />
+                  {address.cityStateZip}
                 </p>
-                <a href="https://maps.google.com" target="_blank" class="text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-2 font-medium">
+                <a href={googleMapsDirectionsUrl} target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-2 font-medium">
                   Get Directions
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -48,7 +63,7 @@ const breadcrumbItems = [
                 </a>
               </div>
             </div>
-            
+
             <div class="flex items-start gap-4">
               <div class="bg-primary-100 p-3 rounded-lg text-primary-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -56,17 +71,17 @@ const breadcrumbItems = [
                 </svg>
               </div>
               <div>
-                <h3 class="text-xl font-semibold text-neutral-900 mb-2">Phone</h3>
+                <h3 class="text-xl font-semibold text-neutral-900 mb-1">Phone</h3>
                 <p class="text-neutral-600">
-                  Main: (123) 456-7890<br />
-                  Emergency: (123) 456-7899
+                  Call: <a href={`tel:${phoneNumber}`} class="hover:underline">{phoneDisplay}</a>
                 </p>
-                <a href="tel:+1234567890" class="text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-2 font-medium">
+                {/* <p class="text-neutral-600">Emergency: {phoneDisplay}</p> */}
+                <a href={`tel:${phoneNumber}`} class="text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-2 font-medium">
                   Call Now
                 </a>
               </div>
             </div>
-            
+
             <div class="flex items-start gap-4">
               <div class="bg-primary-100 p-3 rounded-lg text-primary-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -74,17 +89,16 @@ const breadcrumbItems = [
                 </svg>
               </div>
               <div>
-                <h3 class="text-xl font-semibold text-neutral-900 mb-2">Email</h3>
+                <h3 class="text-xl font-semibold text-neutral-900 mb-1">Email</h3>
                 <p class="text-neutral-600">
-                  info@smiledentalclinic.com<br />
-                  appointments@smiledentalclinic.com
+                  <a href={`mailto:${emailAddress}`} class="hover:underline">{emailAddress}</a>
                 </p>
-                <a href="mailto:info@smiledentalclinic.com" class="text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-2 font-medium">
+                <a href={`mailto:${emailAddress}`} class="text-primary-600 hover:text-primary-700 inline-flex items-center gap-1 mt-2 font-medium">
                   Send Email
                 </a>
               </div>
             </div>
-            
+
             <div class="flex items-start gap-4">
               <div class="bg-primary-100 p-3 rounded-lg text-primary-600">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -93,100 +107,178 @@ const breadcrumbItems = [
               </div>
               <div>
                 <h3 class="text-xl font-semibold text-neutral-900 mb-2">Office Hours</h3>
-                <table class="text-neutral-600">
-                  <tr>
-                    <td class="pr-6 py-1">Monday - Friday</td>
-                    <td>8:00 AM - 6:00 PM</td>
-                  </tr>
-                  <tr>
-                    <td class="pr-6 py-1">Saturday</td>
-                    <td>9:00 AM - 2:00 PM</td>
-                  </tr>
-                  <tr>
-                    <td class="pr-6 py-1">Sunday</td>
-                    <td>Closed</td>
-                  </tr>
+                <table class="text-neutral-600 text-sm">
+                  <tr><td class="pr-4 py-0.5">Monday - Friday</td><td>8:00 AM - 6:00 PM</td></tr>
+                  <tr><td class="pr-4 py-0.5">Saturday</td><td>9:00 AM - 2:00 PM</td></tr>
+                  <tr><td class="pr-4 py-0.5">Sunday</td><td>Closed</td></tr>
                 </table>
               </div>
             </div>
           </div>
         </div>
-        
+
         <!-- Contact Form -->
-        <div class="bg-neutral-50 p-8 rounded-lg shadow-md">
+        <div class="bg-neutral-50 p-6 md:p-8 rounded-lg shadow-md">
           <h2 class="text-2xl font-bold text-neutral-900 mb-6">Send Us a Message</h2>
-          
-          <form id="contact-form" class="space-y-6">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <form id="contact-page-form" class="space-y-5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label for="first-name" class="block text-sm font-medium text-neutral-700 mb-1">First Name *</label>
-                <input type="text" id="first-name" name="first-name" required class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" />
+                <label for="contact_first_name" class="block text-sm font-medium text-neutral-700 mb-1">First Name *</label>
+                <input type="text" id="contact_first_name" name="firstName" required class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" />
               </div>
-              
               <div>
-                <label for="last-name" class="block text-sm font-medium text-neutral-700 mb-1">Last Name *</label>
-                <input type="text" id="last-name" name="last-name" required class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" />
+                <label for="contact_last_name" class="block text-sm font-medium text-neutral-700 mb-1">Last Name *</label>
+                <input type="text" id="contact_last_name" name="lastName" required class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" />
               </div>
             </div>
-            
             <div>
-              <label for="email" class="block text-sm font-medium text-neutral-700 mb-1">Email Address *</label>
-              <input type="email" id="email" name="email" required class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" />
+              <label for="contact_email" class="block text-sm font-medium text-neutral-700 mb-1">Email Address *</label>
+              <input type="email" id="contact_email" name="email" required class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" />
             </div>
-            
             <div>
-              <label for="phone" class="block text-sm font-medium text-neutral-700 mb-1">Phone Number</label>
-              <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" />
+              <label for="contact_phone" class="block text-sm font-medium text-neutral-700 mb-1">Phone Number</label>
+              <input type="tel" id="contact_phone" name="phone" class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors" />
             </div>
-            
             <div>
-              <label for="message" class="block text-sm font-medium text-neutral-700 mb-1">Message *</label>
-              <textarea id="message" name="message" rows="4" required class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors resize-none"></textarea>
+              <label for="contact_message" class="block text-sm font-medium text-neutral-700 mb-1">Message *</label>
+              <textarea id="contact_message" name="message" rows="4" required class="w-full px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none transition-colors resize-none"></textarea>
             </div>
-            
-            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
+             {/* SMS Consent Checkbox */}
+            <div class="flex items-start space-x-2 pt-1">
+              <input id="contact_sms_consent" name="smsConsent" type="checkbox" required
+                class="h-4 w-4 text-primary-600 border-neutral-300 rounded focus:ring-primary-500 mt-0.5" />
+              <label for="contact_sms_consent" class="text-xs text-neutral-600">
+                By checking this box you will be agreeing to receive text messages from Lilac Dental.
+              </label>
+            </div>
+            {/* CAPTCHA Placeholder */}
+            <div class="mt-3 p-3 bg-neutral-100 border border-neutral-200 rounded-md text-center text-sm text-neutral-500">
+              CAPTCHA verification would appear here.
+              {/* For Google reCAPTCHA, you'd put <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div> here */}
+            </div>
+            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-4 rounded-lg transition-colors mt-2">
               Send Message
             </button>
+            {/* Submission messages will be appended here by JavaScript */}
           </form>
         </div>
       </div>
     </div>
   </div>
-  
+
   <!-- Map Section -->
-  <div class="bg-neutral-50 py-16">
+  <div class="bg-neutral-100 py-16">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto text-center mb-12">
         <h2 class="text-3xl font-bold text-neutral-900 mb-4">Find Our Office</h2>
         <p class="text-neutral-600">
-          We're conveniently located in downtown New York with easy access to public transportation and parking.
+          We're conveniently located in the heart of North Austin with easy access to I-35 and parking.
         </p>
       </div>
-      
-      <div class="bg-white p-4 rounded-lg shadow-md">
-        <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden h-96 bg-neutral-200 flex items-center justify-center">
-          <p class="text-neutral-500">Google Maps would be embedded here</p>
+      <div class="bg-white p-2 sm:p-4 rounded-lg shadow-md">
+        <div class="rounded-lg overflow-hidden h-80 sm:h-96 md:h-[500px] bg-neutral-200">
+          <iframe
+            src={googleMapsEmbedUrl}
+            width="100%"
+            height="100%"
+            style="border:0;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title={`Location Map for Lilac Dental at ${fullAddress}`}>
+          </iframe>
         </div>
       </div>
     </div>
   </div>
 </Layout>
 
-<script>
-  // Contact form handling
-  const contactForm = document.getElementById('contact-form');
-  
-  contactForm?.addEventListener('submit', (e) => {
-    e.preventDefault();
+<script define:vars={{ lambdaEndpoint }}>
+  // handleSubmit function (similar to index.astro)
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const formElement = event.target; // Should be the form itself
+    const formData = new FormData(formElement);
     
-    // Get form data
-    const formData = new FormData(e.target as HTMLFormElement);
-    const formDataObj = Object.fromEntries(formData.entries());
-    
-    // Show success message
-    alert('Thank you for your message! We will get back to you shortly.');
-    
-    // Reset form
-    (e.target as HTMLFormElement).reset();
-  });
+    // CAPTCHA: If using Google reCAPTCHA, get the token
+    // const recaptchaToken = formData.get('g-recaptcha-response');
+
+    // Constructing data object - ensure names match form fields
+    const data = {
+      firstName: formData.get('firstName'), // Changed from 'first-name'
+      lastName: formData.get('lastName'),   // Changed from 'last-name'
+      email: formData.get('email'),
+      phone: formData.get('phone'),
+      message: formData.get('message'),
+      smsConsent: formData.get('smsConsent') === 'on', // Will be true if checked
+      formType: 'Contact Page Inquiry', // To differentiate from appointment requests
+      // recaptchaToken: recaptchaToken, // Send token to backend for verification
+    };
+
+    const submitBtn = formElement.querySelector('button[type="submit"]');
+    const originalBtnText = submitBtn.innerHTML;
+    submitBtn.innerHTML = 'Sending...';
+    submitBtn.disabled = true;
+
+    const existingMessage = formElement.querySelector('.form-submission-message');
+    if (existingMessage) existingMessage.remove();
+
+    try {
+      const response = await fetch(lambdaEndpoint, { // Using the defined lambdaEndpoint
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'form-submission-message';
+      messageDiv.style.marginTop = '10px';
+      messageDiv.style.padding = '10px';
+      messageDiv.style.borderRadius = '4px';
+      messageDiv.style.fontSize = '14px';
+      messageDiv.style.textAlign = 'center';
+
+      if (response.ok) {
+        messageDiv.style.backgroundColor = '#d4edda';
+        messageDiv.style.color = '#155724';
+        messageDiv.innerText = 'Thank you for your message! We will get back to you shortly.';
+        formElement.reset();
+        // if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+      } else {
+        const errorData = await response.json().catch(() => ({ message: 'Submission failed. Please try again.' }));
+        messageDiv.style.backgroundColor = '#f8d7da';
+        messageDiv.style.color = '#721c24';
+        messageDiv.innerText = errorData.message || 'Submission failed. Please try again.';
+        // if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+      }
+      formElement.appendChild(messageDiv); // Append message inside the form
+      setTimeout(() => messageDiv.remove(), 5000);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'form-submission-message';
+      // ... (styling for error message)
+      messageDiv.style.marginTop = '10px';
+      messageDiv.style.padding = '10px';
+      messageDiv.style.borderRadius = '4px';
+      messageDiv.style.fontSize = '14px';
+      messageDiv.style.textAlign = 'center';
+      messageDiv.style.backgroundColor = '#f8d7da';
+      messageDiv.style.color = '#721c24';
+      messageDiv.innerText = 'An error occurred. Please check your connection and try again.';
+      formElement.appendChild(messageDiv);
+      setTimeout(() => messageDiv.remove(), 5000);
+      // if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
+    } finally {
+      submitBtn.innerHTML = originalBtnText;
+      submitBtn.disabled = false;
+    }
+  }
+
+  // Attach to the contact form on this page
+  const contactPageForm = document.getElementById('contact-page-form');
+  if (contactPageForm) {
+    contactPageForm.addEventListener('submit', handleSubmit);
+  }
 </script>
