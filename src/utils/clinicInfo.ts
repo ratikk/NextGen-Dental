@@ -14,12 +14,12 @@ const clinicInfo: ClinicInfo = {
     appointmentsEmail: "appointments@lilacdental.com"
   },
   hours: {
-    "Monday": "8:00 AM - 6:00 PM",
-    "Tuesday": "8:00 AM - 6:00 PM",
-    "Wednesday": "8:00 AM - 6:00 PM",
-    "Thursday": "8:00 AM - 6:00 PM",
-    "Friday": "8:00 AM - 6:00 PM",
-    "Saturday": "9:00 AM - 2:00 PM",
+    "Monday": "9:00 AM to 5:00 PM",
+    "Tuesday": "Closed",
+    "Wednesday": "9:00 AM to 5:00 PM",
+    "Thursday": "9:00 AM to 5:00 PM",
+    "Friday": "10:00 AM to 2:00 PM",
+    "Saturday": "9:00 AM to 2:00 PM",
     "Sunday": "Closed"
   },
   socialMedia: {
@@ -37,3 +37,4 @@ const clinicInfo: ClinicInfo = {
 };
 
 export default clinicInfo;
+
