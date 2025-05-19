@@ -1,0 +1,65 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const pageList = {
+  "General": [
+    { name: "Home", link: "/" },
+    { name: "About Us", link: "/about/" },
+    { name: "Book Appointment", link: "/book-appointment/" },
+    { name: "Contact", link: "/contact/" },
+    { name: "Blog", link: "/blog/" },
+    { name: "Financing", link: "/financing/" },
+    { name: "Reviews", link: "/reviews/" },
+    { name: "Patient Information", link: "/patient-information/" }
+  ],
+  "Dental Services": [
+    { name: "All Services", link: "/services/" },
+    { name: "Dental Checkup", link: "/services/dental-checkup/" },
+    { name: "Dental Implants", link: "/services/dental-implants/" },
+    { name: "Dental Laminates", link: "/services/dental-laminates/" },
+    { name: "Dental Veneers", link: "/services/dental-veneers/" },
+    { name: "Dentures", link: "/services/dentures/" },
+    { name: "Full Mouth Reconstruction", link: "/services/full-mouth-reconstruction/" },
+    { name: "Laser Dentistry", link: "/services/laser-dentistry/" },
+    { name: "Lumineers", link: "/services/lumineers/" },
+    { name: "Oral Cancer Screening", link: "/services/oral-cancer-screening/" },
+    { name: "Root Canal", link: "/services/root-canal/" },
+    { name: "Smile Makeover", link: "/services/smile-makeover/" },
+    { name: "Teeth Cleaning", link: "/services/teeth-cleaning/" },
+    { name: "Teeth Whitening", link: "/services/teeth-whitening/" }
+  ],
+  "Patient Education": [
+    { name: "Main", link: "/patient-education/" },
+    { name: "Before & After", link: "/patient-education/before-after/" },
+    { name: "Dental Dictionary", link: "/patient-education/dental-dictionary/" },
+    { name: "Dental Implants Guide", link: "/patient-education/dental-implants-guide/" },
+    { name: "Sleep Apnea", link: "/patient-education/do-i-have-sleep-apnea/" },
+    { name: "FAQ", link: "/patient-education/faq/" },
+    { name: "Gum Disease", link: "/patient-education/gum-disease/" },
+    { name: "Oral Hygiene Basics", link: "/patient-education/oral-hygiene-basics/" },
+    { name: "Orthodontics Guide", link: "/patient-education/orthodontics-guide/" },
+    { name: "Root Canal Guide", link: "/patient-education/root-canal-guide/" },
+    { name: "Tooth Decay", link: "/patient-education/tooth-decay/" }
+  ]
+};
+---
+
+<Layout title="Sitemap for Lilac Dental">
+  <div class="container py-12">
+    <h1 class="text-3xl font-semibold text-purple-700 mb-8">Sitemap for Lilac Dental in Austin, TX</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {Object.entries(pageList).map(([section, links]) => (
+        <div>
+          <h2 class="text-xl font-semibold text-neutral-800 mb-4">{section}</h2>
+          <ul class="list-disc list-inside text-neutral-700 space-y-2">
+            {links.map(link => (
+              <li><a href={link.link} class="hover:text-purple-600 transition-colors">{link.name}</a></li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+

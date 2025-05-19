@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+
+# Block admin, internal, or sensitive directories
+Disallow: /admin/
+Disallow: /internal/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /test/
+
