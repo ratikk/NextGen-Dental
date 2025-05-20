@@ -21,14 +21,15 @@ const fullAddress = `${address.line1}, ${address.cityStateZip}`;
 let googleMapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
 
 const heroImages = [
-  "/images/hero/dental-1.jpg",
-  "/images/hero/dental-2.jpg",
-  "/images/hero/dental-3.jpg",
-  "/images/hero/dental-4.jpg",
-  "/images/hero/dental-5.jpg",
-  "/images/hero/dental-6.jpg"
+  { src: "/images/hero/dental-1.jpg", alt: "Smiling patient after cosmetic dentistry at Lilac Dental, Austin TX" },
+  { src: "/images/hero/dental-2.jpg", alt: "Family-friendly dental office in Austin Texas offering gentle care" },
+  { src: "/images/hero/dental-3.jpg", alt: "Modern dental technology used for teeth whitening at Lilac Dental Austin" },
+  { src: "/images/hero/dental-4.jpg", alt: "Patient receiving dental implants procedure in Austin TX" },
+  { src: "/images/hero/dental-5.jpg", alt: "Austin dentist consultation for veneers and smile makeover treatments" },
+  { src: "/images/hero/dental-6.jpg", alt: "Professional dentist performing oral examination at Lilac Dental Austin" }
 ];
 
+// This is the single source of truth for heroTexts
 const heroTexts = [
   {
     title: "Aesthetic Smiles",
@@ -52,15 +53,16 @@ const heroTexts = [
 ---
 
 <Layout title="Lilac Dental | Austin Dental Care & Aesthetic Smiles">
-  {/* 
-    IMPORTANT: Ensure Swiper.js CSS and JS are loaded in your Layout.astro or a shared head.
-    Example for Layout.astro:
-    <head>
-        ...
-        <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-        <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script> 
-        ...
-    </head>
+  {/*
+  IMPORTANT: Ensure Swiper.js CSS and JS are loaded in your Layout.astro or a shared head.
+  Example for Layout.astro:
+
+  <head>
+    ...
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+    ...
+  </head>
   */}
 
   <div class="hidden lg:block">
@@ -73,13 +75,15 @@ const heroTexts = [
       <div class="h-[50vh] sm:h-[60vh] relative">
         <div class="swiper hero-swiper-mobile h-full">
           <div class="swiper-wrapper">
-            {heroImages.map((image, index) => (
-              <div class="swiper-slide">
-                <img src={image} alt={`Lilac Dental Austin - Mobile View ${index + 1}`}
-                  class="w-full h-full object-cover object-center" loading={index === 0 ? "eager" : "lazy"} decoding="async"
-                  fetchpriority={index === 0 ? "high" : "low"} />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
-              </div>
+            {heroImages.map(({src, alt}, index) => (
+            <div class="swiper-slide">
+              <img src={src} alt={alt}
+                class="w-full h-full object-cover object-center"
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+                fetchpriority={index === 0 ? "high" : "low"} />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"></div>
+            </div>
             ))}
           </div>
           <div class="swiper-pagination mobile-swiper-pagination !bottom-4"></div>
@@ -105,17 +109,14 @@ const heroTexts = [
     </div>
 
     {/* --- Mobile "Request an Appointment" Inline Form Section (Initially Hidden) --- */}
-    {/* This section is intended to be triggered by a dedicated "Request an Appointment" link/button
-        (e.g., in your mobile navigation menu - the "4 line bar").
-        The example trigger button that was here has been REMOVED.
-        You will need to add an element (e.g., in your nav) with id="trigger-mobile-request-form"
-        or adapt the JavaScript to target your chosen trigger element.
-    */}
-    <div id="mobile-request-appointment-form-section" class="hidden bg-white p-4 md:p-6 my-4 mx-2 rounded-lg shadow-xl border border-neutral-200">
+    <div id="mobile-request-appointment-form-section"
+      class="hidden bg-white p-4 md:p-6 my-4 mx-2 rounded-lg shadow-xl border border-neutral-200">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-bold text-purple-700">Request an Appointment</h2>
+        <h2 class="text-xl font-bold text-purple-700">Request an Appointment</h2> {/* Good use of H2 */}
         <button id="close-mobile-request-form-btn" class="text-neutral-500 hover:text-neutral-700 p-1">
-             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
         </button>
       </div>
       <form id="mobile-request-form" class="space-y-3.5">
@@ -138,12 +139,14 @@ const heroTexts = [
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label for="mobile_req_pref_date" class="block text-xs font-medium text-neutral-600 mb-1">Preferred Date</label>
+            <label for="mobile_req_pref_date" class="block text-xs font-medium text-neutral-600 mb-1">Preferred
+              Date</label>
             <input type="date" id="mobile_req_pref_date" name="preferredDate"
               class="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm appearance-none" />
           </div>
           <div>
-            <label for="mobile_req_pref_time" class="block text-xs font-medium text-neutral-600 mb-1">Preferred Time</label>
+            <label for="mobile_req_pref_time" class="block text-xs font-medium text-neutral-600 mb-1">Preferred
+              Time</label>
             <select id="mobile_req_pref_time" name="preferredTime"
               class="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
               <option value="" disabled selected>Select a time</option>
@@ -153,7 +156,8 @@ const heroTexts = [
           </div>
         </div>
         <div>
-          <label for="mobile_req_reason" class="block text-xs font-medium text-neutral-600 mb-1">Reason for Visit</label>
+          <label for="mobile_req_reason" class="block text-xs font-medium text-neutral-600 mb-1">Reason for
+            Visit</label>
           <select id="mobile_req_reason" name="reasonForVisit"
             class="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
             <option value="" disabled selected>Select a reason</option>
@@ -183,45 +187,45 @@ const heroTexts = [
 
 
     <div id="mobile-lower-content-wrapper">
-        <section class="bg-gradient-to-r from-purple-700 via-purple-500 to-purple-700 py-3 overflow-hidden relative">
+      <section class="bg-gradient-to-r from-purple-700 via-purple-500 to-purple-700 py-3 overflow-hidden relative">
         <div class="marquee-container whitespace-nowrap">
-            <div class="marquee-content flex space-x-8">
+          <div class="marquee-content flex space-x-8">
             <span class="marquee-text text-white text-sm font-semibold drop-shadow-sm">
-                {marqueeTagline}
+              {marqueeTagline}
             </span>
             <span class="marquee-text text-white text-sm font-semibold drop-shadow-sm">
-                {marqueeTagline}
+              {marqueeTagline}
             </span>
-            </div>
+          </div>
         </div>
-        </section>
-        <div class="bg-white p-4 shadow-md">
+      </section>
+      <div class="bg-white p-4 shadow-md">
         <a href={googleMapsDirectionsUrl} target="_blank" rel="noopener noreferrer"
-            class="flex items-center justify-between text-neutral-700 hover:text-primary-600 transition-colors">
-            <div class="flex items-center">
+          class="flex items-center justify-between text-neutral-700 hover:text-primary-600 transition-colors">
+          <div class="flex items-center">
             <div class="bg-purple-100 p-2 rounded-full mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                 class="w-5 h-5 text-purple-600">
                 <path fill-rule="evenodd"
-                    d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
-                    clip-rule="evenodd" />
-                </svg>
+                  d="M9.69 18.933l.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 00.281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 103 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 002.273 1.765 11.842 11.842 0 00.976.544l.062.029.018.008.006.003zM10 11.25a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5z"
+                  clip-rule="evenodd" />
+              </svg>
             </div>
             <div>
-                <p class="text-sm font-medium">Our Location:</p>
-                <p class="text-sm">{address.line1}</p>
-                <p class="text-sm">{address.cityStateZip}</p>
+              <p class="text-sm font-medium">Our Location:</p>
+              <p class="text-sm">{address.line1}</p>
+              <p class="text-sm">{address.cityStateZip}</p>
             </div>
-            </div>
-            <div class="text-purple-600">
+          </div>
+          <div class="text-purple-600">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
-                <path fill-rule="evenodd"
+              <path fill-rule="evenodd"
                 d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
                 clip-rule="evenodd" />
             </svg>
-            </div>
+          </div>
         </a>
-        </div>
+      </div>
     </div>
   </div>
 
@@ -233,13 +237,15 @@ const heroTexts = [
         style="width: calc(100% - 420px);">
         <div class="swiper hero-swiper-desktop h-full">
           <div class="swiper-wrapper">
-            {heroImages.map((image, index) => (
-              <div class="swiper-slide bg-black">
-                <img src={image} alt={`Lilac Dental Austin - ${heroTexts[index % heroTexts.length]?.title || `Hero Image ${index + 1}`}`}
-                  class="w-full h-full object-contain object-center" loading={index === 0 ? "eager" : "lazy"}
-                  decoding="async" fetchpriority={index === 0 ? "high" : "low"} />
-                <div class="absolute inset-0 bg-black/25"></div>
-              </div>
+            {heroImages.map(({src, alt}, index) => (
+            <div class="swiper-slide bg-black">
+              <img src={src} alt={alt}
+                class="w-full h-full object-contain object-center"
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+                fetchpriority={index === 0 ? "high" : "low"} /> {/* Excellent loading attributes */}
+              <div class="absolute inset-0 bg-black/25"></div>
+            </div>
             ))}
           </div>
         </div>
@@ -286,7 +292,7 @@ const heroTexts = [
       <div class="absolute z-20 right-6 xl:right-10 top-1/2 transform -translate-y-1/2">
         <div class="bg-white p-6 shadow-2xl rounded-lg w-[360px]">
           <div class="bg-purple-100 p-4 -m-6 mb-6 rounded-t-lg">
-            <h2 class="text-xl font-bold text-purple-700 text-center">Request an Appointment</h2>
+            <h2 class="text-xl font-bold text-purple-700 text-center">Request an Appointment</h2> {/* Good use of H2 */}
           </div>
           <form id="hero-request-form-desktop" class="space-y-3.5">
             <div>
@@ -308,12 +314,14 @@ const heroTexts = [
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
-                <label for="hero_pref_date" class="block text-xs font-medium text-neutral-600 mb-1">Preferred Date</label>
+                <label for="hero_pref_date" class="block text-xs font-medium text-neutral-600 mb-1">Preferred
+                  Date</label>
                 <input type="date" id="hero_pref_date" name="preferredDate"
                   class="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm appearance-none" />
               </div>
               <div>
-                <label for="hero_pref_time" class="block text-xs font-medium text-neutral-600 mb-1">Preferred Time</label>
+                <label for="hero_pref_time" class="block text-xs font-medium text-neutral-600 mb-1">Preferred
+                  Time</label>
                 <select id="hero_pref_time" name="preferredTime"
                   class="w-full px-3 py-2 border border-neutral-300 rounded-md focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none text-sm">
                   <option value="" disabled selected>Select a time</option>
@@ -341,7 +349,8 @@ const heroTexts = [
                 By checking this box you will be agreeing to receive text messages from Lilac Dental.
               </label>
             </div>
-            <div class="mt-3 p-3 bg-neutral-100 border border-neutral-200 rounded-md text-center text-sm text-neutral-500">
+            <div
+              class="mt-3 p-3 bg-neutral-100 border border-neutral-200 rounded-md text-center text-sm text-neutral-500">
               CAPTCHA verification would appear here.
             </div>
             <button type="submit"
@@ -355,19 +364,17 @@ const heroTexts = [
   </div>
 </Layout>
 
-<script>
+<script define:vars={{ heroTexts }}>
+  // The 'heroTexts' variable from Astro frontmatter is now available here.
+  // No need to redefine heroTextsData.
+
   const lambdaEndpoint = "https://7bvjump2trmhg2aemllzaoo5qu0ixytw.lambda-url.us-east-1.on.aws/";
-  const heroTextsData = [
-    { title: "Aesthetic Smiles", subtitle: "Renewing Dental Implants, Veneers, and Teeth Whitening Treatments", linkText: "See all Dental Treatments", linkUrl: "/services" },
-    { title: "Your Family Dentist", subtitle: "Comprehensive care for all ages in a comfortable setting.", linkText: "Meet Our Team", linkUrl: "/about" },
-    { title: "Advanced Dental Tech", subtitle: "Utilizing the latest technology for precise and comfortable care.", linkText: "Explore Technology", linkUrl: "/technology" }
-  ];
 
   async function handleSubmit(event) {
     event.preventDefault();
     const formElement = event.target;
     const formData = new FormData(formElement);
-    
+
     const data = {
       fullName: formData.get('fullName'),
       email: formData.get('email'),
@@ -417,7 +424,6 @@ const heroTexts = [
     } catch (error) {
       console.error('Error submitting form:', error);
       const messageDiv = document.createElement('div');
-      // ... (error message styling) ...
       messageDiv.className = 'form-submission-message';
       messageDiv.style.marginTop = '10px';
       messageDiv.style.padding = '10px';
@@ -445,76 +451,74 @@ const heroTexts = [
     if (mobileRequestForm) {
       mobileRequestForm.addEventListener('submit', handleSubmit);
     }
-    
-    // JS to toggle the mobile "Request an Appointment" form section
-    // YOU NEED TO CREATE/IDENTIFY THE ACTUAL TRIGGER ELEMENT (e.g., in your nav)
-    // and ensure it has the id "trigger-mobile-request-form" or update the selector below.
-    const triggerMobileRequestFormBtn = document.getElementById('trigger-mobile-request-form'); // This ID is an example.
+
+    const triggerMobileRequestFormBtn = document.getElementById('trigger-mobile-request-form');
     const mobileRequestFormSection = document.getElementById('mobile-request-appointment-form-section');
     const closeMobileRequestFormBtn = document.getElementById('close-mobile-request-form-btn');
     const mobileHeroContentWrapper = document.getElementById('mobile-hero-content-wrapper');
     const mobileLowerContentWrapper = document.getElementById('mobile-lower-content-wrapper');
 
     function showMobileRequestForm() {
-        if (mobileRequestFormSection) {
-            if (mobileRequestForm) {
-                mobileRequestForm.reset();
-                const existingMsg = mobileRequestForm.querySelector('.form-submission-message');
-                if (existingMsg) existingMsg.remove();
-                const submitBtn = mobileRequestForm.querySelector('button[type="submit"]');
-                if (submitBtn) {
-                    submitBtn.innerHTML = 'Send Request';
-                    submitBtn.disabled = false;
-                }
-            }
-            mobileRequestFormSection.classList.remove('hidden');
-            mobileRequestFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            if (mobileHeroContentWrapper) mobileHeroContentWrapper.classList.add('hidden');
-            if (mobileLowerContentWrapper) mobileLowerContentWrapper.classList.add('hidden');
+      if (mobileRequestFormSection) {
+        if (mobileRequestForm) {
+          mobileRequestForm.reset();
+          const existingMsg = mobileRequestForm.querySelector('.form-submission-message');
+          if (existingMsg) existingMsg.remove();
+          const submitBtn = mobileRequestForm.querySelector('button[type="submit"]');
+          if (submitBtn) {
+            submitBtn.innerHTML = 'Send Request';
+            submitBtn.disabled = false;
+          }
         }
+        mobileRequestFormSection.classList.remove('hidden');
+        mobileRequestFormSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (mobileHeroContentWrapper) mobileHeroContentWrapper.classList.add('hidden');
+        if (mobileLowerContentWrapper) mobileLowerContentWrapper.classList.add('hidden');
+      }
     }
 
     function hideMobileRequestForm() {
-        if (mobileRequestFormSection) {
-            mobileRequestFormSection.classList.add('hidden');
-            if (mobileHeroContentWrapper) mobileHeroContentWrapper.classList.remove('hidden');
-            if (mobileLowerContentWrapper) mobileLowerContentWrapper.classList.remove('hidden');
-        }
+      if (mobileRequestFormSection) {
+        mobileRequestFormSection.classList.add('hidden');
+        if (mobileHeroContentWrapper) mobileHeroContentWrapper.classList.remove('hidden');
+        if (mobileLowerContentWrapper) mobileLowerContentWrapper.classList.remove('hidden');
+      }
     }
 
-    if (triggerMobileRequestFormBtn) { // This will only work if an element with this ID exists
-        triggerMobileRequestFormBtn.addEventListener('click', showMobileRequestForm);
+    if (triggerMobileRequestFormBtn) {
+      triggerMobileRequestFormBtn.addEventListener('click', showMobileRequestForm);
     }
     if (closeMobileRequestFormBtn) {
-        closeMobileRequestFormBtn.addEventListener('click', hideMobileRequestForm);
+      closeMobileRequestFormBtn.addEventListener('click', hideMobileRequestForm);
     }
 
     if (typeof Swiper !== 'undefined') {
-        const heroSwiperMobile = new Swiper('.hero-swiper-mobile', {
-            loop: true,
-            autoplay: { delay: 5000, disableOnInteraction: false },
-            pagination: { el: '.mobile-swiper-pagination', clickable: true },
-        });
-        const heroSwiperDesktop = new Swiper('.hero-swiper-desktop', {
-            loop: true,
-            autoplay: { delay: 5000, disableOnInteraction: false },
-            pagination: { el: '.desktop-swiper-pagination', clickable: true },
-            on: {
-                slideChange: function () {
-                    const activeIndex = this.realIndex;
-                    const currentTextData = heroTextsData[activeIndex % heroTextsData.length];
-                    const titleEl = document.getElementById('hero-title-desktop');
-                    const subtitleEl = document.getElementById('hero-subtitle-desktop');
-                    const linkEl = document.getElementById('hero-link-desktop');
-                    if (currentTextData && titleEl && subtitleEl && linkEl) {
-                        titleEl.textContent = currentTextData.title;
-                        subtitleEl.textContent = currentTextData.subtitle;
-                        linkEl.textContent = `${currentTextData.linkText} →`;
-                        linkEl.href = currentTextData.linkUrl;
-                    }
-                },
-            },
-        });
+      const heroSwiperMobile = new Swiper('.hero-swiper-mobile', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.mobile-swiper-pagination', clickable: true },
+      });
+      const heroSwiperDesktop = new Swiper('.hero-swiper-desktop', {
+        loop: true,
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        pagination: { el: '.desktop-swiper-pagination', clickable: true },
+        on: {
+          slideChange: function () {
+            const activeIndex = this.realIndex;
+            // Use heroTexts passed from Astro frontmatter
+            const currentTextData = heroTexts[activeIndex % heroTexts.length];
+            const titleEl = document.getElementById('hero-title-desktop');
+            const subtitleEl = document.getElementById('hero-subtitle-desktop');
+            const linkEl = document.getElementById('hero-link-desktop');
+            if (currentTextData && titleEl && subtitleEl && linkEl) {
+              titleEl.textContent = currentTextData.title;
+              subtitleEl.textContent = currentTextData.subtitle;
+              linkEl.textContent = `${currentTextData.linkText} →`;
+              linkEl.href = currentTextData.linkUrl;
+            }
+          },
+        },
+      });
     }
     const marqueeContainer = document.querySelector('.marquee-container');
     if (marqueeContainer) {
@@ -533,7 +537,7 @@ const heroTexts = [
           }
           requestAnimationFrame(step);
         }
-        setTimeout(animateMarquee, 100); 
+        setTimeout(animateMarquee, 100);
       }
     }
   });
