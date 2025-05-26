@@ -3,6 +3,8 @@ import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 
+import preact from '@astrojs/preact';
+
 export default defineConfig({
   site: 'https://lilacdentalaustintx.com',
   server: {
@@ -32,13 +34,9 @@ export default defineConfig({
       }
     }
   },
-  integrations: [
-    tailwind(),
-    sitemap({
-      canonicalURL: 'https://lilacdentalaustintx.com'
-    }),
-     react()
-  ],
+  integrations: [tailwind(), sitemap({
+    canonicalURL: 'https://lilacdentalaustintx.com'
+  }), react(), preact()],
   output: 'static',
   build: {
     format: 'directory'

@@ -2,149 +2,46 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import GoogleReviews from '../components/GoogleReviews.jsx';
+import GoogleStats from '../components/GoogleStats.jsx';
+import PatientSatisfaction from '../components/PatientSatisfaction.jsx';
 
-const breadcrumbItems = [
-  { label: 'Reviews', href: '/reviews' }
-];
-
-const stats = [
-  {
-    number: "4.9",
-    label: "Average Rating"
-  },
-  {
-    number: "500+",
-    label: "Total Reviews"
-  },
-  {
-    number: "15+",
-    label: "Years of Service"
-  },
-  {
-    number: "98%",
-    label: "Patient Satisfaction"
-  }
-];
-
-const reviews = [
-  {
-    author: "Sarah Johnson",
-    rating: 5,
-    date: "March 15, 2024",
-    text: "I've been coming to Smile Dental Clinic for years and have always received excellent care. The staff is friendly and professional, and Dr. Smith is thorough and gentle. Highly recommend!"
-  },
-  {
-    author: "Michael Rodriguez",
-    rating: 5,
-    date: "March 10, 2024",
-    text: "Had my wisdom teeth removed here and the experience was much better than I expected. The team made me feel comfortable and the recovery was smooth. Great follow-up care too!"
-  },
-  {
-    author: "Emily Chen",
-    rating: 5,
-    date: "March 5, 2024",
-    text: "The best dental office I've ever been to! The hygienists are thorough but gentle, and Dr. Johnson always takes time to explain everything. The office is modern and clean."
-  },
-  {
-    author: "David Thompson",
-    rating: 4,
-    date: "March 1, 2024",
-    text: "Very professional team and great service. The only reason for 4 stars instead of 5 is the wait time can sometimes be a bit long, but the quality of care makes up for it."
-  },
-  {
-    author: "Lisa Martinez",
-    rating: 5,
-    date: "February 28, 2024",
-    text: "Had my Invisalign treatment done here and couldn't be happier with the results! The entire team was supportive throughout the process and the results exceeded my expectations."
-  },
-  {
-    author: "James Wilson",
-    rating: 5,
-    date: "February 25, 2024",
-    text: "Outstanding dental practice! From the front desk to the dental assistants to Dr. Smith, everyone is professional and caring. They make going to the dentist a pleasant experience."
-  }
-];
+const breadcrumbItems = [{ label: 'Reviews', href: '/reviews' }];
+const yearsOfService = "15+";
 ---
 
-<Layout 
-  title="Patient Reviews | Smile Dental Clinic"
-  description="Read what our patients say about their experience at Smile Dental Clinic. Real reviews from real patients."
->
-  <Hero 
+<Layout title="Patient Reviews | Lilac Dental">
+  <Hero
     title="Patient Reviews"
     subtitle="See what our patients say about their experience"
     imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
   />
-  
+
   <div class="container mx-auto px-4">
     <Breadcrumbs items={breadcrumbItems} />
-    
+
     <div class="py-12">
-      <!-- Stats -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-        {stats.map(stat => (
-          <div class="bg-white p-6 rounded-lg shadow-md text-center">
-            <div class="text-3xl font-bold text-primary-600 mb-2">{stat.number}</div>
-            <div class="text-neutral-600">{stat.label}</div>
-          </div>
-        ))}
-      </div>
-      
-      <!-- Filter and Sort -->
-      <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-        <div class="flex flex-col md:flex-row gap-4 justify-between">
-          <div class="flex gap-4">
-            <select id="rating-filter" class="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none">
-              <option value="">All Ratings</option>
-              <option value="5">5 Stars</option>
-              <option value="4">4 Stars</option>
-              <option value="3">3 Stars</option>
-              <option value="2">2 Stars</option>
-              <option value="1">1 Star</option>
-            </select>
-          </div>
-          
-          <select id="sort-reviews" class="px-4 py-2 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none">
-            <option value="newest">Newest First</option>
-            <option value="highest">Highest Rated</option>
-            <option value="lowest">Lowest Rated</option>
-          </select>
+        <GoogleStats client:load />
+        <div class="bg-white p-6 rounded-lg shadow-md text-center">
+          <div class="text-3xl font-bold text-primary-600 mb-2">{yearsOfService}</div>
+          <div class="text-neutral-600">Years of Service</div>
         </div>
+        <PatientSatisfaction client:load />
       </div>
-      
-      <!-- Reviews Grid -->
-      <div class="grid md:grid-cols-2 gap-8">
-        {reviews.map(review => (
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <div class="flex justify-between items-start mb-4">
-              <div>
-                <h3 class="text-lg font-semibold">{review.author}</h3>
-                <p class="text-neutral-600 text-sm">{review.date}</p>
-              </div>
-              <div class="flex">
-                {Array(5).fill(0).map((_, i) => (
-                  <svg xmlns="http://www.w3.org/2000/svg" class={`h-5 w-5 ${i < review.rating ? 'text-yellow-400' : 'text-gray-300'}`} viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-            </div>
-            <p class="text-neutral-600">{review.text}</p>
-          </div>
-        ))}
-      </div>
-      
-      <!-- Leave a Review -->
+
+      <GoogleReviews client:load />
+
       <div class="bg-primary-50 p-8 rounded-lg mt-12">
         <h2 class="text-2xl font-bold mb-4">Share Your Experience</h2>
         <p class="text-neutral-600 mb-6">
-          We value your feedback! Help us improve our services and let others know about your experience at Smile Dental Clinic.
+          We value your feedback! Help us improve our services and let others know about your experience at Lilac Dental.
         </p>
         <div class="flex flex-col sm:flex-row gap-4">
-          <a href="https://g.page/r/your-google-review-link" target="_blank" rel="noopener noreferrer" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
+          <a href="https://g.page/r/your-google-review-link" target="_blank" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg">
             Write a Google Review
           </a>
-          <a href="/book-appointment" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
+          <a href="/book-appointment" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg border border-primary-600">
             Book Appointment
           </a>
         </div>
@@ -153,48 +50,3 @@ const reviews = [
   </div>
 </Layout>
 
-<script>
-// Filter and sort functionality
-const ratingFilter = document.getElementById('rating-filter');
-const sortSelect = document.getElementById('sort-reviews');
-const reviewsGrid = document.querySelector('.grid');
-const originalReviews = [...reviewsGrid.children];
-
-function filterAndSortReviews() {
-  let filteredReviews = [...originalReviews];
-  
-  // Apply rating filter
-  if (ratingFilter.value) {
-    filteredReviews = filteredReviews.filter(review => {
-      const stars = review.querySelectorAll('.text-yellow-400').length;
-      return stars === parseInt(ratingFilter.value);
-    });
-  }
-  
-  // Apply sorting
-  filteredReviews.sort((a, b) => {
-    const aDate = new Date(a.querySelector('.text-sm').textContent);
-    const bDate = new Date(b.querySelector('.text-sm').textContent);
-    const aStars = a.querySelectorAll('.text-yellow-400').length;
-    const bStars = b.querySelectorAll('.text-yellow-400').length;
-    
-    switch (sortSelect.value) {
-      case 'newest':
-        return bDate - aDate;
-      case 'highest':
-        return bStars - aStars;
-      case 'lowest':
-        return aStars - bStars;
-      default:
-        return 0;
-    }
-  });
-  
-  // Update display
-  reviewsGrid.innerHTML = '';
-  filteredReviews.forEach(review => reviewsGrid.appendChild(review.cloneNode(true)));
-}
-
-ratingFilter.addEventListener('change', filterAndSortReviews);
-sortSelect.addEventListener('change', filterAndSortReviews);
-</script>
