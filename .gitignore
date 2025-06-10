@@ -1,24 +1,35 @@
-# build output
+# Node and build artifacts
+node_modules/
 dist/
 
-# generated types
-.astro/
+# Sensitive files
+.env
+.env.*
+*.pem
+*.key
 
-# dependencies
-node_modules/
-
-# logs
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
+coverage/
 
-# environment variables
-.env
-.env.production
-
-# macOS-specific files
+# OS-specific files
 .DS_Store
+Thumbs.db
 
-# jetbrains setting folder
+# IDE / Editor specific directories and files
+.vscode/
 .idea/
+.codesandbox/
+.bolt/
+
+# Infrastructure (exclude unless intentional)
+infrastructure/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+
+# Astro build cache or temporary files (if any specific to Astro)
+.cache/
+
