@@ -2,141 +2,262 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
 
 const breadcrumbItems = [
+  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
-  { label: 'Teeth Whitening', href: '/services/teeth-whitening' }
+  { label: 'Teeth Whitening', href: '/services/teeth-whitening' },
 ];
 ---
 
 <Layout 
-  title="Teeth Whitening | Services | Smile Dental Clinic"
-  description="Professional teeth whitening services for a brighter, more confident smile. Learn about our safe and effective whitening treatments."
+  title="Professional Teeth Whitening" 
+  description="Get a brighter, whiter smile with professional teeth whitening at Lilac Dental in Austin, TX. Safe, effective treatments for long-lasting results."
 >
-  <Hero 
-    title="Teeth Whitening"
-    subtitle="Achieve a brighter, more confident smile"
-    imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
+  <Hero
+    title="Professional Teeth Whitening"
+    subtitle="Transform your smile with safe and effective whitening treatments"
+    images={["/images/hero/dental-1.jpg"]}
+    height="md"
   />
   
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <article class="max-w-4xl mx-auto py-12">
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Professional Teeth Whitening</h2>
-        <p class="text-neutral-600 mb-4">
-          Our professional teeth whitening treatments provide safe, effective results that can dramatically improve the appearance of your smile. We offer both in-office and take-home whitening options to suit your needs and lifestyle.
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Professional Teeth Whitening</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Professional teeth whitening offers a safe, effective way to enhance your smile by removing 
+          stains and discoloration. Our advanced whitening treatments provide superior results compared 
+          to over-the-counter products, with treatments customized to your specific needs and sensitivity level.
         </p>
-        <div class="grid md:grid-cols-2 gap-8 mt-8">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Treatment Options</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• In-office power whitening</li>
-              <li>• Custom take-home trays</li>
-              <li>• Zoom! Whitening</li>
-              <li>• Combination treatments</li>
-              <li>• Touch-up treatments</li>
+      </section>
+
+      <!-- Treatment Options -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Treatment Options</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">In-Office Whitening</h3>
+            <p class="text-gray-600 mb-4">
+              Our most powerful option for immediate results:
+            </p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Professional-strength whitening gel</li>
+              <li>Results in just one visit</li>
+              <li>Carefully monitored process</li>
+              <li>Customized treatment intensity</li>
+              <li>Immediate dramatic results</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Benefits</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Immediate results</li>
-              <li>• Safe and monitored process</li>
-              <li>• Long-lasting effects</li>
-              <li>• Professional supervision</li>
-              <li>• Customized treatment</li>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Take-Home Whitening Kits</h3>
+            <p class="text-gray-600 mb-4">
+              Professional-grade whitening at your convenience:
+            </p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Custom-fitted whitening trays</li>
+              <li>Professional-strength gel</li>
+              <li>Flexible treatment schedule</li>
+              <li>Gradual, natural-looking results</li>
+              <li>Perfect for maintenance</li>
+            </ul>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Combination Treatment</h3>
+            <p class="text-gray-600 mb-4">
+              The best of both worlds:
+            </p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Initial in-office treatment</li>
+              <li>Take-home kit for maintenance</li>
+              <li>Maximum long-term results</li>
+              <li>Optimal value for investment</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Our Whitening Process</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">1.</span>
-              <div>
-                <strong>Initial Consultation</strong>
-                <p class="text-neutral-600">Evaluation of your teeth and discussion of treatment options.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">2.</span>
-              <div>
-                <strong>Preparation</strong>
-                <p class="text-neutral-600">Professional cleaning and protection of sensitive areas.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">3.</span>
-              <div>
-                <strong>Treatment Application</strong>
-                <p class="text-neutral-600">Application of professional-grade whitening agents.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">4.</span>
-              <div>
-                <strong>Monitoring</strong>
-                <p class="text-neutral-600">Professional oversight throughout the process.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">5.</span>
-              <div>
-                <strong>Results & Aftercare</strong>
-                <p class="text-neutral-600">Immediate results and maintenance instructions.</p>
-              </div>
-            </li>
+      <!-- Benefits -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Professional Whitening</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Professional Advantage</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Stronger whitening agents</li>
+              <li>Faster results</li>
+              <li>Even, consistent whitening</li>
+              <li>Professionally monitored</li>
+              <li>Reduced sensitivity</li>
+            </ul>
+          </div>
+
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Personal Benefits</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Boosted confidence</li>
+              <li>Younger appearance</li>
+              <li>Enhanced smile aesthetics</li>
+              <li>Long-lasting results</li>
+              <li>Safe and reliable</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Process -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Whitening Process</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Initial Consultation</h3>
+            <p class="text-gray-600">
+              Evaluate your teeth's current shade and discuss your whitening goals. We'll determine 
+              the best treatment option for your needs.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Preparation</h3>
+            <p class="text-gray-600">
+              Professional cleaning to remove surface stains and ensure optimal whitening results. 
+              Protective measures for gums and sensitive areas.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Treatment</h3>
+            <p class="text-gray-600">
+              Application of professional whitening gel, activated by special lighting for in-office 
+              treatment or custom tray fitting for take-home kits.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Results & Aftercare</h3>
+            <p class="text-gray-600">
+              Immediate results for in-office treatment or gradual improvement with take-home kits. 
+              Detailed aftercare instructions provided.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Candidacy -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Is Teeth Whitening Right for You?</h2>
+        
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <p class="text-gray-600 mb-4">
+            Professional whitening is ideal for patients with:
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>Good oral health</li>
+            <li>Natural teeth (not restorations)</li>
+            <li>Surface stains or discoloration</li>
+            <li>Realistic expectations</li>
+            <li>Completed necessary dental work</li>
           </ul>
+          <p class="text-gray-600 mt-4">
+            Schedule a consultation to determine if professional whitening is right for you.
+          </p>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Maintaining Your White Smile</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Do's</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Brush and floss regularly</li>
-              <li>• Use whitening toothpaste</li>
-              <li>• Attend regular checkups</li>
-              <li>• Use straws for dark beverages</li>
-              <li>• Follow aftercare instructions</li>
+      <!-- Aftercare -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Aftercare & Maintenance</h2>
+        
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Immediate Aftercare</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Avoid staining foods/drinks for 48 hours</li>
+              <li>Use sensitivity toothpaste if needed</li>
+              <li>Follow provided care instructions</li>
+              <li>Stay hydrated</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Don'ts</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Avoid tobacco products</li>
-              <li>• Limit staining foods/drinks</li>
-              <li>• Don't skip touch-up treatments</li>
-              <li>• Avoid excessive coffee/tea</li>
-              <li>• Don't use harsh products</li>
+
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Long-term Maintenance</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Regular dental cleanings</li>
+              <li>Good oral hygiene habits</li>
+              <li>Touch-up treatments as needed</li>
+              <li>Minimize staining substances</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="bg-primary-50 p-8 rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Ready for a Brighter Smile?</h2>
-        <p class="text-neutral-600 mb-6">
-          Transform your smile with our professional whitening treatments. Schedule a consultation to discuss your options.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-            Schedule Consultation
-          </a>
-          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-            Contact Us
-          </a>
+      <!-- FAQs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
+        
+        <div class="space-y-4">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">How long do results last?</h3>
+            <p class="text-gray-600">
+              Results typically last 6 months to 2 years, depending on lifestyle habits and maintenance. 
+              Touch-up treatments can extend results.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Is teeth whitening safe?</h3>
+            <p class="text-gray-600">
+              Yes, professional teeth whitening is safe when performed under dental supervision. 
+              We take precautions to protect your gums and minimize sensitivity.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Will I experience sensitivity?</h3>
+            <p class="text-gray-600">
+              Some patients may experience temporary sensitivity, which typically subsides within 
+              24-48 hours. We can adjust treatment to minimize discomfort.
+            </p>
+          </div>
         </div>
       </section>
-    </article>
+
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready for a Brighter Smile?</h2>
+          <p class="text-gray-600 mb-6">
+            Schedule a consultation to learn more about our professional whitening options and start 
+            your journey to a brighter, more confident smile.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Consultation"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </Layout>

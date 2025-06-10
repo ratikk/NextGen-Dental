@@ -2,141 +2,254 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
 
 const breadcrumbItems = [
+  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
-  { label: 'Dental Implants', href: '/services/dental-implants' }
+  { label: 'Dental Implants', href: '/services/dental-implants' },
 ];
 ---
 
 <Layout 
-  title="Dental Implants | Services | Smile Dental Clinic"
-  description="Restore your smile with permanent dental implants. Learn about our advanced implant solutions for missing teeth."
+  title="Dental Implants" 
+  description="Restore your smile with permanent dental implants at Lilac Dental in Austin, TX. Natural-looking tooth replacement that lasts a lifetime."
 >
-  <Hero 
+  <Hero
     title="Dental Implants"
-    subtitle="Permanent, natural-looking solutions for missing teeth"
-    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+    subtitle="Permanent, natural-looking tooth replacement solutions"
+    images={["/images/hero/dental-1.jpg"]}
+    height="md"
   />
   
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <article class="max-w-4xl mx-auto py-12">
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">What Are Dental Implants?</h2>
-        <p class="text-neutral-600 mb-4">
-          Dental implants are titanium posts that are surgically placed into the jawbone to replace missing tooth roots. They provide a strong foundation for fixed or removable replacement teeth that are made to match your natural teeth.
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">What Are Dental Implants?</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Dental implants are titanium posts surgically placed into your jawbone to replace missing tooth 
+          roots. They provide a strong foundation for fixed or removable replacement teeth designed to 
+          match your natural teeth. Implants are the closest thing to natural teeth and can last a lifetime 
+          with proper care.
         </p>
-        <div class="grid md:grid-cols-2 gap-8 mt-8">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Types of Implants</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Single tooth implants</li>
-              <li>• Multiple tooth implants</li>
-              <li>• Full arch implants</li>
-              <li>• All-on-4 implants</li>
-              <li>• Implant-supported bridges</li>
+      </section>
+
+      <!-- Benefits -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Dental Implants</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Functional Benefits</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Restore natural biting and chewing ability</li>
+              <li>Prevent bone loss and maintain facial structure</li>
+              <li>No slipping or movement while eating</li>
+              <li>Improve speech clarity</li>
+              <li>Support adjacent natural teeth</li>
+              <li>Can last a lifetime with proper care</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Benefits</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Natural appearance</li>
-              <li>• Permanent solution</li>
-              <li>• Preserves bone health</li>
-              <li>• Improved function</li>
-              <li>• Long-lasting results</li>
+
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Aesthetic Benefits</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Look and feel like natural teeth</li>
+              <li>Preserve facial features</li>
+              <li>Prevent premature aging</li>
+              <li>Restore confident smile</li>
+              <li>Custom-matched to your natural teeth</li>
+              <li>No visible metal parts</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">The Implant Process</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">1.</span>
-              <div>
-                <strong>Initial Consultation</strong>
-                <p class="text-neutral-600">Comprehensive evaluation and treatment planning.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">2.</span>
-              <div>
-                <strong>Implant Placement</strong>
-                <p class="text-neutral-600">Surgical placement of the titanium implant.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">3.</span>
-              <div>
-                <strong>Healing Period</strong>
-                <p class="text-neutral-600">Osseointegration process (3-6 months).</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">4.</span>
-              <div>
-                <strong>Abutment Placement</strong>
-                <p class="text-neutral-600">Attachment of the connector for the crown.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">5.</span>
-              <div>
-                <strong>Crown Placement</strong>
-                <p class="text-neutral-600">Final restoration attachment.</p>
-              </div>
-            </li>
+      <!-- The Process -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Implant Process</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Initial Consultation</h3>
+            <p class="text-gray-600">
+              Comprehensive examination including 3D imaging to evaluate bone structure and plan optimal 
+              implant placement. We'll discuss your options and create a personalized treatment plan.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Implant Placement</h3>
+            <p class="text-gray-600">
+              The titanium implant is surgically placed into your jawbone under local anesthesia. 
+              Most patients report minimal discomfort during and after the procedure.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Healing Period</h3>
+            <p class="text-gray-600">
+              Over 3-6 months, the implant naturally integrates with your bone through a process called 
+              osseointegration. This creates a strong, stable foundation for your new tooth.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Abutment Placement</h3>
+            <p class="text-gray-600">
+              Once healing is complete, we attach a small connector (abutment) to the implant that will 
+              hold your new tooth.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">5. Crown Placement</h3>
+            <p class="text-gray-600">
+              Your custom-made crown is attached to the abutment, completing your new smile. The crown 
+              is designed to match your natural teeth in color, shape, and size.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Candidacy -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Are You a Candidate?</h2>
+        
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <p class="text-gray-600 mb-4">
+            Good candidates for dental implants typically have:
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>Healthy gums</li>
+            <li>Adequate bone density</li>
+            <li>Good overall oral health</li>
+            <li>Commitment to oral hygiene</li>
+            <li>No uncontrolled medical conditions</li>
           </ul>
+          <p class="text-gray-600 mt-4">
+            Even if you don't meet all criteria, solutions like bone grafting may make implants possible. 
+            Schedule a consultation to discuss your specific situation.
+          </p>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Caring for Your Implants</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Daily Care</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Brush twice daily</li>
-              <li>• Floss regularly</li>
-              <li>• Use soft-bristled brush</li>
-              <li>• Avoid hard foods</li>
-              <li>• Maintain good oral hygiene</li>
+      <!-- Types of Implants -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Types of Implant Solutions</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Single Tooth Replacement</h3>
+            <p class="text-gray-600">
+              One implant and crown to replace a single missing tooth without affecting adjacent teeth.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Multiple Tooth Replacement</h3>
+            <p class="text-gray-600">
+              Implant-supported bridges to replace several adjacent missing teeth with fewer implants.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Full Arch Replacement</h3>
+            <p class="text-gray-600">
+              All-on-4 or All-on-6 implants to support a full arch of replacement teeth with just 4-6 implants.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Care and Maintenance -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Care and Maintenance</h2>
+        
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Daily Care</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Brush twice daily with a soft-bristled toothbrush</li>
+              <li>Floss daily around the implant</li>
+              <li>Use recommended oral hygiene products</li>
+              <li>Follow post-procedure care instructions</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Long-term Maintenance</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Regular dental checkups</li>
-              <li>• Professional cleanings</li>
-              <li>• X-ray monitoring</li>
-              <li>• Prompt attention to issues</li>
-              <li>• Follow care instructions</li>
+
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Long-term Maintenance</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Regular dental checkups</li>
+              <li>Professional cleanings every 6 months</li>
+              <li>X-rays to monitor implant health</li>
+              <li>Prompt attention to any concerns</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="bg-primary-50 p-8 rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Restore Your Smile</h2>
-        <p class="text-neutral-600 mb-6">
-          Ready to replace missing teeth with a permanent solution? Schedule a consultation to discuss your implant options.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-            Schedule Consultation
-          </a>
-          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-            Contact Us
-          </a>
+      <!-- FAQs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
+        
+        <div class="space-y-4">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">How long do implants last?</h3>
+            <p class="text-gray-600">
+              With proper care and maintenance, dental implants can last a lifetime. The crown may need 
+              replacement after 10-15 years due to normal wear.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Is the procedure painful?</h3>
+            <p class="text-gray-600">
+              The procedure is performed under local anesthesia, ensuring your comfort. Most patients 
+              report minimal discomfort and can return to work the next day.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">How much do implants cost?</h3>
+            <p class="text-gray-600">
+              The cost varies depending on your specific needs. We offer financing options and work 
+              with most insurance plans. Schedule a consultation for a detailed cost estimate.
+            </p>
+          </div>
         </div>
       </section>
-    </article>
+
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready to Restore Your Smile?</h2>
+          <p class="text-gray-600 mb-6">
+            Schedule a consultation to learn if dental implants are right for you. Our team will create 
+            a personalized treatment plan to restore your confident smile.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Consultation"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </Layout>

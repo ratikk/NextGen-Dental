@@ -1,0 +1,120 @@
+---
+const insuranceProviders = [
+  {
+    name: "Delta Dental",
+    logo: "/images/insurance/delta-dental.png",
+    isPremier: true
+  },
+  {
+    name: "Delta Dental Premier",
+    logo: "/images/insurance/delta-dental-premier.png",
+    isPremier: true
+  },
+  {
+    name: "MetLife",
+    logo: "/images/insurance/metlife.png",
+    isPremier: true
+  },
+  {
+    name: "Blue Cross Blue Shield",
+    logo: "/images/insurance/bcbs.png",
+    isPremier: true
+  },
+  {
+    name: "Aetna",
+    logo: "/images/insurance/aetna.png",
+    isPremier: true
+  },
+  {
+    name: "Guardian",
+    logo: "/images/insurance/guardian.png",
+    isPremier: false
+  },
+  {
+    name: "Careington",
+    logo: "/images/insurance/careington.png",
+    isPremier: false
+  },
+  {
+    name: "Dental Health Alliance",
+    logo: "/images/insurance/dha.png",
+    isPremier: false
+  },
+  {
+    name: "United Healthcare",
+    logo: "/images/insurance/united-healthcare.png",
+    isPremier: false
+  },
+  {
+    name: "United Concordia",
+    logo: "/images/insurance/united-concordia.png",
+    isPremier: false
+  },
+  {
+    name: "Humana",
+    logo: "/images/insurance/humana.png",
+    isPremier: false
+  },
+  {
+    name: "Cigna",
+    logo: "/images/insurance/cigna.png",
+    isPremier: false
+  }
+];
+---
+
+<section class="py-16 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-3xl md:text-4xl font-bold font-heading text-gray-800 mb-4">Insurance We Accept</h2>
+      <p class="text-lg text-gray-600 mb-8">
+        We work with most major dental insurance providers to maximize your benefits and make dental care affordable.
+      </p>
+
+      <div class="bg-white rounded-lg p-8 shadow-sm">
+        <!-- Premier Insurance Providers -->
+        <div class="mb-8">
+          <h3 class="text-xl font-bold text-gray-800 mb-6">Premier Insurance Partners</h3>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {insuranceProviders.filter(provider => provider.isPremier).map(provider => (
+              <div class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-100 hover:border-primary-200 transition-colors duration-200">
+                <img 
+                  src={provider.logo} 
+                  alt={`${provider.name} logo`}
+                  class="h-12 object-contain mb-2"
+                  loading="lazy"
+                />
+                <span class="text-sm text-gray-600 text-center">{provider.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Additional Insurance Providers -->
+        <div>
+          <h3 class="text-xl font-bold text-gray-800 mb-6">Additional Insurance Plans</h3>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {insuranceProviders.filter(provider => !provider.isPremier).map(provider => (
+              <div class="flex flex-col items-center justify-center p-4 rounded-lg border border-gray-100 hover:border-primary-200 transition-colors duration-200">
+                <img 
+                  src={provider.logo} 
+                  alt={`${provider.name} logo`}
+                  class="h-10 object-contain mb-2"
+                  loading="lazy"
+                />
+                <span class="text-sm text-gray-600 text-center">{provider.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-gray-100">
+          <p class="text-sm text-gray-500">
+            We also accept PPO plans and Medicare. Don't see your insurance listed? Contact us to verify your coverage. 
+            We also offer flexible payment options and financing through Cherry.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

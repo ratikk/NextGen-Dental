@@ -2,142 +2,179 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
 
 const breadcrumbItems = [
+  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
-  { label: 'Oral Cancer Screening', href: '/services/oral-cancer-screening' }
+  { label: 'Oral Cancer Screening', href: '/services/oral-cancer-screening' },
 ];
 ---
 
 <Layout 
-  title="Oral Cancer Screening | Services | Smile Dental Clinic"
-  description="Early detection of oral cancer through professional screening. Learn about our comprehensive oral cancer screening process."
+  title="Oral Cancer Screening" 
+  description="Early detection of oral cancer through professional screening at Lilac Dental in Austin, TX. Quick, painless examinations that could save your life."
 >
-  <Hero 
+  <Hero
     title="Oral Cancer Screening"
     subtitle="Early detection for better treatment outcomes"
-    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+    images={["/images/hero/dental-3.jpg"]}
+    height="md"
   />
   
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <article class="max-w-4xl mx-auto py-12">
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">What is Oral Cancer Screening?</h2>
-        <p class="text-neutral-600 mb-4">
-          Oral cancer screening is a routine examination performed by our dental professionals to detect early signs of cancer or precancerous conditions in your mouth. Early detection significantly increases the chances of successful treatment.
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Why Oral Cancer Screening Matters</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Early detection of oral cancer significantly increases the chances of successful treatment. 
+          Our comprehensive screening process is quick, painless, and could potentially save your life. 
+          Regular screenings are particularly important because oral cancer can develop without causing 
+          pain or obvious symptoms in its early stages.
         </p>
-        <div class="grid md:grid-cols-2 gap-8 mt-8">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Screening Process</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Visual examination</li>
-              <li>• Physical examination</li>
-              <li>• Advanced imaging when needed</li>
-              <li>• Tissue analysis if required</li>
-              <li>• Comprehensive evaluation</li>
+      </section>
+
+      <!-- Screening Process -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Screening Process</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Visual Examination</h3>
+            <p class="text-gray-600 mb-4">
+              Our dentist carefully examines your:
+            </p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Lips and inside of mouth</li>
+              <li>Tongue and under the tongue</li>
+              <li>Back of throat</li>
+              <li>Soft and hard palate</li>
+              <li>Neck and lymph nodes</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Risk Factors</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Tobacco use</li>
-              <li>• Heavy alcohol consumption</li>
-              <li>• Previous oral cancer history</li>
-              <li>• Significant sun exposure</li>
-              <li>• HPV infection</li>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Physical Examination</h3>
+            <p class="text-gray-600 mb-4">
+              We check for:
+            </p>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Unusual lumps or thickening</li>
+              <li>Rough patches or lesions</li>
+              <li>Color changes in tissues</li>
+              <li>Unexplained bleeding</li>
+              <li>Persistent sores</li>
+            </ul>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Advanced Screening Technology</h3>
+            <p class="text-gray-600">
+              When needed, we use specialized light-based technology to detect abnormal tissues 
+              that might not be visible to the naked eye.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Risk Factors -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Risk Factors</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Lifestyle Factors</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Tobacco use (any form)</li>
+              <li>Heavy alcohol consumption</li>
+              <li>Excessive sun exposure</li>
+              <li>Poor diet</li>
+              <li>Poor oral hygiene</li>
+            </ul>
+          </div>
+
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Other Risk Factors</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Age (40+ years)</li>
+              <li>HPV infection</li>
+              <li>Family history</li>
+              <li>Weakened immune system</li>
+              <li>Previous cancer diagnosis</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Warning Signs</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <strong>Red or white patches</strong>
-                <p class="text-neutral-600">Unusual patches in the mouth that don't heal.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <strong>Persistent sores</strong>
-                <p class="text-neutral-600">Mouth sores that don't heal within two weeks.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <strong>Lumps or thickening</strong>
-                <p class="text-neutral-600">Unusual tissue changes in mouth or neck.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <strong>Difficulty in oral functions</strong>
-                <p class="text-neutral-600">Problems with chewing, swallowing, speaking, or jaw movement.</p>
-              </div>
-            </li>
+      <!-- Warning Signs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Warning Signs to Watch For</h2>
+        
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <p class="text-gray-600 mb-4">
+            Contact us immediately if you notice any of these symptoms persisting for more than two weeks:
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>Sores that don't heal</li>
+            <li>Unexplained bleeding</li>
+            <li>Lumps or thick patches</li>
+            <li>White or red patches</li>
+            <li>Difficulty swallowing</li>
+            <li>Persistent sore throat</li>
+            <li>Feeling of something caught in throat</li>
+            <li>Numbness in mouth area</li>
+            <li>Ear pain without infection</li>
           </ul>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Screening Recommendations</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Who Should Get Screened</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Adults over 18</li>
-              <li>• Tobacco users</li>
-              <li>• Heavy alcohol consumers</li>
-              <li>• Previous cancer patients</li>
-              <li>• Those with family history</li>
-            </ul>
-          </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Screening Frequency</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Annual screening for most adults</li>
-              <li>• Bi-annual for high-risk patients</li>
-              <li>• As recommended by dentist</li>
-              <li>• After concerning symptoms</li>
-              <li>• During regular checkups</li>
-            </ul>
-          </div>
+      <!-- Frequency -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">How Often Should You Get Screened?</h2>
+        
+        <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+          <p class="text-gray-600 mb-4">
+            We recommend:
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>Annual screening for adults over 18</li>
+            <li>More frequent screenings for high-risk patients</li>
+            <li>Immediate screening if you notice any warning signs</li>
+            <li>Screening during regular dental checkups</li>
+          </ul>
         </div>
       </section>
 
-      <section class="bg-primary-50 p-8 rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Schedule Your Screening</h2>
-        <p class="text-neutral-600 mb-6">
-          Early detection is key in fighting oral cancer. Schedule your screening today for peace of mind and proactive health care.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-            Book a Screening
-          </a>
-          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-            Contact Us
-          </a>
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Schedule Your Screening Today</h2>
+          <p class="text-gray-600 mb-6">
+            Early detection saves lives. Don't wait to get screened, especially if you have any risk factors 
+            or notice unusual changes in your mouth.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Screening"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
+          </div>
         </div>
       </section>
-    </article>
+    </div>
   </div>
 </Layout>

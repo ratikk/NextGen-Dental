@@ -1,40 +1,40 @@
-const clinicInfo: ClinicInfo = {
+export const clinicInfo = {
   name: "Lilac Dental",
   address: {
-    street: "12314 N Interstate Hwy 35 UNIT 110",
+    line1: "12314 N Interstate Hwy 35 Ste 110",
     city: "Austin",
     state: "TX",
     zip: "78753",
-    country: "USA"
+    full: "12314 N Interstate Hwy 35 Ste 110, Austin, TX 78753"
   },
-  contact: {
-    phone: "+1 (737) 291-3927",
-    emergencyPhone: "+1 (737) 291-3927",
-    email: "info@lilacdental.com",
-    appointmentsEmail: "appointments@lilacdental.com"
+  phone: "+17379103739",
+  displayPhone: "(737) 910-3739",
+  email: "lilacdental24@gmail.com",
+  mapLink: "https://www.google.com/maps/place/Lilac+Dental/@30.400525,-97.6750384,15z/data=!4m2!3m1!1s0x0:0xefc0b389042e9c61?sa=X&ved=1t:2428&hl=en-US&gl=us&ictx=111",
+  coordinates: {
+    latitude: 30.400525,
+    longitude: -97.6750384
   },
   hours: {
-    "Monday": "9:00 AM to 5:00 PM",
-    "Tuesday": "Closed",
-    "Wednesday": "9:00 AM to 5:00 PM",
-    "Thursday": "9:00 AM to 5:00 PM",
-    "Friday": "10:00 AM to 2:00 PM",
-    "Saturday": "9:00 AM to 2:00 PM",
-    "Sunday": "Closed"
+    Monday: "9:00 AM – 5:00 PM",
+    Tuesday: "Closed",
+    Wednesday: "9:00 AM – 5:00 PM",
+    Thursday: "9:00 AM – 5:00 PM",
+    Friday: "10:00 AM – 2:00 PM",
+    Saturday: "9:00 AM – 2:00 PM",
+    Sunday: "Closed"
   },
-  socialMedia: {
-    facebook: "https://facebook.com/lilacdental",
-    twitter: "https://twitter.com/lilacdental",
-    instagram: "https://instagram.com/lilacdental",
-    youtube: "https://youtube.com/lilacdental"
+  social: {
+    facebook: "https://www.facebook.com/LilacDental/",
+    twitter: "https://x.com/lilacdentaltx",
+    yelp: "https://www.yelp.com/biz/lilac-dental-austin"
   },
-  mapUrl: "https://www.google.com/maps/place/Lilac+Dental/@30.400525,-97.6750384,15z/data=!4m6!3m5!1s0x8644cf66fcf7c1e7:0xefc0b389042e9c61!8m2!3d30.400525!4d-97.6750384!16s%2Fg%2F11vw_wmf3z?hl=en-US&entry=ttu&g_ep=EgoyMDI1MDUxMS4wIKXMDSoASAFQAw%3D%3D",
-  logo: {
-    regular: "/images/logo.png",
-    white: "/images/logo-white.png",
-    favicon: "/favicon.svg"
+  booking: {
+    url: "https://book.modento.io/lilac-dental/patient-details"
   }
 };
 
-export default clinicInfo;
+export type ClinicInfo = typeof clinicInfo;
+export type BusinessHours = typeof clinicInfo.hours;
 
+export default clinicInfo;

@@ -1,0 +1,141 @@
+---
+// src/pages/blog/[slug].astro
+import Layout from '../../layouts/Layout.astro'; // This path is correct
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { blogPosts } from '../../utils/blogPosts'; // getBlogPost is not used here, only blogPosts for getStaticPaths
+import type { BlogPost } from '../../utils/blogPosts'; // Assuming BlogPost type is exported from blogPosts.ts
+import { Image } from 'astro:assets'; // Import if using <Image/> directly for content images within markdown/slot
+
+export async function getStaticPaths() { // Added async as getStaticPaths can be async
+  return blogPosts.map(post => ({
+    params: { slug: post.id },
+    props: { post }
+  }));
+}
+
+const { post } = Astro.props as { post: BlogPost }; // Type assertion for post
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Blog', href: '/blog' },
+  { label: post.title, href: `/blog/${post.id}` },
+];
+
+const pageTitle = post.seoTitle || post.title;
+const pageDescription = post.seoDescription || post.excerpt;
+// For canonical URL, ensure Astro.site is configured in astro.config.mjs
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+
+// For OG image, use the post's heroImage if available, otherwise a default
+// Ensure post.image is an ImageMetadata object (which it should be from blogPosts.ts)
+const ogImage = post.image && typeof post.image === 'object' && 'src' in post.image
+  ? new URL(post.image.src, Astro.site).toString() // Use processed src
+  : new URL("/images/hero/lilac-dental-og-image.jpg", Astro.site).toString(); // Fallback OG image in public/images/hero/
+---
+
+<Layout
+  title={pageTitle}
+  description={pageDescription}
+  canonicalURL={canonicalURL}
+  og={{
+    title: pageTitle,
+    description: pageDescription,
+    image: ogImage,
+    type: "article",
+    publishedTime: new Date(post.date).toISOString(),
+    authors: [post.author], // Assuming author is a string, can be an array of URLs
+    section: post.category,
+    tags: post.tags,
+    url: canonicalURL,
+    site_name: "Lilac Dental" // Replace with your site name from clinicInfo if available
+  }}
+  twitter={{
+    card: "summary_large_image",
+    title: pageTitle,
+    description: pageDescription,
+    image: ogImage
+    // creator: "@YourTwitterHandle" // Optional
+  }}
+>
+  {post.image && typeof post.image === 'object' && 'src' in post.image && (
+    <Hero
+      title={post.title}
+      subtitle={post.category}
+      images={[post.image]} {/* This 'post.image' should be an imported ImageMetadata object */}
+      height="sm" {/* Or 'xs' for a shorter blog post hero */}
+      showAppointmentForm={false}
+      isHomePage={false}
+    />
+  )}
+
+  <Breadcrumbs items={breadcrumbItems} class="py-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"/>
+
+  <div class="py-12 md:py-16 bg-white dark:bg-gray-900">
+    <div class="container mx-auto px-4">
+      <article class="prose dark:prose-invert lg:prose-lg max-w-3xl mx-auto">
+        <header class="mb-6 sm:mb-8 border-b dark:border-gray-700 pb-6">
+          {!post.image && ( /* Show title here if no hero image */
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-heading text-gray-800 dark:text-white mb-4">{post.title}</h1>
+          )}
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>
+              Published on <time datetime={post.date}>{new Date(post.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}</time>
+            </span>
+            <span class="hidden sm:inline">•</span>
+            <span>By {post.author}</span>
+            <span class="hidden sm:inline">•</span>
+            <span class="bg-primary-50 dark:bg-primary-900/50 px-2 py-1 rounded-full text-primary-600 dark:text-primary-300 text-xs font-medium">{post.category}</span>
+          </div>
+        </header>
+
+        {/* Render Markdown/HTML content from post.content */}
+        {/* If post.content is HTML string: */}
+        <div class="prose-content" set:html={post.content} />
+        {/* If post.content is plain text needing paragraph breaks (as in your example): */}
+        {/* <div class="space-y-4">
+          {post.content.split('\n').map(paragraph => (
+            paragraph.trim() && <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{paragraph}</p>
+          ))}
+        </div> */}
+        {/* For actual Markdown rendering if using content collections, you'd use <Content /> component */}
+
+
+        {post.tags && post.tags.length > 0 && (
+          <footer class="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 dark:text-gray-400 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M5.5 16a3.5 3.5 0 01-.358-6.948 4.502 4.502 0 017.933-1.977A4.5 4.5 0 1114.5 16h-9z" />
+                <path d="M9 10a1 1 0 011-1h4a1 1 0 110 2h-4a1 1 0 01-1-1z" />
+              </svg>
+              <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-200">Tags:</h3>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {post.tags.map(tag => (
+                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </footer>
+        )}
+
+        <div class="mt-10 sm:mt-14 pt-6 sm:pt-8 border-t border-gray-200 dark:border-gray-700">
+          <a
+            href="/blog"
+            class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium transition-colors duration-200 group"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to All Blog Posts
+          </a>
+        </div>
+      </article>
+    </div>
+  </div>
+</Layout>

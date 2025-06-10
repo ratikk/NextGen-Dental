@@ -1,40 +1,268 @@
 ---
-interface Props {
-  title: string;
+import Button from './Button.astro';
+import { Image } from 'astro:assets';
+import { clinicInfo } from '../utils/clinicInfo';
+
+export interface Props {
+  images?: string[];
+  title?: string;
   subtitle?: string;
+  height?: 'sm' | 'md' | 'lg' | 'xl';
+  overlay?: boolean;
   buttonText?: string;
-  buttonUrl?: string;
-  imageUrl?: string;
+  buttonLink?: string;
+  buttonVariant?: 'primary' | 'secondary' | 'outline';
+  secondaryButtonText?: string;
+  secondaryButtonLink?: string;
+  showAppointmentForm?: boolean;
+  isHomePage?: boolean;
 }
 
-const { 
-  title, 
-  subtitle = "", 
-  buttonText = "Book Appointment", 
-  buttonUrl = "/book-appointment",
-  imageUrl = "https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+const {
+  images = ['/images/hero/dental-1.jpg'],
+  title,
+  subtitle,
+  height = 'lg',
+  overlay = true,
+  buttonText,
+  buttonLink,
+  buttonVariant = 'primary',
+  secondaryButtonText,
+  secondaryButtonLink,
+  showAppointmentForm = false,
+  isHomePage = false,
 } = Astro.props;
 ---
 
-<section class="relative bg-neutral-800 text-white overflow-hidden">
-  <div class="absolute inset-0">
-    <img 
-      src={imageUrl} 
-      alt="Dental care professionals"
-      class="object-cover w-full h-full opacity-40"
-      width="1600"
-      height="800"
-    />
-    <div class="absolute inset-0 bg-gradient-to-r from-primary-900/80 to-primary-800/50 mix-blend-multiply"></div>
-  </div>
-  
-  <div class="container mx-auto px-4 py-24 md:py-32 relative z-10">
-    <div class="max-w-3xl">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
-      {subtitle && <p class="text-xl mb-8 text-white/90">{subtitle}</p>}
-      {buttonText && <a href={buttonUrl} class="inline-block bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors">
-        {buttonText}
-      </a>}
+<section class={`relative ${isHomePage ? 'mt-32' : 'mt-24'}`}>
+  <div class="container mx-auto px-4 max-w-7xl">
+    <div class="grid grid-cols-12 gap-4 sm:gap-8">
+      <div class={`col-span-12 ${showAppointmentForm ? 'lg:col-span-8' : 'lg:col-span-12'} relative`}>
+        <div class="relative w-full overflow-hidden rounded-lg">
+          <div class="swiper heroSwiper">
+            <div class="swiper-wrapper">
+              {images.map((image, index) => (
+                <div class="swiper-slide">
+                  <div class="relative pb-[56.25%]"> <!-- 16:9 aspect ratio -->
+                    <Image 
+                      src={image}
+                      alt="Dental care"
+                      width={960} // Reduced from 1920
+                      height={540} // Reduced from 1080
+                      class="absolute inset-0 w-full h-full object-cover object-center"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      format="webp"
+                      quality={80} // Reduced from 90
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div class="swiper-pagination"></div>
+          </div>
+          
+          {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-40"></div>}
+        </div>
+
+        {isHomePage && (
+          <div class="mt-6 sm:mt-8 text-center">
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-heading mb-3 sm:mb-4 text-gray-800">
+              {title || `Welcome to ${clinicInfo.name}`}
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600">{subtitle || "Your trusted partner in dental care"}</p>
+          </div>
+        )}
+        {!isHomePage && title && (
+          <div class="mt-6 sm:mt-8 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold font-heading mb-3 sm:mb-4 text-gray-800">{title}</h1>
+            {subtitle && <p class="text-lg md:text-xl text-gray-600">{subtitle}</p>}
+          </div>
+        )}
+      </div>
+
+      {showAppointmentForm && (
+        <div class="col-span-12 lg:col-span-4">
+          <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-left">
+            <h2 class="text-2xl font-bold text-primary-600 text-center mb-6">Request an Appointment</h2>
+            <form id="appointment-form" class="space-y-4">
+              <div>
+                <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <input
+                  type="text"
+                  id="full-name"
+                  name="fullName"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="Enter your full name"
+                />
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Your email"
+                  />
+                </div>
+                <div>
+                  <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Your phone"
+                  />
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
+                  <input
+                    type="date"
+                    id="date"
+                    name="preferredDate"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+                <div>
+                  <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Preferred Time</label>
+                  <select
+                    id="time"
+                    name="preferredTime"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    <option value="">Select a time</option>
+                    <option value="morning">Morning (8:00 AM - 12:00 PM)</option>
+                    <option value="afternoon">Afternoon (12:00 PM - 5:00 PM)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Reason for Visit</label>
+                <select
+                  id="reason"
+                  name="reasonForVisit"
+                  required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="">Select a reason</option>
+                  <option value="checkup">Regular Checkup</option>
+                  <option value="cleaning">Teeth Cleaning</option>
+                  <option value="emergency">Dental Emergency</option>
+                  <option value="consultation">Consultation</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+
+              <div class="flex items-center">
+                <input
+                  type="checkbox"
+                  id="consent"
+                  name="smsConsent"
+                  required
+                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                />
+                <label for="consent" class="ml-2 block text-sm text-gray-700">
+                  I consent to receiving text messages from {clinicInfo.name}
+                </label>
+              </div>
+
+              <p class="text-xs text-gray-500 mt-4">
+                This form is protected by reCAPTCHA and the Google 
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Privacy Policy</a> and 
+                <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Terms of Service</a> apply.
+              </p>
+
+              <button
+                type="submit"
+                class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition-colors duration-200"
+              >
+                Request Appointment
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   </div>
 </section>
+
+<script>
+  import { submitForm } from '../utils/forms';
+  import Swiper from 'swiper';
+  import { Autoplay, Pagination } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/pagination';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Swiper
+    new Swiper('.heroSwiper', {
+      modules: [Autoplay, Pagination],
+      slidesPerView: 1,
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+    });
+
+    // Form submission handler
+    const appointmentForm = document.getElementById('appointment-form');
+    if (appointmentForm) {
+      appointmentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        try {
+          const formData = new FormData(appointmentForm as HTMLFormElement);
+          const data = Object.fromEntries(formData.entries());
+          
+          await submitForm({
+            ...data,
+            formType: 'appointment'
+          });
+          
+          alert('Appointment request submitted successfully! We will contact you shortly.');
+          appointmentForm.reset();
+          
+        } catch (error) {
+          console.error('Error submitting form:', error);
+          alert('Failed to submit form. Please try again later.');
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .swiper-slide {
+    height: 100%;
+  }
+  
+  .swiper-pagination {
+    bottom: 20px !important;
+  }
+  
+  .swiper-pagination-bullet {
+    background: white !important;
+    opacity: 0.5;
+  }
+  
+  .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+</style>

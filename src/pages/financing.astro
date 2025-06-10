@@ -1,115 +1,248 @@
 ---
-import Layout from '../layouts/Layout.astro';
+// src/pages/financing.astro
+import Layout from '../layouts/Layout.astro'; // CORRECTED PATH
 import Hero from '../components/Hero.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Button from '../components/Button.astro';
+import { clinicInfo } from '../utils/clinicInfo';
+
+// --- IMPORT THE HERO IMAGE FOR THE FINANCING PAGE ---
+import financingPageHeroImage from '../assets/images/hero/dental-2.jpg'; // Ensure this image is in src/assets
+
 
 const breadcrumbItems = [
-  { label: 'Financing', href: '/financing' }
+  { label: 'Home', href: '/' },
+  { label: 'Financing Options', href: '/financing' }, // Consistent label
 ];
+
+const paymentMethods = [
+  {
+    name: "Cherry",
+    description: "Simple financing with no hard credit check",
+    features: [
+      "No hard credit check",
+      "Instant approval",
+      "Flexible payment plans",
+      "Use for any treatment"
+    ],
+    icon: "🍒",
+    primary: true
+  },
+  {
+    name: "Insurance",
+    description: "We accept most major dental insurance plans",
+    features: [
+      "In-network with major providers",
+      "Insurance claim filing",
+      "Benefits verification",
+      "Maximum coverage utilization"
+    ],
+    icon: "🏥"
+  },
+  {
+    name: "Credit Cards",
+    description: "All major credit cards accepted",
+    features: [
+      "Visa",
+      "Mastercard",
+      "American Express",
+      "Discover"
+    ],
+    icon: "💳"
+  },
+  {
+    name: "HSA/FSA",
+    description: "Use your health savings",
+    features: [
+      "Health Savings Account (HSA)",
+      "Flexible Spending Account (FSA)",
+      "Tax advantages",
+      "Easy processing"
+    ],
+    icon: "💰"
+  }
+];
+
+const faqs = [
+  {
+    question: "What is Cherry Financing?",
+    answer: "Cherry is a healthcare financing solution that offers flexible payment plans with no hard credit check. It allows you to get the dental care you need today and pay over time with plans that fit your budget."
+  },
+  {
+    question: "How do I apply for Cherry Financing?",
+    answer: "Applying is simple and takes just seconds. You can apply during checkout at our office or pre-qualify online through Cherry's website. There's no hard credit check, and you'll get an instant decision."
+  },
+  {
+    question: "What payment plans are available?",
+    answer: "Cherry offers various payment plans to fit your budget. Plans typically range from 3 to 24 months, and you can choose the option that works best for you. Some plans may offer 0% interest if paid within a promotional period."
+  },
+  {
+    question: "What dental procedures can I finance?",
+    answer: "Cherry can be used for most dental procedures, including cleanings, implants, orthodontics, cosmetic dentistry, and emergency dental care. Our team can help you understand your financing options for specific treatments."
+  },
+  {
+    question: "Do you accept my insurance?",
+    answer: `${clinicInfo.name} accepts most major dental insurance plans. Contact our office to verify your specific insurance coverage and benefits.`
+  },
+  {
+    question: "Is there an interest-free option?",
+    answer: "Yes, Cherry often offers promotional 0% interest plans when paid within a specific timeframe. Ask our team about current promotional financing options."
+  }
+];
+
+const pageTitle = "Flexible Dental Financing Options"; // Added for consistency
+const pageSubtitle = `Affordable payment plans, including Cherry, at ${clinicInfo.name}.`; // Added
 ---
 
-<Layout 
-  title="Financing Options | Smile Dental Clinic"
-  description="Flexible financing options to help make your dental care affordable. Learn about our payment plans and insurance coverage."
+<Layout
+  title={`${pageTitle} | ${clinicInfo.name}`}
+  description={`Explore flexible payment options and dental financing through Cherry at ${clinicInfo.name} in Austin. Get the dental care you need with easy payment plans that fit your budget.`}
 >
-  <Hero 
-    title="Financing Options"
-    subtitle="Making quality dental care accessible and affordable"
-    imageUrl="https://images.pexels.com/photos/3943883/pexels-photo-3943883.jpeg"
+  <Hero
+    title={pageTitle}
+    subtitle={pageSubtitle}
+    images={[financingPageHeroImage]} {/* <<<<<< CORRECTED: Use the imported asset */}
+    height="sm" {/* Consistent with other internal pages, or use "md" if preferred */}
+    showAppointmentForm={false}
+    isHomePage={false}
   />
-  
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <div class="py-12">
-      <div class="max-w-4xl mx-auto">
-        <section class="mb-12">
-          <h2 class="text-3xl font-bold mb-6">Payment Options</h2>
-          <p class="text-neutral-600 mb-8">
-            We believe that quality dental care should be accessible to everyone. That's why we offer various payment options to help make your treatment more affordable.
-          </p>
-          
-          <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-white p-6 rounded-lg shadow-md">
-              <h3 class="text-xl font-semibold mb-4">Insurance</h3>
-              <p class="text-neutral-600 mb-4">
-                We work with most major insurance providers to maximize your benefits.
-              </p>
-              <ul class="space-y-2 text-neutral-600">
-                <li>• Pre-treatment estimates</li>
-                <li>• Insurance claim filing</li>
-                <li>• Benefits verification</li>
-                <li>• Coverage explanation</li>
+
+  <Breadcrumbs items={breadcrumbItems} class="py-4 bg-gray-50 dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700"/>
+
+  {/* ... (The rest of your financing.astro HTML content remains the same) ... */}
+  {/* Ensure dark mode classes and any other styling enhancements are applied consistently */}
+  <div class="py-12 md:py-16 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-300">
+    <div class="container mx-auto px-4">
+      {/* Introduction */}
+      <section class="mb-12 md:mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h1 class="text-3xl md:text-4xl font-bold font-heading text-gray-800 dark:text-white mb-6">
+          Simple, Flexible Payment Options
+        </h1>
+        <p class="text-lg leading-relaxed text-gray-600 dark:text-gray-300 mb-8">
+          At {clinicInfo.name}, we believe everyone deserves access to quality dental care.
+          That's why we offer multiple payment options and flexible financing through Cherry
+          to help make your dental care affordable.
+        </p>
+        <div class="flex justify-center">
+          <Button
+            href="https://withcherry.com/patients"
+            text="Apply Now with Cherry"
+            variant="primary"
+            size="lg"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="!px-8 !py-3 group"
+          >
+            <span class="mr-2">Apply Now with Cherry</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline transform group-hover:translate-x-1 transition-transform duration-200" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </Button>
+        </div>
+      </section>
+
+      {/* Payment Methods */}
+      <section class="mb-12 md:mb-16" data-aos="fade-up">
+        <h2 class="text-2xl md:text-3xl font-bold font-heading text-gray-800 dark:text-white text-center mb-8 md:mb-12">Our Payment Solutions</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+          {paymentMethods.map(method => (
+            <div class={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border flex flex-col ${method.primary ? 'border-primary-500 dark:border-primary-400 ring-2 ring-primary-500 dark:ring-primary-400' : 'border-gray-200 dark:border-gray-700'}`}>
+              <div class="flex items-center gap-3 mb-4">
+                <span class="text-3xl flex-shrink-0">{method.icon}</span>
+                <h3 class="text-xl font-bold font-heading text-gray-800 dark:text-white">{method.name}</h3>
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 text-sm mb-5 flex-grow">{method.description}</p>
+              <ul class="space-y-2 text-sm">
+                {method.features.map(feature => (
+                  <li class="flex items-start gap-2 text-gray-600 dark:text-gray-300">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600 dark:text-primary-400 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                    <span>{feature}</span>
+                  </li>
+                ))}
               </ul>
             </div>
-            
-            <div class="bg-white p-6 rounded-lg shadow-md">
-              <h3 class="text-xl font-semibold mb-4">Payment Methods</h3>
-              <p class="text-neutral-600 mb-4">
-                We accept various forms of payment for your convenience.
-              </p>
-              <ul class="space-y-2 text-neutral-600">
-                <li>• Cash</li>
-                <li>• Credit Cards</li>
-                <li>• Personal Checks</li>
-                <li>• FSA/HSA Cards</li>
-              </ul>
-            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* How Cherry Works */}
+      <section class="mb-12 md:mb-16 bg-gray-50 dark:bg-gray-800/50 py-12 md:py-16 px-4 rounded-lg" data-aos="fade-up">
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-2xl md:text-3xl font-bold font-heading text-gray-800 dark:text-white mb-8 md:mb-12 text-center">
+            How Cherry Financing Works
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { num: "1️⃣", title: "Apply in Seconds", desc: "Quick application with no hard credit check" },
+              { num: "2️⃣", title: "Choose Your Plan", desc: "Select a payment plan that fits your budget" },
+              { num: "3️⃣", title: "Get Treatment", desc: "Receive your dental care right away" }
+            ].map(step => (
+              <div class="text-center p-4">
+                <div class="bg-white dark:bg-gray-700 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-md">
+                  <span class="text-2xl">{step.num}</span>
+                </div>
+                <h3 class="font-bold text-gray-800 dark:text-white text-lg mb-2">{step.title}</h3>
+                <p class="text-gray-600 dark:text-gray-300 text-sm">{step.desc}</p>
+              </div>
+            ))}
           </div>
-        </section>
-        
-        <section class="mb-12">
-          <h2 class="text-3xl font-bold mb-6">Financing Plans</h2>
-          <div class="bg-white p-6 rounded-lg shadow-md mb-8">
-            <h3 class="text-xl font-semibold mb-4">CareCredit®</h3>
-            <p class="text-neutral-600 mb-4">
-              We partner with CareCredit to offer flexible financing options with:
-            </p>
-            <ul class="space-y-2 text-neutral-600 mb-6">
-              <li>• 0% interest options</li>
-              <li>• Extended payment plans</li>
-              <li>• Quick application process</li>
-              <li>• Immediate approval decisions</li>
-            </ul>
-            <a 
-              href="https://www.carecredit.com/apply/" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors"
-            >
-              Apply for CareCredit
-            </a>
-          </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">In-House Payment Plans</h3>
-            <p class="text-neutral-600 mb-4">
-              We offer flexible in-house payment plans to help make your treatment more manageable:
-            </p>
-            <ul class="space-y-2 text-neutral-600">
-              <li>• Customized payment schedules</li>
-              <li>• No interest options available</li>
-              <li>• Easy setup process</li>
-              <li>• Flexible terms</li>
-            </ul>
-          </div>
-        </section>
-        
-        <section class="bg-primary-50 p-8 rounded-lg">
-          <h2 class="text-2xl font-bold mb-4">Questions About Financing?</h2>
-          <p class="text-neutral-600 mb-6">
-            Our team is here to help you understand your financing options and find the best solution for your needs.
+        </div>
+      </section>
+
+      {/* FAQs */}
+      <section class="mb-12 md:mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl md:text-3xl font-bold font-heading text-gray-800 dark:text-white mb-8 md:mb-12 text-center">
+          Frequently Asked Questions
+        </h2>
+        <div class="space-y-4">
+          {faqs.map((faq, index) => (
+            <details class="group bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700" name="faq-accordion" open={index === 0}>
+              <summary class="flex justify-between items-center font-semibold text-gray-800 dark:text-white cursor-pointer text-md sm:text-lg list-none group-hover:text-primary-600 dark:hover:text-primary-400">
+                <span>{faq.question}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-open:rotate-180 transition-transform duration-200 ml-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </summary>
+              <div class="text-gray-600 dark:text-gray-300 mt-3 text-sm sm:text-base leading-relaxed">
+                {faq.answer.split('\n').map(paragraph => <p class="mb-2 last:mb-0">{paragraph}</p>)}
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 dark:bg-primary-900/30 p-8 rounded-lg shadow-lg">
+          <h2 class="text-2xl md:text-3xl font-bold font-heading text-gray-800 dark:text-white mb-4">
+            Ready to Get Started?
+          </h2>
+          <p class="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+            Apply for Cherry Financing today and get the dental care you need with a payment plan
+            that works for you. Or contact us to discuss your financing options.
           </p>
-          <div class="flex flex-col sm:flex-row gap-4">
-            <a href="/contact" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-              Contact Us
-            </a>
-            <a href="/book-appointment" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-              Schedule Consultation
-            </a>
+          <div class="flex flex-col sm:flex-row justify-center gap-4">
+            <Button
+              href="https://withcherry.com/patients"
+              text="Apply with Cherry"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="w-full sm:w-auto"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text={`Call Us: ${clinicInfo.phoneFormatted || clinicInfo.phone}`}
+              variant="outline"
+              size="lg"
+              class="w-full sm:w-auto"
+            />
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </div>
   </div>
 </Layout>

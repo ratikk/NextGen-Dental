@@ -4,177 +4,266 @@ import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 const breadcrumbItems = [
+  { label: 'Home', href: '/' },
   { label: 'Patient Education', href: '/patient-education' },
-  { label: 'Orthodontics Guide', href: '/patient-education/orthodontics-guide' }
+  { label: 'Orthodontics Guide', href: '/patient-education/orthodontics-guide' },
 ];
 ---
 
 <Layout 
-  title="Orthodontics Guide | Patient Education | Smile Dental Clinic"
-  description="Comprehensive guide to orthodontic treatments. Learn about braces, Invisalign, and other options for achieving a straight, healthy smile."
+  title="Orthodontics Guide" 
+  description="Learn about orthodontic treatments, including braces and clear aligners, from the dental experts at Lilac Dental in Austin, TX."
 >
-  <Hero 
+  <Hero
     title="Orthodontics Guide"
-    subtitle="Understanding your options for achieving a straight, beautiful smile"
-    imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
-    buttonText=""
+    subtitle="Understanding orthodontic treatment options"
+    images={["/images/hero/dental-3.jpg"]}
+    height="md"
   />
   
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <article class="max-w-4xl mx-auto py-12">
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Understanding Orthodontic Treatment</h2>
-        <p class="text-neutral-600 mb-4">
-          Orthodontic treatment helps align your teeth and jaw to improve both the appearance of your smile and your oral health. Modern orthodontics offers various options to suit different needs and lifestyles.
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Understanding Orthodontics</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Orthodontic treatment helps align teeth and jaws to improve both function and appearance. 
+          Whether you're considering treatment for yourself or your child, understanding your options 
+          can help you make informed decisions about your dental care.
         </p>
-        <div class="grid md:grid-cols-2 gap-8 mt-8">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Common Issues Treated</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Crooked teeth</li>
-              <li>• Overcrowding</li>
-              <li>• Gaps between teeth</li>
-              <li>• Overbite/Underbite</li>
-              <li>• Crossbite</li>
+      </section>
+
+      <!-- Treatment Options -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Treatment Options</h2>
+        
+        <div class="space-y-8">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Traditional Braces</h3>
+            <div class="space-y-4">
+              <p class="text-gray-600">
+                Metal brackets and wires that gradually move teeth into position. Modern braces are 
+                more comfortable and less noticeable than ever before.
+              </p>
+              <div class="pl-4">
+                <h4 class="font-bold text-gray-800 mb-2">Benefits:</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                  <li>Effective for complex alignment issues</li>
+                  <li>Cannot be removed (ensures consistent treatment)</li>
+                  <li>Often the most economical option</li>
+                  <li>Suitable for patients of all ages</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Clear Aligners</h3>
+            <div class="space-y-4">
+              <p class="text-gray-600">
+                Custom-made, removable clear plastic trays that gradually straighten teeth. Popular 
+                among adults due to their nearly invisible appearance.
+              </p>
+              <div class="pl-4">
+                <h4 class="font-bold text-gray-800 mb-2">Benefits:</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                  <li>Nearly invisible treatment option</li>
+                  <li>Removable for eating and cleaning</li>
+                  <li>Often more comfortable than traditional braces</li>
+                  <li>Fewer office visits required</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Ceramic Braces</h3>
+            <div class="space-y-4">
+              <p class="text-gray-600">
+                Similar to traditional braces but with tooth-colored or clear brackets for a more 
+                subtle appearance.
+              </p>
+              <div class="pl-4">
+                <h4 class="font-bold text-gray-800 mb-2">Benefits:</h4>
+                <ul class="list-disc list-inside text-gray-600 space-y-1">
+                  <li>Less visible than metal braces</li>
+                  <li>As effective as traditional braces</li>
+                  <li>Suitable for most orthodontic issues</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Common Issues -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Common Orthodontic Issues</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Alignment Issues</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Crowded teeth</li>
+              <li>Gaps between teeth</li>
+              <li>Rotated or tilted teeth</li>
+              <li>Protruding teeth</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Benefits</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Improved appearance</li>
-              <li>• Better oral hygiene</li>
-              <li>• Enhanced bite function</li>
-              <li>• Reduced wear on teeth</li>
-              <li>• Increased confidence</li>
+
+          <div class="bg-gray-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Bite Problems</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Overbite (upper teeth overlap lower)</li>
+              <li>Underbite (lower teeth overlap upper)</li>
+              <li>Crossbite (misaligned bite)</li>
+              <li>Open bite (teeth don't meet when biting)</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Treatment Options</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
+      <!-- Treatment Process -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Treatment Process</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Initial Consultation</h3>
+            <p class="text-gray-600">
+              Comprehensive examination including X-rays and digital imaging to develop a 
+              personalized treatment plan.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Treatment Planning</h3>
+            <p class="text-gray-600">
+              Discussion of treatment options, timeline, and costs. Creation of custom treatment 
+              plan based on your specific needs.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Active Treatment</h3>
+            <p class="text-gray-600">
+              Regular adjustments and monitoring of progress. Length varies depending on individual 
+              needs and chosen treatment method.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Retention Phase</h3>
+            <p class="text-gray-600">
+              Use of retainers to maintain results after active treatment. Critical phase for 
+              long-term success.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Care During Treatment -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Care During Treatment</h2>
+        
+        <div class="bg-primary-50 p-6 rounded-lg">
           <ul class="space-y-4">
             <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">1.</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
               <div>
-                <strong>Traditional Braces</strong>
-                <p class="text-neutral-600">Metal brackets and wires that gradually move teeth into position. Effective for most orthodontic issues.</p>
+                <strong class="text-gray-800">Oral Hygiene:</strong>
+                <p class="text-gray-600">Brush after every meal and floss daily using special tools if needed</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">2.</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
               <div>
-                <strong>Ceramic Braces</strong>
-                <p class="text-neutral-600">Similar to traditional braces but with tooth-colored or clear materials for a more discreet appearance.</p>
+                <strong class="text-gray-800">Diet Modifications:</strong>
+                <p class="text-gray-600">Avoid hard, sticky, or sugary foods that can damage braces</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">3.</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
               <div>
-                <strong>Invisalign</strong>
-                <p class="text-neutral-600">Clear, removable aligners that gradually straighten teeth without metal brackets or wires.</p>
+                <strong class="text-gray-800">Regular Checkups:</strong>
+                <p class="text-gray-600">Attend all scheduled appointments for adjustments</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">4.</span>
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
               <div>
-                <strong>Lingual Braces</strong>
-                <p class="text-neutral-600">Braces placed on the inside surface of teeth, completely hidden from view.</p>
+                <strong class="text-gray-800">Protection During Sports:</strong>
+                <p class="text-gray-600">Wear a mouthguard during physical activities</p>
               </div>
             </li>
           </ul>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">The Treatment Process</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Initial Phase</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Consultation</li>
-              <li>• X-rays and impressions</li>
-              <li>• Treatment planning</li>
-              <li>• Appliance fitting</li>
-              <li>• Initial adjustments</li>
-            </ul>
+      <!-- FAQs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
+        
+        <div class="space-y-4">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">How long does treatment take?</h3>
+            <p class="text-gray-600">
+              Treatment time varies depending on individual needs, typically ranging from 12 to 36 months.
+            </p>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Active Treatment</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Regular adjustments</li>
-              <li>• Progress monitoring</li>
-              <li>• Oral hygiene maintenance</li>
-              <li>• Dietary considerations</li>
-              <li>• Wearing elastics if needed</li>
-            </ul>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">At what age should treatment begin?</h3>
+            <p class="text-gray-600">
+              The American Association of Orthodontists recommends an initial evaluation by age 7, 
+              though treatment can be effective at any age.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Will it hurt?</h3>
+            <p class="text-gray-600">
+              Some discomfort is normal, especially after adjustments, but it's typically mild and 
+              temporary. Over-the-counter pain relievers can help.
+            </p>
           </div>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Care During Treatment</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Oral Hygiene</strong>
-                <p class="text-neutral-600">Brush after every meal and floss daily using special orthodontic tools.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Diet Restrictions</strong>
-                <p class="text-neutral-600">Avoid hard, sticky, and sugary foods that can damage braces.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Regular Appointments</strong>
-                <p class="text-neutral-600">Attend all scheduled adjustments and checkups.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Retainer Use</strong>
-                <p class="text-neutral-600">Wear retainers as prescribed after treatment completion.</p>
-              </div>
-            </li>
-          </ul>
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg text-center">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready to Transform Your Smile?</h2>
+          <p class="text-gray-600 mb-6">
+            Schedule a consultation to learn which orthodontic treatment option is best for you. 
+            Our team will create a personalized plan to achieve your perfect smile.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <a 
+              href="/book-appointment" 
+              class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
+            >
+              Book Consultation
+            </a>
+            <a 
+              href="tel:+17376008776" 
+              class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors duration-200"
+            >
+              Call Us
+            </a>
+          </div>
         </div>
       </section>
-
-      <section class="bg-primary-50 p-8 rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Ready to Start Your Smile Journey?</h2>
-        <p class="text-neutral-600 mb-6">
-          Schedule a consultation to discuss your orthodontic treatment options and create a personalized plan for your perfect smile.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-            Schedule Consultation
-          </a>
-          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-            Contact Us
-          </a>
-        </div>
-      </section>
-    </article>
+    </div>
   </div>
 </Layout>

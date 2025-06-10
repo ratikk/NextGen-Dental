@@ -2,134 +2,149 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
 
 const breadcrumbItems = [
+  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
-  { label: 'Dental Checkup', href: '/services/dental-checkup' }
+  { label: 'Dental Checkup', href: '/services/dental-checkup' },
 ];
 ---
 
 <Layout 
-  title="Dental Checkup | Services | Smile Dental Clinic"
-  description="Regular dental checkups and professional cleanings to maintain your oral health and prevent dental problems."
+  title="Dental Checkup & Examination" 
+  description="Regular dental checkups at Lilac Dental help prevent cavities, gum disease, and other oral health issues. Schedule your comprehensive exam today."
 >
-  <Hero 
+  <Hero
     title="Dental Checkup"
-    subtitle="Comprehensive dental examinations and professional cleanings"
-    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+    subtitle="Comprehensive dental examinations for optimal oral health"
+    images={["/images/hero/dental-1.jpg"]}
+    height="md"
   />
   
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <article class="max-w-4xl mx-auto py-12">
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">What to Expect During Your Checkup</h2>
-        <p class="text-neutral-600 mb-4">
-          Regular dental checkups are essential for maintaining good oral health. During your visit, our experienced dental team will perform a comprehensive examination of your teeth, gums, and mouth.
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Why Regular Checkups Matter</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Regular dental checkups are essential for maintaining good oral health and preventing serious dental issues. 
+          Our comprehensive examinations help detect problems early when they're easier and less expensive to treat.
         </p>
-        <div class="grid md:grid-cols-2 gap-8 mt-8">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Examination Includes</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Visual examination of teeth and gums</li>
-              <li>• Digital X-rays when necessary</li>
-              <li>• Oral cancer screening</li>
-              <li>• Gum disease evaluation</li>
-              <li>• Examination of existing dental work</li>
+      </section>
+
+      <!-- What's Included -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">What's Included in Your Checkup</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Comprehensive Examination</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Visual inspection of teeth and gums</li>
+              <li>Cavity detection</li>
+              <li>Gum disease screening</li>
+              <li>Bite and jaw alignment check</li>
+              <li>Oral cancer screening</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Professional Cleaning</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Removal of plaque and tartar</li>
-              <li>• Professional flossing</li>
-              <li>• Expert tooth polishing</li>
-              <li>• Fluoride treatment if needed</li>
-              <li>• Oral hygiene recommendations</li>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Digital X-Rays</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Low-radiation digital imaging</li>
+              <li>Detection of hidden decay</li>
+              <li>Assessment of bone health</li>
+              <li>Evaluation of tooth roots</li>
+            </ul>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Treatment Planning</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Personalized care recommendations</li>
+              <li>Preventive treatment options</li>
+              <li>Discussion of findings</li>
+              <li>Cost and insurance review</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Why Regular Checkups Matter</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Early Detection:</strong>
-                <p class="text-neutral-600">Identify and treat dental issues before they become serious problems.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Prevention:</strong>
-                <p class="text-neutral-600">Regular cleanings help prevent cavities, gum disease, and other dental problems.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Cost-Effective:</strong>
-                <p class="text-neutral-600">Preventive care is less expensive than treating dental problems after they develop.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Overall Health:</strong>
-                <p class="text-neutral-600">Good oral health contributes to better overall health and well-being.</p>
-              </div>
-            </li>
+      <!-- Benefits -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Regular Checkups</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Prevention</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Early detection of issues</li>
+              <li>Prevention of tooth decay</li>
+              <li>Gum disease prevention</li>
+              <li>Maintain overall health</li>
+            </ul>
+          </div>
+
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Cost Savings</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Avoid expensive treatments</li>
+              <li>Prevent dental emergencies</li>
+              <li>Maximize insurance benefits</li>
+              <li>Long-term oral health</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Frequency -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">How Often Should You Visit?</h2>
+        
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <p class="text-gray-600 mb-4">
+            Most patients should visit every 6 months for routine checkups. However, some may need more 
+            frequent visits based on:
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>History of gum disease</li>
+            <li>High risk of cavities</li>
+            <li>Smoking or tobacco use</li>
+            <li>Diabetes or other medical conditions</li>
+            <li>Previous dental work</li>
           </ul>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">How Often Should You Visit?</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <p class="text-neutral-600 mb-4">
-            Most patients should visit the dentist every six months for routine checkups and cleanings. However, some patients may need more frequent visits based on their oral health needs.
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Schedule Your Checkup Today</h2>
+          <p class="text-gray-600 mb-6">
+            Don't wait until you have a problem. Regular checkups help maintain your oral health and prevent future issues.
           </p>
-          <p class="text-neutral-600">
-            Factors that might require more frequent visits include:
-          </p>
-          <ul class="mt-4 space-y-2 text-neutral-600">
-            <li>• History of gum disease</li>
-            <li>• High risk of cavities</li>
-            <li>• Smoking or tobacco use</li>
-            <li>• Diabetes or other medical conditions</li>
-            <li>• Weak immune system</li>
-          </ul>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Appointment"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
+          </div>
         </div>
       </section>
-
-      <section class="bg-primary-50 p-8 rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Schedule Your Checkup Today</h2>
-        <p class="text-neutral-600 mb-6">
-          Don't wait until you have a problem to visit the dentist. Regular checkups help maintain your oral health and prevent future issues.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-            Book an Appointment
-          </a>
-          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-            Contact Us
-          </a>
-        </div>
-      </section>
-    </article>
+    </div>
   </div>
 </Layout>

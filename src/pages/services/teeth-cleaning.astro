@@ -2,142 +2,156 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
 
 const breadcrumbItems = [
+  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
-  { label: 'Teeth Cleaning', href: '/services/teeth-cleaning' }
+  { label: 'Teeth Cleaning', href: '/services/teeth-cleaning' },
 ];
 ---
 
 <Layout 
-  title="Professional Teeth Cleaning | Services | Smile Dental Clinic"
-  description="Professional dental cleaning services to maintain optimal oral health and prevent dental problems."
+  title="Professional Teeth Cleaning" 
+  description="Get a brighter, healthier smile with professional teeth cleaning services at Lilac Dental in Austin, TX. Remove plaque, tartar, and surface stains."
 >
-  <Hero 
+  <Hero
     title="Professional Teeth Cleaning"
-    subtitle="Keep your smile healthy with regular professional cleanings"
-    imageUrl="https://images.pexels.com/photos/3845743/pexels-photo-3845743.jpeg"
+    subtitle="Keep your smile bright and healthy with regular professional cleanings"
+    images={["/images/hero/dental-2.jpg"]}
+    height="md"
   />
   
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <article class="max-w-4xl mx-auto py-12">
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Professional Teeth Cleaning</h2>
-        <p class="text-neutral-600 mb-4">
-          Professional teeth cleaning is essential for maintaining good oral health and preventing dental problems. Our experienced dental hygienists use advanced techniques and tools to provide thorough cleaning that goes beyond what regular brushing and flossing can achieve.
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Professional Teeth Cleaning</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Professional teeth cleaning goes beyond what regular brushing and flossing can achieve. 
+          Our skilled hygienists use specialized tools and techniques to remove plaque, tartar, 
+          and surface stains, helping prevent cavities and gum disease while brightening your smile.
         </p>
-        <div class="grid md:grid-cols-2 gap-8 mt-8">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Cleaning Process</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Physical exam of your mouth</li>
-              <li>• Removal of plaque and tartar</li>
-              <li>• Expert tooth polishing</li>
-              <li>• Professional flossing</li>
-              <li>• Fluoride treatment (if needed)</li>
+      </section>
+
+      <!-- The Process -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Cleaning Process</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Physical Exam</h3>
+            <p class="text-gray-600">
+              Before beginning the cleaning, your hygienist will examine your mouth for any obvious 
+              signs of oral health concerns.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Plaque and Tartar Removal</h3>
+            <p class="text-gray-600">
+              Using specialized tools, we'll carefully remove plaque and tartar buildup from your 
+              teeth, including below the gum line.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Professional Polishing</h3>
+            <p class="text-gray-600">
+              We use a special polishing tool and paste to remove surface stains and leave your 
+              teeth feeling smooth and clean.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Expert Flossing</h3>
+            <p class="text-gray-600">
+              Professional flossing removes any remaining plaque or polishing paste between your teeth.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">5. Fluoride Treatment</h3>
+            <p class="text-gray-600">
+              Optional fluoride treatment to help protect your teeth against decay until your next visit.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Benefits -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Professional Cleaning</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Health Benefits</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Prevents tooth decay</li>
+              <li>Reduces gum disease risk</li>
+              <li>Freshens breath</li>
+              <li>Supports overall health</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Benefits</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Prevents tooth decay</li>
-              <li>• Fights gum disease</li>
-              <li>• Removes stains</li>
-              <li>• Freshens breath</li>
-              <li>• Early problem detection</li>
+
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Aesthetic Benefits</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Removes surface stains</li>
+              <li>Brightens smile</li>
+              <li>Smoother-feeling teeth</li>
+              <li>Boosts confidence</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Types of Professional Cleaning</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Prophylaxis (Regular Cleaning)</strong>
-                <p class="text-neutral-600">Standard cleaning for patients with good oral health.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Scaling and Root Planing</strong>
-                <p class="text-neutral-600">Deep cleaning for patients with signs of gum disease.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Gross Debridement</strong>
-                <p class="text-neutral-600">Initial cleaning for patients who haven't had a cleaning in a long time.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div>
-                <strong>Periodontal Maintenance</strong>
-                <p class="text-neutral-600">Ongoing care for patients with a history of gum disease.</p>
-              </div>
-            </li>
+      <!-- Frequency -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">How Often Should You Get a Cleaning?</h2>
+        
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <p class="text-gray-600 mb-4">
+            Most patients should have professional cleanings every 6 months. However, some may need 
+            more frequent cleanings based on:
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>Gum disease history</li>
+            <li>Rate of tartar buildup</li>
+            <li>Oral hygiene habits</li>
+            <li>Overall health conditions</li>
           </ul>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Maintaining Your Clean Smile</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Daily Care</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Brush twice daily</li>
-              <li>• Floss at least once daily</li>
-              <li>• Use fluoride toothpaste</li>
-              <li>• Rinse with mouthwash</li>
-              <li>• Maintain a healthy diet</li>
-            </ul>
-          </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Professional Care</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Regular dental checkups</li>
-              <li>• Professional cleanings every 6 months</li>
-              <li>• X-rays as recommended</li>
-              <li>• Prompt attention to problems</li>
-              <li>• Follow hygienist's advice</li>
-            </ul>
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready for a Brighter Smile?</h2>
+          <p class="text-gray-600 mb-6">
+            Schedule your professional cleaning today and experience the difference a truly clean mouth feels like.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Appointment"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
           </div>
         </div>
       </section>
-
-      <section class="bg-primary-50 p-8 rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Schedule Your Cleaning</h2>
-        <p class="text-neutral-600 mb-6">
-          Regular professional cleanings are essential for maintaining optimal oral health. Schedule your appointment today.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-            Book an Appointment
-          </a>
-          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-            Contact Us
-          </a>
-        </div>
-      </section>
-    </article>
+    </div>
   </div>
 </Layout>

@@ -2,188 +2,232 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Button from '../components/Button.astro';
 
 const breadcrumbItems = [
-  { label: 'Patient Information', href: '/patient-information' }
+  { label: 'Home', href: '/' },
+  { label: 'Patient Information', href: '/patient-information' },
+];
+
+const paymentMethods = [
+  { name: 'Visa', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M15.446 10.648l-1.103 5.161h-1.764l1.104-5.161h1.763zm7.508-.754l-1.473 3.776-.174-.87c-.302-.968-.786-1.87-1.378-2.906h-1.813l2.596 6.015h1.937l2.763-6.015h-1.458zm-9.874.754l-1.103 5.161h-1.764l1.104-5.161h1.763zm-3.896 3.483c.007.557-.344.87-.917.87h-1.509l.528-2.473h1.664c.538 0 .861.313.861.87 0 .278-.111.557-.278.733h-.349zm.146-2.334c0 .557-.337.87-.875.87h-1.509l.486-2.264h1.509c.538 0 .896.313.896.87 0 .244-.111.488-.278.663l-.229-.139zm1.509-2.195h-3.93l-1.509 7.077h3.93c1.159 0 1.972-.383 2.371-1.148.399-.731.434-1.496.156-2.229.278-.557.451-1.148.451-1.74 0-1.009-.816-1.96-1.469-1.96z"/></svg>' },
+  { name: 'Mastercard', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M11.454 7.72h9.982v8.56h-9.982z"/><path d="M12.454 12c0-2.37-1.119-4.28-2.492-4.28-1.373 0-2.492 1.91-2.492 4.28s1.119 4.28 2.492 4.28c1.373 0 2.492-1.91 2.492-4.28zm11.492 0c0-2.37-1.119-4.28-2.492-4.28-1.373 0-2.492 1.91-2.492 4.28s1.119 4.28 2.492 4.28c1.373 0 2.492-1.91 2.492-4.28zm-5.746 0c0 2.37-1.119 4.28-2.492 4.28-1.373 0-2.492-1.91-2.492-4.28s1.119-4.28 2.492-4.28c1.373 0 2.492 1.91 2.492 4.28z"/></svg>' },
+  { name: 'American Express', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M2.614 14.076h1.951l.413-.938h.938l.413.938h3.827v-.713l.341.713h1.975l.341-.725v.725h7.912l.975-1.027.91 1.027h2.039l-3.001-3.264 3.001-3.264h-1.989l-.947 1.039-.873-1.039h-8.001v.713l-.314-.713h-1.951l-.314.725v-.725h-2.926l-.524 1.189-.536-1.189h-2.013v.713l-.289-.713h-1.814l-1.038 2.365-1.101-2.365h-1.926l1.364 2.977-1.364 2.977h1.926l1.101-2.365 1.038 2.365z"/></svg>' },
+  { name: 'Discover', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 100 16 8 8 0 000-16zm3.5 4.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/></svg>' },
+  { name: 'Cherry', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>' }
+];
+
+const insuranceProviders = [
+  "Delta Dental",
+  "Delta Dental Premier",
+  "MetLife",
+  "Blue Cross Blue Shield",
+  "Aetna",
+  "Guardian",
+  "Careington",
+  "Dental Health Alliance",
+  "United Healthcare",
+  "United Concordia",
+  "Humana",
+  "Cigna"
 ];
 ---
 
 <Layout 
-  title="Patient Information | Smile Dental Clinic"
-  description="Important information for new and existing patients. Learn about our policies, forms, and what to expect during your visit."
+  title="Patient Information" 
+  description="Find important information for new and existing patients at Lilac Dental in Austin, TX. Learn about appointments, insurance, and payment options."
 >
-  <Hero 
+  <Hero
     title="Patient Information"
-    subtitle="Everything you need to know for your dental visit"
-    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
+    subtitle="The team at Lilac Dental is committed to providing excellent dental care in a comfortable environment where patients can relax and feel at ease."
+    images={["/images/hero/dental-2.jpg"]}
+    height="md"
   />
   
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <!-- Main Content -->
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
-      <!-- New Patients Section -->
-      <section class="mb-16">
-        <div class="max-w-3xl mx-auto text-center mb-12">
-          <h2 class="text-3xl font-bold text-neutral-900 mb-4">New Patients</h2>
-          <p class="text-neutral-600">
-            Welcome to Smile Dental Clinic! We're excited to help you achieve optimal oral health. Here's what you need to know for your first visit.
+      <!-- Contact Information -->
+      <section class="mb-16" data-aos="fade-up">
+        <div class="bg-primary-50 rounded-lg p-8">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Contact Us</h2>
+          <p class="text-lg text-gray-600 mb-6">
+            We are happy to hear from you, answer your questions, and schedule an appointment.
           </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="bg-neutral-50 p-6 rounded-lg">
-            <div class="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-2">Patient Forms</h3>
-            <p class="text-neutral-600 mb-4">
-              Save time by downloading and completing our new patient forms before your visit.
-            </p>
-            <a href="#" class="text-primary-600 hover:text-primary-700 font-medium inline-flex items-center">
-              Download Forms
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </a>
-          </div>
-
-          <div class="bg-neutral-50 p-6 rounded-lg">
-            <div class="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-2">What to Expect</h3>
-            <p class="text-neutral-600 mb-4">
-              Learn about our comprehensive exam process and what your first visit will include.
-            </p>
-            <a href="#first-visit" class="text-primary-600 hover:text-primary-700 font-medium">
-              Learn More
-            </a>
-          </div>
-
-          <div class="bg-neutral-50 p-6 rounded-lg">
-            <div class="bg-primary-100 w-12 h-12 rounded-lg flex items-center justify-center mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-2">Payment Options</h3>
-            <p class="text-neutral-600 mb-4">
-              Review our accepted insurance plans and flexible payment options.
-            </p>
-            <a href="/financing" class="text-primary-600 hover:text-primary-700 font-medium">
-              View Options
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- First Visit Section -->
-      <section id="first-visit" class="mb-16">
-        <div class="bg-neutral-50 p-8 rounded-lg">
-          <h2 class="text-3xl font-bold mb-6">Your First Visit</h2>
-          <div class="grid md:grid-cols-2 gap-8">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
-              <h3 class="text-xl font-semibold mb-4">What to Bring</h3>
-              <ul class="space-y-3 text-neutral-600">
-                <li>• Completed new patient forms</li>
-                <li>• Valid photo ID</li>
-                <li>• Insurance card (if applicable)</li>
-                <li>• List of current medications</li>
-                <li>• Previous dental records (if available)</li>
-              </ul>
+              <h3 class="font-bold text-gray-800 mb-2">Phone</h3>
+              <a 
+                href="tel:+17376008776" 
+                class="text-primary-600 hover:text-primary-700 text-lg font-medium transition-colors duration-200"
+              >
+                (737) 600-8776
+              </a>
             </div>
+            
             <div>
-              <h3 class="text-xl font-semibold mb-4">What to Expect</h3>
-              <ul class="space-y-3 text-neutral-600">
-                <li>• Comprehensive oral examination</li>
-                <li>• Digital X-rays</li>
-                <li>• Professional cleaning</li>
-                <li>• Treatment plan discussion</li>
-                <li>• Insurance and payment consultation</li>
-              </ul>
+              <h3 class="font-bold text-gray-800 mb-2">Address</h3>
+              <a 
+                href="https://www.google.com/maps/place/12314+N+Interstate+Hwy+35+Ste+110,+Austin,+TX+78753"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-gray-600 hover:text-primary-600 transition-colors duration-200"
+              >
+                12314 N Interstate Hwy 35 Ste 110<br>
+                Austin, TX 78753
+              </a>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Insurance & Payment Section -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-8">Insurance & Payment</h2>
-        <div class="grid md:grid-cols-2 gap-8">
-          <div class="bg-neutral-50 p-6 rounded-lg">
-            <h3 class="text-xl font-semibold mb-4">Accepted Insurance Plans</h3>
-            <p class="text-neutral-600 mb-4">
-              We work with most major insurance providers to maximize your benefits. Some of our accepted plans include:
-            </p>
-            <ul class="space-y-2 text-neutral-600">
-              <li>• Delta Dental</li>
-              <li>• Cigna</li>
-              <li>• Aetna</li>
-              <li>• MetLife</li>
-              <li>• Guardian</li>
-              <li>• And many more...</li>
-            </ul>
+      <!-- Welcome Section -->
+      <section class="mb-16" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Welcome to Lilac Dental</h2>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div>
+            <div class="space-y-8">
+              <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">Making an Appointment</h3>
+                <p class="text-gray-600">
+                  It's easy to make an appointment for your initial examination and dental treatments. 
+                  Simply call (737) 600-8776 to speak with our friendly team. We request 48-hours notice 
+                  for appointment cancellations to avoid a cancellation fee.
+                </p>
+              </div>
+              
+              <div>
+                <h3 class="text-xl font-bold text-gray-800 mb-3">What to Expect</h3>
+                <p class="text-gray-600">
+                  Upon arriving, you'll be welcomed by our friendly staff in our comfortable waiting area. 
+                  We'll collect your new patient paperwork and insurance information. Your privacy is important 
+                  to us, and you can be confident that all information shared with our team will be kept confidential.
+                </p>
+              </div>
+            </div>
           </div>
-
-          <div class="bg-neutral-50 p-6 rounded-lg">
-            <h3 class="text-xl font-semibold mb-4">Payment Options</h3>
-            <p class="text-neutral-600 mb-4">
-              We offer various payment options to make dental care accessible:
-            </p>
-            <ul class="space-y-2 text-neutral-600">
-              <li>• Cash, check, and major credit cards</li>
-              <li>• CareCredit financing</li>
-              <li>• Flexible payment plans</li>
-              <li>• FSA/HSA accounts</li>
-              <li>• Insurance benefit maximization</li>
-            </ul>
+          
+          <div class="space-y-8">
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-3">Initial Examination</h3>
+              <p class="text-gray-600">
+                Your first visit typically includes a comprehensive exam, professional cleaning by our hygienist, 
+                and a thorough examination by Dr. Yanala. This appointment usually takes about an hour, allowing 
+                us to get to know you and understand your dental needs.
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-3">Pain Concerns</h3>
+              <p class="text-gray-600">
+                We understand that dental anxiety is common. Dr. Yanala will work with you to create a 
+                pain management plan tailored to your needs and comfort level. Our goal is to make your 
+                dental experience as comfortable as possible.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Office Policies Section -->
-      <section class="mb-16">
-        <h2 class="text-3xl font-bold mb-8">Office Policies</h2>
-        <div class="grid md:grid-cols-3 gap-8">
-          <div class="bg-neutral-50 p-6 rounded-lg">
-            <h3 class="text-xl font-semibold mb-4">Appointment Policy</h3>
-            <p class="text-neutral-600">
-              We require 24-hour notice for cancellations. Late cancellations or missed appointments may incur a fee.
+      <!-- Payment & Insurance -->
+      <section class="mb-16" data-aos="fade-up">
+        <div class="bg-gray-50 rounded-lg p-8">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Payment & Insurance Information</h2>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-4">Payment Methods</h3>
+              <p class="text-gray-600 mb-6">
+                We accept various payment methods to make dental care accessible to all our patients:
+              </p>
+              
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+                {paymentMethods.map(method => (
+                  <div class="flex items-center gap-2 text-gray-600">
+                    <span set:html={method.icon} />
+                    <span>{method.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-4">Insurance</h3>
+              <p class="text-gray-600 mb-4">
+                We work with most major dental insurance providers and will help you maximize your benefits. 
+                Our team will assist you in understanding your coverage and filing claims.
+              </p>
+              
+              <div class="grid grid-cols-2 gap-4">
+                {insuranceProviders.map(provider => (
+                  <div class="text-gray-600">{provider}</div>
+                ))}
+              </div>
+              
+              <p class="text-gray-600 mt-4">
+                We also accept PPO plans and Medicare. Don't have insurance? Ask about our in-house membership 
+                plan and financing options through Cherry.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Financial Policy -->
+      <section class="mb-16" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Financial Policy</h2>
+        <p class="text-gray-600 mb-6">
+          At Lilac Dental, we believe everyone deserves access to quality dental care. We offer:
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-3">Flexible Payment Plans</h3>
+            <p class="text-gray-600">
+              We offer various payment options to help make your dental care more affordable.
             </p>
           </div>
-
-          <div class="bg-neutral-50 p-6 rounded-lg">
-            <h3 class="text-xl font-semibold mb-4">Privacy Policy</h3>
-            <p class="text-neutral-600">
-              We maintain strict HIPAA compliance to protect your personal and medical information.
+          
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-3">Insurance Coordination</h3>
+            <p class="text-gray-600">
+              Our team will help you understand and maximize your insurance benefits.
             </p>
           </div>
-
-          <div class="bg-neutral-50 p-6 rounded-lg">
-            <h3 class="text-xl font-semibold mb-4">Emergency Care</h3>
-            <p class="text-neutral-600">
-              24/7 emergency dental care available for existing patients. Call our emergency line for assistance.
+          
+          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+            <h3 class="font-bold text-gray-800 mb-3">Transparent Pricing</h3>
+            <p class="text-gray-600">
+              We provide clear cost estimates before beginning any treatment.
             </p>
           </div>
         </div>
       </section>
 
       <!-- CTA Section -->
-      <section class="bg-primary-50 p-8 rounded-lg text-center">
-        <h2 class="text-2xl font-bold mb-4">Ready to Schedule Your Visit?</h2>
-        <p class="text-neutral-600 mb-6 max-w-2xl mx-auto">
-          Whether you're a new patient or due for a checkup, we're here to help you achieve optimal oral health.
+      <section class="text-center" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Ready to Schedule Your Visit?</h2>
+        <p class="text-lg text-gray-600 mb-8">
+          Contact us today to schedule your appointment or ask any questions about our services.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors">
-            Book Appointment
-          </a>
-          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors border border-primary-600">
-            Contact Us
-          </a>
+        
+        <div class="flex flex-wrap justify-center gap-4">
+          <Button
+            href="/book-appointment"
+            text="Book Appointment"
+            variant="primary"
+            size="lg"
+          />
+          <Button
+            href="tel:+17376008776"
+            text="Call Us"
+            variant="outline"
+            size="lg"
+          />
         </div>
       </section>
     </div>

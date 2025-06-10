@@ -2,134 +2,214 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
 
 const breadcrumbItems = [
+  { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
-  { label: 'Lumineers', href: '/services/lumineers' }
+  { label: 'Lumineers', href: '/services/lumineers' },
 ];
 ---
 
 <Layout 
-  title="Lumineers | Services | Smile Dental Clinic"
-  description="Transform your smile with ultra-thin Lumineers. Learn about this minimally invasive alternative to traditional veneers."
+  title="Lumineers | No-Prep Dental Veneers" 
+  description="Transform your smile with Lumineers at Lilac Dental in Austin, TX. Ultra-thin, no-prep veneers that preserve your natural teeth while creating a beautiful smile."
 >
-  <Hero 
+  <Hero
     title="Lumineers"
-    subtitle="Ultra-thin, no-prep veneers for a beautiful smile transformation"
-    imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
+    subtitle="Transform your smile without altering your natural teeth"
+    images={["/images/hero/dental-2.jpg"]}
+    height="md"
   />
   
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <article class="max-w-4xl mx-auto py-12">
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">What Are Lumineers?</h2>
-        <p class="text-neutral-600 mb-4">
-          Lumineers are ultra-thin porcelain veneers that require minimal to no reduction of your natural tooth structure. They offer a beautiful, natural-looking solution for transforming your smile while preserving your healthy tooth enamel.
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">What Are Lumineers?</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Lumineers are ultra-thin, highly translucent porcelain veneers that offer a painless way to 
+          achieve a beautiful smile. Unlike traditional veneers, Lumineers are so thin that they can 
+          be applied seamlessly over your existing teeth without requiring the removal of sensitive tooth structure.
         </p>
-        <div class="grid md:grid-cols-2 gap-8 mt-8">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Ideal For</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Stained or discolored teeth</li>
-              <li>• Gaps between teeth</li>
-              <li>• Chipped teeth</li>
-              <li>• Misshapen teeth</li>
-              <li>• Minor misalignment</li>
+      </section>
+
+      <!-- Benefits -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Lumineers</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Advantages</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>No drilling or grinding down teeth</li>
+              <li>Preserves natural tooth structure</li>
+              <li>Reversible procedure</li>
+              <li>No shots or anesthesia needed</li>
+              <li>Ultra-thin (about 0.2mm)</li>
+              <li>Durable and long-lasting</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Advantages</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• No drilling or grinding</li>
-              <li>• Reversible procedure</li>
-              <li>• Ultra-thin design</li>
-              <li>• Natural appearance</li>
-              <li>• Long-lasting results</li>
+
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Aesthetic Improvements</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Whiten and brighten teeth</li>
+              <li>Close gaps between teeth</li>
+              <li>Fix misshapen teeth</li>
+              <li>Cover stains and discoloration</li>
+              <li>Improve minor misalignment</li>
+              <li>Create a uniform smile</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">The Lumineers Process</h2>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">1.</span>
-              <div>
-                <strong>Initial Consultation</strong>
-                <p class="text-neutral-600">Evaluation and discussion of your smile goals.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">2.</span>
-              <div>
-                <strong>Digital Imaging</strong>
-                <p class="text-neutral-600">Creation of precise digital impressions.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">3.</span>
-              <div>
-                <strong>Custom Design</strong>
-                <p class="text-neutral-600">Crafting of your personalized Lumineers.</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <span class="text-primary-600 font-bold">4.</span>
-              <div>
-                <strong>Fitting & Bonding</strong>
-                <p class="text-neutral-600">Precise placement and bonding of Lumineers.</p>
-              </div>
-            </li>
+      <!-- The Process -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Lumineers Process</h2>
+        
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Initial Consultation</h3>
+            <p class="text-gray-600">
+              We evaluate your smile, discuss your goals, and determine if Lumineers are the right 
+              choice for you. Digital imaging helps visualize your potential results.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Custom Design</h3>
+            <p class="text-gray-600">
+              Precise impressions of your teeth are taken to create your custom Lumineers. Each veneer 
+              is crafted to match your natural tooth color and desired shape.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Preview and Fitting</h3>
+            <p class="text-gray-600">
+              Your Lumineers are temporarily placed to ensure proper fit, color match, and appearance 
+              before final bonding.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Final Placement</h3>
+            <p class="text-gray-600">
+              Once you're satisfied, the Lumineers are permanently bonded to your teeth. The process 
+              is comfortable and typically requires no anesthesia.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Candidacy -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Are You a Candidate?</h2>
+        
+        <div class="bg-gray-50 p-6 rounded-lg">
+          <p class="text-gray-600 mb-4">
+            Lumineers are an excellent solution for many people, but they're particularly suitable if you have:
+          </p>
+          <ul class="list-disc list-inside text-gray-600 space-y-2">
+            <li>Stained or discolored teeth resistant to whitening</li>
+            <li>Minor gaps or misalignment</li>
+            <li>Chipped or worn teeth</li>
+            <li>Misshapen teeth</li>
+            <li>Old dental work you'd like to improve</li>
+            <li>Healthy teeth and gums</li>
           </ul>
         </div>
       </section>
 
-      <section class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Lumineers vs. Traditional Veneers</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Lumineers</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Ultra-thin (0.2mm)</li>
-              <li>• No tooth reduction</li>
-              <li>• Reversible procedure</li>
-              <li>• Minimal preparation</li>
-              <li>• Preserves natural teeth</li>
+      <!-- Care and Maintenance -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Care and Maintenance</h2>
+        
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Daily Care</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Brush twice daily with non-abrasive toothpaste</li>
+              <li>Floss daily as usual</li>
+              <li>Use a soft-bristled toothbrush</li>
+              <li>Maintain regular dental checkups</li>
             </ul>
           </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-xl font-semibold mb-4">Traditional Veneers</h3>
-            <ul class="space-y-3 text-neutral-600">
-              <li>• Thicker (0.5mm)</li>
-              <li>• Requires tooth reduction</li>
-              <li>• Permanent procedure</li>
-              <li>• More preparation needed</li>
-              <li>• Alters natural teeth</li>
+
+          <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Long-term Care</h3>
+            <ul class="list-disc list-inside text-gray-600 space-y-2">
+              <li>Avoid biting hard objects</li>
+              <li>Wear a nightguard if you grind your teeth</li>
+              <li>Schedule regular professional cleanings</li>
+              <li>Address any issues promptly</li>
             </ul>
           </div>
         </div>
       </section>
 
-      <section class="bg-primary-50 p-8 rounded-lg">
-        <h2 class="text-2xl font-bold mb-4">Transform Your Smile</h2>
-        <p class="text-neutral-600 mb-6">
-          Ready to enhance your smile with minimal intervention? Schedule a consultation to learn if Lumineers are right for you.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/book-appointment" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-            Schedule Consultation
-          </a>
-          <a href="/contact" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-            Contact Us
-          </a>
+      <!-- FAQs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
+        
+        <div class="space-y-4">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">How long do Lumineers last?</h3>
+            <p class="text-gray-600">
+              With proper care, Lumineers can last 20 years or more. Their durability and longevity 
+              make them an excellent investment in your smile.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Is the procedure painful?</h3>
+            <p class="text-gray-600">
+              The Lumineers procedure is typically painless and requires no anesthesia since there's 
+              no drilling or alteration of your natural teeth.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">How many visits are required?</h3>
+            <p class="text-gray-600">
+              The process usually requires just two visits – one for impressions and design, and 
+              another for placement of your custom Lumineers.
+            </p>
+          </div>
         </div>
       </section>
-    </article>
+
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Transform Your Smile with Lumineers</h2>
+          <p class="text-gray-600 mb-6">
+            Ready to achieve the smile you've always wanted? Schedule a consultation to learn if 
+            Lumineers are right for you.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Consultation"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </Layout>

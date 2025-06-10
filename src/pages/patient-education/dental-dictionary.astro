@@ -4,65 +4,62 @@ import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 
 const breadcrumbItems = [
+  { label: 'Home', href: '/' },
   { label: 'Patient Education', href: '/patient-education' },
-  { label: 'Dental Dictionary', href: '/patient-education/dental-dictionary' }
+  { label: 'Dental Dictionary', href: '/patient-education/dental-dictionary' },
 ];
 
 const terms = [
   {
     letter: "A",
-    terms: [
+    definitions: [
       {
         term: "Abscess",
-        definition: "A localized collection of pus in tissues, organs, or confined spaces, usually due to an infection."
-      },
-      {
-        term: "Abutment",
-        definition: "A tooth or implant that supports a dental prosthesis."
+        definition: "A localized infection filled with pus that can occur around the root of a tooth or in the gums."
       },
       {
         term: "Amalgam",
-        definition: "A mixture of metals used as a filling material for teeth."
+        definition: "A silver-colored filling material made from a mixture of mercury, silver, tin, and copper."
+      },
+      {
+        term: "Anesthesia",
+        definition: "Medication used to prevent pain during dental procedures."
       }
     ]
   },
   {
     letter: "B",
-    terms: [
+    definitions: [
       {
         term: "Bridge",
-        definition: "A fixed prosthetic device that replaces one or more missing teeth."
+        definition: "A fixed prosthetic device that replaces one or more missing teeth by attaching to adjacent teeth."
       },
       {
         term: "Bruxism",
-        definition: "The habit of grinding or clenching teeth, especially during sleep."
-      },
-      {
-        term: "Bicuspid",
-        definition: "A premolar tooth with two cusps, located between the canine and molar teeth."
+        definition: "The habit of grinding or clenching teeth, often during sleep."
       }
     ]
   },
   {
     letter: "C",
-    terms: [
+    definitions: [
       {
         term: "Cavity",
         definition: "A hole in a tooth caused by decay."
       },
       {
         term: "Crown",
-        definition: "A restoration that covers all or part of the tooth's surface."
+        definition: "A cap that covers a damaged tooth to restore its shape, size, strength, and appearance."
       },
       {
-        term: "Calculus",
-        definition: "Hardened plaque that forms on teeth, also known as tartar."
+        term: "Composite",
+        definition: "A tooth-colored filling material used for restoring decayed teeth."
       }
     ]
   },
   {
     letter: "D",
-    terms: [
+    definitions: [
       {
         term: "Dentin",
         definition: "The layer of tooth structure beneath the enamel."
@@ -75,319 +72,213 @@ const terms = [
   },
   {
     letter: "E",
-    terms: [
+    definitions: [
       {
         term: "Enamel",
-        definition: "The hard, outer surface layer of a tooth."
+        definition: "The hard, protective outer layer of a tooth."
       },
       {
-        term: "Endodontics",
-        definition: "The dental specialty dealing with the tooth pulp and tissues surrounding the root."
+        term: "Extraction",
+        definition: "The removal of a tooth from its socket in the bone."
       }
     ]
   },
   {
     letter: "F",
-    terms: [
+    definitions: [
       {
         term: "Filling",
-        definition: "Material used to restore missing tooth structure."
+        definition: "Material used to restore a decayed portion of a tooth."
       },
       {
         term: "Fluoride",
-        definition: "A mineral that helps prevent tooth decay."
+        definition: "A mineral that helps prevent tooth decay by strengthening tooth enamel."
       }
     ]
   },
   {
     letter: "G",
-    terms: [
+    definitions: [
       {
         term: "Gingivitis",
-        definition: "Inflammation of the gums, the early stage of gum disease."
+        definition: "Early stage of gum disease characterized by inflammation of the gums."
       },
       {
-        term: "Gingiva",
-        definition: "The gum tissue surrounding the teeth."
-      }
-    ]
-  },
-  {
-    letter: "H",
-    terms: [
-      {
-        term: "Halitosis",
-        definition: "Bad breath; an unpleasant odor emanating from the mouth."
-      },
-      {
-        term: "Hygienist",
-        definition: "A licensed dental professional who specializes in preventive dental care."
+        term: "Gum Disease",
+        definition: "Infection of the tissues that hold teeth in place; also called periodontal disease."
       }
     ]
   },
   {
     letter: "I",
-    terms: [
+    definitions: [
       {
         term: "Implant",
         definition: "An artificial tooth root placed into the jaw to hold a replacement tooth."
       },
       {
-        term: "Incisor",
-        definition: "The front teeth used for biting."
-      }
-    ]
-  },
-  {
-    letter: "J",
-    terms: [
-      {
-        term: "Jaw",
-        definition: "The bone structure that holds the teeth and forms the framework of the mouth."
-      }
-    ]
-  },
-  {
-    letter: "L",
-    terms: [
-      {
-        term: "Laminate",
-        definition: "A thin shell of porcelain bonded to the front of teeth to improve appearance."
-      },
-      {
-        term: "Local Anesthetic",
-        definition: "Medication used to prevent pain in a specific area during dental procedures."
-      }
-    ]
-  },
-  {
-    letter: "M",
-    terms: [
-      {
-        term: "Molar",
-        definition: "The large teeth at the back of the mouth used for grinding food."
-      },
-      {
-        term: "Malocclusion",
-        definition: "Improper alignment of teeth or bite."
-      }
-    ]
-  },
-  {
-    letter: "N",
-    terms: [
-      {
-        term: "Necrotizing Ulcerative Gingivitis",
-        definition: "A severe gum infection characterized by painful, bleeding gums."
-      },
-      {
-        term: "Night Guard",
-        definition: "A dental appliance worn at night to prevent teeth grinding."
-      }
-    ]
-  },
-  {
-    letter: "O",
-    terms: [
-      {
-        term: "Orthodontics",
-        definition: "The dental specialty focused on correcting misaligned teeth and jaws."
-      },
-      {
-        term: "Occlusion",
-        definition: "The relationship between the upper and lower teeth when they come together."
+        term: "Inlay",
+        definition: "A custom-fitted filling made in a laboratory and cemented into a tooth."
       }
     ]
   },
   {
     letter: "P",
-    terms: [
-      {
-        term: "Periodontics",
-        definition: "The dental specialty focusing on the supporting structures of teeth."
-      },
+    definitions: [
       {
         term: "Plaque",
-        definition: "A sticky film of bacteria that forms on teeth."
+        definition: "A sticky film of bacteria that forms on teeth and can cause decay."
+      },
+      {
+        term: "Periodontal",
+        definition: "Referring to the gums and other tissues that support the teeth."
       }
     ]
   },
   {
     letter: "R",
-    terms: [
+    definitions: [
       {
         term: "Root Canal",
-        definition: "A procedure to treat infected or damaged tooth pulp."
+        definition: "A procedure to treat infected or damaged tooth pulp by removing it and sealing the space."
       },
       {
         term: "Restoration",
-        definition: "The replacement of missing tooth structure by artificial means."
+        definition: "The replacement of a missing or damaged tooth structure."
       }
     ]
   },
   {
     letter: "S",
-    terms: [
+    definitions: [
       {
         term: "Scaling",
-        definition: "The removal of tartar from above and below the gum line."
+        definition: "The removal of tartar (calculus) and plaque from above and below the gum line."
       },
       {
         term: "Sealant",
-        definition: "A plastic material applied to the chewing surfaces of teeth to prevent decay."
+        definition: "A plastic material applied to the chewing surfaces of back teeth to prevent decay."
       }
     ]
   },
   {
     letter: "T",
-    terms: [
+    definitions: [
       {
         term: "Tartar",
-        definition: "Calcified plaque that has hardened on the teeth."
+        definition: "Hardened plaque that has been left on teeth for an extended period; also called calculus."
       },
       {
         term: "TMJ",
-        definition: "Temporomandibular joint; the joint where the jaw connects to the skull."
+        definition: "Temporomandibular joint; the joint where the lower jaw connects to the skull."
       }
     ]
   },
   {
     letter: "V",
-    terms: [
+    definitions: [
       {
         term: "Veneer",
-        definition: "A thin covering placed over the front part of a tooth to improve appearance."
+        definition: "A thin shell of porcelain or composite material bonded to the front of teeth to improve their appearance."
       }
     ]
   },
   {
     letter: "W",
-    terms: [
+    definitions: [
       {
         term: "Whitening",
-        definition: "The process of making teeth appear whiter through various dental procedures."
+        definition: "A cosmetic procedure that lightens teeth and removes stains and discoloration."
       },
       {
         term: "Wisdom Teeth",
         definition: "The third and final set of molars that usually appear in the late teens or early twenties."
       }
     ]
-  },
-  {
-    letter: "X",
-    terms: [
-      {
-        term: "X-ray",
-        definition: "A radiographic image of teeth and surrounding structures used for diagnostic purposes."
-      }
-    ]
-  },
-  {
-    letter: "Y",
-    terms: [
-      {
-        term: "Yeast Infection",
-        definition: "A fungal infection that can occur in the mouth, also known as oral thrush."
-      },
-      {
-        term: "Yellow Teeth",
-        definition: "Discoloration of teeth that can be caused by foods, beverages, tobacco use, or aging."
-      }
-    ]
-  },
-  {
-    letter: "Z",
-    terms: [
-      {
-        term: "Zinc Oxide Eugenol",
-        definition: "A dental material used in temporary fillings and cement."
-      },
-      {
-        term: "Zoom Whitening",
-        definition: "A professional teeth whitening system that uses light activation to enhance the bleaching process."
-      }
-    ]
   }
 ];
-
-const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 ---
 
 <Layout 
-  title="Dental Dictionary | Patient Education | Smile Dental Clinic"
-  description="Comprehensive glossary of dental terms and definitions to help you better understand dental procedures and terminology."
+  title="Dental Dictionary" 
+  description="Learn common dental terms and definitions with our comprehensive dental dictionary at Lilac Dental in Austin, TX."
 >
-  <Hero 
+  <Hero
     title="Dental Dictionary"
-    subtitle="Understanding common dental terms and terminology"
-    imageUrl="https://images.pexels.com/photos/3845757/pexels-photo-3845757.jpeg"
-    buttonText=""
+    subtitle="Understanding common dental terms and procedures"
+    images={["/images/hero/dental-1.jpg"]}
+    height="md"
   />
   
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-    
-    <div class="max-w-4xl mx-auto py-12">
-      <!-- Search Bar -->
-      <div class="mb-12">
-        <div class="relative">
-          <input 
-            type="text" 
-            placeholder="Search dental terms..." 
-            class="w-full px-4 py-3 pl-12 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 outline-none"
-          />
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-neutral-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
-      </div>
-      
-      <!-- Alphabet Navigation -->
-      <div class="mb-12">
-        <div class="flex flex-wrap gap-2">
-          {alphabet.map(letter => (
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Understanding Dental Terms</h2>
+        <p class="text-lg text-gray-600">
+          Our dental dictionary helps you understand common dental terms and procedures. 
+          Knowledge is key to making informed decisions about your oral health.
+        </p>
+      </section>
+
+      <!-- Dictionary Navigation -->
+      <section class="mb-12 max-w-3xl mx-auto" data-aos="fade-up">
+        <div class="flex flex-wrap gap-2 justify-center">
+          {terms.map(section => (
             <a 
-              href={`#${letter}`}
-              class="w-8 h-8 flex items-center justify-center rounded-full border border-primary-600 text-primary-600 hover:bg-primary-600 hover:text-white transition-colors"
+              href={`#${section.letter}`}
+              class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-50 text-primary-600 font-bold hover:bg-primary-100 transition-colors duration-200"
             >
-              {letter}
+              {section.letter}
             </a>
           ))}
         </div>
-      </div>
-      
-      <!-- Terms List -->
-      <div class="space-y-12">
+      </section>
+
+      <!-- Dictionary Terms -->
+      <div class="max-w-3xl mx-auto">
         {terms.map(section => (
-          <div id={section.letter}>
-            <h2 class="text-3xl font-bold mb-6">{section.letter}</h2>
+          <section id={section.letter} class="mb-12 scroll-mt-32" data-aos="fade-up">
+            <h2 class="text-4xl font-bold font-heading text-primary-600 mb-6">{section.letter}</h2>
+            
             <div class="space-y-6">
-              {section.terms.map(item => (
-                <div class="bg-white p-6 rounded-lg shadow-md">
-                  <h3 class="text-xl font-semibold mb-2">{item.term}</h3>
-                  <p class="text-neutral-600">{item.definition}</p>
+              {section.definitions.map(item => (
+                <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+                  <h3 class="text-xl font-bold text-gray-800 mb-2">{item.term}</h3>
+                  <p class="text-gray-600">{item.definition}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
         ))}
       </div>
-      
+
       <!-- Additional Resources -->
-      <div class="bg-primary-50 p-8 rounded-lg mt-12">
-        <h2 class="text-2xl font-bold mb-4">Need More Information?</h2>
-        <p class="text-neutral-600 mb-6">
-          Have questions about dental terms or procedures? Our team is here to help explain everything in detail.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="/contact" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors text-center">
-            Contact Us
-          </a>
-          <a href="/book-appointment" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg hover:bg-primary-50 transition-colors text-center border border-primary-600">
-            Book Appointment
-          </a>
+      <section class="max-w-3xl mx-auto mt-16" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Need More Information?</h2>
+          <p class="text-gray-600 mb-6">
+            Our team is here to help explain any dental terms or procedures you don't understand. 
+            We believe in educating our patients to make informed decisions about their oral health.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a 
+              href="/contact" 
+              class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
+            >
+              Contact Us
+            </a>
+            <a 
+              href="/patient-education" 
+              class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors duration-200"
+            >
+              More Resources
+            </a>
+          </div>
         </div>
-      </div>
+      </section>
     </div>
   </div>
 </Layout>

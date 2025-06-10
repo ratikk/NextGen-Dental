@@ -2,51 +2,69 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import GoogleReviews from '../components/GoogleReviews.jsx';
-import GoogleStats from '../components/GoogleStats.jsx';
-import PatientSatisfaction from '../components/PatientSatisfaction.jsx';
+import GoogleReviews from '../components/GoogleReviews';
+import { clinicInfo } from '../utils/clinicInfo';
 
-const breadcrumbItems = [{ label: 'Reviews', href: '/reviews' }];
-const yearsOfService = "15+";
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Reviews', href: '/reviews' },
+];
 ---
 
-<Layout title="Patient Reviews | Lilac Dental">
+<Layout 
+  title="Patient Reviews" 
+  description={`See what our patients are saying about their experience at ${clinicInfo.name}. Read real Google reviews and testimonials from our dental patients in Austin, TX.`}
+>
   <Hero
     title="Patient Reviews"
-    subtitle="See what our patients say about their experience"
-    imageUrl="https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg"
+    subtitle="Hear what our patients have to say about their experience"
+    images={["/images/hero/dental-2.jpg"]}
+    height="md"
   />
-
-  <div class="container mx-auto px-4">
-    <Breadcrumbs items={breadcrumbItems} />
-
-    <div class="py-12">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-        <GoogleStats client:load />
-        <div class="bg-white p-6 rounded-lg shadow-md text-center">
-          <div class="text-3xl font-bold text-primary-600 mb-2">{yearsOfService}</div>
-          <div class="text-neutral-600">Years of Service</div>
-        </div>
-        <PatientSatisfaction client:load />
-      </div>
-
-      <GoogleReviews client:load />
-
-      <div class="bg-primary-50 p-8 rounded-lg mt-12">
-        <h2 class="text-2xl font-bold mb-4">Share Your Experience</h2>
-        <p class="text-neutral-600 mb-6">
-          We value your feedback! Help us improve our services and let others know about your experience at Lilac Dental.
+  
+  <Breadcrumbs items={breadcrumbItems} />
+  
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold font-heading text-gray-800 mb-6">
+          Our Patients' Experience
+        </h2>
+        <p class="text-lg text-gray-600">
+          At {clinicInfo.name}, we value our patients' feedback and strive to provide exceptional 
+          dental care. Read what our patients are saying about their experience with us.
         </p>
-        <div class="flex flex-col sm:flex-row gap-4">
-          <a href="https://g.page/r/your-google-review-link" target="_blank" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg">
-            Write a Google Review
-          </a>
-          <a href="/book-appointment" class="inline-block bg-white text-primary-600 px-6 py-3 rounded-lg border border-primary-600">
-            Book Appointment
+      </section>
+
+      <!-- Google Reviews -->
+      <section class="mb-16" data-aos="fade-up">
+        <GoogleReviews client:load />
+      </section>
+
+      <!-- Leave a Review CTA -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">
+            Share Your Experience
+          </h2>
+          <p class="text-gray-600 mb-6">
+            Had a great experience at {clinicInfo.name}? We'd love to hear about it! Your feedback 
+            helps us continue providing exceptional care to all our patients.
+          </p>
+          <a 
+            href={clinicInfo.social.google}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
+          >
+            Leave a Review on Google
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
           </a>
         </div>
-      </div>
+      </section>
     </div>
   </div>
 </Layout>
-
