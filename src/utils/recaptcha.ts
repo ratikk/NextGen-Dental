@@ -16,13 +16,14 @@ export async function getRecaptchaToken(action: string): Promise<string> {
 
     // Execute reCAPTCHA with the specified action
     const token = await window.grecaptcha.execute(
-      import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY, 
+      import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY,
       { action }
     );
-    
+
     return token;
   } catch (error) {
     console.error('Error getting reCAPTCHA token:', error);
     throw new Error('Failed to get reCAPTCHA token');
   }
 }
+

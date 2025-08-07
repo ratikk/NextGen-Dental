@@ -16,14 +16,14 @@ const breadcrumbItems = [
   { label: 'Our Blog', href: '/blog' },
 ];
 
-const pageTitle = "Lilac Dental Blog";
+const pageTitle = "NextGen Dental Blog";
 const pageSubtitle = "Expert Insights, Tips, and News for Your Oral Health";
 const metaDescription = `Stay informed with the latest dental health tips, treatment guides, and oral care insights from the professionals at ${clinicInfo.name} in Austin, TX.`;
 const pageUrl = new URL(Astro.url.pathname, Astro.site || Astro.url.origin).toString();
 
 const ogImageForIndex = blogIndexPageHeroImage && typeof blogIndexPageHeroImage === 'object' && 'src' in blogIndexPageHeroImage
   ? new URL(blogIndexPageHeroImage.src, Astro.site || Astro.url.origin).toString()
-  : new URL("/images/hero/lilac-dental-og-image.jpg", Astro.site || Astro.url.origin).toString(); // Fallback public OG image
+  : new URL("/images/hero/NextGen-dental-og-image.jpg", Astro.site || Astro.url.origin).toString(); // Fallback public OG image
 
 // --- DEFINE SIZES ATTRIBUTE FOR BLOG CARD IMAGES HERE ---
 // This string needs to accurately describe your layout.

@@ -15,59 +15,59 @@ import { clinicInfo } from '../utils/clinicInfo';
         </button>
       </div>
     </div>
-    
+
     <div class="p-6">
       <form id="booking-form" class="space-y-4">
         <div>
           <label for="fullName" class="block text-sm font-medium text-gray-700 mb-1">Full Name*</label>
-          <input 
-            type="text" 
-            id="fullName" 
-            name="fullName" 
-            required 
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
-        
+
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email*</label>
-          <input 
-            type="email" 
-            id="email" 
-            name="email" 
-            required 
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
-        
+
         <div>
           <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number*</label>
-          <input 
-            type="tel" 
-            id="phone" 
-            name="phone" 
-            required 
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
-        
+
         <div>
           <label for="preferredDate" class="block text-sm font-medium text-gray-700 mb-1">Preferred Date*</label>
-          <input 
-            type="date" 
-            id="preferredDate" 
-            name="preferredDate" 
-            required 
+          <input
+            type="date"
+            id="preferredDate"
+            name="preferredDate"
+            required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
           />
         </div>
-        
+
         <div>
           <label for="preferredTime" class="block text-sm font-medium text-gray-700 mb-1">Preferred Time*</label>
-          <select 
-            id="preferredTime" 
-            name="preferredTime" 
-            required 
+          <select
+            id="preferredTime"
+            name="preferredTime"
+            required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="">Select a time</option>
@@ -75,13 +75,13 @@ import { clinicInfo } from '../utils/clinicInfo';
             <option value="Afternoon">Afternoon (12:00 PM - 5:00 PM)</option>
           </select>
         </div>
-        
+
         <div>
           <label for="reasonForVisit" class="block text-sm font-medium text-gray-700 mb-1">Reason for Visit*</label>
-          <select 
-            id="reasonForVisit" 
-            name="reasonForVisit" 
-            required 
+          <select
+            id="reasonForVisit"
+            name="reasonForVisit"
+            required
             class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
           >
             <option value="">Select a reason</option>
@@ -92,32 +92,32 @@ import { clinicInfo } from '../utils/clinicInfo';
             <option value="Other">Other</option>
           </select>
         </div>
-        
+
         <div class="flex items-center">
-          <input 
-            type="checkbox" 
-            id="smsConsent" 
-            name="smsConsent" 
-            required 
+          <input
+            type="checkbox"
+            id="smsConsent"
+            name="smsConsent"
+            required
             class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
           />
           <label for="smsConsent" class="ml-2 block text-sm text-gray-700">
             I consent to being contacted by {clinicInfo.name} regarding my appointment request.*
           </label>
         </div>
-        
+
         <div>
-          <Button 
-            type="submit" 
-            text="Submit Request" 
-            variant="primary" 
+          <Button
+            type="submit"
+            text="Submit Request"
+            variant="primary"
             class="w-full"
           />
         </div>
 
         <p class="text-xs text-gray-500 mt-4">
-          This form is protected by reCAPTCHA and the Google 
-          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Privacy Policy</a> and 
+          This form is protected by reCAPTCHA and the Google
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Privacy Policy</a> and
           <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Terms of Service</a> apply.
         </p>
       </form>
@@ -127,13 +127,13 @@ import { clinicInfo } from '../utils/clinicInfo';
 
 <script>
   import { submitForm } from '../utils/forms';
-  
+
   document.addEventListener('DOMContentLoaded', () => {
     const bookingButtons = document.querySelectorAll('[data-booking]');
     const popup = document.getElementById('booking-popup');
     const closePopup = document.getElementById('close-popup');
     const bookingForm = document.getElementById('booking-form');
-    
+
     bookingButtons.forEach(button => {
       button.addEventListener('click', (e) => {
         e.preventDefault();
@@ -141,12 +141,12 @@ import { clinicInfo } from '../utils/clinicInfo';
         document.body.style.overflow = 'hidden';
       });
     });
-    
+
     closePopup.addEventListener('click', () => {
       popup.classList.add('hidden');
       document.body.style.overflow = '';
     });
-    
+
     // Close when clicking outside the form
     popup.addEventListener('click', (e) => {
       if (e.target === popup) {
@@ -154,20 +154,20 @@ import { clinicInfo } from '../utils/clinicInfo';
         document.body.style.overflow = '';
       }
     });
-    
+
     if (bookingForm) {
       bookingForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         try {
           const formData = new FormData(bookingForm);
           const data = Object.fromEntries(formData.entries());
-          
+
           await submitForm({
             ...data,
             formType: 'booking'
           });
-          
+
           // Show success message
           bookingForm.innerHTML = `
             <div class="text-center py-6">
@@ -179,19 +179,19 @@ import { clinicInfo } from '../utils/clinicInfo';
               <button id="close-success" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors duration-200">Close</button>
             </div>
           `;
-          
+
           document.getElementById('close-success')?.addEventListener('click', () => {
             if (popup) {
               popup.classList.add('hidden');
               document.body.style.overflow = '';
-              
+
               // Reset form
               setTimeout(() => {
                 location.reload();
               }, 300);
             }
           });
-          
+
         } catch (error) {
           console.error('Error submitting form:', error);
           alert('Failed to submit form. Please try again later.');
@@ -200,4 +200,5 @@ import { clinicInfo } from '../utils/clinicInfo';
     }
   });
 </script>
+
 

@@ -40,7 +40,7 @@ export const blogPosts: BlogPost[] = [
     image: '/images/hero/dental-1.jpg',
     category: 'Oral Health',
     tags: ['dental hygiene', 'oral health', 'brushing techniques', 'flossing', 'dental care'],
-    seoTitle: 'Dental Hygiene Tips: 5 Essential Practices for a Healthy Smile | Lilac Dental Austin',
+    seoTitle: 'Dental Hygiene Tips: 5 Essential Practices for a Healthy Smile | NextGen Dental Austin',
     seoDescription: 'Learn 5 proven dental hygiene tips from Austin\'s top dentists. Discover proper brushing techniques, flossing methods, and diet recommendations for optimal oral health.'
   },
   {
@@ -75,7 +75,7 @@ export const blogPosts: BlogPost[] = [
     image: '/images/hero/dental-2.jpg',
     category: 'Dental Products',
     tags: ['toothbrush', 'dental products', 'oral care', 'dental hygiene'],
-    seoTitle: 'How to Choose the Best Toothbrush: Expert Guide | Lilac Dental Austin',
+    seoTitle: 'How to Choose the Best Toothbrush: Expert Guide | NextGen Dental Austin',
     seoDescription: 'Expert guide on choosing the right toothbrush for your needs. Compare manual vs electric, bristle types, and features to maintain optimal oral health.'
   }
 ];

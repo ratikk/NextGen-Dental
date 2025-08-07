@@ -27,22 +27,22 @@ export interface Props {
 
 const {
   title,
-  description = "Lilac Dental provides exceptional dental care with a gentle touch in Austin, TX. Our experienced team offers comprehensive dental services including cleanings, implants, and cosmetic dentistry.",
-  image = "/images/og/lilac-dental-og.jpg",
+  description = "NextGen Dental provides exceptional dental care with a gentle touch in Austin, TX. Our experienced team offers comprehensive dental services including cleanings, implants, and cosmetic dentistry.",
+  image = "/images/og/NextGen-dental-og.jpg",
   canonical = Astro.url.pathname,
   type = 'website',
   publishDate,
   modifiedDate
 } = Astro.props;
 
-const siteUrl = "https://lilacdentalaustintx.com";
+const siteUrl = "https://nextgendentalaustintx.com";
 const fullCanonical = `${siteUrl}${canonical}`;
 const ogImage = `${siteUrl}${image}`;
 
 // Construct SEO-optimized title
-const pageTitle = title === 'Welcome to Lilac Dental' 
-  ? `Lilac Dental | Top-Rated Dentist in Austin, TX | Family & Cosmetic Dentistry`
-  : `${title} | Lilac Dental Austin, TX | Expert Dental Care`;
+const pageTitle = title === 'Welcome to NextGen Dental' 
+  ? `NextGen Dental | Top-Rated Dentist in Austin, TX | Family & Cosmetic Dentistry`
+  : `${title} | NextGen Dental Austin, TX | Expert Dental Care`;
 
 // Schema.org structured data
 const dentistSchema = {
@@ -142,7 +142,7 @@ const dentistSchema = {
       "@type": "Person",
       "name": "Jennifer Davis"
     },
-    "reviewBody": "I've been a patient at Lilac Dental for over 5 years now. Dr. Suman and his team always make me feel comfortable and provide exceptional care."
+    "reviewBody": "I've been a patient at NextGen Dental for over 5 years now. Dr. Suman and his team always make me feel comfortable and provide exceptional care."
   }
 };
 
@@ -242,7 +242,6 @@ const localBusinessSchema = {
     <meta property="twitter:title" content={pageTitle} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={ogImage} />
-    <meta name="twitter:creator" content="@lilacdentaltx" />
     
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(dentistSchema)} />
@@ -259,13 +258,14 @@ const localBusinessSchema = {
       window.recaptchaCallback = function() {
         // reCAPTCHA is ready
       };
-    </script>
-    <script 
-      src={`https://www.google.com/recaptcha/api.js?render=${import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY}&onload=recaptchaCallback`}
-      async 
-      defer
-    ></script>
-    
+</script>
+
+    <script
+       src={`https://www.google.com/recaptcha/api.js?render=${import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY}`}
+       async
+       defer
+   ></script>
+
     <!-- Initialize Swiper -->
     <script>
       import Swiper from 'swiper';

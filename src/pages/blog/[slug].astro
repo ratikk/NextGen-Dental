@@ -31,7 +31,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
 // Ensure post.image is an ImageMetadata object (which it should be from blogPosts.ts)
 const ogImage = post.image && typeof post.image === 'object' && 'src' in post.image
   ? new URL(post.image.src, Astro.site).toString() // Use processed src
-  : new URL("/images/hero/lilac-dental-og-image.jpg", Astro.site).toString(); // Fallback OG image in public/images/hero/
+  : new URL("/images/hero/NextGen-dental-og-image.jpg", Astro.site).toString(); // Fallback OG image in public/images/hero/
 ---
 
 <Layout
@@ -48,7 +48,7 @@ const ogImage = post.image && typeof post.image === 'object' && 'src' in post.im
     section: post.category,
     tags: post.tags,
     url: canonicalURL,
-    site_name: "Lilac Dental" // Replace with your site name from clinicInfo if available
+    site_name: "NextGen Dental" // Replace with your site name from clinicInfo if available
   }}
   twitter={{
     card: "summary_large_image",
