@@ -10,7 +10,7 @@ export const clinicInfo = {
   phone: "+(512) 649-4419",
   displayPhone: "(512) 649-4419",
   email: "ismile@nextgendentaltx.com",
-  mapLink: "https://www.google.com/maps/place/NextGen+Dental/@30.400525,-97.6750384,15z/data=!4m2!3m1!1s0x0:0xefc0b389042e9c61?sa=X&ved=1t:2428&hl=en-US&gl=us&ictx=111",
+  mapLink: "https://www.google.com/maps/place/Next+Gen+Dental/@30.1566059,-97.7896349,15z/data=!4m5!3m4!1s0x0:0x2c8c00c6c8cc73f7!8m2!3d30.1566059!4d-97.7896349",
   coordinates: {
     latitude: 30.400525,
     longitude: -97.6750384
