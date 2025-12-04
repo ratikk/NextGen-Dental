@@ -1,0 +1,233 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Dental Veneers', href: '/services/dental-veneers' },
+];
+
+// --- SEO: MEDICAL PROCEDURE SCHEMA ---
+// This tells Google specific details about the Veneers service for rich results
+const veneerSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  "name": "Porcelain Veneers",
+  "procedureType": "CosmeticProcedure",
+  "bodyLocation": "Teeth",
+  "description": "Custom-made porcelain shells bonded to the front of teeth to improve appearance.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/dental-veneers"
+  }
+};
+---
+
+<Layout
+  title="Porcelain Veneers in Austin, TX (78747) | NextGen Dental Cosmetic Dentistry"
+  description="Transform your smile with custom porcelain veneers at NextGen Dental in South Austin. Fix chips, gaps, and stains with our expert cosmetic dentistry."
+  serviceSchema={veneerSchema}
+>
+  <!-- SEO: SLIM HEADER (Optimized for LCP/Speed) -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Porcelain Veneers</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Design your dream smile with custom-crafted veneers in Austin.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Veneers</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">The Secret to a Hollywood Smile</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Are you unhappy with chipped, stained, or unevenly spaced teeth? <strong>Porcelain veneers</strong> might be the perfect solution. At <strong>{clinicInfo.name}</strong> in South Austin (78747), we specialize in creating natural-looking smile makeovers that boost your confidence.
+        </p>
+        <p class="text-lg text-gray-600 mb-6">
+          Veneers are ultra-thin, custom-made shells of ceramic that are bonded to the front surface of your teeth. They instantly correct imperfections and create a durable, stain-resistant, and flawless appearance.
+        </p>
+      </section>
+
+      <!-- What Can Veneers Fix? -->
+      <section class="mb-16 max-w-4xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">What Problems Can Veneers Fix?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0 text-primary-600 font-bold">1</div>
+            <div>
+              <h3 class="font-bold text-gray-800">Severe Discoloration</h3>
+              <p class="text-gray-600 text-sm">Teeth that don't respond to traditional whitening can be permanently brightened with veneers.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0 text-primary-600 font-bold">2</div>
+            <div>
+              <h3 class="font-bold text-gray-800">Chipped or Broken Teeth</h3>
+              <p class="text-gray-600 text-sm">Restore the natural shape and strength of damaged teeth seamlessley.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0 text-primary-600 font-bold">3</div>
+            <div>
+              <h3 class="font-bold text-gray-800">Gaps & Spacing</h3>
+              <p class="text-gray-600 text-sm">Close unwanted spaces between teeth without the need for years of braces.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-4">
+            <div class="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center flex-shrink-0 text-primary-600 font-bold">4</div>
+            <div>
+              <h3 class="font-bold text-gray-800">Misaligned or Uneven Teeth</h3>
+              <p class="text-gray-600 text-sm">Create a straight, uniform appearance instantly ("Instant Orthodontics").</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Process -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Your Smile Makeover Process</h2>
+
+        <div class="space-y-6">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Design Consultation</h3>
+            <p class="text-gray-600">
+              We discuss your goals and use digital imaging to show you what your new smile could look like. We select the perfect shade and shape to match your face.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Preparation</h3>
+            <p class="text-gray-600">
+              A tiny amount of enamel (less than a millimeter) is removed to make room for the veneer so it doesn't look bulky. We take precise impressions to send to our dental lab.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Temporary Veneers</h3>
+            <p class="text-gray-600">
+              While your custom veneers are being crafted (usually 1-2 weeks), you will wear temporary veneers to protect your teeth and "test drive" your new smile.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Bonding the Final Result</h3>
+            <p class="text-gray-600">
+              Once your porcelain veneers arrive, we check the fit and color. We then permanently bond them to your teeth, giving you a radiant new smile instantly.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Benefits Grid -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Why Choose Porcelain Veneers?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Stain Resistant</h3>
+            <p class="text-gray-600 text-sm">Unlike natural enamel, porcelain is highly resistant to coffee, tea, and wine stains.</p>
+          </div>
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Natural Appearance</h3>
+            <p class="text-gray-600 text-sm">Porcelain mimics the light-reflecting properties of natural teeth perfectly.</p>
+          </div>
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Durability</h3>
+            <p class="text-gray-600 text-sm">With proper care, veneers can last 10-15 years or longer.</p>
+          </div>
+          <div class="bg-primary-50 p-6 rounded-lg">
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Gum Friendly</h3>
+            <p class="text-gray-600 text-sm">Gum tissue tolerates porcelain well, reducing the risk of irritation.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Common Questions</h2>
+
+        <div class="space-y-4">
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Does the procedure hurt?</h3>
+            <p class="text-gray-600">
+              The procedure is minimally invasive. We use local anesthesia during the preparation phase to ensure you are completely comfortable. Post-procedure sensitivity is usually mild and temporary.
+            </p>
+          </div>
+
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-2">How do I care for veneers?</h3>
+            <p class="text-gray-600">
+              Simply brush and floss them just like your natural teeth. We recommend non-abrasive toothpaste and avoiding biting directly into very hard objects (like ice or pens).
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready to Transform Your Smile?</h2>
+          <p class="text-gray-600 mb-6">
+            Visit NextGen Dental in Austin (78747) for a consultation. Find out if veneers are the right choice for the smile you've always wanted.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Consultation"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</Layout>

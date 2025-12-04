@@ -1,11 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Button from '../components/Button.astro';
 import BeforeAfterGallery from '../components/BeforeAfterGallery.tsx';
 import { clinicInfo } from '../utils/clinicInfo';
-import { HERO_IMAGES, GALLERY_IMAGES } from '../utils/images';
+import { GALLERY_IMAGES } from '../utils/images';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
@@ -15,7 +14,7 @@ const breadcrumbItems = [
 const transformations = [
   {
     title: "Professional Teeth Whitening",
-    description: "Dramatic smile brightening achieved in just one visit",
+    description: "Dramatic smile brightening achieved in just one visit.",
     before: GALLERY_IMAGES.whiteningCase1.before,
     after: GALLERY_IMAGES.whiteningCase1.after,
     treatment: "Zoom! Whitening",
@@ -24,7 +23,7 @@ const transformations = [
   },
   {
     title: "Composite Filings",
-    description: "Complete smile makeover addressing multiple cosmetic concerns",
+    description: "Complete smile makeover addressing multiple cosmetic concerns.",
     before: GALLERY_IMAGES.fillingsCase1.before,
     after: GALLERY_IMAGES.fillingsCase1.after,
     treatment: "Porcelain Veneers",
@@ -33,7 +32,7 @@ const transformations = [
   },
   {
     title: "Dental Implants",
-    description: "Permanent tooth replacement with natural-looking results",
+    description: "Permanent tooth replacement with natural-looking results.",
     before: GALLERY_IMAGES.implantCase1.before,
     after: GALLERY_IMAGES.implantCase1.after,
     treatment: "Dental Implant",
@@ -43,46 +42,56 @@ const transformations = [
 ];
 ---
 
-<Layout 
-  title="Smile Gallery | Before & After Transformations" 
-  description="Explore real smile transformations at NextGen Dental in Austin, TX. View our before and after gallery showcasing actual results from teeth whitening, veneers, implants, and more."
+<Layout
+  title="Smile Gallery | Before & After Transformations | NextGen Dental Austin"
+  description="See real patient results. Explore before and after photos of implants, veneers, and whitening at NextGen Dental in Austin, TX."
 >
-  <Hero
-    title="Smile Gallery"
-    subtitle="Real transformations from real patients"
-    images={[HERO_IMAGES.dental1]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER (No Big Image) -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Smile Transformations</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Real patients. Real results. See what modern dentistry can do for you.
+      </p>
+    </div>
+  </div>
+
+  <!-- Breadcrumbs -->
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Smile Gallery</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
-      <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-bold font-heading text-gray-800 mb-6">
-          Real Patient Results
-        </h2>
-        <p class="text-lg text-gray-600">
-          Browse our collection of smile transformations. These before and after photos showcase 
-          actual results achieved by our patients at {clinicInfo.name}.
-        </p>
-      </section>
-
+      
       <!-- Gallery Grid -->
-      <section class="mb-16" data-aos="fade-up">
+      <section class="mb-20" data-aos="fade-up">
+        <!-- We removed the Intro text block to get straight to the photos -->
         <BeforeAfterGallery client:load transformations={transformations} />
       </section>
 
       <!-- CTA Section -->
       <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">
-            Ready to Transform Your Smile?
+        <div class="bg-primary-50 p-8 rounded-2xl border border-primary-100 shadow-sm">
+          <h2 class="text-3xl font-bold font-heading text-gray-900 mb-4">
+            Ready to Start Your Transformation?
           </h2>
-          <p class="text-gray-600 mb-6">
-            Schedule a consultation to discuss your smile goals and learn how we can help you 
-            achieve the smile you've always wanted.
+          <p class="text-gray-600 mb-8 text-lg">
+            Schedule a consultation to discuss your smile goals and learn how we can help you achieve similar results.
           </p>
           <div class="flex flex-wrap justify-center gap-4">
             <Button
@@ -98,6 +107,7 @@ const transformations = [
               text="Call Us"
               variant="outline"
               size="lg"
+              class="bg-white hover:bg-gray-50"
             />
           </div>
         </div>

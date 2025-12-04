@@ -1,5 +1,3 @@
-// Location: src/utils/forms.ts
-
 import { getRecaptchaToken } from './recaptcha';
 
 const LAMBDA_ENDPOINT = import.meta.env.PUBLIC_LAMBDA_ENDPOINT;
@@ -9,45 +7,61 @@ if (!LAMBDA_ENDPOINT) {
 }
 
 interface FormData {
-  [key: string]: any;
-  formType: 'booking' | 'contact';
+  firstName?: string;
+  lastName?: string;
+  fullName?: string;
+  dob?: string; 
+  email: string;
+  phone: string;
+  message?: string;
+  preferredDate?: string;
+  preferredTime?: string;
+  reasonForVisit?: string;
+  smsConsent: boolean;
+  formType: 'appointment' | 'contact' | 'booking';
 }
 
 export async function submitForm(data: FormData) {
   try {
-    // 1. Attempt to get the reCAPTCHA token.
     const token = await getRecaptchaToken(`submit_${data.formType}`);
 
-    // ✅ DEBUGGING STEP: Log the token to the browser console.
-    // This will tell us if the token is being generated correctly.
-    console.log('reCAPTCHA token received by submitForm:', token);
-
-    if (!token) {
-      throw new Error('Could not retrieve a valid CAPTCHA token. It might be empty.');
-    }
-
-    // 2. Construct the payload for the Lambda function.
+    // ✅ FIXED: Mapping data to match your OLD NextGen Lambda expectations
     const payload = {
-      ...data,
-      captchaToken: token,
+      fullName: data.fullName || `${data.firstName || ''} ${data.lastName || ''}`.trim(),
+      email: data.email,
+      phone: data.phone,
+      dob: data.dob, // We are sending this, but Lambda needs update to read it
+      preferredDate: data.preferredDate,
+      preferredTime: data.preferredTime,
+      reasonForVisit: data.reasonForVisit,
+      message: data.message,
+      smsConsent: data.smsConsent,
+      // ⚠️ CRITICAL CHANGE: Renamed 'recaptchaToken' to 'captchaToken' to match your Lambda
+      captchaToken: token, 
     };
 
-    // 3. Send the data to the Lambda endpoint.
     const response = await fetch(LAMBDA_ENDPOINT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
 
-    const responseData = await response.json();
-
     if (!response.ok) {
-      throw new Error(responseData.message || 'An unknown server error occurred.');
+      let errorMessage = 'Form submission failed.';
+      try {
+        const errorData = await response.json();
+        if (errorData && errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } catch (e) {
+        errorMessage = `Server error: ${response.statusText}`;
+      }
+      throw new Error(errorMessage);
     }
 
-    return responseData;
+    return await response.json();
 
   } catch (error) {
     console.error('Error in submitForm utility:', error);

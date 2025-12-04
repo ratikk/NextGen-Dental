@@ -1,0 +1,206 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Pediatric Dentistry', href: '/services/pediatric-dentistry' },
+];
+
+// --- SEO: PEDIATRIC DENTISTRY SCHEMA ---
+const pediatricSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure", // or MedicalSpecialty
+  "name": "Pediatric Dental Care",
+  "procedureType": "NoninvasiveProcedure",
+  "bodyLocation": "Mouth",
+  "description": "Specialized dental care for infants, children, and teens, including exams, sealants, and fluoride treatments.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/pediatric-dentistry",
+    "description": "First 'Happy Visit' recommended by age 1."
+  }
+};
+---
+
+<Layout
+  title="Pediatric Dentist Austin, TX (78747) | Kids Dentistry | NextGen Dental"
+  description="Gentle dental care for kids in South Austin. NextGen Dental offers exams, sealants, and fluoride for children. Book your child's happy visit today!"
+  serviceSchema={pediatricSchema}
+>
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Pediatric Dentistry</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Fun, gentle, and positive dental experiences for your little ones in Austin.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Pediatric</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Your Child's Dental Home in South Austin</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Setting the foundation for a lifetime of healthy smiles starts early. At <strong>{clinicInfo.name}</strong>, we love seeing children! Our team is trained to make dental visits fun, educational, and fear-free for kids of all ages in the <strong>78747</strong> area.
+        </p>
+        <p class="text-lg text-gray-600">
+          We recommend a child's first dental visit by their first birthday (or when the first tooth appears). This "Happy Visit" helps them get used to the sights and sounds of our office.
+        </p>
+      </section>
+
+      <!-- Services Grid -->
+      <section class="mb-16 max-w-5xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">Services for Growing Smiles</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Service 1 -->
+          <div class="bg-primary-50 p-6 rounded-xl border border-primary-100 hover:shadow-md transition-shadow">
+            <div class="text-4xl mb-4">🦷</div>
+            <h3 class="text-xl font-bold text-primary-800 mb-3">Exams & Cleanings</h3>
+            <p class="text-gray-600 text-sm">
+              Gentle plaque removal and monitoring of tooth eruption and jaw development.
+            </p>
+          </div>
+
+          <!-- Service 2 -->
+          <div class="bg-primary-50 p-6 rounded-xl border border-primary-100 hover:shadow-md transition-shadow">
+            <div class="text-4xl mb-4">🛡️</div>
+            <h3 class="text-xl font-bold text-primary-800 mb-3">Dental Sealants</h3>
+            <p class="text-gray-600 text-sm">
+              A thin protective coating applied to back teeth to prevent cavities in deep grooves.
+            </p>
+          </div>
+
+          <!-- Service 3 -->
+          <div class="bg-primary-50 p-6 rounded-xl border border-primary-100 hover:shadow-md transition-shadow">
+            <div class="text-4xl mb-4">✨</div>
+            <h3 class="text-xl font-bold text-primary-800 mb-3">Fluoride Treatments</h3>
+            <p class="text-gray-600 text-sm">
+              Strengthens enamel and helps reverse early signs of tooth decay.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Parent's Guide Section -->
+      <section class="mb-16 max-w-4xl mx-auto bg-gray-50 p-8 rounded-2xl" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">A Parent's Guide to Healthy Smiles</h2>
+        
+        <div class="space-y-6">
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold">1</div>
+            <div>
+              <h3 class="font-bold text-gray-800 mb-1">Start Early</h3>
+              <p class="text-gray-600 text-sm">Before teeth appear, wipe gums with a soft cloth. Once they appear, brush twice daily with a rice-sized amount of fluoride toothpaste.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold">2</div>
+            <div>
+              <h3 class="font-bold text-gray-800 mb-1">Watch the Sugar</h3>
+              <p class="text-gray-600 text-sm">Limit sugary snacks and juices. Don't put your baby to bed with a bottle of milk or juice, as this causes "baby bottle tooth decay."</p>
+            </div>
+          </div>
+
+          <div class="flex gap-4">
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-primary-600 text-white flex items-center justify-center font-bold">3</div>
+            <div>
+              <h3 class="font-bold text-gray-800 mb-1">Make it Fun</h3>
+              <p class="text-gray-600 text-sm">Let them choose a fun toothbrush. Play a song for 2 minutes while brushing. Positive reinforcement works wonders!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6 text-center">Common Questions</h2>
+        
+        <div class="space-y-4">
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">When should I bring my child in?</h3>
+            <p class="text-gray-600 text-sm">The American Academy of Pediatric Dentistry recommends the first visit by age 1 or within 6 months of the first tooth erupting.</p>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">Are baby teeth really that important?</h3>
+            <p class="text-gray-600 text-sm">Yes! They hold space for adult teeth and are crucial for chewing and speech development. Premature loss can lead to crowding issues later.</p>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">What if my child is scared?</h3>
+            <p class="text-gray-600 text-sm">We specialize in anxious patients. We use "Tell-Show-Do" techniques and have a friendly, relaxed environment to put them at ease.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-xl border border-primary-100">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Book Your Child's Visit</h2>
+          <p class="text-gray-600 mb-6">
+            Join the NextGen Dental family. We can't wait to meet your little superhero!
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Appointment"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</Layout>

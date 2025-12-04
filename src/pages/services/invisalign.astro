@@ -1,0 +1,274 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Invisalign®', href: '/services/invisalign' },
+];
+
+// --- 1. ADVANCED SEO SCHEMA FOR INVISALIGN ---
+const invisalignSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "serviceType": "Orthodontics",
+  "name": "Invisalign Clear Aligners",
+  "description": "Clear, removable aligners to straighten teeth without metal braces. Available for teens and adults in South Austin.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "areaServed": {
+    "@type": "City",
+    "name": "Austin"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "Orthodontic Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Invisalign Consultation"
+        }
+      }
+    ]
+  }
+};
+---
+
+<Layout
+  title="Invisalign® in Austin, TX (78747) | Clear Aligners | NextGen Dental"
+  description="Straighten your teeth discreetly with Invisalign at NextGen Dental in South Austin. The clear, comfortable alternative to metal braces. Book your consultation today."
+  serviceSchema={invisalignSchema}
+>
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Invisalign® Clear Aligners</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        The clear, comfortable way to straighten your smile in Austin.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Invisalign</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Straighten Your Teeth Without Braces</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          Do you want a straighter smile but don't want the look or hassle of metal braces? <strong>Invisalign®</strong> is the modern solution for adults and teens in <strong>South Austin (78747)</strong>.
+        </p>
+        <p class="text-lg text-gray-600">
+          Using a series of custom-made, virtually invisible plastic aligners, Invisalign gently shifts your teeth into place. You get the results you want without anyone knowing you are undergoing treatment.
+        </p>
+      </section>
+
+      <!-- Benefits Grid -->
+      <section class="mb-16 max-w-5xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">Why Choose Invisalign?</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Benefit 1 -->
+          <div class="bg-primary-50 p-8 rounded-xl border border-primary-100 text-center hover:shadow-md transition-shadow">
+            <div class="text-4xl mb-4">✨</div>
+            <h3 class="text-xl font-bold text-primary-800 mb-3">Virtually Invisible</h3>
+            <p class="text-gray-600">
+              The clear trays are almost unnoticeable. You can smile, speak, and socialize with total confidence during your treatment.
+            </p>
+          </div>
+
+          <!-- Benefit 2 -->
+          <div class="bg-primary-50 p-8 rounded-xl border border-primary-100 text-center hover:shadow-md transition-shadow">
+            <div class="text-4xl mb-4">🍔</div>
+            <h3 class="text-xl font-bold text-primary-800 mb-3">No Food Restrictions</h3>
+            <p class="text-gray-600">
+              Unlike braces, the aligners are removable. Take them out to eat popcorn, apples, or anything else you love.
+            </p>
+          </div>
+
+          <!-- Benefit 3 -->
+          <div class="bg-primary-50 p-8 rounded-xl border border-primary-100 text-center hover:shadow-md transition-shadow">
+            <div class="text-4xl mb-4">🪥</div>
+            <h3 class="text-xl font-bold text-primary-800 mb-3">Easy Hygiene</h3>
+            <p class="text-gray-600">
+              Simply remove the trays to brush and floss normally. No threading floss around wires or brackets.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- The Process -->
+      <section class="mb-16 max-w-4xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8">Your Path to a Straighter Smile</h2>
+        
+        <div class="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-gray-300 before:to-transparent">
+          
+          <!-- Step 1 -->
+          <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-primary-100 group-[.is-active]:bg-primary-600 text-primary-600 group-[.is-active]:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+              1
+            </div>
+            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
+              <h3 class="text-lg font-bold text-gray-800 mb-2">3D Scan & Consultation</h3>
+              <p class="text-gray-600 text-sm">
+                We use advanced digital scanners (no messy goop!) to create a precise 3D model of your teeth. Dr. K maps out your exact treatment plan.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 2 -->
+          <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-primary-100 group-[.is-active]:bg-primary-600 text-primary-600 group-[.is-active]:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+              2
+            </div>
+            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Custom Aligners</h3>
+              <p class="text-gray-600 text-sm">
+                You receive your series of custom-crafted clear aligners. You wear each set for about 1-2 weeks, moving your teeth gradually.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-primary-100 group-[.is-active]:bg-primary-600 text-primary-600 group-[.is-active]:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+              3
+            </div>
+            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Progress Checks</h3>
+              <p class="text-gray-600 text-sm">
+                You visit our Austin office every 6-8 weeks so we can check your progress and give you your next sets of aligners.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+            <div class="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-primary-100 group-[.is-active]:bg-primary-600 text-primary-600 group-[.is-active]:text-white shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
+              4
+            </div>
+            <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-6 bg-white rounded-lg border border-gray-100 shadow-sm">
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Reveal Your Smile</h3>
+              <p class="text-gray-600 text-sm">
+                Once treatment is complete, you'll have the straight smile you've always wanted. We provide retainers to keep it that way!
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Cost & Insurance FAQ -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Cost & Financing</h2>
+        <div class="bg-white border-2 border-primary-100 rounded-xl p-8 shadow-sm">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">Is Invisalign Expensive?</h3>
+          <p class="text-gray-600 mb-6">
+            Invisalign costs are often comparable to traditional braces. The exact cost depends on the complexity of your case and the length of treatment.
+          </p>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div class="flex items-start gap-3">
+              <div class="text-green-500 text-xl">✓</div>
+              <p class="text-sm text-gray-700"><strong>Insurance:</strong> Many dental plans cover a portion of orthodontic treatment.</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="text-green-500 text-xl">✓</div>
+              <p class="text-sm text-gray-700"><strong>Financing:</strong> We accept CareCredit and Cherry payment plans to break costs into monthly payments.</p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div class="text-green-500 text-xl">✓</div>
+              <p class="text-sm text-gray-700"><strong>FSA / HSA:</strong> You can use your Flexible Spending or Health Savings Account funds.</p>
+            </div>
+          </div>
+
+          <div class="text-center">
+            <a href="/financing" class="text-primary-600 font-semibold hover:underline">Learn more about financing options &rarr;</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Common Questions</h2>
+        
+        <div class="space-y-4">
+          <div class="bg-gray-50 p-5 rounded-lg">
+            <h3 class="font-bold text-gray-800 mb-2">How long does treatment take?</h3>
+            <p class="text-gray-600 text-sm">Average treatment time is 12 to 18 months, though some minor cases can be finished in as little as 6 months.</p>
+          </div>
+          <div class="bg-gray-50 p-5 rounded-lg">
+            <h3 class="font-bold text-gray-800 mb-2">Do I have to wear them all day?</h3>
+            <p class="text-gray-600 text-sm">For the best results, aligners must be worn for 20-22 hours per day, removing them only to eat, drink, brush, and floss.</p>
+          </div>
+          <div class="bg-gray-50 p-5 rounded-lg">
+            <h3 class="font-bold text-gray-800 mb-2">Does it hurt?</h3>
+            <p class="text-gray-600 text-sm">You may feel temporary pressure for the first day or two of a new tray, but it is generally much more comfortable than metal braces.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Start Your Smile Journey</h2>
+          <p class="text-gray-600 mb-6">
+            See what your future smile could look like. Schedule a consultation at NextGen Dental in South Austin.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={clinicInfo.booking.url}
+              text="Book Consultation"
+              variant="primary"
+              size="lg"
+              target="_blank"
+              rel="noopener noreferrer"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+              size="lg"
+            />
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</Layout>

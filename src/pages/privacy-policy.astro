@@ -1,0 +1,199 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { clinicInfo } from '../utils/clinicInfo';
+
+// Sections data to generate the Sidebar and Content automatically
+const sections = [
+  { id: 'collection', title: 'Collection of Information', icon: '📋' },
+  { id: 'use', title: 'Use of Information', icon: '✨' },
+  { id: 'sharing', title: 'Sharing of Information', icon: '🤝' },
+  { id: 'security', title: 'Security', icon: '🔒' },
+  { id: 'cookies', title: 'Cookies', icon: '🍪' },
+  { id: 'links', title: 'Third-party Links', icon: '🔗' },
+  { id: 'changes', title: 'Changes to Policy', icon: '📅' },
+  { id: 'contact', title: 'Contact Us', icon: '✉️' }
+];
+
+const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Layout
+  title="Privacy Policy | NextGen Dental Austin"
+  description={`Privacy Policy for ${clinicInfo.name}. Learn how we safeguard your personal information.`}
+>
+  <!-- Decorative Header Background -->
+  <div class="bg-primary-900 text-white py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <span class="inline-block py-1 px-3 rounded-full bg-primary-800 border border-primary-700 text-xs font-medium tracking-wider uppercase mb-4">
+        Legal Documentation
+      </span>
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Privacy Policy</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Your privacy is our priority. Here is exactly how we protect your data.
+      </p>
+      <p class="text-sm text-primary-300 mt-4">Last Updated: {lastUpdated}</p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col lg:flex-row gap-12 max-w-7xl mx-auto">
+        
+        <!-- SIDEBAR NAVIGATION (Sticky on Desktop) -->
+        <aside class="hidden lg:block w-1/4">
+          <div class="sticky top-24 bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Table of Contents</h3>
+            <nav class="space-y-1">
+              {sections.map(section => (
+                <a 
+                  href={`#${section.id}`} 
+                  class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                >
+                  <span class="mr-2">{section.icon}</span> {section.title}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="w-full lg:w-3/4">
+          <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
+            
+            <!-- Intro -->
+            <div class="prose prose-lg text-gray-600 mb-12 border-b border-gray-100 pb-8">
+              <p class="lead text-xl text-gray-800 font-medium">
+                At <strong>{clinicInfo.name}</strong>, we are committed to protecting the privacy of our patients and visitors. This policy outlines how we collect, use, and safeguard your personal information with the utmost care.
+              </p>
+            </div>
+
+            <!-- Sections Loop -->
+            <div class="space-y-16">
+              
+              <section id="collection" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">📋</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Collection of Information</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  We collect personal information such as your <strong>name, email address, phone number, date of birth, and insurance details</strong> when you contact us, request an appointment, or fill out forms on our website. We also collect non-personal information such as your IP address, browser type, and operating system to improve our website’s user experience.
+                </p>
+              </section>
+
+              <section id="use" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">✨</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Use of Information</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  We use the personal information you provide to:
+                </p>
+                <ul class="list-disc pl-6 mt-4 space-y-2 text-gray-600">
+                  <li>Schedule and confirm your appointments.</li>
+                  <li>Provide comprehensive dental services.</li>
+                  <li>Communicate with you about your treatment plans.</li>
+                  <li>Send appointment reminders and important office updates.</li>
+                </ul>
+                <p class="text-gray-500 text-sm mt-4 italic">
+                  Note: You can opt-out of receiving non-essential communications at any time.
+                </p>
+              </section>
+
+              <section id="sharing" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">🤝</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Sharing of Information</h2>
+                </div>
+                <div class="bg-primary-50 p-6 rounded-lg border-l-4 border-primary-500">
+                  <p class="text-gray-700 font-medium">
+                    We do not sell, trade, or rent your personal information to third parties.
+                  </p>
+                </div>
+                <p class="text-gray-600 mt-4 leading-relaxed">
+                  We may share your information with our trusted partners and service providers (such as our HIPAA-compliant booking system, insurance processors, or website hosting services) solely for the purpose of operating our practice and fulfilling your requests.
+                </p>
+              </section>
+
+              <section id="security" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">🔒</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Security</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  We take rigorous measures to protect your personal information. We use <strong>Secure Socket Layer (SSL) encryption</strong> to protect your data during transmission through our website forms and store your information in secure, encrypted environments that meet industry standards.
+                </p>
+              </section>
+
+              <section id="cookies" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">🍪</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Cookies</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  We use cookies to enhance your browsing experience. Cookies are small data files placed on your device. You can disable cookies in your browser settings, but this may affect your ability to use features like online scheduling.
+                </p>
+              </section>
+
+              <section id="links" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">🔗</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Third-party Links</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  Our website may contain links to external websites (such as financing partners or review platforms). We are not responsible for the privacy practices of these external sites and recommend reviewing their policies directly.
+                </p>
+              </section>
+
+              <section id="changes" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">📅</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Changes to Policy</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  We reserve the right to modify this privacy policy at any time. Any changes will be posted on this page with an updated revision date at the top.
+                </p>
+              </section>
+
+              <section id="contact" class="scroll-mt-32 bg-gray-900 text-white p-8 rounded-xl">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">✉️</span>
+                  <h2 class="text-2xl font-bold text-white">Contact Us</h2>
+                </div>
+                <p class="text-gray-300 mb-6">
+                  If you have any questions or concerns about our privacy policy, please do not hesitate to reach out.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <span class="block text-gray-400 text-sm uppercase tracking-wider mb-1">Email</span>
+                    <a href={`mailto:${clinicInfo.email}`} class="text-lg font-medium hover:text-primary-300 transition-colors">{clinicInfo.email}</a>
+                  </div>
+                  <div>
+                    <span class="block text-gray-400 text-sm uppercase tracking-wider mb-1">Phone</span>
+                    <a href={`tel:${clinicInfo.phone}`} class="text-lg font-medium hover:text-primary-300 transition-colors">{clinicInfo.displayPhone || clinicInfo.phone}</a>
+                  </div>
+                  <div class="md:col-span-2">
+                    <span class="block text-gray-400 text-sm uppercase tracking-wider mb-1">Location</span>
+                    <span class="text-lg font-medium">{clinicInfo.address.full}</span>
+                  </div>
+                </div>
+              </section>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  /* Smooth scrolling for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+</style>

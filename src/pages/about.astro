@@ -1,6 +1,5 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Button from '../components/Button.astro';
 import { clinicInfo } from '../utils/clinicInfo';
@@ -16,105 +15,107 @@ const teamMembers = [
     name: "Dr. Suman Kondragunta",
     title: "Lead Dentist",
     image: TEAM_IMAGES.drSuman,
-    bio: "With over 11 years of full-time dental experience, Dr. Suman Kondragunta (AKA, Dr. K) attended New York University College of Dentistry where he received a Doctor of Dental Surgery in 2011. After graduating, he moved to New Mexico serving the neediest communities and created new beautiful smiles. Dr. K treats all patients with compassion and gentle dental care. Dr. K and his wife decided it was time for a change with their family expanding. They couldn't be happier with their decision to put down their roots in Texas and serving Texans.\n\nDr. K loves meditation and Tacos (Tex-Mex) food. When not in the office Dr. K enjoys spending time with his wife Dr. Yanala and his 2 children, Arnav and Avan. He also enjoys hiking, biking, and outdoor recreations and the beautiful Austin area provides this and more. He is passionate about wood carving, sculpture, and painting, and also fond of sports cars.",
+    bio: "With over 11 years of full-time dental experience, Dr. Suman Kondragunta (AKA, Dr. K) has dedicated his career to providing exceptional oral healthcare. He earned his Doctor of Dental Surgery from New York University College of Dentistry in 2011. After graduating, he spent years serving underserved communities in New Mexico, honing his skills in restoring beautiful smiles.\n\nNow proudly serving the **South Austin** community, Dr. K treats every patient with compassion and a gentle touch. When his family began to expand, he and his wife chose to put down roots here in Texas. They couldn't be happier to call **Austin** home.\n\nOutside the office, Dr. K is a true Austinite who loves meditation and authentic Tex-Mex tacos. He enjoys hiking and biking through Austin's beautiful trails with his wife, Dr. Yanala, and their two children, Arnav and Avan. An artist at heart, he is also passionate about wood carving, sculpture, and painting.",
     credentials: [
       "DDS - New York University College of Dentistry, 2011",
-      "11+ Years of Full-time Dental Experience",
-      "Expertise in Gentle Dental Care"
+      "11+ Years of Clinical Experience",
+      "Focus on Gentle, Compassionate Care"
     ]
   },
   {
     name: "Dr. Kiranmayee Yanala",
     title: "Dentist",
     image: TEAM_IMAGES.drKiranmayee,
-    bio: "Dr Yanala graduated from Tufts University school of dental medicine in 2010. After graduation she has worked with different companies and have got the experience in the different procedures and how to treat complications. She likes to keep up with dental products and procedures which are continuously evolving. Her passion lies in aesthetic restorations and smile enhancement.\n\nDr K and Dr Yanala came to visit their friends in 2011 and immediately fell in love with Austin. The landscape and the unique culture attracted them and made them move to Austin. They have been here in Austin from 2016 and consider Austin as their home town.\n\nThey have 2 boys Arnav 12 years old and Avan 7 years old. She loves spending time with her family. On weekends or on her off days you will find her in her little garden in the back yard. She has 2 adorable young boys. During her free time, She loves to spend time with them and try to cook a new recipe.",
+    bio: "Dr. Kiranmayee Yanala graduated from Tufts University School of Dental Medicine in 2010. With over a decade of experience, she has mastered a wide range of dental procedures and complications. She is a lifelong learner who stays ahead of the curve with the latest evolving dental products and techniques. Her true passion lies in aesthetic restorations and smile enhancements.\n\nDr. K and Dr. Yanala first visited friends in **Austin** in 2011 and immediately fell in love with the city's unique culture and landscape. They officially moved here in 2016 and now consider Austin their forever hometown.\n\nDr. Yanala cherishes time with her family, including their two boys, Arnav (12) and Avan (7). On weekends, you can find her tending to her backyard garden or cooking up new recipes for her family.",
     credentials: [
       "DDS - Tufts University School of Dental Medicine, 2010",
       "Specializes in Aesthetic Restorations",
-      "Expertise in Smile Enhancement"
+      "Expertise in Smile Enhancement & Cosmetics"
     ]
   }
 ];
 ---
 
-<Layout 
-  title="About Us | Meet Our Team" 
-  description="Meet our experienced dental team at NextGen Dental in Austin, TX. Led by Dr. Suman Kondragunta and Dr. Kiranmayee Yanala, we provide compassionate and comprehensive dental care."
+<Layout
+  title="About NextGen Dental | Top Family Dentist in South Austin (78747)"
+  description="Meet Dr. Suman Kondragunta & Dr. Kiranmayee Yanala at NextGen Dental. Providing expert family & cosmetic dentistry to South Austin, Buda, and the 78747 community."
 >
-  <Hero
-    title="About NextGen Dental"
-    subtitle="Committed to Excellence in Dental Care"
-    images={[HERO_IMAGES.dental3]}
-    height="sm"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">About NextGen Dental</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Your trusted partners in dental health, serving South Austin since 2023.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">About Us</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
-      <!-- Our Philosophy -->
-      <section class="mb-16" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Our Philosophy</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <p class="text-lg text-gray-600 mb-6">
-              At {clinicInfo.name}, we believe that exceptional dental care goes beyond technical expertise. 
-              Our philosophy centers on creating a welcoming, comfortable environment where patients feel 
-              heard, respected, and cared for. We take the time to understand each patient's unique needs 
-              and concerns, developing personalized treatment plans that align with their goals and lifestyle.
-            </p>
-            <p class="text-lg text-gray-600">
-              Our commitment to excellence drives us to stay current with the latest advancements in 
-              dental technology and techniques, ensuring our patients receive the highest standard of care. 
-              We focus on preventive care and patient education, empowering our patients to maintain 
-              optimal oral health between visits.
-            </p>
-          </div>
-          <div class="relative aspect-[4/3] w-full">
-            <img 
-              src={HERO_IMAGES.dental1.src} 
-              alt="Modern dental office" 
-              class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-lg"
-              width={HERO_IMAGES.dental1.width}
-              height={HERO_IMAGES.dental1.height}
-            />
-          </div>
+      
+      <!-- SECTION 1: Meet Our Team -->
+      <section class="mb-20" data-aos="fade-up">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold font-heading text-gray-800 mb-4">Meet Our Doctors</h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Led by a husband-and-wife team who call Austin home, we are dedicated to treating every patient like family.
+          </p>
         </div>
-      </section>
 
-      <!-- Meet Our Team -->
-      <section class="mb-16" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Meet Our Team</h2>
-        <p class="text-lg text-gray-600 mb-12 max-w-3xl">
-          Our experienced team of dental professionals is dedicated to providing you with the 
-          highest quality care in a comfortable and welcoming environment.
-        </p>
-        
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {teamMembers.map(member => (
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden" data-aos="fade-up">
-              <div class="relative aspect-[4/3]">
-                <img 
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-xl transition-shadow duration-300">
+              <div class="relative aspect-[4/3] overflow-hidden">
+                <!-- UPDATED CLASS: Changed object-center to object-top -->
+                <img
                   src={member.image.src}
-                  alt={member.name} 
-                  class="absolute inset-0 w-full h-full object-cover object-center"
+                  alt={`${member.name} - Dentist in Austin TX`}
+                  class="absolute inset-0 w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
                   width={member.image.width}
                   height={member.image.height}
                 />
               </div>
-              <div class="p-6">
-                <h3 class="text-2xl font-bold font-heading text-gray-800 mb-2">{member.name}</h3>
-                <p class="text-primary-600 font-medium mb-4">{member.title}</p>
-                <div class="prose prose-lg max-w-none">
+              <div class="p-8 flex flex-col flex-grow">
+                <h3 class="text-2xl font-bold font-heading text-gray-800 mb-1">{member.name}</h3>
+                <p class="text-primary-600 font-bold uppercase tracking-wide text-sm mb-6">{member.title}</p>
+                
+                <div class="prose prose-lg text-gray-600 mb-8 flex-grow">
                   {member.bio.split('\n\n').map(paragraph => (
-                    <p class="mb-4 text-gray-600">{paragraph}</p>
+                    <p class="mb-4" set:html={paragraph.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary-800">$1</strong>')} />
                   ))}
                 </div>
-                <div class="border-t border-gray-200 pt-4 mt-4">
-                  <h4 class="font-bold text-gray-800 mb-2">Credentials:</h4>
-                  <ul class="list-disc list-inside text-gray-600">
+
+                <div class="bg-gray-50 rounded-xl p-5 mt-auto">
+                  <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    Credentials
+                  </h4>
+                  <ul class="space-y-2">
                     {member.credentials.map(credential => (
-                      <li>{credential}</li>
+                      <li class="text-sm text-gray-600 flex items-start gap-2">
+                        <span class="text-primary-400 mt-1">•</span>
+                        {credential}
+                      </li>
                     ))}
                   </ul>
                 </div>
@@ -124,57 +125,75 @@ const teamMembers = [
         </div>
       </section>
 
-      <!-- Our Office -->
-      <section class="mb-16" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Our Office</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- SECTION 2: Our Philosophy -->
+      <section class="mb-20" data-aos="fade-up">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
-            <p class="text-lg text-gray-600 mb-6">
-              Our state-of-the-art dental office is designed with your comfort in mind. We've created 
-              a warm, welcoming environment equipped with the latest dental technology to provide you 
-              with the best possible care experience.
-            </p>
-            <div class="space-y-4">
-              <div class="flex items-start gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <div>
-                  <h4 class="font-bold text-gray-800">Modern Technology</h4>
-                  <p class="text-gray-600">Advanced digital imaging and treatment planning systems</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <div>
-                  <h4 class="font-bold text-gray-800">Comfort Features</h4>
-                  <p class="text-gray-600">Comfortable seating, entertainment options, and amenities</p>
-                </div>
-              </div>
-              <div class="flex items-start gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                </svg>
-                <div>
-                  <h4 class="font-bold text-gray-800">Sterilization</h4>
-                  <p class="text-gray-600">Advanced sterilization procedures exceeding industry standards</p>
-                </div>
-              </div>
+            <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Our Philosophy</h2>
+            <div class="prose prose-lg text-gray-600">
+              <p class="mb-6">
+                At <strong>{clinicInfo.name}</strong>, we are proud to serve the <strong>South Austin</strong> community with dental care that goes beyond technical expertise.
+                Located conveniently off <strong>Interstate 35</strong>, our philosophy centers on creating a welcoming environment for families in **Austin (78747)**, Buda, and Kyle.
+              </p>
+              <p class="mb-6">
+                We believe every patient deserves to feel heard and respected. We take the time to understand your unique needs, developing personalized treatment plans that align with your lifestyle.
+              </p>
+              <p>
+                Our commitment to excellence drives us to use the latest dental technology, ensuring our neighbors in Austin receive the highest standard of care.
+              </p>
             </div>
           </div>
-          <div class="relative aspect-[4/3] w-full">
-            <img 
-              src={HERO_IMAGES.dental2.src}
-              alt="NextGen Dental office interior" 
-              class="absolute inset-0 w-full h-full object-cover rounded-lg shadow-lg"
-              width={HERO_IMAGES.dental2.width}
-              height={HERO_IMAGES.dental2.height}
+          <div class="relative aspect-square w-full rounded-2xl overflow-hidden shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-500">
+            <img
+              src={HERO_IMAGES.dental1.src}
+              alt="Modern dental office interior in South Austin"
+              class="absolute inset-0 w-full h-full object-cover"
+              width={HERO_IMAGES.dental1.width}
+              height={HERO_IMAGES.dental1.height}
             />
           </div>
         </div>
       </section>
+
+      <!-- SECTION 3: Our South Austin Office -->
+      <section class="mb-16 bg-primary-50 rounded-3xl p-8 md:p-12" data-aos="fade-up">
+        <div class="text-center mb-10">
+          <h2 class="text-3xl font-bold font-heading text-gray-800 mb-4">Patient Comfort & Technology</h2>
+          <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+            Conveniently located at <strong>{clinicInfo.address.line1}</strong>, our state-of-the-art office is designed to make your visit easy and stress-free.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-primary-100 text-center">
+            <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-2xl mb-4 mx-auto">📷</div>
+            <h3 class="font-bold text-gray-800 mb-2">Digital Imaging</h3>
+            <p class="text-gray-600 text-sm">Low-radiation digital X-rays and 3D scanning for precise diagnostics.</p>
+          </div>
+          
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-primary-100 text-center">
+            <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-2xl mb-4 mx-auto">🛋️</div>
+            <h3 class="font-bold text-gray-800 mb-2">Comfort Amenities</h3>
+            <p class="text-gray-600 text-sm">Relaxing treatment rooms and entertainment options to put you at ease.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-xl shadow-sm border border-primary-100 text-center">
+            <div class="w-14 h-14 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center text-2xl mb-4 mx-auto">✨</div>
+            <h3 class="font-bold text-gray-800 mb-2">Advanced Sterilization</h3>
+            <p class="text-gray-600 text-sm">Hospital-grade sterilization protocols that exceed safety requirements.</p>
+          </div>
+        </div>
+        
+        <div class="mt-12 text-center">
+           <Button 
+             href="/contact" 
+             text="Get Directions & Contact Us" 
+             variant="primary"
+             size="lg"
+           />
+        </div>
+      </section>
+
     </div>
   </div>
 </Layout>

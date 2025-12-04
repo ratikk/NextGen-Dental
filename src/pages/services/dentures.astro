@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
 import { clinicInfo } from '../../utils/clinicInfo';
@@ -10,103 +9,126 @@ const breadcrumbItems = [
   { label: 'Services', href: '/services' },
   { label: 'Dentures', href: '/services/dentures' },
 ];
+
+// --- SEO: DENTURE/PROSTHODONTIC SCHEMA ---
+const dentureSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  "name": "Custom Dentures & Partials",
+  "procedureType": "RestorativeProcedure",
+  "bodyLocation": "Mouth",
+  "description": "Custom-fitted complete and partial dentures to restore smile function and aesthetics.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/dentures"
+  }
+};
 ---
 
-<Layout 
-  title="Dentures & Partial Dentures" 
-  description="Restore your smile with custom-fitted dentures at NextGen Dental in Austin, TX. We offer full and partial dentures to help you regain confidence and function."
+<Layout
+  title="Custom Dentures in Austin, TX (78747) | NextGen Dental"
+  description="Restore your smile and confidence with custom full and partial dentures at NextGen Dental in South Austin. Comfortable, natural-looking solutions."
+  serviceSchema={dentureSchema}
 >
-  <Hero
-    title="Dentures"
-    subtitle="Restore your smile and confidence with custom-fitted dentures"
-    images={["/images/hero/dental-3.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Custom Dentures</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Restore your smile's function and beauty with comfortable, modern dentures.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Dentures</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
       <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">What Are Dentures?</h2>
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Smile with Confidence in South Austin</h2>
         <p class="text-lg text-gray-600 mb-6">
-          Dentures are removable appliances that replace missing teeth and surrounding tissues. Whether 
-          you need full dentures to replace all teeth or partial dentures to fill gaps, our custom-fitted 
-          solutions help restore your ability to eat, speak, and smile with confidence.
+          Missing teeth can make eating difficult, affect your speech, and lower your self-esteem. At <strong>{clinicInfo.name}</strong> in South Austin (78747), we create high-quality, custom-fitted dentures that look natural and fit comfortably.
+        </p>
+        <p class="text-lg text-gray-600">
+          Whether you need to replace a few missing teeth or a full arch, Dr. K and Dr. Yanala use modern materials to craft dentures that restore your facial structure and let you enjoy your favorite foods again.
         </p>
       </section>
 
       <!-- Types of Dentures -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Types of Dentures</h2>
+      <section class="mb-16 max-w-4xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">Our Denture Solutions</h2>
         
-        <div class="space-y-6">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Complete Dentures</h3>
-            <p class="text-gray-600 mb-4">
-              Full dentures replace all teeth in either the upper or lower jaw, or both. They include:
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Partial -->
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-shadow border border-gray-100">
+            <h3 class="text-xl font-bold text-primary-700 mb-3">Partial Dentures</h3>
+            <p class="text-gray-600 text-sm mb-4">
+              Ideal if you still have healthy natural teeth. Partials fill in the gaps to prevent your remaining teeth from shifting.
             </p>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Conventional full dentures (placed after tissues have healed)</li>
-              <li>Immediate full dentures (placed immediately after tooth extraction)</li>
-              <li>Custom-fitted for optimal comfort and function</li>
-              <li>Natural-looking appearance</li>
+            <ul class="text-sm text-gray-500 list-disc list-inside">
+              <li>Removable clasp design</li>
+              <li>Preserves natural teeth</li>
+              <li>Cost-effective</li>
             </ul>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Partial Dentures</h3>
-            <p class="text-gray-600 mb-4">
-              Partial dentures replace one or more missing teeth when some natural teeth remain:
+          <!-- Full -->
+          <div class="bg-gray-50 rounded-xl p-6 hover:shadow-md transition-shadow border border-gray-100">
+            <h3 class="text-xl font-bold text-primary-700 mb-3">Full Dentures</h3>
+            <p class="text-gray-600 text-sm mb-4">
+              A complete replacement for an upper or lower arch. Modern full dentures are lighter and more realistic than ever before.
             </p>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Removable partial dentures</li>
-              <li>Flexible partial dentures</li>
-              <li>Precision partial dentures</li>
-              <li>Bridge-supported partials</li>
+            <ul class="text-sm text-gray-500 list-disc list-inside">
+              <li>Custom gum shading</li>
+              <li>Natural tooth shapes</li>
+              <li>Restores facial profile</li>
             </ul>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Implant-Supported Dentures</h3>
-            <p class="text-gray-600 mb-4">
-              A modern solution that combines dentures with dental implants:
+          <!-- Implant Supported -->
+          <div class="bg-primary-50 rounded-xl p-6 hover:shadow-md transition-shadow border border-primary-100">
+            <h3 class="text-xl font-bold text-primary-700 mb-3">Implant-Supported</h3>
+            <p class="text-gray-600 text-sm mb-4">
+              The most stable option. Dentures snap onto dental implants for a secure fit that never slips while talking or eating.
             </p>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Greater stability and security</li>
-              <li>Improved chewing ability</li>
-              <li>Better comfort and fit</li>
+            <ul class="text-sm text-gray-500 list-disc list-inside">
+              <li>No adhesive needed</li>
+              <li>Superior biting power</li>
               <li>Prevents bone loss</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Benefits -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Modern Dentures</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Functional Benefits</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Restored ability to eat</li>
-              <li>Improved speech clarity</li>
-              <li>Support facial muscles</li>
-              <li>Prevent shifting of remaining teeth</li>
-              <li>Maintain jaw alignment</li>
-            </ul>
-          </div>
-
-          <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Aesthetic Benefits</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Natural-looking smile</li>
-              <li>Improved facial appearance</li>
-              <li>Custom-matched to your features</li>
-              <li>Restored lip support</li>
-              <li>Younger appearance</li>
             </ul>
           </div>
         </div>
@@ -114,101 +136,31 @@ const breadcrumbItems = [
 
       <!-- The Process -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Denture Process</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Getting Your New Smile</h2>
+
         <div class="space-y-6">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Initial Consultation</h3>
-            <p class="text-gray-600">
-              Comprehensive examination and discussion of your needs, goals, and treatment options.
-            </p>
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6 flex gap-4">
+            <div class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Impressions & Measurements</h3>
+              <p class="text-gray-600 text-sm">We take precise molds of your mouth to ensure an accurate fit that minimizes sore spots.</p>
+            </div>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Impressions and Measurements</h3>
-            <p class="text-gray-600">
-              Detailed impressions and measurements ensure your dentures fit perfectly and look natural.
-            </p>
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6 flex gap-4">
+            <div class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Wax Try-In</h3>
+              <p class="text-gray-600 text-sm">You try a "mock-up" of the dentures. We adjust the shape, color, and fit until you are happy with how they look.</p>
+            </div>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Wax Try-in</h3>
-            <p class="text-gray-600">
-              Preview your new smile with wax models and make any necessary adjustments.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Final Fitting</h3>
-            <p class="text-gray-600">
-              Precise adjustments ensure optimal fit, comfort, and function of your new dentures.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">5. Follow-up Care</h3>
-            <p class="text-gray-600">
-              Regular check-ups and adjustments maintain proper fit and function over time.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Care and Maintenance -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Care and Maintenance</h2>
-        
-        <div class="space-y-6">
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Daily Care</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Remove and rinse after meals</li>
-              <li>Brush dentures daily with soft brush</li>
-              <li>Clean your mouth thoroughly</li>
-              <li>Soak dentures overnight</li>
-              <li>Handle with care</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Long-term Maintenance</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Regular dental check-ups</li>
-              <li>Professional cleanings</li>
-              <li>Adjustments as needed</li>
-              <li>Replace when worn</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- FAQs -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
-        
-        <div class="space-y-4">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">How long do dentures last?</h3>
-            <p class="text-gray-600">
-              With proper care, dentures typically last 5-7 years before needing replacement. Regular 
-              adjustments help maintain proper fit and function.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Will dentures affect my speech?</h3>
-            <p class="text-gray-600">
-              Initially, you may need time to adjust to speaking with dentures. Most people adapt 
-              quickly and find their speech improves compared to missing teeth.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Can I eat normally with dentures?</h3>
-            <p class="text-gray-600">
-              While there may be an adjustment period, most people can eat most foods comfortably. 
-              Start with soft foods and gradually introduce more challenging items.
-            </p>
+          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6 flex gap-4">
+            <div class="w-8 h-8 bg-primary-100 text-primary-600 rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+            <div>
+              <h3 class="text-lg font-bold text-gray-800 mb-2">Final Fitting</h3>
+              <p class="text-gray-600 text-sm">Your final custom dentures are ready. We make minor adjustments to ensure maximum comfort so you can leave smiling.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -216,10 +168,9 @@ const breadcrumbItems = [
       <!-- Call to Action -->
       <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
         <div class="bg-primary-50 p-8 rounded-lg">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready to Restore Your Smile?</h2>
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Eat & Smile Comfortably Again</h2>
           <p class="text-gray-600 mb-6">
-            Schedule a consultation to learn which denture solution is right for you. Our team will 
-            create a personalized treatment plan to help you regain your confident smile.
+            Schedule a consultation at our Austin office to discuss your denture options.
           </p>
           <div class="flex flex-wrap justify-center gap-4">
             <Button
@@ -239,6 +190,7 @@ const breadcrumbItems = [
           </div>
         </div>
       </section>
+
     </div>
   </div>
 </Layout>

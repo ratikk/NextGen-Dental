@@ -2,9 +2,11 @@
 import Button from './Button.astro';
 import { Image } from 'astro:assets';
 import { clinicInfo } from '../utils/clinicInfo';
+import type { ImageMetadata } from 'astro';
 
 export interface Props {
-  images?: string[];
+  // Allow both smart images (ImageMetadata) and simple strings (legacy)
+  images?: (string | ImageMetadata)[];
   title?: string;
   subtitle?: string;
   height?: 'sm' | 'md' | 'lg' | 'xl';
@@ -19,7 +21,7 @@ export interface Props {
 }
 
 const {
-  images = ['/images/hero/dental-1.jpg'],
+  images = [],
   title,
   subtitle,
   height = 'lg',
@@ -44,23 +46,36 @@ const {
               {images.map((image, index) => (
                 <div class="swiper-slide">
                   <div class="relative pb-[56.25%]"> <!-- 16:9 aspect ratio -->
-                    <Image 
-                      src={image}
-                      alt="Dental care"
-                      width={960} // Reduced from 1920
-                      height={540} // Reduced from 1080
-                      class="absolute inset-0 w-full h-full object-cover object-center"
-                      loading={index === 0 ? "eager" : "lazy"}
-                      format="webp"
-                      quality={80} // Reduced from 90
-                    />
+                    {/* Logic to handle both optimized assets and legacy string paths */}
+                    {typeof image === 'string' ? (
+                      <img
+                        src={image}
+                        alt="Dental care"
+                        class="absolute inset-0 w-full h-full object-cover object-center"
+                        loading={index === 0 ? "eager" : "lazy"}
+                      />
+                    ) : (
+                      <Image
+                        src={image}
+                        alt="Dental care"
+                        width={1920}
+                        height={1080}
+                        class="absolute inset-0 w-full h-full object-cover object-center"
+                        loading={index === 0 ? "eager" : "lazy"}
+                        fetchpriority={index === 0 ? "high" : "auto"}
+                        widths={[640, 768, 1024, 1366, 1600, 1920]} 
+                        sizes={`(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px`}
+                        format="webp"
+                        quality={80}
+                      />
+                    )}
                   </div>
                 </div>
               ))}
             </div>
             <div class="swiper-pagination"></div>
           </div>
-          
+
           {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-40"></div>}
         </div>
 
@@ -87,75 +102,39 @@ const {
             <form id="appointment-form" class="space-y-4">
               <div>
                 <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                <input
-                  type="text"
-                  id="full-name"
-                  name="fullName"
-                  required
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  placeholder="Enter your full name"
-                />
+                <input type="text" id="full-name" name="fullName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Enter your full name" />
               </div>
-
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    placeholder="Your email"
-                  />
+                  <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Your email" />
                 </div>
                 <div>
                   <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    placeholder="Your phone"
-                  />
+                  <input type="tel" id="phone" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Your phone" />
                 </div>
               </div>
-
+              <div>
+                <label for="dob" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
+                <input type="date" id="dob" name="dob" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
+              </div>
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
-                  <input
-                    type="date"
-                    id="date"
-                    name="preferredDate"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  />
+                  <input type="date" id="date" name="preferredDate" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
                 </div>
                 <div>
                   <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Preferred Time</label>
-                  <select
-                    id="time"
-                    name="preferredTime"
-                    required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                  >
+                  <select id="time" name="preferredTime" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                     <option value="">Select a time</option>
                     <option value="morning">Morning (8:00 AM - 12:00 PM)</option>
                     <option value="afternoon">Afternoon (12:00 PM - 5:00 PM)</option>
                   </select>
                 </div>
               </div>
-
               <div>
                 <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Reason for Visit</label>
-                <select
-                  id="reason"
-                  name="reasonForVisit"
-                  required
-                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
-                >
+                <select id="reason" name="reasonForVisit" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                   <option value="">Select a reason</option>
                   <option value="checkup">Regular Checkup</option>
                   <option value="cleaning">Teeth Cleaning</option>
@@ -164,32 +143,13 @@ const {
                   <option value="other">Other</option>
                 </select>
               </div>
-
               <div class="flex items-center">
-                <input
-                  type="checkbox"
-                  id="consent"
-                  name="smsConsent"
-                  required
-                  class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                />
-                <label for="consent" class="ml-2 block text-sm text-gray-700">
-                  I consent to receiving text messages from {clinicInfo.name}
-                </label>
+                <input type="checkbox" id="consent" name="smsConsent" required class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" />
+                <label for="consent" class="ml-2 block text-sm text-gray-700">I consent to receiving text messages from {clinicInfo.name}</label>
               </div>
-
-              <p class="text-xs text-gray-500 mt-4">
-                This form is protected by reCAPTCHA and the Google 
-                <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Privacy Policy</a> and 
-                <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Terms of Service</a> apply.
-              </p>
-
-              <button
-                type="submit"
-                class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition-colors duration-200"
-              >
-                Request Appointment
-              </button>
+              <p class="text-xs text-red-600 font-medium mt-3"><span class="font-bold">Please Note:</span> A $25 fee applies to cancellations made with less than 24 hours' notice.</p>
+              <p class="text-xs text-gray-500 mt-2">This form is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Terms of Service</a> apply.</p>
+              <button type="submit" class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition-colors duration-200">Request Appointment</button>
             </form>
           </div>
         </div>
@@ -199,70 +159,51 @@ const {
 </section>
 
 <script>
-  import { submitForm } from '../utils/forms';
-  import Swiper from 'swiper';
-  import { Autoplay, Pagination } from 'swiper/modules';
-  import 'swiper/css';
-  import 'swiper/css/pagination';
-  
-  document.addEventListener('DOMContentLoaded', () => {
-    // Initialize Swiper
-    new Swiper('.heroSwiper', {
-      modules: [Autoplay, Pagination],
-      slidesPerView: 1,
-      loop: true,
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-    });
-
-    // Form submission handler
+  document.addEventListener('DOMContentLoaded', async () => {
     const appointmentForm = document.getElementById('appointment-form');
+    const heroSlider = document.querySelector('.heroSwiper');
+
     if (appointmentForm) {
+      const { submitForm } = await import('../utils/forms');
       appointmentForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         try {
           const formData = new FormData(appointmentForm as HTMLFormElement);
           const data = Object.fromEntries(formData.entries());
-          
-          await submitForm({
-            ...data,
-            formType: 'appointment'
-          });
-          
+          // @ts-ignore
+          await submitForm({ ...data, formType: 'appointment' });
           alert('Appointment request submitted successfully! We will contact you shortly.');
-          appointmentForm.reset();
-          
+          (appointmentForm as HTMLFormElement).reset();
         } catch (error) {
           console.error('Error submitting form:', error);
           alert('Failed to submit form. Please try again later.');
         }
       });
     }
+
+    if (heroSlider) {
+      const Swiper = (await import('swiper')).default;
+      const { Autoplay, Pagination } = await import('swiper/modules');
+      await import('swiper/css');
+      await import('swiper/css/pagination');
+
+      new Swiper('.heroSwiper', {
+        modules: [Autoplay, Pagination],
+        slidesPerView: 1,
+        loop: true,
+        autoHeight: false,
+        resizeObserver: true,
+        autoplay: { delay: 4000, disableOnInteraction: false },
+        pagination: { el: '.swiper-pagination', clickable: true },
+      });
+    }
   });
 </script>
 
 <style>
-  .swiper-slide {
-    height: 100%;
-  }
-  
-  .swiper-pagination {
-    bottom: 20px !important;
-  }
-  
-  .swiper-pagination-bullet {
-    background: white !important;
-    opacity: 0.5;
-  }
-  
-  .swiper-pagination-bullet-active {
-    opacity: 1;
-  }
+  .heroSwiper { width: 100%; height: 100%; }
+  .swiper-slide { height: 100%; }
+  .swiper-pagination { bottom: 20px !important; }
+  .swiper-pagination-bullet { background: white !important; opacity: 0.5; }
+  .swiper-pagination-bullet-active { opacity: 1; }
 </style>

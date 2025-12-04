@@ -5,16 +5,21 @@ import react from '@astrojs/react';
 
 export default defineConfig({
   integrations: [tailwind(), sitemap(), react()],
-  site: 'https://lilacdentalaustintx.com',
+  // ✅ UPDATED: The correct domain
+  site: 'https://nextgendentalaustintx.com', 
   output: 'static',
   server: {
     host: '0.0.0.0'
   },
+  // Performance: Keep CSS inside HTML to stop "Render Blocking" warnings
+  build: {
+    inlineStylesheets: 'always',
+  },
   image: {
     service: {
-      entrypoint: 'astro/assets/services/sharp', // This is correct for custom config
-      // You can add config here if needed
-      // config: { ... }
-    }
+      entrypoint: 'astro/assets/services/sharp',
+    },
+    // Performance: Ensure images are compressed automatically
+    compress: true,
   }
 });

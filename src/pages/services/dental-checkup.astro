@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
 import { clinicInfo } from '../../utils/clinicInfo';
@@ -10,127 +9,181 @@ const breadcrumbItems = [
   { label: 'Services', href: '/services' },
   { label: 'Dental Checkup', href: '/services/dental-checkup' },
 ];
+
+// --- SEO: DIAGNOSTIC PROCEDURE SCHEMA ---
+const checkupSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  "name": "Dental Checkup & Cleaning",
+  "procedureType": "DiagnosticProcedure",
+  "bodyLocation": "Mouth",
+  "description": "Comprehensive dental examination, digital x-rays, and professional teeth cleaning to prevent cavities and gum disease.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/dental-checkup"
+  }
+};
 ---
 
-<Layout 
-  title="Dental Checkup & Examination" 
-  description="Regular dental checkups at NextGen Dental help prevent cavities, gum disease, and other oral health issues. Schedule your comprehensive exam today."
+<Layout
+  title="Dental Checkup & Cleaning in Austin, TX (78747) | NextGen Dental"
+  description="Book your comprehensive dental exam and teeth cleaning at NextGen Dental in South Austin. We offer digital X-rays, plaque removal, and fluoride treatments."
+  serviceSchema={checkupSchema}
 >
-  <Hero
-    title="Dental Checkup"
-    subtitle="Comprehensive dental examinations for optimal oral health"
-    images={["/images/hero/dental-1.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Checkup & Cleaning</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        The foundation of a healthy smile starts with routine care.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Checkup</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
+      
       <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Why Regular Checkups Matter</h2>
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Preventive Care in South Austin</h2>
         <p class="text-lg text-gray-600 mb-6">
-          Regular dental checkups are essential for maintaining good oral health and preventing serious dental issues. 
-          Our comprehensive examinations help detect problems early when they're easier and less expensive to treat.
+          Prevention is better than cure. At <strong>{clinicInfo.name}</strong>, serving the <strong>78747</strong> area, our goal is to catch small issues before they become expensive problems. 
+        </p>
+        <p class="text-lg text-gray-600">
+          Regular checkups and professional cleanings are the most effective way to prevent cavities, gum disease, and tooth loss. We make these visits quick, comfortable, and thorough.
         </p>
       </section>
 
-      <!-- What's Included -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">What's Included in Your Checkup</h2>
+      <!-- What Happens During a Visit? -->
+      <section class="mb-16 max-w-5xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">Your Comprehensive Exam Includes</h2>
         
-        <div class="space-y-6">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Comprehensive Examination</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Visual inspection of teeth and gums</li>
-              <li>Cavity detection</li>
-              <li>Gum disease screening</li>
-              <li>Bite and jaw alignment check</li>
-              <li>Oral cancer screening</li>
-            </ul>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Step 1 -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex gap-4">
+            <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center text-2xl flex-shrink-0">📸</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Digital X-Rays</h3>
+              <p class="text-gray-600 text-sm">
+                We use low-radiation digital imaging to see between teeth and under the gum line, detecting hidden decay, bone loss, or impacted teeth.
+              </p>
+            </div>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Digital X-Rays</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Low-radiation digital imaging</li>
-              <li>Detection of hidden decay</li>
-              <li>Assessment of bone health</li>
-              <li>Evaluation of tooth roots</li>
-            </ul>
+          <!-- Step 2 -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex gap-4">
+            <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center text-2xl flex-shrink-0">✨</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Professional Cleaning</h3>
+              <p class="text-gray-600 text-sm">
+                Our hygienists gently remove plaque and hardened tartar (calculus) that brushing at home cannot remove. We finish with a polish for a shiny, smooth feel.
+              </p>
+            </div>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Treatment Planning</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Personalized care recommendations</li>
-              <li>Preventive treatment options</li>
-              <li>Discussion of findings</li>
-              <li>Cost and insurance review</li>
-            </ul>
+          <!-- Step 3 -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex gap-4">
+            <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center text-2xl flex-shrink-0">🛡️</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Gum Health Check</h3>
+              <p class="text-gray-600 text-sm">
+                We measure your gum pockets to screen for periodontal (gum) disease, the leading cause of tooth loss in adults.
+              </p>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex gap-4">
+            <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center text-2xl flex-shrink-0">🩺</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Oral Cancer Screening</h3>
+              <p class="text-gray-600 text-sm">
+                Included in every exam. We check your tongue, throat, and tissues for any early signs of abnormalities.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- Benefits -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Regular Checkups</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Prevention</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Early detection of issues</li>
-              <li>Prevention of tooth decay</li>
-              <li>Gum disease prevention</li>
-              <li>Maintain overall health</li>
-            </ul>
-          </div>
-
-          <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Cost Savings</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Avoid expensive treatments</li>
-              <li>Prevent dental emergencies</li>
-              <li>Maximize insurance benefits</li>
-              <li>Long-term oral health</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Frequency -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">How Often Should You Visit?</h2>
-        
-        <div class="bg-gray-50 p-6 rounded-lg">
-          <p class="text-gray-600 mb-4">
-            Most patients should visit every 6 months for routine checkups. However, some may need more 
-            frequent visits based on:
+      <!-- Why It Matters -->
+      <section class="mb-16 max-w-4xl mx-auto bg-primary-50 p-8 rounded-2xl" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6 text-center">Why Every 6 Months?</h2>
+        <div class="space-y-4 text-gray-700">
+          <p>
+            You might brush and floss daily, but <strong>plaque hardens into tartar within 24-48 hours</strong>. Once it becomes tartar, only a dental professional can remove it.
           </p>
-          <ul class="list-disc list-inside text-gray-600 space-y-2">
-            <li>History of gum disease</li>
-            <li>High risk of cavities</li>
-            <li>Smoking or tobacco use</li>
-            <li>Diabetes or other medical conditions</li>
-            <li>Previous dental work</li>
-          </ul>
+          <p>
+            If left untreated, tartar leads to gum inflammation (gingivitis), which can progress to periodontal disease and bone loss. Routine visits every 6 months break this cycle and keep your mouth healthy for life.
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQs -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6 text-center">Common Questions</h2>
+        
+        <div class="space-y-4">
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">Does a cleaning hurt?</h3>
+            <p class="text-gray-600 text-sm">For most patients, a cleaning is painless. If you have sensitive teeth or haven't been in a while, let us know! We can use numbing gel to ensure you are comfortable.</p>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">Do I really need X-rays?</h3>
+            <p class="text-gray-600 text-sm">Yes. X-rays allow us to see decay between teeth and infections under the gum line that are invisible to the naked eye.</p>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">Does insurance cover this?</h3>
+            <p class="text-gray-600 text-sm">Most dental insurance plans cover 100% of preventive care (two exams and cleanings per year) because they want to prevent costly issues later.</p>
+          </div>
         </div>
       </section>
 
       <!-- Call to Action -->
       <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Schedule Your Checkup Today</h2>
+        <div class="bg-white border-2 border-primary-100 p-8 rounded-lg shadow-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Time for Your Checkup?</h2>
           <p class="text-gray-600 mb-6">
-            Don't wait until you have a problem. Regular checkups help maintain your oral health and prevent future issues.
+            Keep your smile bright and healthy. Schedule your visit at NextGen Dental in Austin today.
           </p>
           <div class="flex flex-wrap justify-center gap-4">
             <Button
               href={clinicInfo.booking.url}
-              text="Book Appointment"
+              text="Book Checkup"
               variant="primary"
               size="lg"
               target="_blank"
@@ -145,6 +198,7 @@ const breadcrumbItems = [
           </div>
         </div>
       </section>
+
     </div>
   </div>
 </Layout>

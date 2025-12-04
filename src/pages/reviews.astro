@@ -1,67 +1,83 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import Breadcrumbs from '../components/Breadcrumbs.astro';
 import GoogleReviews from '../components/GoogleReviews';
 import { clinicInfo } from '../utils/clinicInfo';
 
-const breadcrumbItems = [
-  { label: 'Home', href: '/' },
-  { label: 'Reviews', href: '/reviews' },
-];
+const pageTitle = "Patient Reviews";
+const pageDescription = `See what our patients are saying about their experience at ${clinicInfo.name}. Read real Google reviews and testimonials from our dental patients in Austin, TX.`;
 ---
 
-<Layout 
-  title="Patient Reviews" 
-  description={`See what our patients are saying about their experience at ${clinicInfo.name}. Read real Google reviews and testimonials from our dental patients in Austin, TX.`}
+<Layout
+  title={`${pageTitle} | ${clinicInfo.name}`}
+  description={pageDescription}
 >
-  <Hero
-    title="Patient Reviews"
-    subtitle="Hear what our patients have to say about their experience"
-    images={["/images/hero/dental-2.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER (No Stock Photo) -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">{pageTitle}</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Real stories from real smiles. See why our patients love {clinicInfo.name}.
+      </p>
+    </div>
+  </div>
+
+  <!-- Breadcrumbs -->
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Reviews</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
-      <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-bold font-heading text-gray-800 mb-6">
-          Our Patients' Experience
+      
+      <!-- Introduction (Kept short to get to reviews faster) -->
+      <section class="mb-12 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-4">
+          5-Star Care in Austin
         </h2>
         <p class="text-lg text-gray-600">
-          At {clinicInfo.name}, we value our patients' feedback and strive to provide exceptional 
-          dental care. Read what our patients are saying about their experience with us.
+          We treat every patient like family. But don't just take our word for it—read what our community has to say about their experience with Dr. K and Dr. Yanala.
         </p>
       </section>
 
-      <!-- Google Reviews -->
+      <!-- Google Reviews Component -->
       <section class="mb-16" data-aos="fade-up">
         <GoogleReviews client:load />
       </section>
 
       <!-- Leave a Review CTA -->
       <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg">
+        <div class="bg-primary-50 p-8 rounded-2xl border border-primary-100">
           <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">
             Share Your Experience
           </h2>
           <p class="text-gray-600 mb-6">
-            Had a great experience at {clinicInfo.name}? We'd love to hear about it! Your feedback 
-            helps us continue providing exceptional care to all our patients.
+            Had a great experience at {clinicInfo.name}? We'd love to hear about it! Your feedback helps us continue providing exceptional care to all our patients.
           </p>
-          <a 
-            href={clinicInfo.social.google}
+          
+          <!-- Note: clinicInfo.social.google might need to be set in your config, 
+               otherwise fallback to the generic search link or map link -->
+          <a
+            href={clinicInfo.mapLink} 
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
+            class="inline-flex items-center px-6 py-3 bg-white text-gray-800 font-bold border border-gray-200 rounded-md hover:bg-gray-50 hover:text-primary-600 transition-colors duration-200 shadow-sm"
           >
+            <span class="mr-2 text-xl">⭐</span>
             Leave a Review on Google
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-            </svg>
           </a>
         </div>
       </section>

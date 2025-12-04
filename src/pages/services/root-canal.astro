@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
 import { clinicInfo } from '../../utils/clinicInfo';
@@ -10,75 +9,117 @@ const breadcrumbItems = [
   { label: 'Services', href: '/services' },
   { label: 'Root Canal', href: '/services/root-canal' },
 ];
+
+// --- SEO: MEDICAL PROCEDURE SCHEMA ---
+const rootCanalSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  "name": "Root Canal Treatment",
+  "procedureType": "SurgicalProcedure",
+  "bodyLocation": "Tooth",
+  "description": "Endodontic therapy to remove infected pulp and save the natural tooth.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/root-canal"
+  }
+};
 ---
 
-<Layout 
-  title="Root Canal Treatment" 
-  description="Expert root canal therapy at NextGen Dental in Austin, TX. Save your natural teeth with our gentle, modern endodontic treatments."
+<Layout
+  title="Root Canal Treatment in Austin, TX (78747) | NextGen Dental"
+  description="Save your natural tooth with gentle root canal therapy at NextGen Dental in South Austin. Relief for tooth pain and infection near Buda."
+  serviceSchema={rootCanalSchema}
 >
-  <Hero
-    title="Root Canal Treatment"
-    subtitle="Save your natural teeth with modern endodontic therapy"
-    images={["/images/hero/dental-2.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Root Canal Therapy</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Save your natural teeth with modern endodontic treatment.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Root Canal</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
       <!-- Introduction -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">What is a Root Canal?</h2>
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Expert Endodontic Care in South Austin</h2>
         <p class="text-lg text-gray-600 mb-6">
-          A root canal is a dental procedure that treats infection or damage in the tooth's pulp – 
-          the soft tissue inside your tooth containing nerves, blood vessels, and connective tissue. 
-          Despite its reputation, modern root canal treatment is virtually painless and can save your 
-          natural tooth, preventing the need for extraction.
+          If you are experiencing severe tooth pain or sensitivity, you may need a root canal. At <strong>{clinicInfo.name}</strong>, located in South Austin (78747), we perform gentle, modern root canal therapy to save your natural tooth and eliminate pain.
+        </p>
+        <p class="text-lg text-gray-600 mb-6">
+          Despite its reputation, a root canal is a straightforward procedure that relieves pain caused by deep decay or infection. Our compassionate team ensures your comfort every step of the way.
         </p>
       </section>
 
       <!-- When It's Needed -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">When is a Root Canal Needed?</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Signs You May Need Treatment</h2>
+
         <div class="bg-gray-50 p-6 rounded-lg mb-8">
-          <h3 class="text-xl font-bold text-gray-800 mb-4">Common Signs You May Need a Root Canal:</h3>
           <ul class="space-y-4">
             <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+              <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 flex-shrink-0">⚠️</div>
               <div>
                 <strong class="text-gray-800">Severe Tooth Pain:</strong>
-                <p class="text-gray-600">Particularly when chewing or applying pressure</p>
+                <p class="text-gray-600">Pain when chewing or applying pressure.</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+              <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 flex-shrink-0">❄️</div>
               <div>
                 <strong class="text-gray-800">Temperature Sensitivity:</strong>
-                <p class="text-gray-600">Prolonged sensitivity to hot or cold temperatures</p>
+                <p class="text-gray-600">Lingering pain after eating hot or cold foods.</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+              <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 flex-shrink-0">🌑</div>
               <div>
                 <strong class="text-gray-800">Tooth Discoloration:</strong>
-                <p class="text-gray-600">Darkening of the affected tooth</p>
+                <p class="text-gray-600">Darkening of the tooth due to nerve damage.</p>
               </div>
             </li>
             <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
+              <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 flex-shrink-0">🔴</div>
               <div>
                 <strong class="text-gray-800">Swollen Gums:</strong>
-                <p class="text-gray-600">Tenderness and swelling in nearby gums</p>
+                <p class="text-gray-600">Tenderness or a pimple-like bump on the gums.</p>
               </div>
             </li>
           </ul>
@@ -87,134 +128,34 @@ const breadcrumbItems = [
 
       <!-- The Procedure -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Root Canal Procedure</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">What to Expect During Your Visit</h2>
+
         <div class="space-y-8">
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 1: Examination and X-rays</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Diagnosis & Imaging</h3>
             <p class="text-gray-600">
-              We begin with a thorough examination and X-rays to assess the extent of damage 
-              and plan the treatment.
+              We use advanced digital X-rays to pinpoint the infection and plan your treatment precisely.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 2: Local Anesthesia</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Numbing & Comfort</h3>
             <p class="text-gray-600">
-              The area is numbed with local anesthesia to ensure you're comfortable throughout 
-              the procedure.
+              We apply local anesthesia to numb the area completely. You will feel pressure, but not pain.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 3: Removing Infected Pulp</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Cleaning the Root</h3>
             <p class="text-gray-600">
-              We create a small opening and carefully remove the infected pulp, cleaning and 
-              shaping the root canals.
+              We create a tiny opening to remove the infected pulp, clean the canals, and disinfect the area.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 4: Filling and Sealing</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Sealing & Restoration</h3>
             <p class="text-gray-600">
-              The cleaned canals are filled with a rubber-like material and sealed to prevent 
-              future infection.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 5: Crown Placement</h3>
-            <p class="text-gray-600">
-              In most cases, a crown is placed to protect the treated tooth and restore its 
-              function and appearance.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Benefits -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Root Canal Treatment</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Immediate Benefits</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Relief from tooth pain</li>
-              <li>Save your natural tooth</li>
-              <li>Stop infection spread</li>
-              <li>Restore normal bite force</li>
-              <li>Prevent extraction</li>
-            </ul>
-          </div>
-
-          <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Long-term Benefits</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Maintain natural smile</li>
-              <li>Protect surrounding teeth</li>
-              <li>Prevent bone loss</li>
-              <li>Cost-effective vs extraction</li>
-              <li>Efficient chewing</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Recovery -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Recovery and Aftercare</h2>
-        
-        <div class="bg-gray-50 p-6 rounded-lg">
-          <div class="space-y-6">
-            <div>
-              <h3 class="text-xl font-bold text-gray-800 mb-3">Immediate Aftercare</h3>
-              <ul class="list-disc list-inside text-gray-600 space-y-2">
-                <li>Take prescribed medications as directed</li>
-                <li>Avoid chewing on treated tooth until crown is placed</li>
-                <li>Continue gentle brushing and flossing</li>
-                <li>Use cold compresses if needed</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 class="text-xl font-bold text-gray-800 mb-3">Long-term Care</h3>
-              <ul class="list-disc list-inside text-gray-600 space-y-2">
-                <li>Maintain good oral hygiene</li>
-                <li>Regular dental checkups</li>
-                <li>Protect crown from damage</li>
-                <li>Report any issues promptly</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- FAQs -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
-        
-        <div class="space-y-4">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Is a root canal painful?</h3>
-            <p class="text-gray-600">
-              Modern root canal procedures are virtually painless thanks to local anesthesia and 
-              advanced techniques. Most patients report that it's no more uncomfortable than getting a filling.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">How long does recovery take?</h3>
-            <p class="text-gray-600">
-              Most patients return to normal activities the next day. Any mild discomfort typically 
-              subsides within a few days.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">How long does the procedure take?</h3>
-            <p class="text-gray-600">
-              A root canal typically takes 60-90 minutes, though complex cases may require multiple visits.
+              The tooth is filled with a biocompatible material. Finally, we place a crown to restore the tooth's strength and appearance.
             </p>
           </div>
         </div>
@@ -223,10 +164,9 @@ const breadcrumbItems = [
       <!-- Call to Action -->
       <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
         <div class="bg-primary-50 p-8 rounded-lg">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Don't Wait Until It's Too Late</h2>
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Save Your Smile Today</h2>
           <p class="text-gray-600 mb-6">
-            Early treatment can save your tooth and prevent more serious complications. Contact us today 
-            to schedule an evaluation.
+            Don't let tooth pain worsen. Contact NextGen Dental in Austin immediately to schedule an evaluation.
           </p>
           <div class="flex flex-wrap justify-center gap-4">
             <Button

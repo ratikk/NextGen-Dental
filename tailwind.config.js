@@ -4,25 +4,27 @@ export default {
   theme: {
     extend: {
       colors: {
+        // ✅ NEXTGEN ORANGE THEME
         primary: {
-          50: '#fff7ed',
-          100: '#ffedd5',
-          200: '#fed7aa',
-          300: '#fdba74',
-          400: '#fb923c',
-          500: '#FF7A00', // Primary orange color
-          600: '#ea580c',
-          700: '#c2410c',
-          800: '#9a3412',
-          900: '#7c2d12',
+          50: '#fef3e9',
+          100: '#fce8d4',
+          200: '#f9d1a9',
+          300: '#f5b97e',
+          400: '#f2a253',
+          500: '#f08929', // Main Brand Color (Orange)
+          600: '#d87a24',
+          700: '#b4661e',
+          800: '#8f5118',
+          900: '#734113',
         },
+        // Complementary Teal
         secondary: {
           50: '#f0fdfa',
           100: '#ccfbf1',
           200: '#99f6e4',
           300: '#5eead4',
           400: '#2dd4bf',
-          500: '#00B4A6', // Complementary teal color
+          500: '#00B4A6', 
           600: '#0d9488',
           700: '#0f766e',
           800: '#115e59',
@@ -114,6 +116,9 @@ export default {
     },
   },
   plugins: [
-    require('@tailwindcss/aspect-ratio')
+    require('@tailwindcss/aspect-ratio'),
+    // Essential for Blog & Contact Forms to render correctly
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms'),
   ],
 }

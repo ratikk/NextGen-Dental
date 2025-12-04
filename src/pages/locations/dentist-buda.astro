@@ -1,0 +1,104 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Locations', href: '#' },
+  { label: 'Dentist near Buda', href: '/locations/dentist-buda' },
+];
+---
+
+<Layout
+  title="Dentist near Buda, TX & Onion Creek | NextGen Dental"
+  description="Looking for a top-rated dentist near Buda, TX? NextGen Dental is located just minutes north on I-35 in South Austin. comprehensive family & cosmetic dentistry."
+>
+  <Hero
+    title="Dentist Near Buda & Onion Creek"
+    subtitle="5-Star Dental Care just minutes from Buda, TX"
+    images={["/images/hero/dental-1.jpg"]}
+    height="md"
+  />
+
+  <Breadcrumbs items={breadcrumbItems} />
+
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      
+      <!-- Intro Section -->
+      <section class="mb-16 max-w-4xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Convenient Dental Care for Buda Residents</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          If you live in **Buda, Kyle, or Onion Creek**, you deserve a dentist who is easy to reach and provides exceptional care. 
+          <strong>{clinicInfo.name}</strong> is located conveniently in South Austin directly off **Interstate 35**, making us the perfect choice for commuters and local families.
+        </p>
+        <p class="text-lg text-gray-600">
+          Avoid the traffic of downtown Austin! We are just a short 5-10 minute drive north from Main Street Buda.
+        </p>
+      </section>
+
+      <!-- Why Drive a Few Minutes? -->
+      <section class="mb-16" data-aos="fade-up">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h3 class="text-2xl font-bold font-heading text-gray-800 mb-4">Why Choose NextGen Dental?</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">✓</div>
+                <span class="text-gray-700"><strong>State-of-the-Art Facility:</strong> Modern digital imaging and comfortable amenities.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">✓</div>
+                <span class="text-gray-700"><strong>Comprehensive Care:</strong> From checkups to implants and Invisalign, we do it all under one roof.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">✓</div>
+                <span class="text-gray-700"><strong>Insurance Friendly:</strong> We accept most PPO plans including Delta, Cigna, and MetLife.</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center flex-shrink-0">✓</div>
+                <span class="text-gray-700"><strong>Easy Parking:</strong> Huge parking lot right off the frontage road—no downtown garages!</span>
+              </li>
+            </ul>
+            <div class="mt-8">
+              <Button
+                href={clinicInfo.booking.url}
+                text="Book an Appointment"
+                variant="primary"
+              />
+            </div>
+          </div>
+          <!-- Map Embed -->
+          <div class="rounded-xl overflow-hidden shadow-lg h-[400px] border border-gray-200">
+             <iframe 
+                width="100%" 
+                height="100%" 
+                style="border:0;" 
+                loading="lazy" 
+                allowfullscreen 
+                src={`https://maps.google.com/maps?q=${encodeURIComponent(clinicInfo.address.full)}&t=&z=13&ie=UTF8&iwloc=&output=embed`}>
+            </iframe>
+          </div>
+        </div>
+      </section>
+
+      <!-- Driving Directions -->
+      <section class="max-w-3xl mx-auto bg-gray-50 p-8 rounded-xl border border-gray-100" data-aos="fade-up">
+        <h3 class="text-xl font-bold font-heading text-gray-800 mb-4">Driving Directions from Buda, TX</h3>
+        <ol class="list-decimal list-inside space-y-3 text-gray-600">
+          <li>Head <strong>North on I-35</strong>.</li>
+          <li>Take <strong>Exit 225</strong> toward Onion Creek Pkwy.</li>
+          <li>Stay on the Frontage Road.</li>
+          <li><strong>{clinicInfo.name}</strong> will be on your right (10001 S I-35 Frontage Rd), located in the shopping plaza.</li>
+        </ol>
+        <p class="mt-6 text-sm text-gray-500 italic">
+          *We are located near the Onion Creek neighborhood, providing easy access for patients in 78610, 78747, and 78744.
+        </p>
+      </section>
+
+    </div>
+  </div>
+</Layout>

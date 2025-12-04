@@ -1,235 +1,168 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Button from '../components/Button.astro';
+import { clinicInfo } from '../utils/clinicInfo';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
   { label: 'Patient Information', href: '/patient-information' },
 ];
 
-const paymentMethods = [
-  { name: 'Visa', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M15.446 10.648l-1.103 5.161h-1.764l1.104-5.161h1.763zm7.508-.754l-1.473 3.776-.174-.87c-.302-.968-.786-1.87-1.378-2.906h-1.813l2.596 6.015h1.937l2.763-6.015h-1.458zm-9.874.754l-1.103 5.161h-1.764l1.104-5.161h1.763zm-3.896 3.483c.007.557-.344.87-.917.87h-1.509l.528-2.473h1.664c.538 0 .861.313.861.87 0 .278-.111.557-.278.733h-.349zm.146-2.334c0 .557-.337.87-.875.87h-1.509l.486-2.264h1.509c.538 0 .896.313.896.87 0 .244-.111.488-.278.663l-.229-.139zm1.509-2.195h-3.93l-1.509 7.077h3.93c1.159 0 1.972-.383 2.371-1.148.399-.731.434-1.496.156-2.229.278-.557.451-1.148.451-1.74 0-1.009-.816-1.96-1.469-1.96z"/></svg>' },
-  { name: 'Mastercard', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M11.454 7.72h9.982v8.56h-9.982z"/><path d="M12.454 12c0-2.37-1.119-4.28-2.492-4.28-1.373 0-2.492 1.91-2.492 4.28s1.119 4.28 2.492 4.28c1.373 0 2.492-1.91 2.492-4.28zm11.492 0c0-2.37-1.119-4.28-2.492-4.28-1.373 0-2.492 1.91-2.492 4.28s1.119 4.28 2.492 4.28c1.373 0 2.492-1.91 2.492-4.28zm-5.746 0c0 2.37-1.119 4.28-2.492 4.28-1.373 0-2.492-1.91-2.492-4.28s1.119-4.28 2.492-4.28c1.373 0 2.492 1.91 2.492 4.28z"/></svg>' },
-  { name: 'American Express', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M2.614 14.076h1.951l.413-.938h.938l.413.938h3.827v-.713l.341.713h1.975l.341-.725v.725h7.912l.975-1.027.91 1.027h2.039l-3.001-3.264 3.001-3.264h-1.989l-.947 1.039-.873-1.039h-8.001v.713l-.314-.713h-1.951l-.314.725v-.725h-2.926l-.524 1.189-.536-1.189h-2.013v.713l-.289-.713h-1.814l-1.038 2.365-1.101-2.365h-1.926l1.364 2.977-1.364 2.977h1.926l1.101-2.365 1.038 2.365z"/></svg>' },
-  { name: 'Discover', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2zm0 2a8 8 0 100 16 8 8 0 000-16zm3.5 4.5a4.5 4.5 0 110 9 4.5 4.5 0 010-9z"/></svg>' },
-  { name: 'Cherry', icon: '<svg xmlns="http://www.w3.org/2000/svg" class="h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>' }
-];
-
-const insuranceProviders = [
-  "Delta Dental",
-  "Delta Dental Premier",
-  "MetLife",
-  "Blue Cross Blue Shield",
-  "Aetna",
-  "Guardian",
-  "Careington",
-  "Dental Health Alliance",
-  "United Healthcare",
-  "United Concordia",
-  "Humana",
-  "Cigna"
+const faqs = [
+  {
+    question: "Do you accept new patients?",
+    answer: "Yes! We are currently welcoming new patients of all ages to our South Austin office. Whether you need a routine checkup or restorative work, we are here to help."
+  },
+  {
+    question: "Do you take my insurance?",
+    answer: "We accept most major PPO dental insurance plans, including Delta, Cigna, MetLife, and Aetna. We also offer a complimentary benefits check before your appointment."
+  },
+  {
+    question: "What if I have a dental emergency?",
+    answer: "We set aside time daily for emergency appointments. If you are in pain, please call us immediately at " + clinicInfo.displayPhone + "."
+  },
+  {
+    question: "How long will my first visit take?",
+    answer: "Please allow approximately 60 to 90 minutes for your initial visit. This gives us ample time for a comprehensive exam, x-rays, and a thorough cleaning."
+  }
 ];
 ---
 
-<Layout 
-  title="Patient Information" 
-  description="Find important information for new and existing patients at Nextgen Dental in Austin, TX. Learn about appointments, insurance, and payment options."
+<Layout
+  title="New Patient Information | NextGen Dental Austin, TX (78747)"
+  description="Everything you need for your first visit to NextGen Dental in South Austin. New patient forms, what to expect, and insurance information."
 >
-  <Hero
-    title="Patient Information"
-    subtitle="The team at Nextgen Dental is committed to providing excellent dental care in a comfortable environment where patients can relax and feel at ease."
-    images={["/images/hero/dental-2.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
-  <!-- Main Content -->
+  <!-- CLEAN HEADER (Matches Financing Page) -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Patient Information</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Welcome to the NextGen Dental family. Here is everything you need to know for your first visit.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Patient Info</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
-      <!-- Contact Information -->
-      <section class="mb-16" data-aos="fade-up">
-        <div class="bg-primary-50 rounded-lg p-8">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Contact Us</h2>
-          <p class="text-lg text-gray-600 mb-6">
-            We are happy to hear from you, answer your questions, and schedule an appointment.
+      
+      <!-- Welcome & What to Expect -->
+      <section class="mb-20 max-w-4xl mx-auto" data-aos="fade-up">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Your First Visit</h2>
+          <p class="text-lg text-gray-600">
+            We want your first experience at <strong>{clinicInfo.name}</strong> to be relaxing and positive. From the moment you walk into our Austin office, our team is dedicated to your comfort.
           </p>
-          
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 class="font-bold text-gray-800 mb-2">Phone</h3>
-              <a 
-                href="tel:+17376008776" 
-                class="text-primary-600 hover:text-primary-700 text-lg font-medium transition-colors duration-200"
-              >
-                (737) 600-8776
-              </a>
-            </div>
-            
-            <div>
-              <h3 class="font-bold text-gray-800 mb-2">Address</h3>
-              <a 
-                href="https://www.google.com/maps/place/Next+Gen+Dental/@30.1566059,-97.7896349,15z/data=!4m5!3m4!1s0x0:0x2c8c00c6c8cc73f7!8m2!3d30.1566059!4d-97.7896349"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-gray-600 hover:text-primary-600 transition-colors duration-200"
-              >
-                10001 S I-35 Frontage Rd Ste 350<br>
-                Austin, TX 78747
-              </a>
-            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-primary-50 p-8 rounded-xl border border-primary-100">
+            <h3 class="text-xl font-bold text-primary-800 mb-4 flex items-center gap-2">
+              <span class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-primary-600 shadow-sm">1</span>
+              Comprehensive Exam
+            </h3>
+            <p class="text-gray-600">
+              Dr. K or Dr. Yanala will perform a complete oral examination. We use digital X-rays and intraoral cameras to check for cavities, gum disease, and other issues that aren't visible to the naked eye.
+            </p>
+          </div>
+
+          <div class="bg-primary-50 p-8 rounded-xl border border-primary-100">
+            <h3 class="text-xl font-bold text-primary-800 mb-4 flex items-center gap-2">
+              <span class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-primary-600 shadow-sm">2</span>
+              Professional Cleaning
+            </h3>
+            <p class="text-gray-600">
+              One of our gentle hygienists will clean your teeth, removing plaque and tartar build-up. We finish with a polish to remove surface stains, leaving your smile feeling fresh.
+            </p>
+          </div>
+
+          <div class="bg-primary-50 p-8 rounded-xl border border-primary-100">
+            <h3 class="text-xl font-bold text-primary-800 mb-4 flex items-center gap-2">
+              <span class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-primary-600 shadow-sm">3</span>
+              Personalized Plan
+            </h3>
+            <p class="text-gray-600">
+              If any treatment is needed, we will create a personalized plan for you. We explain everything clearly—no confusing medical jargon—and discuss your options.
+            </p>
+          </div>
+
+          <div class="bg-primary-50 p-8 rounded-xl border border-primary-100">
+            <h3 class="text-xl font-bold text-primary-800 mb-4 flex items-center gap-2">
+              <span class="bg-white w-8 h-8 rounded-full flex items-center justify-center text-primary-600 shadow-sm">4</span>
+              Financial Clarity
+            </h3>
+            <p class="text-gray-600">
+              Before you leave, we will review your insurance benefits and provide a clear estimate of any costs. No surprise bills, ever.
+            </p>
           </div>
         </div>
       </section>
 
-      <!-- Welcome Section -->
-      <section class="mb-16" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Welcome to Nextgen Dental</h2>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div>
-            <div class="space-y-8">
-              <div>
-                <h3 class="text-xl font-bold text-gray-800 mb-3">Making an Appointment</h3>
-                <p class="text-gray-600">
-                  It's easy to make an appointment for your initial examination and dental treatments. 
-                  Simply call (737) 600-8776 to speak with our friendly team. We request 48-hours notice 
-                  for appointment cancellations to avoid a cancellation fee.
-                </p>
-              </div>
-              
-              <div>
-                <h3 class="text-xl font-bold text-gray-800 mb-3">What to Expect</h3>
-                <p class="text-gray-600">
-                  Upon arriving, you'll be welcomed by our friendly staff in our comfortable waiting area. 
-                  We'll collect your new patient paperwork and insurance information. Your privacy is important 
-                  to us, and you can be confident that all information shared with our team will be kept confidential.
-                </p>
-              </div>
-            </div>
-          </div>
-          
-          <div class="space-y-8">
-            <div>
-              <h3 class="text-xl font-bold text-gray-800 mb-3">Initial Examination</h3>
-              <p class="text-gray-600">
-                Your first visit typically includes a comprehensive exam, professional cleaning by our hygienist, 
-                and a thorough examination by Dr. Yanala. This appointment usually takes about an hour, allowing 
-                us to get to know you and understand your dental needs.
-              </p>
-            </div>
-            
-            <div>
-              <h3 class="text-xl font-bold text-gray-800 mb-3">Pain Concerns</h3>
-              <p class="text-gray-600">
-                We understand that dental anxiety is common. Dr. Yanala will work with you to create a 
-                pain management plan tailored to your needs and comfort level. Our goal is to make your 
-                dental experience as comfortable as possible.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Payment & Insurance -->
-      <section class="mb-16" data-aos="fade-up">
-        <div class="bg-gray-50 rounded-lg p-8">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Payment & Insurance Information</h2>
-          
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            <div>
-              <h3 class="text-xl font-bold text-gray-800 mb-4">Payment Methods</h3>
-              <p class="text-gray-600 mb-6">
-                We accept various payment methods to make dental care accessible to all our patients:
-              </p>
-              
-              <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
-                {paymentMethods.map(method => (
-                  <div class="flex items-center gap-2 text-gray-600">
-                    <span set:html={method.icon} />
-                    <span>{method.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            <div>
-              <h3 class="text-xl font-bold text-gray-800 mb-4">Insurance</h3>
-              <p class="text-gray-600 mb-4">
-                We work with most major dental insurance providers and will help you maximize your benefits. 
-                Our team will assist you in understanding your coverage and filing claims.
-              </p>
-              
-              <div class="grid grid-cols-2 gap-4">
-                {insuranceProviders.map(provider => (
-                  <div class="text-gray-600">{provider}</div>
-                ))}
-              </div>
-              
-              <p class="text-gray-600 mt-4">
-                We also accept PPO plans and Medicare. Don't have insurance? Ask about our in-house membership 
-                plan and financing options through Cherry.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Financial Policy -->
-      <section class="mb-16" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Financial Policy</h2>
-        <p class="text-gray-600 mb-6">
-          At Nextgen Dental, we believe everyone deserves access to quality dental care. We offer:
+      <!-- Patient Forms Section -->
+      <section class="mb-20 bg-gray-900 text-white rounded-2xl p-10 md:p-16 text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading mb-6">Patient Forms</h2>
+        <p class="text-gray-300 mb-8 max-w-2xl mx-auto">
+          Save time on your first visit by completing your new patient paperwork online. It's secure, easy, and lets us verify your insurance before you arrive.
         </p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-3">Flexible Payment Plans</h3>
-            <p class="text-gray-600">
-              We offer various payment options to help make your dental care more affordable.
-            </p>
-          </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-3">Insurance Coordination</h3>
-            <p class="text-gray-600">
-              Our team will help you understand and maximize your insurance benefits.
-            </p>
-          </div>
-          
-          <div class="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-            <h3 class="font-bold text-gray-800 mb-3">Transparent Pricing</h3>
-            <p class="text-gray-600">
-              We provide clear cost estimates before beginning any treatment.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- CTA Section -->
-      <section class="text-center" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Ready to Schedule Your Visit?</h2>
-        <p class="text-lg text-gray-600 mb-8">
-          Contact us today to schedule your appointment or ask any questions about our services.
-        </p>
-        
         <div class="flex flex-wrap justify-center gap-4">
           <Button
-            href="/book-appointment"
-            text="Book Appointment"
+            href={clinicInfo.booking.url}
+            text="Complete Forms Online"
             variant="primary"
             size="lg"
-          />
-          <Button
-            href="tel:+(512) 649-4419"
-            text="Call Us"
-            variant="outline"
-            size="lg"
+            class="bg-white text-gray-900 hover:bg-gray-100 border-white"
+            target="_blank"
+            rel="noopener noreferrer"
           />
         </div>
       </section>
+
+      <!-- FAQ Section -->
+      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">Frequently Asked Questions</h2>
+        
+        <div class="space-y-4">
+          {faqs.map(faq => (
+            <details class="group bg-white border border-gray-200 rounded-lg p-4 cursor-pointer hover:border-primary-300 transition-colors">
+              <summary class="font-bold text-gray-800 flex justify-between items-center list-none">
+                {faq.question}
+                <span class="text-primary-600 transform group-open:rotate-180 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </span>
+              </summary>
+              <p class="mt-3 text-gray-600 leading-relaxed border-t border-gray-100 pt-3">
+                {faq.answer}
+              </p>
+            </details>
+          ))}
+        </div>
+        
+        <div class="text-center mt-8">
+          <p class="text-gray-600 mb-4">Have a question not listed here?</p>
+          <a href="/contact" class="text-primary-600 font-bold hover:underline">Contact Us</a>
+        </div>
+      </section>
+
     </div>
   </div>
 </Layout>

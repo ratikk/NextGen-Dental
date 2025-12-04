@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
 import { clinicInfo } from '../../utils/clinicInfo';
@@ -10,60 +9,111 @@ const breadcrumbItems = [
   { label: 'Services', href: '/services' },
   { label: 'Dental Implants', href: '/services/dental-implants' },
 ];
+
+// --- SEO: SURGICAL PROCEDURE SCHEMA ---
+const implantSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  "name": "Dental Implants",
+  "procedureType": "SurgicalProcedure",
+  "bodyLocation": "Mouth",
+  "description": "Permanent replacement of missing teeth using titanium posts and porcelain crowns.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/dental-implants",
+    "description": "Includes implant post, abutment, and crown. Financing available."
+  }
+};
 ---
 
-<Layout 
-  title="Dental Implants" 
-  description="Restore your smile with permanent dental implants at NextGen Dental in Austin, TX. Natural-looking tooth replacement that lasts a lifetime."
+<Layout
+  title="Dental Implants in Austin, TX (78747) | NextGen Dental"
+  description="Restore your smile with permanent dental implants at NextGen Dental in South Austin. We offer single tooth replacement, bridges, and implant dentures near Buda."
+  serviceSchema={implantSchema}
 >
-  <Hero
-    title="Dental Implants"
-    subtitle="Permanent, natural-looking tooth replacement solutions"
-    images={["/images/hero/dental-1.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Dental Implants</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Permanent, natural-looking tooth replacement solutions in Austin.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Implants</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
       <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">What Are Dental Implants?</h2>
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Restore Your Smile in South Austin</h2>
         <p class="text-lg text-gray-600 mb-6">
-          Dental implants are titanium posts surgically placed into your jawbone to replace missing tooth 
-          roots. They provide a strong foundation for fixed or removable replacement teeth designed to 
-          match your natural teeth. Implants are the closest thing to natural teeth and can last a lifetime 
-          with proper care.
+          Missing teeth can affect not just your smile, but your ability to eat, speak, and live with confidence.
+          At <strong>{clinicInfo.name}</strong>, located conveniently off <strong>Interstate 35</strong> in Austin (78747), we specialize in restoring smiles with state-of-the-art dental implants.
+        </p>
+        <p class="text-lg text-gray-600 mb-6">
+          Dental implants are the gold standard for tooth replacement. Unlike dentures that slip or bridges that require grinding down healthy teeth, implants provide a permanent, stable foundation that looks and feels exactly like your natural teeth.
         </p>
       </section>
 
       <!-- Benefits -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Dental Implants</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Why Choose Implants?</h2>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-primary-50 p-6 rounded-lg">
             <h3 class="text-xl font-bold text-gray-800 mb-3">Functional Benefits</h3>
             <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Restore natural biting and chewing ability</li>
-              <li>Prevent bone loss and maintain facial structure</li>
-              <li>No slipping or movement while eating</li>
-              <li>Improve speech clarity</li>
-              <li>Support adjacent natural teeth</li>
-              <li>Can last a lifetime with proper care</li>
+              <li>Restore natural biting force (eat steak, apples!)</li>
+              <li>Prevent bone loss & facial sagging</li>
+              <li>No slipping or adhesives needed</li>
+              <li>Protect adjacent healthy teeth</li>
+              <li>Speech improvement</li>
             </ul>
           </div>
 
           <div class="bg-primary-50 p-6 rounded-lg">
             <h3 class="text-xl font-bold text-gray-800 mb-3">Aesthetic Benefits</h3>
             <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Look and feel like natural teeth</li>
-              <li>Preserve facial features</li>
-              <li>Prevent premature aging</li>
-              <li>Restore confident smile</li>
-              <li>Custom-matched to your natural teeth</li>
-              <li>No visible metal parts</li>
+              <li>Look identical to natural teeth</li>
+              <li>Preserve your natural face shape</li>
+              <li>Smile with total confidence</li>
+              <li>No visible metal hooks or clasps</li>
+              <li>Custom-shaded to match your smile</li>
             </ul>
           </div>
         </div>
@@ -71,154 +121,83 @@ const breadcrumbItems = [
 
       <!-- The Process -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Implant Process</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Implant Process at NextGen Dental</h2>
+
         <div class="space-y-6">
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Initial Consultation</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Consultation & 3D Scanning</h3>
             <p class="text-gray-600">
-              Comprehensive examination including 3D imaging to evaluate bone structure and plan optimal 
-              implant placement. We'll discuss your options and create a personalized treatment plan.
+              We start with a comprehensive exam at our Austin office using advanced 3D CBCT imaging to evaluate your bone density and plan the precise placement of your implant.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-3">2. Implant Placement</h3>
             <p class="text-gray-600">
-              The titanium implant is surgically placed into your jawbone under local anesthesia. 
-              Most patients report minimal discomfort during and after the procedure.
+              The titanium post is gently placed into the jawbone. This procedure is typically performed under local anesthesia, and most patients report minimal discomfort.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Healing Period</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Healing & Osseointegration</h3>
             <p class="text-gray-600">
-              Over 3-6 months, the implant naturally integrates with your bone through a process called 
-              osseointegration. This creates a strong, stable foundation for your new tooth.
+              Over 3-6 months, the implant fuses with your natural bone. This biological bond provides a rock-solid foundation for your new tooth.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Abutment Placement</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Your New Smile</h3>
             <p class="text-gray-600">
-              Once healing is complete, we attach a small connector (abutment) to the implant that will 
-              hold your new tooth.
+              Once healed, we attach a custom-crafted porcelain crown. You leave our office with a complete, beautiful, and fully functional smile.
             </p>
           </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">5. Crown Placement</h3>
-            <p class="text-gray-600">
-              Your custom-made crown is attached to the abutment, completing your new smile. The crown 
-              is designed to match your natural teeth in color, shape, and size.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Candidacy -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Are You a Candidate?</h2>
-        
-        <div class="bg-gray-50 p-6 rounded-lg">
-          <p class="text-gray-600 mb-4">
-            Good candidates for dental implants typically have:
-          </p>
-          <ul class="list-disc list-inside text-gray-600 space-y-2">
-            <li>Healthy gums</li>
-            <li>Adequate bone density</li>
-            <li>Good overall oral health</li>
-            <li>Commitment to oral hygiene</li>
-            <li>No uncontrolled medical conditions</li>
-          </ul>
-          <p class="text-gray-600 mt-4">
-            Even if you don't meet all criteria, solutions like bone grafting may make implants possible. 
-            Schedule a consultation to discuss your specific situation.
-          </p>
         </div>
       </section>
 
       <!-- Types of Implants -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Types of Implant Solutions</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Implant Solutions We Offer</h2>
+
         <div class="space-y-6">
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-3">Single Tooth Replacement</h3>
             <p class="text-gray-600">
-              One implant and crown to replace a single missing tooth without affecting adjacent teeth.
+              Perfect for replacing one missing tooth without grinding down neighboring teeth for a bridge.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Multiple Tooth Replacement</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Implant-Supported Bridges</h3>
             <p class="text-gray-600">
-              Implant-supported bridges to replace several adjacent missing teeth with fewer implants.
+              Ideal for replacing 3 or more teeth in a row using just two implants for support.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Full Arch Replacement</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Implant Dentures (All-on-4)</h3>
             <p class="text-gray-600">
-              All-on-4 or All-on-6 implants to support a full arch of replacement teeth with just 4-6 implants.
+              Secure loose dentures permanently. No more messy adhesives or slipping while you talk.
             </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Care and Maintenance -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Care and Maintenance</h2>
-        
-        <div class="space-y-6">
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Daily Care</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Brush twice daily with a soft-bristled toothbrush</li>
-              <li>Floss daily around the implant</li>
-              <li>Use recommended oral hygiene products</li>
-              <li>Follow post-procedure care instructions</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Long-term Maintenance</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Regular dental checkups</li>
-              <li>Professional cleanings every 6 months</li>
-              <li>X-rays to monitor implant health</li>
-              <li>Prompt attention to any concerns</li>
-            </ul>
           </div>
         </div>
       </section>
 
       <!-- FAQs -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Common Questions</h2>
+
         <div class="space-y-4">
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-2">How long do implants last?</h3>
             <p class="text-gray-600">
-              With proper care and maintenance, dental implants can last a lifetime. The crown may need 
-              replacement after 10-15 years due to normal wear.
+              With proper care (brushing, flossing, and regular checkups), the titanium implant screw can last a lifetime. The porcelain crown may need replacement after 15-20 years due to normal wear.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Is the procedure painful?</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Does insurance cover implants?</h3>
             <p class="text-gray-600">
-              The procedure is performed under local anesthesia, ensuring your comfort. Most patients 
-              report minimal discomfort and can return to work the next day.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">How much do implants cost?</h3>
-            <p class="text-gray-600">
-              The cost varies depending on your specific needs. We offer financing options and work 
-              with most insurance plans. Schedule a consultation for a detailed cost estimate.
+              Many insurance plans now cover a portion of the implant procedure. We also accept CareCredit and offer flexible financing options to make your smile restoration affordable.
             </p>
           </div>
         </div>
@@ -229,8 +208,7 @@ const breadcrumbItems = [
         <div class="bg-primary-50 p-8 rounded-lg">
           <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready to Restore Your Smile?</h2>
           <p class="text-gray-600 mb-6">
-            Schedule a consultation to learn if dental implants are right for you. Our team will create 
-            a personalized treatment plan to restore your confident smile.
+            Schedule a consultation at our Austin office to find out if dental implants are right for you.
           </p>
           <div class="flex flex-wrap justify-center gap-4">
             <Button

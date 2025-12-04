@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lilacdentalaustintx.com/sitemap.xml
+Sitemap: https://nextgendentalaustintx.com/sitemap-index.xml

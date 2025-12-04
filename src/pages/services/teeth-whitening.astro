@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
 import { clinicInfo } from '../../utils/clinicInfo';
@@ -10,76 +9,113 @@ const breadcrumbItems = [
   { label: 'Services', href: '/services' },
   { label: 'Teeth Whitening', href: '/services/teeth-whitening' },
 ];
+
+// --- SEO: COSMETIC PROCEDURE SCHEMA ---
+const whiteningSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  "name": "Professional Teeth Whitening",
+  "procedureType": "CosmeticProcedure",
+  "bodyLocation": "Teeth",
+  "description": "Professional in-office and take-home teeth whitening treatments to remove stains and brighten smiles.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/teeth-whitening"
+  }
+};
 ---
 
-<Layout 
-  title="Professional Teeth Whitening" 
-  description="Get a brighter, whiter smile with professional teeth whitening at NextGen Dental in Austin, TX. Safe, effective treatments for long-lasting results."
+<Layout
+  title="Professional Teeth Whitening in Austin, TX | NextGen Dental"
+  description="Get a brighter, whiter smile with professional teeth whitening at NextGen Dental in South Austin (78747). Safe, effective Zoom! treatments for long-lasting results."
+  serviceSchema={whiteningSchema}
 >
-  <Hero
-    title="Professional Teeth Whitening"
-    subtitle="Transform your smile with safe and effective whitening treatments"
-    images={["/images/hero/dental-1.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Professional Teeth Whitening</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Transform your smile with safe and effective whitening treatments.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Whitening</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
       <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Professional Teeth Whitening</h2>
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Brighten Your Smile in South Austin</h2>
         <p class="text-lg text-gray-600 mb-6">
-          Professional teeth whitening offers a safe, effective way to enhance your smile by removing 
-          stains and discoloration. Our advanced whitening treatments provide superior results compared 
-          to over-the-counter products, with treatments customized to your specific needs and sensitivity level.
+          A bright, radiant smile can boost your confidence and make a lasting first impression. At <strong>{clinicInfo.name}</strong>, serving residents of <strong>South Austin</strong>, Buda, and the 78747 area, we offer professional teeth whitening solutions that are far superior to over-the-counter strips.
+        </p>
+        <p class="text-lg text-gray-600 mb-6">
+          Whether you have staining from coffee, wine, or just natural aging, our professional-grade whitening treatments are customized to your sensitivity level to ensure a comfortable experience and dazzling results.
         </p>
       </section>
 
       <!-- Treatment Options -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Treatment Options</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Our Whitening Options</h2>
+
         <div class="space-y-6">
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">In-Office Whitening</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">In-Office Power Whitening</h3>
             <p class="text-gray-600 mb-4">
-              Our most powerful option for immediate results:
+              Perfect for patients in Austin who want immediate results for a wedding, interview, or special event.
             </p>
             <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Professional-strength whitening gel</li>
-              <li>Results in just one visit</li>
-              <li>Carefully monitored process</li>
-              <li>Customized treatment intensity</li>
-              <li>Immediate dramatic results</li>
+              <li>Professional-strength gel applied by our experts</li>
+              <li>Dramatic results in just one visit (about an hour)</li>
+              <li>Gum protection measures to prevent irritation</li>
+              <li>Walk out with a noticeably whiter smile</li>
             </ul>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Take-Home Whitening Kits</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Custom Take-Home Kits</h3>
             <p class="text-gray-600 mb-4">
-              Professional-grade whitening at your convenience:
+              Whiten comfortably at home with trays custom-molded to your unique bite.
             </p>
             <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Custom-fitted whitening trays</li>
-              <li>Professional-strength gel</li>
-              <li>Flexible treatment schedule</li>
-              <li>Gradual, natural-looking results</li>
-              <li>Perfect for maintenance</li>
-            </ul>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Combination Treatment</h3>
-            <p class="text-gray-600 mb-4">
-              The best of both worlds:
-            </p>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Initial in-office treatment</li>
-              <li>Take-home kit for maintenance</li>
-              <li>Maximum long-term results</li>
-              <li>Optimal value for investment</li>
+              <li>Trays fitted precisely at our Austin office</li>
+              <li>Professional-strength gel (stronger than store brands)</li>
+              <li>Whiten at your own pace (30 minutes a day)</li>
+              <li>Excellent for maintenance and touch-ups</li>
             </ul>
           </div>
         </div>
@@ -87,28 +123,26 @@ const breadcrumbItems = [
 
       <!-- Benefits -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Professional Whitening</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Why Choose Professional Whitening?</h2>
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Professional Advantage</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Safety & Comfort</h3>
             <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Stronger whitening agents</li>
-              <li>Faster results</li>
-              <li>Even, consistent whitening</li>
-              <li>Professionally monitored</li>
-              <li>Reduced sensitivity</li>
+              <li>Supervised by Dr. K & Dr. Yanala</li>
+              <li>Custom trays prevent gel leakage on gums</li>
+              <li>Formulas designed to minimize sensitivity</li>
+              <li>Safe for enamel</li>
             </ul>
           </div>
 
           <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Personal Benefits</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">Superior Results</h3>
             <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Boosted confidence</li>
-              <li>Younger appearance</li>
-              <li>Enhanced smile aesthetics</li>
-              <li>Long-lasting results</li>
-              <li>Safe and reliable</li>
+              <li>Remove deep, stubborn stains</li>
+              <li>Even, consistent whitening</li>
+              <li>Longer lasting than drug-store kits</li>
+              <li>Customized shade goals</li>
             </ul>
           </div>
         </div>
@@ -117,116 +151,47 @@ const breadcrumbItems = [
       <!-- The Process -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
         <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Whitening Process</h2>
-        
+
         <div class="space-y-6">
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Initial Consultation</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Shade Assessment</h3>
             <p class="text-gray-600">
-              Evaluate your teeth's current shade and discuss your whitening goals. We'll determine 
-              the best treatment option for your needs.
+              We start by evaluating your current tooth shade and discussing your goals. We check for existing restorations (crowns/fillings) as these do not whiten like natural enamel.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Preparation</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Cleaning & Preparation</h3>
             <p class="text-gray-600">
-              Professional cleaning to remove surface stains and ensure optimal whitening results. 
-              Protective measures for gums and sensitive areas.
+              A quick professional cleaning removes surface plaque, ensuring the whitening gel can penetrate the enamel evenly for the best results.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Treatment</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Treatment Application</h3>
             <p class="text-gray-600">
-              Application of professional whitening gel, activated by special lighting for in-office 
-              treatment or custom tray fitting for take-home kits.
+              For in-office visits, we apply a protective barrier to your gums and then apply the high-concentration gel. For home kits, we take impressions to create your custom trays.
             </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Results & Aftercare</h3>
-            <p class="text-gray-600">
-              Immediate results for in-office treatment or gradual improvement with take-home kits. 
-              Detailed aftercare instructions provided.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Candidacy -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Is Teeth Whitening Right for You?</h2>
-        
-        <div class="bg-gray-50 p-6 rounded-lg">
-          <p class="text-gray-600 mb-4">
-            Professional whitening is ideal for patients with:
-          </p>
-          <ul class="list-disc list-inside text-gray-600 space-y-2">
-            <li>Good oral health</li>
-            <li>Natural teeth (not restorations)</li>
-            <li>Surface stains or discoloration</li>
-            <li>Realistic expectations</li>
-            <li>Completed necessary dental work</li>
-          </ul>
-          <p class="text-gray-600 mt-4">
-            Schedule a consultation to determine if professional whitening is right for you.
-          </p>
-        </div>
-      </section>
-
-      <!-- Aftercare -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Aftercare & Maintenance</h2>
-        
-        <div class="space-y-6">
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Immediate Aftercare</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Avoid staining foods/drinks for 48 hours</li>
-              <li>Use sensitivity toothpaste if needed</li>
-              <li>Follow provided care instructions</li>
-              <li>Stay hydrated</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Long-term Maintenance</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Regular dental cleanings</li>
-              <li>Good oral hygiene habits</li>
-              <li>Touch-up treatments as needed</li>
-              <li>Minimize staining substances</li>
-            </ul>
           </div>
         </div>
       </section>
 
       <!-- FAQs -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
-        
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Common Questions</h2>
+
         <div class="space-y-4">
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
             <h3 class="text-xl font-bold text-gray-800 mb-2">How long do results last?</h3>
             <p class="text-gray-600">
-              Results typically last 6 months to 2 years, depending on lifestyle habits and maintenance. 
-              Touch-up treatments can extend results.
+              Results typically last 6 months to 2 years, depending on your lifestyle (coffee, tea, smoking). We recommend keeping your custom trays for inexpensive touch-ups.
             </p>
           </div>
 
           <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Is teeth whitening safe?</h3>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Is it safe for my enamel?</h3>
             <p class="text-gray-600">
-              Yes, professional teeth whitening is safe when performed under dental supervision. 
-              We take precautions to protect your gums and minimize sensitivity.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Will I experience sensitivity?</h3>
-            <p class="text-gray-600">
-              Some patients may experience temporary sensitivity, which typically subsides within 
-              24-48 hours. We can adjust treatment to minimize discomfort.
+              Yes. Professional whitening products use ingredients that are proven safe for tooth enamel when used as directed by a dentist.
             </p>
           </div>
         </div>
@@ -237,13 +202,12 @@ const breadcrumbItems = [
         <div class="bg-primary-50 p-8 rounded-lg">
           <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready for a Brighter Smile?</h2>
           <p class="text-gray-600 mb-6">
-            Schedule a consultation to learn more about our professional whitening options and start 
-            your journey to a brighter, more confident smile.
+            Visit us in South Austin (78747) for a consultation. Let's reveal the bright, confident smile you deserve!
           </p>
           <div class="flex flex-wrap justify-center gap-4">
             <Button
               href={clinicInfo.booking.url}
-              text="Book Consultation"
+              text="Book Whitening"
               variant="primary"
               size="lg"
               target="_blank"

@@ -1,85 +1,77 @@
+// src/utils/blogPosts.ts
+import { type ImageMetadata } from 'astro';
+
+// Import existing images to use as placeholders for now
+import dental1 from '../assets/images/hero/dental-1.jpg';
+import dental2 from '../assets/images/hero/dental-2.jpg';
+import dental3 from '../assets/images/hero/dental-3.jpg';
+import dental4 from '../assets/images/hero/dental-4.jpg';
+
 export interface BlogPost {
   id: string;
   title: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  date: string;
-  image: string;
-  category: string;
-  tags: string[];
   seoTitle?: string;
   seoDescription?: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  author: string;
+  category: string;
+  image?: ImageMetadata | string;
+  tags?: string[];
 }
 
 export const blogPosts: BlogPost[] = [
   {
-    id: 'dental-hygiene-tips',
-    title: '5 Essential Dental Hygiene Tips for a Healthy Smile',
-    excerpt: 'Maintain optimal oral health with these proven dental hygiene practices that you can easily incorporate into your daily routine.',
-    content: `
-      Maintaining good oral hygiene is crucial for a healthy smile and overall well-being. Here are five essential tips to help you maintain optimal dental health:
-
-      1. Proper Brushing Technique
-      Use a soft-bristled toothbrush and fluoride toothpaste. Brush at a 45-degree angle to your gums, using gentle circular motions. Don't forget to brush your tongue!
-
-      2. Regular Flossing
-      Floss at least once daily to remove plaque and food particles between teeth where your toothbrush can't reach.
-
-      3. Healthy Diet
-      Limit sugary and acidic foods. Include calcium-rich foods in your diet to strengthen teeth and bones.
-
-      4. Stay Hydrated
-      Drink plenty of water throughout the day to help wash away bacteria and food particles.
-
-      5. Regular Dental Checkups
-      Visit your dentist every six months for professional cleaning and examination.
-    `,
-    author: 'Dr. Suman Kondragunta',
-    date: '2024-02-15',
-    image: '/images/hero/dental-1.jpg',
-    category: 'Oral Health',
-    tags: ['dental hygiene', 'oral health', 'brushing techniques', 'flossing', 'dental care'],
-    seoTitle: 'Dental Hygiene Tips: 5 Essential Practices for a Healthy Smile | NextGen Dental Austin',
-    seoDescription: 'Learn 5 proven dental hygiene tips from Austin\'s top dentists. Discover proper brushing techniques, flossing methods, and diet recommendations for optimal oral health.'
+    id: 'why-get-veneers',
+    title: 'Why Do People Get Veneers?',
+    seoTitle: 'Dental Veneers Austin | Lilac Dental Cosmetic Dentistry',
+    seoDescription: 'Are dental veneers right for you? Learn how they fix chips, gaps, and stains for a perfect smile.',
+    excerpt: 'The dental veneers market is booming. From fixing chips to closing gaps, see how this cosmetic treatment transforms smiles.',
+    date: '2025-12-01',
+    author: 'Dr. Kiranmayee Yanala',
+    category: 'Dental Veneers', // <--- NEW CATEGORY
+    image: dental1, // Placeholder
+    tags: ['Veneers', 'Cosmetic', 'Smile Makeover'],
+    content: `<p>Dental veneers are thin, custom-made shells crafted of tooth-colored materials designed to cover the front surface of teeth...</p>`
   },
   {
-    id: 'choosing-toothbrush',
-    title: 'How to Choose the Right Toothbrush: A Complete Guide',
-    excerpt: 'Learn how to select the perfect toothbrush for your specific dental needs with our comprehensive guide.',
-    content: `
-      Choosing the right toothbrush is essential for maintaining good oral health. Here's what to consider:
-
-      Bristle Type:
-      - Soft bristles are recommended for most people
-      - Medium and hard bristles can damage gums and enamel
-      - Look for rounded bristle tips for gentle cleaning
-
-      Head Size:
-      - Should easily reach all areas of your mouth
-      - Smaller heads offer better control and access
-      - Consider your mouth size when choosing
-
-      Handle Design:
-      - Should feel comfortable in your hand
-      - Non-slip grip for better control
-      - Flexible neck can help reduce pressure
-
-      Manual vs. Electric:
-      - Both can be effective when used properly
-      - Electric brushes can help with limited mobility
-      - Consider your budget and preferences
-    `,
+    id: 'invisalign-vs-braces',
+    title: 'Invisalign vs. Braces: What is Right for You?',
+    seoTitle: 'Invisalign vs Braces Austin | Lilac Dental',
+    seoDescription: 'Comparing clear aligners vs traditional metal braces in North Austin.',
+    excerpt: 'Choosing between clear aligners and traditional metal braces is a big decision. We break down the cost, comfort, and speed.',
+    date: '2025-11-27',
+    author: 'Dr. Suman Kondragunta',
+    category: 'Invisalign',
+    image: dental2, // Placeholder
+    tags: ['Invisalign', 'Orthodontics'],
+    content: `<p>Choosing between <strong>Invisalign</strong> and traditional braces is a significant decision...</p>`
+  },
+  {
+    id: 'tongue-pain-causes',
+    title: 'Why Does The Side Of My Tongue Hurt?',
+    seoTitle: 'Tongue Pain Causes & Treatments | Austin Dentist',
+    seoDescription: 'Experiencing tongue pain? Learn common causes from trauma to vitamin deficiency.',
+    excerpt: 'It may not seem like a big deal at first, but tongue pain can indicate underlying issues. Here is what to look out for.',
+    date: '2025-11-20',
+    author: 'Dr. Suman Kondragunta',
+    category: 'Preventive',
+    image: dental3, // Placeholder
+    tags: ['Oral Health', 'Diagnosis'],
+    content: `<p>Tongue pain is surprisingly common and often ignored...</p>`
+  },
+  {
+    id: 'replace-toothbrush',
+    title: 'How Often Should I Change My Toothbrush?',
+    seoTitle: 'When to Change Toothbrush | Dental Hygiene Tips',
+    seoDescription: 'Learn why changing your toothbrush every 3 months is crucial for oral health.',
+    excerpt: 'How often should I change my toothbrush? According to the ADA, you might be keeping yours for too long.',
+    date: '2025-11-10',
     author: 'Dr. Kiranmayee Yanala',
-    date: '2024-02-10',
-    image: '/images/hero/dental-2.jpg',
-    category: 'Dental Products',
-    tags: ['toothbrush', 'dental products', 'oral care', 'dental hygiene'],
-    seoTitle: 'How to Choose the Best Toothbrush: Expert Guide | NextGen Dental Austin',
-    seoDescription: 'Expert guide on choosing the right toothbrush for your needs. Compare manual vs electric, bristle types, and features to maintain optimal oral health.'
+    category: 'Preventive',
+    image: dental4, // Placeholder
+    tags: ['Hygiene', 'Tips'],
+    content: `<p>A worn-out toothbrush cannot clean your teeth effectively...</p>`
   }
 ];
-
-export function getBlogPost(id: string): BlogPost | undefined {
-  return blogPosts.find(post => post.id === id);
-}

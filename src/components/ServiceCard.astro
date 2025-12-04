@@ -14,14 +14,14 @@ const { title, description, icon, image, link, featured = false } = Astro.props;
 <div class={`group bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg ${featured ? 'border-2 border-primary-500' : 'border border-gray-100'}`} data-aos="fade-up">
   {image && (
     <div class="h-48 overflow-hidden">
-      <img 
-        src={image} 
-        alt={title} 
+      <img
+        src={image}
+        alt={title}
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
       />
     </div>
   )}
-  
+
   <div class="p-6">
     <div class="flex items-start gap-4">
       {icon && (
@@ -29,17 +29,22 @@ const { title, description, icon, image, link, featured = false } = Astro.props;
           <span set:html={icon} />
         </div>
       )}
-      
+
       <div>
         <h3 class="text-xl font-bold mb-2 font-heading text-gray-800 group-hover:text-primary-600 transition-colors duration-200">
           {title}
         </h3>
         <p class="text-gray-600 mb-4">{description}</p>
-        <a 
-          href={link} 
+        
+        <!-- SEO FIX: Added hidden text span -->
+        <a
+          href={link}
           class="inline-flex items-center text-primary-600 font-medium hover:text-primary-700 transition-colors duration-200"
         >
           Learn More
+          <!-- The class 'sr-only' hides this text visually but shows it to Google/Screen Readers -->
+          <span class="sr-only">&nbsp;about {title}</span>
+          
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-1 transition-transform duration-300 group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>

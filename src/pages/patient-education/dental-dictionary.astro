@@ -1,284 +1,81 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
-  { label: 'Patient Education', href: '/patient-education' },
-  { label: 'Dental Dictionary', href: '/patient-education/dental-dictionary' },
+  { label: 'Patient Info', href: '/patient-information' },
+  { label: 'Dictionary', href: '/patient-education/dental-dictionary' },
 ];
 
 const terms = [
-  {
-    letter: "A",
-    definitions: [
-      {
-        term: "Abscess",
-        definition: "A localized infection filled with pus that can occur around the root of a tooth or in the gums."
-      },
-      {
-        term: "Amalgam",
-        definition: "A silver-colored filling material made from a mixture of mercury, silver, tin, and copper."
-      },
-      {
-        term: "Anesthesia",
-        definition: "Medication used to prevent pain during dental procedures."
-      }
-    ]
-  },
-  {
-    letter: "B",
-    definitions: [
-      {
-        term: "Bridge",
-        definition: "A fixed prosthetic device that replaces one or more missing teeth by attaching to adjacent teeth."
-      },
-      {
-        term: "Bruxism",
-        definition: "The habit of grinding or clenching teeth, often during sleep."
-      }
-    ]
-  },
-  {
-    letter: "C",
-    definitions: [
-      {
-        term: "Cavity",
-        definition: "A hole in a tooth caused by decay."
-      },
-      {
-        term: "Crown",
-        definition: "A cap that covers a damaged tooth to restore its shape, size, strength, and appearance."
-      },
-      {
-        term: "Composite",
-        definition: "A tooth-colored filling material used for restoring decayed teeth."
-      }
-    ]
-  },
-  {
-    letter: "D",
-    definitions: [
-      {
-        term: "Dentin",
-        definition: "The layer of tooth structure beneath the enamel."
-      },
-      {
-        term: "Dentures",
-        definition: "Removable artificial teeth and gums used to replace missing teeth."
-      }
-    ]
-  },
-  {
-    letter: "E",
-    definitions: [
-      {
-        term: "Enamel",
-        definition: "The hard, protective outer layer of a tooth."
-      },
-      {
-        term: "Extraction",
-        definition: "The removal of a tooth from its socket in the bone."
-      }
-    ]
-  },
-  {
-    letter: "F",
-    definitions: [
-      {
-        term: "Filling",
-        definition: "Material used to restore a decayed portion of a tooth."
-      },
-      {
-        term: "Fluoride",
-        definition: "A mineral that helps prevent tooth decay by strengthening tooth enamel."
-      }
-    ]
-  },
-  {
-    letter: "G",
-    definitions: [
-      {
-        term: "Gingivitis",
-        definition: "Early stage of gum disease characterized by inflammation of the gums."
-      },
-      {
-        term: "Gum Disease",
-        definition: "Infection of the tissues that hold teeth in place; also called periodontal disease."
-      }
-    ]
-  },
-  {
-    letter: "I",
-    definitions: [
-      {
-        term: "Implant",
-        definition: "An artificial tooth root placed into the jaw to hold a replacement tooth."
-      },
-      {
-        term: "Inlay",
-        definition: "A custom-fitted filling made in a laboratory and cemented into a tooth."
-      }
-    ]
-  },
-  {
-    letter: "P",
-    definitions: [
-      {
-        term: "Plaque",
-        definition: "A sticky film of bacteria that forms on teeth and can cause decay."
-      },
-      {
-        term: "Periodontal",
-        definition: "Referring to the gums and other tissues that support the teeth."
-      }
-    ]
-  },
-  {
-    letter: "R",
-    definitions: [
-      {
-        term: "Root Canal",
-        definition: "A procedure to treat infected or damaged tooth pulp by removing it and sealing the space."
-      },
-      {
-        term: "Restoration",
-        definition: "The replacement of a missing or damaged tooth structure."
-      }
-    ]
-  },
-  {
-    letter: "S",
-    definitions: [
-      {
-        term: "Scaling",
-        definition: "The removal of tartar (calculus) and plaque from above and below the gum line."
-      },
-      {
-        term: "Sealant",
-        definition: "A plastic material applied to the chewing surfaces of back teeth to prevent decay."
-      }
-    ]
-  },
-  {
-    letter: "T",
-    definitions: [
-      {
-        term: "Tartar",
-        definition: "Hardened plaque that has been left on teeth for an extended period; also called calculus."
-      },
-      {
-        term: "TMJ",
-        definition: "Temporomandibular joint; the joint where the lower jaw connects to the skull."
-      }
-    ]
-  },
-  {
-    letter: "V",
-    definitions: [
-      {
-        term: "Veneer",
-        definition: "A thin shell of porcelain or composite material bonded to the front of teeth to improve their appearance."
-      }
-    ]
-  },
-  {
-    letter: "W",
-    definitions: [
-      {
-        term: "Whitening",
-        definition: "A cosmetic procedure that lightens teeth and removes stains and discoloration."
-      },
-      {
-        term: "Wisdom Teeth",
-        definition: "The third and final set of molars that usually appear in the late teens or early twenties."
-      }
-    ]
-  }
+  { term: "Abutment", def: "A connector that attaches a dental implant to a crown, bridge, or denture." },
+  { term: "Bruxism", def: "The habit of grinding or clenching teeth, often during sleep." },
+  { term: "Calculus (Tartar)", def: "Hardened plaque that forms on teeth and can only be removed by a dentist." },
+  { term: "Caries", def: "The technical term for tooth decay or cavities." },
+  { term: "Crown", def: "A tooth-shaped 'cap' placed over a damaged tooth to restore its shape, size, and strength." },
+  { term: "Dental Implant", def: "A titanium post surgically placed in the jawbone to replace a missing tooth root." },
+  { term: "Endodontist", def: "A specialist who treats the inside of the tooth (pulp), commonly performing root canals." },
+  { term: "Gingivitis", def: "The earliest stage of gum disease, characterized by red, swollen gums that may bleed easily." },
+  { term: "Halitosis", def: "Chronic bad breath." },
+  { term: "Malocclusion", def: "Misalignment of the teeth or jaws ('bad bite')." },
+  { term: "Periodontal Disease", def: "Advanced gum disease that can lead to bone and tooth loss." },
+  { term: "Plaque", def: "A sticky film of bacteria that forms on teeth and causes cavities and gum disease." },
+  { term: "Prophylaxis", def: "Professional cleaning of the teeth to prevent disease." },
+  { term: "Root Canal", def: "A treatment to save a tooth that is badly decayed or infected by removing the nerve." },
+  { term: "Sealant", def: "A thin plastic coating applied to the chewing surfaces of back teeth to prevent decay." },
+  { term: "Veneer", def: "A thin shell of porcelain bonded to the front of a tooth to improve its appearance." },
+  { term: "Xerostomia", def: "Dry mouth caused by a lack of saliva." }
 ];
 ---
 
-<Layout 
-  title="Dental Dictionary" 
-  description="Learn common dental terms and definitions with our comprehensive dental dictionary at NextGen Dental in Austin, TX."
+<Layout
+  title="Dental Dictionary | Common Dental Terms Explained | NextGen Dental"
+  description="Confused by dental jargon? Use our dental dictionary to understand common terms like abutment, calculus, and periodontal disease."
 >
-  <Hero
-    title="Dental Dictionary"
-    subtitle="Understanding common dental terms and procedures"
-    images={["/images/hero/dental-1.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- Simple Header -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Dental Dictionary</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Understanding your oral health starts with understanding the terminology.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium">Dental Dictionary</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Understanding Dental Terms</h2>
-        <p class="text-lg text-gray-600">
-          Our dental dictionary helps you understand common dental terms and procedures. 
-          Knowledge is key to making informed decisions about your oral health.
-        </p>
-      </section>
-
-      <!-- Dictionary Navigation -->
-      <section class="mb-12 max-w-3xl mx-auto" data-aos="fade-up">
-        <div class="flex flex-wrap gap-2 justify-center">
-          {terms.map(section => (
-            <a 
-              href={`#${section.letter}`}
-              class="w-10 h-10 flex items-center justify-center rounded-full bg-primary-50 text-primary-600 font-bold hover:bg-primary-100 transition-colors duration-200"
-            >
-              {section.letter}
-            </a>
-          ))}
-        </div>
-      </section>
-
-      <!-- Dictionary Terms -->
-      <div class="max-w-3xl mx-auto">
-        {terms.map(section => (
-          <section id={section.letter} class="mb-12 scroll-mt-32" data-aos="fade-up">
-            <h2 class="text-4xl font-bold font-heading text-primary-600 mb-6">{section.letter}</h2>
-            
-            <div class="space-y-6">
-              {section.definitions.map(item => (
-                <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-                  <h3 class="text-xl font-bold text-gray-800 mb-2">{item.term}</h3>
-                  <p class="text-gray-600">{item.definition}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+    <div class="container mx-auto px-4 max-w-4xl">
+      <div class="grid gap-6">
+        {terms.map((item) => (
+          <div class="bg-gray-50 p-6 rounded-lg border border-gray-100 hover:border-primary-200 transition-colors">
+            <h3 class="text-xl font-bold text-primary-700 mb-2">{item.term}</h3>
+            <p class="text-gray-700">{item.def}</p>
+          </div>
         ))}
       </div>
-
-      <!-- Additional Resources -->
-      <section class="max-w-3xl mx-auto mt-16" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Need More Information?</h2>
-          <p class="text-gray-600 mb-6">
-            Our team is here to help explain any dental terms or procedures you don't understand. 
-            We believe in educating our patients to make informed decisions about their oral health.
-          </p>
-          <div class="flex flex-wrap gap-4">
-            <a 
-              href="/contact" 
-              class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
-            >
-              Contact Us
-            </a>
-            <a 
-              href="/patient-education" 
-              class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors duration-200"
-            >
-              More Resources
-            </a>
-          </div>
-        </div>
-      </section>
+      
+      <div class="mt-12 text-center bg-primary-50 p-8 rounded-xl">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Still have questions?</h2>
+        <p class="text-gray-600 mb-6">
+          We are happy to explain any procedure or term in person.
+        </p>
+        <a href="/contact" class="inline-block bg-primary-600 text-white px-6 py-3 rounded-md hover:bg-primary-700 transition-colors">
+          Contact Us
+        </a>
+      </div>
     </div>
   </div>
 </Layout>

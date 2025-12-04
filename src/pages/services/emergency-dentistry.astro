@@ -1,0 +1,215 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  { label: 'Services', href: '/services' },
+  { label: 'Emergency Dentistry', href: '/services/emergency-dentistry' },
+];
+
+// --- SEO: EMERGENCY MEDICAL PROCEDURE SCHEMA ---
+const emergencySchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  "name": "Emergency Dental Care",
+  "procedureType": "SurgicalProcedure", // Broad categorization for Google
+  "bodyLocation": "Mouth",
+  "description": "Same-day emergency dental treatment for severe toothaches, knocked-out teeth, and dental trauma.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/emergency-dentistry",
+    "description": "Same-day appointments available for urgent cases."
+  }
+};
+---
+
+<Layout
+  title="Emergency Dentist Austin, TX (78747) | Same-Day Care | NextGen Dental"
+  description="Need an emergency dentist in South Austin? NextGen Dental offers same-day appointments for severe toothaches, broken teeth, and dental trauma. Call us now!"
+  serviceSchema={emergencySchema}
+>
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Emergency Dental Care</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Fast relief for toothaches, broken teeth, and dental trauma.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Emergency</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+      
+      <!-- URGENT ALERT BANNER (Crucial for conversions!) -->
+      <section class="mb-12 max-w-4xl mx-auto" data-aos="fade-up">
+        <div class="bg-red-50 border-l-4 border-red-500 p-6 rounded-r-lg shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <h2 class="text-2xl font-bold text-red-700 mb-2">In Pain? Don't Wait.</h2>
+            <p class="text-red-800">
+              Dental emergencies can't wait. We prioritize emergency cases at our South Austin office (78747).
+              Call us immediately to schedule a same-day visit.
+            </p>
+          </div>
+          <div class="flex-shrink-0">
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text={`Call ${clinicInfo.displayPhone}`}
+              variant="primary"
+              class="bg-red-600 hover:bg-red-700 border-red-600 text-white"
+            />
+          </div>
+        </div>
+      </section>
+
+      <!-- Introduction -->
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Same-Day Emergency Dentist in South Austin</h2>
+        <p class="text-lg text-gray-600 mb-6">
+          If you are experiencing severe mouth pain, have knocked out a tooth, or have a dental infection, <strong>{clinicInfo.name}</strong> is here to help. Located conveniently off Interstate 35, we serve patients from Austin, Buda, and Kyle who need immediate attention.
+        </p>
+        <p class="text-lg text-gray-600">
+          We understand that dental emergencies are stressful. Our compassionate team will get you out of pain quickly and create a plan to restore your smile.
+        </p>
+      </section>
+
+      <!-- Common Emergencies Grid -->
+      <section class="mb-16 max-w-5xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">Common Emergencies We Treat</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          
+          <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:border-primary-200 transition-colors">
+            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4 text-2xl">🦷</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Severe Toothache</h3>
+            <p class="text-gray-600 text-sm">Persistent, throbbing pain that doesn't go away with medication often indicates an infection or abscess.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:border-primary-200 transition-colors">
+            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4 text-2xl">💥</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Broken or Chipped Tooth</h3>
+            <p class="text-gray-600 text-sm">Save any pieces of the tooth if possible. We can often bond it back or restore it with a crown.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:border-primary-200 transition-colors">
+            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4 text-2xl">🩸</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Knocked-Out Tooth</h3>
+            <p class="text-gray-600 text-sm">Time is critical. Keep the tooth moist (in milk or cheek) and get to our office within 1 hour for the best chance of saving it.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:border-primary-200 transition-colors">
+            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4 text-2xl">🦠</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Abscess & Infection</h3>
+            <p class="text-gray-600 text-sm">Swelling in the gums or face is a serious medical emergency. Do not ignore it; the infection can spread.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:border-primary-200 transition-colors">
+            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4 text-2xl">👑</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Lost Filling or Crown</h3>
+            <p class="text-gray-600 text-sm">Exposed tooth tissue can be painful and sensitive to temperature. We can replace the restoration quickly.</p>
+          </div>
+
+          <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:border-primary-200 transition-colors">
+            <div class="w-12 h-12 bg-primary-100 rounded-full flex items-center justify-center mb-4 text-2xl">🔧</div>
+            <h3 class="text-xl font-bold text-gray-800 mb-2">Orthodontic Emergencies</h3>
+            <p class="text-gray-600 text-sm">Broken wires or loose brackets from braces that are causing pain or cutting your cheek.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- First Aid Tips -->
+      <section class="mb-16 max-w-4xl mx-auto bg-gray-50 p-8 rounded-xl" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">What To Do Before You Arrive</h2>
+        <div class="space-y-4">
+          <details class="group bg-white rounded-lg p-4 shadow-sm cursor-pointer">
+            <summary class="font-bold text-gray-800 flex justify-between items-center">
+              What to do for a severe toothache?
+              <span class="text-primary-600 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <p class="mt-3 text-gray-600">Rinse your mouth with warm water. Use dental floss to remove any lodged food. Take over-the-counter pain medication (Tylenol/Advil) but do not place aspirin directly on the gums. Apply a cold compress to the outside of your cheek if there is swelling.</p>
+          </details>
+
+          <details class="group bg-white rounded-lg p-4 shadow-sm cursor-pointer">
+            <summary class="font-bold text-gray-800 flex justify-between items-center">
+              What if my tooth is knocked out?
+              <span class="text-primary-600 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <p class="mt-3 text-gray-600">Hold the tooth by the crown (top), not the root. Rinse it gently with water if dirty, but do not scrub. Try to reinsert it into the socket. If that's not possible, keep it in a cup of milk or inside your cheek. Call us immediately.</p>
+          </details>
+
+          <details class="group bg-white rounded-lg p-4 shadow-sm cursor-pointer">
+            <summary class="font-bold text-gray-800 flex justify-between items-center">
+              Should I go to the ER or the Dentist?
+              <span class="text-primary-600 group-open:rotate-180 transition-transform">▼</span>
+            </summary>
+            <p class="mt-3 text-gray-600">For toothaches, broken teeth, or lost crowns, see a dentist. <strong>Go to the ER</strong> if you have severe facial swelling that impacts breathing, trauma to the head/neck, or uncontrollable bleeding.</p>
+          </details>
+        </div>
+      </section>
+
+      <!-- Call to Action -->
+      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <div class="bg-primary-50 p-8 rounded-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">We Are Here For You</h2>
+          <p class="text-gray-600 mb-6">
+            Don't suffer in silence. Contact NextGen Dental immediately. We do our best to accommodate same-day emergency appointments for patients in Austin.
+          </p>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Now for Emergency"
+              variant="primary"
+              size="lg"
+              class="bg-red-600 hover:bg-red-700 border-red-600 text-white"
+            />
+            <Button
+              href="/contact"
+              text="Get Directions"
+              variant="outline"
+              size="lg"
+            />
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</Layout>

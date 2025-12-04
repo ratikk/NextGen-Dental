@@ -3,23 +3,26 @@ import Button from './Button.astro';
 import MobileMenu from './MobileMenu.astro';
 import { clinicInfo } from '../utils/clinicInfo';
 import { services } from '../utils/services';
+
+const rawPhone = clinicInfo.phone.replace(/\D/g, '');
 ---
 
 <header class="w-full fixed top-0 left-0 z-50 bg-white shadow-sm">
-  <!-- Top Info Bar -->
   <div class="bg-gray-50 py-2">
     <div class="container mx-auto px-4">
       <div class="flex justify-between items-center">
-        <a href="/" class="flex items-center gap-2">
+        
+        <a href="/" class="flex items-center gap-2" aria-label="Lilac Dental Homepage">
           <img src="/images/logo.png" alt={`${clinicInfo.name} Logo`} class="h-8" />
         </a>
-        
+
         <div class="flex items-center gap-4">
-          <a 
+          <a
             href={clinicInfo.mapLink}
-            target="_blank" 
-            rel="noopener noreferrer" 
+            target="_blank"
+            rel="noopener noreferrer"
             class="hidden md:flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+            aria-label="Open Google Maps Location"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -29,75 +32,38 @@ import { services } from '../utils/services';
           </a>
 
           <div class="flex items-center gap-2">
-            <a 
-              href={clinicInfo.mapLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="md:hidden flex items-center justify-center w-10 h-10 text-gray-600 hover:text-primary-600 transition-colors duration-200"
-              aria-label="View on Google Maps"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </a>
-            <Button
-              href={`tel:${clinicInfo.phone}`}
-              text="Call Us"
-              variant="outline"
-              size="lg"
-            />
-            <Button
-              href={clinicInfo.booking.url}
-              text="Book Now"
-              variant="primary"
-              size="lg"
-              target="_blank"
-              rel="noopener noreferrer"
-            />
+            <div class="secure-call-wrapper" data-phone={rawPhone}>
+              <!-- SEO FIX: Point to /contact so bots see a valid link. JS will intercept for humans. -->
+              <Button href="/contact" text="Call Us" variant="outline" size="lg" />
+            </div>
+            <Button href={clinicInfo.booking.url} text="Book Now" variant="primary" size="lg" target="_blank" rel="noopener noreferrer" />
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Navigation Bar -->
   <nav class="py-4 bg-white">
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between">
-        <!-- Desktop Navigation -->
         <div class="hidden lg:flex items-center space-x-8">
           <a href="/" class="nav-link">Home</a>
           <a href="/about" class="nav-link">About</a>
-          
-          <!-- Services Dropdown -->
           <div class="relative group">
-            <a href="/services" class="nav-link flex items-center gap-1">
-              Services <span class="ml-1">▼</span>
-            </a>
+            <a href="/services" class="nav-link flex items-center gap-1">Services <span class="ml-1">▼</span></a>
             <div class="absolute left-0 top-full w-[800px] bg-white shadow-lg rounded-lg p-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 border border-gray-100">
               <div class="grid grid-cols-3 gap-6">
                 {Object.entries(services).map(([key, category]) => (
                   <div>
                     <h3 class="font-bold text-gray-800 mb-2">{category.title}</h3>
-                    <p class="text-sm text-gray-600 mb-4">{category.description}</p>
                     <ul class="space-y-3">
                       {category.items.map(service => (
                         <li>
-                          <a 
-                            href={service.href} 
-                            class="group/service block"
-                            aria-label={`Learn more about ${service.name}`}
-                          >
+                          <a href={service.href} class="group/service block" aria-label={`View service: ${service.name}`}>
                             <div class="flex items-center gap-2">
                               <span class="text-lg">{service.icon}</span>
-                              <span class="font-medium text-gray-700 group-hover/service:text-primary-600 transition-colors duration-200">
-                                {service.name}
-                              </span>
+                              <span class="font-medium text-gray-700 group-hover/service:text-primary-600 transition-colors duration-200">{service.name}</span>
                             </div>
-                            <p class="text-sm text-gray-500 mt-1 group-hover/service:text-gray-700 transition-colors duration-200">
-                              {service.description}
-                            </p>
                           </a>
                         </li>
                       ))}
@@ -105,21 +71,8 @@ import { services } from '../utils/services';
                   </div>
                 ))}
               </div>
-              <div class="mt-6 pt-4 border-t border-gray-100">
-                <a 
-                  href="/services" 
-                  class="inline-flex items-center text-primary-600 hover:text-primary-700 font-medium"
-                >
-                  View All Services 
-                  <span class="ml-2">→</span>
-                </a>
-                <p class="text-sm text-gray-500 mt-2">
-                  Explore all the ways {clinicInfo.name} can support your oral health — from cleanings to complete smile makeovers.
-                </p>
-              </div>
             </div>
           </div>
-
           <a href="/smile-gallery" class="nav-link">Smile Gallery</a>
           <a href="/patient-information" class="nav-link">Patient Information</a>
           <a href="/blog" class="nav-link">Blog</a>
@@ -128,8 +81,7 @@ import { services } from '../utils/services';
           <a href="/contact" class="nav-link">Contact</a>
         </div>
 
-        <!-- Mobile menu button -->
-        <button id="menu-toggle" class="lg:hidden text-gray-700 focus:outline-none">
+        <button id="menu-toggle" class="lg:hidden text-gray-700 focus:outline-none" aria-label="Open Mobile Menu">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
@@ -137,25 +89,32 @@ import { services } from '../utils/services';
       </div>
     </div>
   </nav>
-
-  <!-- Mobile Navigation -->
   <MobileMenu services={services} />
 </header>
 
 <style>
-  .nav-link {
-    @apply font-medium text-gray-700 hover:text-primary-600 transition-colors duration-200;
-  }
+  .nav-link { @apply font-medium text-gray-700 hover:text-primary-600 transition-colors duration-200; }
 </style>
 
 <script>
-  // Handle header background change on scroll
-  const header = document.querySelector('header');
   const menuToggle = document.getElementById('menu-toggle');
   const mobileMenu = document.getElementById('mobile-menu');
+  if (menuToggle && mobileMenu) {
+    menuToggle.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
   
-  // Handle mobile menu toggle
-  menuToggle.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
+  // Logic: Intercept the click on /contact and force a call instead
+  const callWrappers = document.querySelectorAll('.secure-call-wrapper');
+  callWrappers.forEach(wrapper => {
+    const btn = wrapper.querySelector('a'); 
+    if (btn && wrapper instanceof HTMLElement) {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault(); // STOP browser from going to /contact
+        const phone = wrapper.dataset.phone;
+        if (phone) window.location.href = `tel:${phone}`; // Dial number instead
+      });
+    }
   });
 </script>

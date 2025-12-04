@@ -1,0 +1,191 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { clinicInfo } from '../utils/clinicInfo';
+
+// Sidebar Sections
+const sections = [
+  { id: 'acceptance', title: 'Acceptance of Terms', icon: '✅' },
+  { id: 'medical', title: 'Medical Disclaimer', icon: '🩺' },
+  { id: 'appointments', title: 'Appointments & Fees', icon: '📅' },
+  { id: 'insurance', title: 'Insurance & Billing', icon: '💳' },
+  { id: 'use', title: 'Use of Website', icon: '💻' },
+  { id: 'liability', title: 'Limitation of Liability', icon: '⚖️' },
+  { id: 'contact', title: 'Contact Us', icon: '✉️' }
+];
+
+const lastUpdated = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<Layout
+  title="Terms of Service | NextGen Dental Austin"
+  description={`Terms of Service for ${clinicInfo.name}. Guidelines for using our website and services.`}
+>
+  <!-- Decorative Header Background (Matches Privacy Policy) -->
+  <div class="bg-primary-900 text-white py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <span class="inline-block py-1 px-3 rounded-full bg-primary-800 border border-primary-700 text-xs font-medium tracking-wider uppercase mb-4">
+        Legal Documentation
+      </span>
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Terms of Service</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        Please read these terms carefully before using our website or services.
+      </p>
+      <p class="text-sm text-primary-300 mt-4">Last Updated: {lastUpdated}</p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 min-h-screen py-16">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col lg:flex-row gap-12 max-w-7xl mx-auto">
+        
+        <!-- SIDEBAR NAVIGATION -->
+        <aside class="hidden lg:block w-1/4">
+          <div class="sticky top-24 bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4">Table of Contents</h3>
+            <nav class="space-y-1">
+              {sections.map(section => (
+                <a 
+                  href={`#${section.id}`} 
+                  class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                >
+                  <span class="mr-2">{section.icon}</span> {section.title}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="w-full lg:w-3/4">
+          <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-12">
+            
+            <!-- Intro -->
+            <div class="prose prose-lg text-gray-600 mb-12 border-b border-gray-100 pb-8">
+              <p class="lead text-xl text-gray-800 font-medium">
+                Welcome to <strong>{clinicInfo.name}</strong>. By accessing our website or scheduling an appointment, you agree to be bound by the following terms and conditions.
+              </p>
+            </div>
+
+            <!-- Sections Loop -->
+            <div class="space-y-16">
+              
+              <section id="acceptance" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">✅</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Acceptance of Terms</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  These Terms of Service ("Terms") govern your use of the website located at <strong>lilacdentalaustintx.com</strong> and any services provided by {clinicInfo.name}. If you do not agree with any part of these terms, please do not use our website.
+                </p>
+              </section>
+
+              <section id="medical" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">🩺</span>
+                  <h2 class="text-2xl font-bold text-gray-900">No Medical Advice</h2>
+                </div>
+                <div class="bg-yellow-50 p-6 rounded-lg border-l-4 border-yellow-400">
+                  <p class="text-gray-800 font-medium">
+                    The content on this website is for informational purposes only.
+                  </p>
+                </div>
+                <p class="text-gray-600 mt-4 leading-relaxed">
+                  Nothing on this website constitutes medical advice, diagnosis, or treatment. Always seek the advice of a qualified dentist or other healthcare provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay seeking it because of something you have read on this website.
+                </p>
+              </section>
+
+              <section id="appointments" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">📅</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Appointments & Cancellations</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed mb-4">
+                  When you schedule an appointment with us, that time is reserved exclusively for you. We understand that emergencies happen, but to ensure we can serve all patients:
+                </p>
+                <ul class="list-disc pl-6 space-y-2 text-gray-600">
+                  <li>We require at least <strong>24 hours' notice</strong> for cancellations or rescheduling.</li>
+                  <li><strong>Late Cancellations/No-Shows:</strong> Appointments cancelled with less than 24 hours' notice may be subject to a cancellation fee of <strong>$25</strong>.</li>
+                  <li>Repeated missed appointments may result in the inability to schedule future visits.</li>
+                </ul>
+              </section>
+
+              <section id="insurance" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">💳</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Insurance & Financial Policy</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  We are happy to bill your dental insurance as a courtesy. However, insurance policies are a contract between you and your insurance provider. You are ultimately responsible for all fees associated with your treatment, regardless of insurance coverage.
+                </p>
+                <p class="text-gray-600 mt-4">
+                  Please bring your current insurance card to every visit. Co-payments and deductibles are due at the time of service.
+                </p>
+              </section>
+
+              <section id="use" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">💻</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Use of Website</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  You agree to use our website only for lawful purposes. You are prohibited from:
+                </p>
+                <ul class="list-disc pl-6 mt-4 space-y-2 text-gray-600">
+                  <li>Using the site to send spam or solicitations.</li>
+                  <li>Attempting to interfere with the proper working of the site or our booking systems.</li>
+                  <li>Copying or distributing our content (text, images, logos) without written permission.</li>
+                </ul>
+              </section>
+
+              <section id="liability" class="scroll-mt-32">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">⚖️</span>
+                  <h2 class="text-2xl font-bold text-gray-900">Limitation of Liability</h2>
+                </div>
+                <p class="text-gray-600 leading-relaxed">
+                  {clinicInfo.name} shall not be liable for any direct, indirect, incidental, or consequential damages resulting from the use or inability to use this website. We make no warranties regarding the accuracy or completeness of the content provided herein.
+                </p>
+              </section>
+
+              <section id="contact" class="scroll-mt-32 bg-gray-900 text-white p-8 rounded-xl">
+                <div class="flex items-center gap-3 mb-4">
+                  <span class="text-3xl">✉️</span>
+                  <h2 class="text-2xl font-bold text-white">Contact Us</h2>
+                </div>
+                <p class="text-gray-300 mb-6">
+                  If you have questions about these Terms of Service, please contact our office.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <span class="block text-gray-400 text-sm uppercase tracking-wider mb-1">Email</span>
+                    <a href={`mailto:${clinicInfo.email}`} class="text-lg font-medium hover:text-primary-300 transition-colors">{clinicInfo.email}</a>
+                  </div>
+                  <div>
+                    <span class="block text-gray-400 text-sm uppercase tracking-wider mb-1">Phone</span>
+                    <a href={`tel:${clinicInfo.phone}`} class="text-lg font-medium hover:text-primary-300 transition-colors">{clinicInfo.displayPhone || clinicInfo.phone}</a>
+                  </div>
+                  <div class="md:col-span-2">
+                    <span class="block text-gray-400 text-sm uppercase tracking-wider mb-1">Location</span>
+                    <span class="text-lg font-medium">{clinicInfo.address.full}</span>
+                  </div>
+                </div>
+              </section>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<style>
+  html {
+    scroll-behavior: smooth;
+  }
+</style>

@@ -1,6 +1,5 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
 import { clinicInfo } from '../../utils/clinicInfo';
@@ -10,134 +9,192 @@ const breadcrumbItems = [
   { label: 'Services', href: '/services' },
   { label: 'Teeth Cleaning', href: '/services/teeth-cleaning' },
 ];
+
+// --- SEO: DENTAL CLEANING SCHEMA ---
+const cleaningSchema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalProcedure",
+  "name": "Professional Teeth Cleaning (Prophylaxis)",
+  "procedureType": "NoninvasiveProcedure",
+  "bodyLocation": "Teeth",
+  "description": "Professional removal of plaque, tartar, and stains to prevent gum disease and cavities.",
+  "provider": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "telephone": clinicInfo.phone,
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": clinicInfo.address.line1,
+      "addressLocality": clinicInfo.address.city,
+      "addressRegion": clinicInfo.address.state,
+      "postalCode": clinicInfo.address.zip,
+      "addressCountry": "US"
+    }
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock",
+    "url": "https://lilacdentalaustintx.com/services/teeth-cleaning",
+    "description": "Covered by most insurance plans twice a year."
+  }
+};
 ---
 
-<Layout 
-  title="Professional Teeth Cleaning" 
-  description="Get a brighter, healthier smile with professional teeth cleaning services at NextGen Dental in Austin, TX. Remove plaque, tartar, and surface stains."
+<Layout
+  title="Teeth Cleaning in Austin, TX (78747) | Dental Hygiene | NextGen Dental"
+  description="Keep your smile healthy with professional teeth cleaning at NextGen Dental in South Austin. Remove tartar, fight gum disease, and freshen breath."
+  serviceSchema={cleaningSchema}
 >
-  <Hero
-    title="Professional Teeth Cleaning"
-    subtitle="Keep your smile bright and healthy with regular professional cleanings"
-    images={["/images/hero/dental-2.jpg"]}
-    height="md"
-  />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
+  <!-- CLEAN, SLIM HEADER -->
+  <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <svg class="h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+        <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white" />
+      </svg>
+    </div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">Professional Teeth Cleaning</h1>
+      <p class="text-primary-200 text-lg max-w-2xl mx-auto">
+        A fresh, healthy smile starts here.
+      </p>
+    </div>
+  </div>
+
+  <div class="bg-gray-50 border-b border-gray-200">
+    <div class="container mx-auto px-4 py-3">
+      <nav class="flex text-sm text-gray-500" aria-label="Breadcrumb">
+        <ol class="flex items-center space-x-2">
+          <li><a href="/" class="hover:text-primary-600">Home</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li><a href="/services" class="hover:text-primary-600">Services</a></li>
+          <li><span class="text-gray-400">/</span></li>
+          <li class="text-gray-900 font-medium" aria-current="page">Cleaning</li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
+      
       <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Professional Teeth Cleaning</h2>
+      <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Preventive Care in South Austin</h2>
         <p class="text-lg text-gray-600 mb-6">
-          Professional teeth cleaning goes beyond what regular brushing and flossing can achieve. 
-          Our skilled hygienists use specialized tools and techniques to remove plaque, tartar, 
-          and surface stains, helping prevent cavities and gum disease while brightening your smile.
+          Brushing and flossing at home are essential, but they can't remove everything. Over time, plaque hardens into tartar (calculus), which can only be removed by a professional.
+        </p>
+        <p class="text-lg text-gray-600">
+          At <strong>{clinicInfo.name}</strong>, serving the <strong>78747</strong> community, our gentle hygienists provide thorough cleanings that leave your teeth feeling smooth, looking brighter, and free from harmful bacteria.
         </p>
       </section>
 
-      <!-- The Process -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Cleaning Process</h2>
+      <!-- The 4 Steps of Cleaning -->
+      <section class="mb-16 max-w-5xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">What Happens During Your Cleaning?</h2>
         
-        <div class="space-y-6">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">1. Physical Exam</h3>
-            <p class="text-gray-600">
-              Before beginning the cleaning, your hygienist will examine your mouth for any obvious 
-              signs of oral health concerns.
-            </p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Step 1 -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex gap-4">
+            <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center text-2xl flex-shrink-0 text-primary-600 font-bold">1</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Ultrasonic Scaling</h3>
+              <p class="text-gray-600 text-sm">
+                We use a gentle ultrasonic device that uses vibration and water to loosen large pieces of tartar. It's fast and effective.
+              </p>
+            </div>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">2. Plaque and Tartar Removal</h3>
-            <p class="text-gray-600">
-              Using specialized tools, we'll carefully remove plaque and tartar buildup from your 
-              teeth, including below the gum line.
-            </p>
+          <!-- Step 2 -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex gap-4">
+            <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center text-2xl flex-shrink-0 text-primary-600 font-bold">2</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Fine Hand Scaling</h3>
+              <p class="text-gray-600 text-sm">
+                Your hygienist uses specialized tools to manually remove smaller deposits from between teeth and along the gumline.
+              </p>
+            </div>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">3. Professional Polishing</h3>
-            <p class="text-gray-600">
-              We use a special polishing tool and paste to remove surface stains and leave your 
-              teeth feeling smooth and clean.
-            </p>
+          <!-- Step 3 -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex gap-4">
+            <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center text-2xl flex-shrink-0 text-primary-600 font-bold">3</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Polishing</h3>
+              <p class="text-gray-600 text-sm">
+                We use a high-tech electric brush and special gritty toothpaste to scrub away surface stains (coffee, tea) and polish the enamel.
+              </p>
+            </div>
           </div>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">4. Expert Flossing</h3>
-            <p class="text-gray-600">
-              Professional flossing removes any remaining plaque or polishing paste between your teeth.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">5. Fluoride Treatment</h3>
-            <p class="text-gray-600">
-              Optional fluoride treatment to help protect your teeth against decay until your next visit.
-            </p>
+          <!-- Step 4 -->
+          <div class="bg-gray-50 p-6 rounded-xl border border-gray-100 flex gap-4">
+            <div class="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center text-2xl flex-shrink-0 text-primary-600 font-bold">4</div>
+            <div>
+              <h3 class="text-xl font-bold text-gray-800 mb-2">Fluoride Treatment</h3>
+              <p class="text-gray-600 text-sm">
+                Optional but recommended: We apply a fluoride varnish that helps remineralize your enamel and fight cavities for months.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       <!-- Benefits -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Benefits of Professional Cleaning</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Health Benefits</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Prevents tooth decay</li>
-              <li>Reduces gum disease risk</li>
-              <li>Freshens breath</li>
-              <li>Supports overall health</li>
-            </ul>
+      <section class="mb-16 max-w-4xl mx-auto bg-primary-50 p-8 rounded-2xl" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6 text-center">More Than Just a Shiny Smile</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div class="flex items-center gap-3">
+            <div class="text-green-500 text-xl">✓</div>
+            <p class="text-gray-700"><strong>Prevent Gum Disease:</strong> Removing tartar stops gingivitis in its tracks.</p>
           </div>
-
-          <div class="bg-primary-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Aesthetic Benefits</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Removes surface stains</li>
-              <li>Brightens smile</li>
-              <li>Smoother-feeling teeth</li>
-              <li>Boosts confidence</li>
-            </ul>
+          <div class="flex items-center gap-3">
+            <div class="text-green-500 text-xl">✓</div>
+            <p class="text-gray-700"><strong>Fresher Breath:</strong> Eliminates bacteria that cause chronic halitosis.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="text-green-500 text-xl">✓</div>
+            <p class="text-gray-700"><strong>Save Money:</strong> Preventive care is much cheaper than fillings or root canals.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="text-green-500 text-xl">✓</div>
+            <p class="text-gray-700"><strong>Overall Health:</strong> Gum health is linked to heart health and diabetes control.</p>
           </div>
         </div>
       </section>
 
-      <!-- Frequency -->
+      <!-- FAQs -->
       <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">How Often Should You Get a Cleaning?</h2>
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6 text-center">Common Questions</h2>
         
-        <div class="bg-gray-50 p-6 rounded-lg">
-          <p class="text-gray-600 mb-4">
-            Most patients should have professional cleanings every 6 months. However, some may need 
-            more frequent cleanings based on:
-          </p>
-          <ul class="list-disc list-inside text-gray-600 space-y-2">
-            <li>Gum disease history</li>
-            <li>Rate of tartar buildup</li>
-            <li>Oral hygiene habits</li>
-            <li>Overall health conditions</li>
-          </ul>
+        <div class="space-y-4">
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">Does a cleaning hurt?</h3>
+            <p class="text-gray-600 text-sm">For most patients, it is painless. If you have sensitive gums or haven't had a cleaning in years, let us know! We can use numbing gel to ensure your comfort.</p>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">How often should I come in?</h3>
+            <p class="text-gray-600 text-sm">Most patients need a cleaning every 6 months. However, if you have a history of gum disease, we may recommend visits every 3-4 months.</p>
+          </div>
+          <div class="bg-white border border-gray-200 rounded-lg p-5">
+            <h3 class="font-bold text-gray-800 mb-2">Does insurance cover it?</h3>
+            <p class="text-gray-600 text-sm">Yes, almost all dental PPO plans cover two preventive cleanings (prophylaxis) per year at 100%.</p>
+          </div>
         </div>
       </section>
 
       <!-- Call to Action -->
       <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Ready for a Brighter Smile?</h2>
+        <div class="bg-white border-2 border-primary-100 p-8 rounded-lg shadow-lg">
+          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Time for a Refresh?</h2>
           <p class="text-gray-600 mb-6">
-            Schedule your professional cleaning today and experience the difference a truly clean mouth feels like.
+            Get that "just left the dentist" smooth feeling. Schedule your cleaning at NextGen Dental today.
           </p>
           <div class="flex flex-wrap justify-center gap-4">
             <Button
               href={clinicInfo.booking.url}
-              text="Book Appointment"
+              text="Book Cleaning"
               variant="primary"
               size="lg"
               target="_blank"
@@ -152,6 +209,7 @@ const breadcrumbItems = [
           </div>
         </div>
       </section>
+
     </div>
   </div>
 </Layout>
