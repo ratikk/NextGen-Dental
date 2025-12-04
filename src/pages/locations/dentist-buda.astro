@@ -4,6 +4,8 @@ import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
 import { clinicInfo } from '../../utils/clinicInfo';
+// ✅ ADD THIS IMPORT
+import { HERO_IMAGES } from '../../utils/images';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
@@ -19,9 +21,10 @@ const breadcrumbItems = [
   <Hero
     title="Dentist Near Buda & Onion Creek"
     subtitle="5-Star Dental Care just minutes from Buda, TX"
-    images={["/images/hero/dental-1.jpg"]}
+    images={[HERO_IMAGES.dental1]}  
     height="md"
   />
+  {/* 👆 FIXED: Used HERO_IMAGES.dental1 instead of string path */}
 
   <Breadcrumbs items={breadcrumbItems} />
 

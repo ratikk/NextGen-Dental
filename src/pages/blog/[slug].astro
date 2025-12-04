@@ -4,7 +4,7 @@ import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { blogPosts } from '../../utils/blogPosts';
 import { Image } from 'astro:assets';
-import { HERO_IMAGES } from '../../utils/images'; // Use a generic image for the header background
+import { HERO_IMAGES } from '../../utils/images'; // ✅ Make sure this is imported
 
 export async function getStaticPaths() {
   return blogPosts.map(post => ({
@@ -23,14 +23,16 @@ const breadcrumbItems = [
 
 const pageTitle = post.seoTitle || post.title;
 const pageDescription = post.seoDescription || post.excerpt;
-const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://lilacdentalaustintx.com').toString();
+// Use site URL from config or fallback
+const siteUrl = Astro.site ? Astro.site.toString() : 'https://nextgendentalaustintx.com';
+const canonicalURL = new URL(Astro.url.pathname, siteUrl).toString();
 
-// Handle Image Logic
+// Handle Image Logic for OG Tags
 const isAstroImage = post.image && typeof post.image === 'object' && 'src' in post.image;
 const ogImage = isAstroImage
   // @ts-ignore
-  ? new URL(post.image.src, Astro.site || 'https://lilacdentalaustintx.com').toString()
-  : new URL("/images/hero/lilac-dental-og-image.jpg", Astro.site || 'https://lilacdentalaustintx.com').toString();
+  ? new URL(post.image.src, siteUrl).toString()
+  : new URL("/images/hero/dental-2.jpg", siteUrl).toString();
 ---
 
 <Layout
@@ -50,11 +52,11 @@ const ogImage = isAstroImage
     site_name: "NextGen Dental"
   }}
 >
-  {/* 1. GENERIC SMALL HEADER (Not the huge blog image) */}
+  {/* ✅ FIXED: Use the imported HERO_IMAGES object instead of a string path */}
   <Hero
     title="Dental Health Blog"
     subtitle="Expert Advice from NextGen Dental"
-    images={['/images/hero/dental-3.jpg']} 
+    images={[HERO_IMAGES.dental3]} 
     height="xs" 
     showAppointmentForm={false}
     isHomePage={false}
@@ -64,7 +66,7 @@ const ogImage = isAstroImage
   <Breadcrumbs items={breadcrumbItems} class="py-4 bg-gray-50 border-b border-gray-200"/>
 
   <div class="py-12 bg-white">
-    <div class="container mx-auto px-4 max-w-4xl"> {/* Restricted width for reading comfort */}
+    <div class="container mx-auto px-4 max-w-4xl">
       <article>
         {/* Header Section */}
         <header class="mb-8 text-center">
@@ -87,7 +89,7 @@ const ogImage = isAstroImage
           </div>
         </header>
 
-        {/* 2. THE BLOG IMAGE (Contained, Rounded, Nice looking) */}
+        {/* Blog Post Main Image */}
         {post.image && (
           <div class="mb-10 rounded-xl overflow-hidden shadow-lg mx-auto max-w-3xl">
             {isAstroImage ? (

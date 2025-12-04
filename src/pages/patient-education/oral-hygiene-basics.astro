@@ -2,158 +2,75 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+// ✅ ADD THIS IMPORT
+import { HERO_IMAGES } from '../../utils/images';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
-  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Patient Education', href: '/patient-information' },
   { label: 'Oral Hygiene Basics', href: '/patient-education/oral-hygiene-basics' },
 ];
 ---
 
-<Layout 
-  title="Oral Hygiene Basics" 
+<Layout
+  title="Oral Hygiene Basics | Dental Care Tips | NextGen Dental"
   description="Learn the fundamentals of good oral hygiene from NextGen Dental. Discover proper brushing techniques, flossing tips, and daily dental care routines."
 >
   <Hero
     title="Oral Hygiene Basics"
-    subtitle="Essential practices for maintaining a healthy smile"
-    images={["/images/hero/dental-1.jpg"]}
+    subtitle="The foundation of a healthy, beautiful smile"
+    images={[HERO_IMAGES.dental1]} 
     height="md"
   />
-  
+  {/* 👆 FIXED: Used HERO_IMAGES.dental1 instead of string path */}
+
   <Breadcrumbs items={breadcrumbItems} />
-  
+
   <div class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">The Foundation of Dental Health</h2>
-        <p class="text-lg text-gray-600 mb-6">
-          Good oral hygiene is essential for maintaining healthy teeth and gums. By following proper dental care 
-          practices, you can prevent cavities, gum disease, and other oral health issues. Here's what you need 
-          to know about maintaining optimal oral hygiene.
+    <div class="container mx-auto px-4 max-w-4xl">
+      <article class="prose prose-lg prose-primary mx-auto">
+        <h2>The Importance of Daily Care</h2>
+        <p>
+          Maintaining good oral hygiene is the most important thing you can do for your teeth and gums. Healthy teeth not only look good, but they also make it possible to eat and speak properly. Good oral health is important to your overall well-being.
         </p>
-      </section>
-
-      <!-- Daily Oral Care -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Daily Oral Care Routine</h2>
         
-        <div class="space-y-8">
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Proper Brushing Technique</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Brush at least twice daily, using fluoride toothpaste</li>
-              <li>Use a soft-bristled toothbrush and replace it every 3-4 months</li>
-              <li>Hold your brush at a 45-degree angle to your gums</li>
-              <li>Use gentle, circular motions to clean all tooth surfaces</li>
-              <li>Brush for at least two minutes each time</li>
-              <li>Don't forget to brush your tongue</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Flossing Fundamentals</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Floss at least once daily</li>
-              <li>Use about 18 inches of floss</li>
-              <li>Curve the floss around each tooth in a C-shape</li>
-              <li>Use clean sections of floss for each tooth</li>
-              <li>Be gentle to avoid damaging your gums</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Additional Care Tips</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Use an antimicrobial mouthwash</li>
-              <li>Consider using an electric toothbrush</li>
-              <li>Clean between teeth with interdental brushes or water flossers</li>
-              <li>Maintain a balanced, low-sugar diet</li>
-              <li>Stay hydrated by drinking plenty of water</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Common Mistakes -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Common Oral Hygiene Mistakes</h2>
-        <div class="bg-gray-50 p-6 rounded-lg">
-          <ul class="space-y-4 text-gray-600">
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-error-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Brushing too hard:</strong> This can damage your enamel and gums
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-error-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Rushing through brushing:</strong> Not spending enough time to clean thoroughly
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-error-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Skipping flossing:</strong> Brushing alone can't reach between teeth
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-error-500 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Using an old toothbrush:</strong> Worn bristles don't clean effectively
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Professional Care -->
-      <section class="max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Professional Dental Care</h2>
-        <p class="text-gray-600 mb-6">
-          While daily oral hygiene is crucial, it's important to complement your routine with regular 
-          professional dental care. Visit us every six months for:
+        <h3>Proper Brushing Technique</h3>
+        <p>
+          Brushing twice a day is the first line of defense against tooth decay and gum disease.
         </p>
-        <ul class="list-disc list-inside text-gray-600 space-y-2 mb-8">
-          <li>Professional cleaning and polishing</li>
-          <li>Comprehensive oral examination</li>
-          <li>Early detection of potential issues</li>
-          <li>Personalized oral hygiene advice</li>
-          <li>Fluoride treatments if needed</li>
+        <ul>
+          <li><strong>Angle:</strong> Tilt the brush at a 45° angle against the gumline.</li>
+          <li><strong>Motion:</strong> Use short, gentle strokes. Don't scrub hard!</li>
+          <li><strong>Coverage:</strong> Brush the outer, inner, and chewing surfaces of each tooth.</li>
+          <li><strong>Time:</strong> Brush for at least two full minutes.</li>
         </ul>
-        
-        <div class="bg-primary-50 p-6 rounded-lg">
-          <h3 class="text-xl font-bold text-gray-800 mb-4">Schedule Your Dental Checkup</h3>
-          <p class="text-gray-600 mb-6">
-            Regular dental visits are essential for maintaining optimal oral health. Contact us today 
-            to schedule your next appointment.
+
+        <h3>Don't Forget to Floss</h3>
+        <p>
+          Daily flossing removes plaque and food particles from between the teeth and under the gumline where your toothbrush can't reach. Because tooth decay and gum disease often start in these areas, flossing is essential.
+        </p>
+
+        <h3>Diet and Dental Health</h3>
+        <p>
+          A balanced diet is necessary for your teeth and gums to remain healthy. A diet high in sugar and starches can lead to tooth decay. Limit sugary snacks and drinks, and drink plenty of water to help wash away food particles.
+        </p>
+
+        <div class="bg-primary-50 p-6 rounded-lg not-prose mt-8 text-center">
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Time for a Checkup?</h3>
+          <p class="text-gray-600 mb-4">
+            Daily care is vital, but professional cleanings remove the hardened tartar that brushing misses.
           </p>
-          <div class="flex flex-wrap gap-4">
-            <a 
-              href="/book-appointment" 
-              class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
-            >
-              Book Appointment
-            </a>
-            <a 
-              href="tel:+17376008776" 
-              class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors duration-200"
-            >
-              Call Us
-            </a>
+          <div class="flex flex-wrap justify-center gap-4">
+            <Button 
+              href="/contact" 
+              text="Schedule Cleaning" 
+              variant="primary"
+            />
           </div>
         </div>
-      </section>
+      </article>
     </div>
   </div>
 </Layout>

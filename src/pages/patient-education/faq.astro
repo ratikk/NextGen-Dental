@@ -2,159 +2,107 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+// ✅ ADD THIS IMPORT
+import { HERO_IMAGES } from '../../utils/images';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
-  { label: 'Patient Education', href: '/patient-education' },
-  { label: 'FAQ', href: '/patient-education/faq' },
+  { label: 'Patient Education', href: '/patient-information' },
+  { label: 'FAQs', href: '/patient-education/faq' },
 ];
 
 const faqs = [
   {
-    category: "General Dental Care",
-    questions: [
+    category: "General",
+    items: [
       {
-        q: "How often should I visit the dentist?",
-        a: "We recommend visiting the dentist every six months for routine checkups and professional cleanings. However, some patients may need more frequent visits based on their oral health needs."
+        q: "Do you accept new patients?",
+        a: `Yes! We are currently welcoming new patients of all ages to ${clinicInfo.name}. Whether you need a routine checkup or restorative work, we are here to help.`
       },
       {
-        q: "What's the best way to brush my teeth?",
-        a: "Use a soft-bristled toothbrush and fluoride toothpaste. Brush at a 45-degree angle to your gums, using gentle circular motions. Brush all surfaces of your teeth for at least two minutes, twice daily."
+        q: "What insurance do you accept?",
+        a: "We accept most major PPO dental insurance plans, including Delta, Cigna, MetLife, and Aetna. We also offer a complimentary benefits check before your appointment."
       },
       {
-        q: "Why is flossing important?",
-        a: "Flossing removes plaque and food particles between teeth where your toothbrush can't reach. Daily flossing helps prevent cavities, gum disease, and bad breath."
+        q: "What if I have a dental emergency?",
+        a: `We set aside time daily for emergency appointments. If you are in pain, please call us immediately at ${clinicInfo.displayPhone}.`
       }
     ]
   },
   {
-    category: "Dental Procedures",
-    questions: [
+    category: "Procedures",
+    items: [
       {
-        q: "Does getting a filling hurt?",
-        a: "No, you shouldn't feel pain during a filling. We use local anesthesia to numb the area completely. You might feel slight pressure or vibration, but no pain."
+        q: "How often should I get a checkup?",
+        a: "The American Dental Association recommends visiting your dentist every six months for regular checkups and routine teeth cleanings to keep your teeth and gums healthy."
       },
       {
-        q: "How long do dental implants last?",
-        a: "With proper care and maintenance, dental implants can last a lifetime. The crown attached to the implant typically needs replacement every 10-15 years due to normal wear."
-      },
-      {
-        q: "Is teeth whitening safe?",
-        a: "Yes, professional teeth whitening is safe when performed under dental supervision. We use approved whitening agents and take precautions to protect your gums and sensitive teeth."
-      }
-    ]
-  },
-  {
-    category: "Insurance and Payment",
-    questions: [
-      {
-        q: "What insurance plans do you accept?",
-        a: "We accept most major dental insurance plans. Our team will help verify your coverage and maximize your benefits. Contact our office for specific insurance questions."
-      },
-      {
-        q: "Do you offer payment plans?",
-        a: "Yes, we offer various financing options including Cherry and in-house payment plans. We'll work with you to make dental care affordable."
-      },
-      {
-        q: "What forms of payment do you accept?",
-        a: "We accept cash, credit cards (Visa, Mastercard, American Express, Discover), debit cards, and HSA/FSA cards. We also work with various financing options."
-      }
-    ]
-  },
-  {
-    category: "Emergency Dental Care",
-    questions: [
-      {
-        q: "What should I do in a dental emergency?",
-        a: "Contact our office immediately at (737) 291-3927. For after-hours emergencies, follow the prompts to reach our on-call dentist. If you experience severe trauma or bleeding, visit the nearest emergency room."
-      },
-      {
-        q: "What constitutes a dental emergency?",
-        a: "Dental emergencies include severe tooth pain, knocked-out teeth, broken or chipped teeth, lost fillings or crowns, severe bleeding or swelling, and trauma to the mouth or jaw."
-      }
-    ]
-  },
-  {
-    category: "Children's Dental Care",
-    questions: [
-      {
-        q: "When should my child first visit the dentist?",
-        a: "The American Academy of Pediatric Dentistry recommends scheduling your child's first dental visit by their first birthday or when their first tooth appears."
-      },
-      {
-        q: "Are dental X-rays safe for children?",
-        a: "Yes, dental X-rays are safe for children. We use digital X-rays that minimize radiation exposure and take precautions like lead aprons for added protection."
+        q: "Are dental x-rays safe?",
+        a: "Yes. We use modern digital X-rays which use up to 90% less radiation than traditional film X-rays. They are safe and vital for diagnosing issues we can't see with the naked eye."
       }
     ]
   }
 ];
 ---
 
-<Layout 
-  title="Frequently Asked Questions" 
+<Layout
+  title="Dental FAQs | Common Questions Answered | NextGen Dental"
   description="Find answers to common dental questions about procedures, insurance, emergency care, and more at NextGen Dental in Austin, TX."
 >
   <Hero
     title="Frequently Asked Questions"
-    subtitle="Find answers to common dental questions"
-    images={["/images/hero/dental-2.jpg"]}
+    subtitle="Answers to your common dental health questions"
+    images={[HERO_IMAGES.dental2]} 
     height="md"
   />
-  
-  <Breadcrumbs items={breadcrumbItems} />
-  
-  <div class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Common Dental Questions</h2>
-        <p class="text-lg text-gray-600">
-          Find answers to frequently asked questions about dental care, procedures, and policies. 
-          If you don't find the answer you're looking for, please don't hesitate to contact us.
-        </p>
-      </section>
+  {/* 👆 FIXED: Used HERO_IMAGES.dental2 instead of string path */}
 
-      <!-- FAQ Categories -->
-      <div class="max-w-3xl mx-auto">
-        {faqs.map((category) => (
-          <section class="mb-12" data-aos="fade-up">
-            <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">{category.category}</h2>
-            
-            <div class="space-y-6">
-              {category.questions.map((faq) => (
-                <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-                  <h3 class="text-xl font-bold text-gray-800 mb-3">{faq.q}</h3>
-                  <p class="text-gray-600">{faq.a}</p>
-                </div>
+  <Breadcrumbs items={breadcrumbItems} />
+
+  <div class="py-16 bg-white">
+    <div class="container mx-auto px-4 max-w-4xl">
+      
+      <div class="space-y-12">
+        {faqs.map((section) => (
+          <div>
+            <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6 border-b border-gray-200 pb-2">
+              {section.category}
+            </h2>
+            <div class="space-y-4">
+              {section.items.map((item) => (
+                <details class="group bg-gray-50 rounded-lg p-4 border border-gray-100 cursor-pointer open:bg-white open:shadow-md transition-all duration-200">
+                  <summary class="font-bold text-gray-800 flex justify-between items-center list-none select-none">
+                    {item.q}
+                    <span class="text-primary-600 transform group-open:rotate-180 transition-transform duration-200">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </span>
+                  </summary>
+                  <p class="mt-3 text-gray-600 leading-relaxed border-t border-gray-100 pt-3">
+                    {item.a}
+                  </p>
+                </details>
               ))}
             </div>
-          </section>
+          </div>
         ))}
       </div>
 
-      <!-- Contact CTA -->
-      <section class="max-w-3xl mx-auto mt-16" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg text-center">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Still Have Questions?</h2>
-          <p class="text-gray-600 mb-6">
-            Our team is here to help! Contact us for personalized answers to your dental care questions.
-          </p>
-          <div class="flex flex-wrap justify-center gap-4">
-            <a 
-              href="/contact" 
-              class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
-            >
-              Contact Us
-            </a>
-            <a 
-              href="tel:+17372913927" 
-              class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors duration-200"
-            >
-              Call Now
-            </a>
-          </div>
-        </div>
-      </section>
+      <div class="mt-16 bg-primary-900 text-white rounded-xl p-8 text-center">
+        <h3 class="text-2xl font-bold mb-4">Still have questions?</h3>
+        <p class="text-primary-200 mb-8">
+          Our friendly team is happy to answer any specific questions you may have about your dental care or insurance coverage.
+        </p>
+        <a 
+          href="/contact" 
+          class="inline-block bg-white text-primary-900 font-bold px-8 py-3 rounded-md hover:bg-primary-50 transition-colors"
+        >
+          Contact Us
+        </a>
+      </div>
+
     </div>
   </div>
 </Layout>

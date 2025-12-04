@@ -6,17 +6,25 @@ import FeatureCard from '../components/FeatureCard.astro';
 import Button from '../components/Button.astro';
 import { clinicInfo } from '../utils/clinicInfo';
 
-// Hero Images
-// ✅ UPDATED: Removed 'promo-smile.jpg'. Now starts with dental-1.
+// ✅ STEP 1: Import images directly so Astro can optimize them
+import dental1 from '../assets/images/hero/dental-1.jpg';
+import dental2 from '../assets/images/hero/dental-2.jpg';
+import dental3 from '../assets/images/hero/dental-3.jpg';
+import dental4 from '../assets/images/hero/dental-4.jpg';
+import dental5 from '../assets/images/hero/dental-5.jpg';
+import dental6 from '../assets/images/hero/dental-6.jpg';
+
+// ✅ STEP 2: Create the array using the imported objects
 const heroImages = [
-  '/images/hero/dental-1.jpg',
-  '/images/hero/dental-2.jpg',
-  '/images/hero/dental-3.jpg',
-  '/images/hero/dental-4.jpg',
-  '/images/hero/dental-5.jpg',
-  '/images/hero/dental-6.jpg'
+  dental1,
+  dental2,
+  dental3,
+  dental4,
+  dental5,
+  dental6
 ];
 
+// ... (Keep the rest of your Featured Services and Features code exactly the same)
 // Featured Services
 const featuredServices = [
   {

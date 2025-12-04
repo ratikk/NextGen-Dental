@@ -2,210 +2,82 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+// ✅ ADD THIS IMPORT
+import { HERO_IMAGES } from '../../utils/images';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
-  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Patient Education', href: '/patient-information' },
   { label: 'Tooth Decay', href: '/patient-education/tooth-decay' },
 ];
 ---
 
-<Layout 
-  title="Understanding Tooth Decay" 
+<Layout
+  title="Understanding Tooth Decay | Cavity Prevention | NextGen Dental Austin"
   description="Learn about the causes, prevention, and treatment of tooth decay from the dental experts at NextGen Dental in Austin, TX."
 >
   <Hero
-    title="Understanding Tooth Decay"
-    subtitle="Prevention and treatment of dental caries"
-    images={["/images/hero/dental-3.jpg"]}
+    title="Tooth Decay & Cavities"
+    subtitle="Prevention is the key to a healthy smile"
+    images={[HERO_IMAGES.dental3]} 
     height="md"
   />
-  
+  {/* 👆 FIXED: Used HERO_IMAGES.dental3 instead of string path */}
+
   <Breadcrumbs items={breadcrumbItems} />
-  
+
   <div class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">What is Tooth Decay?</h2>
-        <p class="text-lg text-gray-600 mb-6">
-          Tooth decay, also known as dental caries or cavities, is damage to a tooth that occurs when 
-          bacteria in your mouth produce acids that eat away at the tooth's surface. It's one of the 
-          most common health problems worldwide but is largely preventable with proper oral care.
+    <div class="container mx-auto px-4 max-w-4xl">
+      <article class="prose prose-lg prose-primary mx-auto">
+        <h2>What is Tooth Decay?</h2>
+        <p>
+          Tooth decay (cavities) is the destruction of your tooth enamel, the hard, outer layer of your teeth. It can be a problem for children, teens, and adults. Plaque, a sticky film of bacteria, constantly forms on your teeth. When you eat or drink foods containing sugars, the bacteria in plaque produce acids that attack tooth enamel.
         </p>
-      </section>
-
-      <!-- Causes -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Causes of Tooth Decay</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div class="bg-gray-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Primary Factors</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Plaque formation</li>
-              <li>Frequent sugar consumption</li>
-              <li>Poor oral hygiene</li>
-              <li>Acidic foods and drinks</li>
-              <li>Dry mouth conditions</li>
-            </ul>
-          </div>
+        <h3>The Process of Decay</h3>
+        <p>
+          The stickiness of the plaque keeps these acids in contact with your teeth and over time the enamel can break down. This is when cavities can form.
+        </p>
+        <ul>
+          <li><strong>Stage 1: White Spots.</strong> Chalky white areas on the surface of the tooth indicate the loss of calcium and buildup of plaque.</li>
+          <li><strong>Stage 2: Enamel Decay.</strong> The enamel breaks underneath the tooth's surface.</li>
+          <li><strong>Stage 3: Dentin Decay.</strong> If left untreated, bacteria and acids dissolve the enamel and move into the dentin (the softer layer under enamel). Pain usually starts here.</li>
+          <li><strong>Stage 4: Pulp Infection.</strong> The decay reaches the pulp (nerve) of the tooth, causing severe pain and infection (abscess).</li>
+        </ul>
 
-          <div class="bg-gray-50 p-6 rounded-lg">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Contributing Factors</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Genetics</li>
-              <li>Deep tooth crevices</li>
-              <li>Insufficient fluoride</li>
-              <li>Eating disorders</li>
-              <li>Certain medications</li>
-            </ul>
-          </div>
-        </div>
-      </section>
+        <h3>Prevention</h3>
+        <p>
+          The good news is that tooth decay is largely preventable.
+        </p>
+        <ul>
+          <li>Brush twice a day with fluoride toothpaste.</li>
+          <li>Clean between your teeth daily with floss or interdental cleaners.</li>
+          <li>Eat nutritious and balanced meals and limit snacking.</li>
+          <li>Check with your dentist about the use of supplemental fluoride.</li>
+          <li>Visit {clinicInfo.name} regularly for professional cleanings and oral exams.</li>
+        </ul>
 
-      <!-- Stages -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Stages of Tooth Decay</h2>
-        
-        <div class="space-y-6">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Stage 1: Initial Demineralization</h3>
-            <p class="text-gray-600">
-              White spots appear on teeth as enamel loses minerals. This stage is reversible 
-              with proper care and fluoride treatment.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Stage 2: Enamel Decay</h3>
-            <p class="text-gray-600">
-              The enamel begins to break down, forming small cavities. Treatment typically 
-              involves dental fillings.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Stage 3: Dentin Decay</h3>
-            <p class="text-gray-600">
-              Decay reaches the softer dentin layer, often causing sensitivity. More extensive 
-              treatment may be needed.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Stage 4: Pulp Damage</h3>
-            <p class="text-gray-600">
-              Infection reaches the tooth's nerve center, often requiring root canal treatment.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Stage 5: Abscess Formation</h3>
-            <p class="text-gray-600">
-              Severe infection can lead to abscess formation, requiring immediate treatment to 
-              prevent serious complications.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Prevention -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Prevention Tips</h2>
-        
-        <div class="bg-primary-50 p-6 rounded-lg mb-8">
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Practice Good Oral Hygiene:</strong>
-                <p class="text-gray-600">Brush twice daily with fluoride toothpaste and floss regularly</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Limit Sugary Foods and Drinks:</strong>
-                <p class="text-gray-600">Reduce frequency of sugar consumption and rinse after eating</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Use Fluoride Products:</strong>
-                <p class="text-gray-600">Choose fluoride toothpaste and consider fluoride treatments</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Regular Dental Visits:</strong>
-                <p class="text-gray-600">Schedule checkups every six months for early detection</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- Treatment Options -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Treatment Options</h2>
-        
-        <div class="space-y-6">
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Early Stage Treatment</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Fluoride treatments to remineralize enamel</li>
-              <li>Dental sealants for prevention</li>
-              <li>Professional cleaning and polishing</li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Advanced Treatment</h3>
-            <ul class="list-disc list-inside text-gray-600 space-y-2">
-              <li>Fillings for small to moderate cavities</li>
-              <li>Crowns for extensive decay</li>
-              <li>Root canal therapy for infected pulp</li>
-              <li>Extraction for severely damaged teeth</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <!-- Call to Action -->
-      <section class="max-w-3xl mx-auto" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg text-center">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Protect Your Smile</h2>
-          <p class="text-gray-600 mb-6">
-            Don't wait until tooth decay becomes painful. Schedule a checkup with our team for early 
-            detection and prevention.
+        <div class="bg-primary-50 p-6 rounded-lg not-prose mt-8 text-center">
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Due for a Checkup?</h3>
+          <p class="text-gray-600 mb-4">
+            Regular exams catch decay early when it's easy to treat.
           </p>
           <div class="flex flex-wrap justify-center gap-4">
-            <a 
-              href="/book-appointment" 
-              class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
-            >
-              Book Appointment
-            </a>
-            <a 
-              href="tel:+17376008776" 
-              class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors duration-200"
-            >
-              Call Us
-            </a>
+            <Button 
+              href="/contact" 
+              text="Book Appointment" 
+              variant="primary"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+            />
           </div>
         </div>
-      </section>
+      </article>
     </div>
   </div>
 </Layout>

@@ -2,234 +2,85 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Button from '../../components/Button.astro';
+import { clinicInfo } from '../../utils/clinicInfo';
+// ✅ ADD THIS IMPORT
+import { HERO_IMAGES } from '../../utils/images';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
-  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Patient Education', href: '/patient-information' },
   { label: 'Root Canal Guide', href: '/patient-education/root-canal-guide' },
 ];
 ---
 
-<Layout 
-  title="Root Canal Treatment Guide" 
+<Layout
+  title="Patient Guide to Root Canal Therapy | NextGen Dental Austin"
   description="Learn about root canal treatment, what to expect during the procedure, and recovery tips from the dental experts at NextGen Dental in Austin, TX."
 >
   <Hero
-    title="Root Canal Treatment Guide"
-    subtitle="Understanding the procedure and recovery process"
-    images={["/images/hero/dental-1.jpg"]}
+    title="Root Canal Therapy Guide"
+    subtitle="Saving your natural teeth"
+    images={[HERO_IMAGES.dental2]} 
     height="md"
   />
-  
+  {/* 👆 FIXED: Used HERO_IMAGES.dental2 instead of string path */}
+
   <Breadcrumbs items={breadcrumbItems} />
-  
+
   <div class="py-16 bg-white">
-    <div class="container mx-auto px-4">
-      <!-- Introduction -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">What is a Root Canal?</h2>
-        <p class="text-lg text-gray-600 mb-6">
-          A root canal is a dental procedure that treats infection or damage in the tooth's pulp – 
-          the soft tissue inside your tooth containing nerves, blood vessels, and connective tissue. 
-          This treatment saves teeth that would otherwise need to be extracted.
+    <div class="container mx-auto px-4 max-w-4xl">
+      <article class="prose prose-lg prose-primary mx-auto">
+        <h2>What is a Root Canal?</h2>
+        <p>
+          A root canal is a treatment used to repair and save a tooth that is badly decayed or becomes infected. During a root canal procedure, the nerve and pulp are removed and the inside of the tooth is cleaned and sealed. Without treatment, the tissue surrounding the tooth will become infected and abscesses may form.
         </p>
-      </section>
-
-      <!-- When It's Needed -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">When is a Root Canal Needed?</h2>
         
-        <div class="bg-gray-50 p-6 rounded-lg mb-8">
-          <h3 class="text-xl font-bold text-gray-800 mb-4">Common Signs You May Need a Root Canal:</h3>
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Severe Tooth Pain:</strong>
-                <p class="text-gray-600">Particularly when chewing or applying pressure</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Temperature Sensitivity:</strong>
-                <p class="text-gray-600">Prolonged sensitivity to hot or cold temperatures</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Tooth Discoloration:</strong>
-                <p class="text-gray-600">Darkening of the affected tooth</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Swollen Gums:</strong>
-                <p class="text-gray-600">Tenderness and swelling in nearby gums</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <h3>Why Would I Need a Root Canal?</h3>
+        <p>
+          A tooth's nerve and pulp can become irritated, inflamed, and infected due to deep decay, repeated dental procedures on a tooth, large fillings, a crack or chip in the tooth, or trauma to the face.
+        </p>
 
-      <!-- The Procedure -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">The Root Canal Procedure</h2>
-        
-        <div class="space-y-8">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 1: Examination and X-rays</h3>
-            <p class="text-gray-600">
-              We begin with a thorough examination and X-rays to assess the extent of damage 
-              and plan the treatment.
-            </p>
-          </div>
+        <h3>What are the Signs?</h3>
+        <ul>
+          <li>Severe toothache pain upon chewing or application of pressure</li>
+          <li>Prolonged sensitivity (pain) to heat or cold temperatures (after the heat or cold has been removed)</li>
+          <li>Discoloration (darkening) of the tooth</li>
+          <li>Swelling and tenderness in nearby gums</li>
+          <li>A persistent or recurring pimple on the gums</li>
+        </ul>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 2: Local Anesthesia</h3>
-            <p class="text-gray-600">
-              The area is numbed with local anesthesia to ensure you're comfortable throughout 
-              the procedure.
-            </p>
-          </div>
+        <h3>The Procedure</h3>
+        <p>
+          Root canal treatment is highly successful; the procedure has more than a 95% success rate. Many teeth fixed with a root canal can last a lifetime.
+        </p>
+        <ol>
+          <li><strong>Anesthesia:</strong> Local anesthesia is administered to numb the tooth and surrounding area.</li>
+          <li><strong>Access:</strong> An opening is made through the crown of the tooth into the pulp chamber.</li>
+          <li><strong>Cleaning:</strong> The pulp is removed, and the root canals are cleaned, enlarged, and shaped.</li>
+          <li><strong>Filling:</strong> The root canals are filled and sealed.</li>
+          <li><strong>Restoration:</strong> A crown is usually placed over the tooth to protect and restore it to full function.</li>
+        </ol>
 
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 3: Removing Infected Pulp</h3>
-            <p class="text-gray-600">
-              We create a small opening and carefully remove the infected pulp, cleaning and 
-              shaping the root canals.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 4: Filling and Sealing</h3>
-            <p class="text-gray-600">
-              The cleaned canals are filled with a rubber-like material and sealed to prevent 
-              future infection.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-3">Step 5: Crown Placement</h3>
-            <p class="text-gray-600">
-              In most cases, a crown is placed to protect the treated tooth and restore its 
-              function and appearance.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Recovery and Aftercare -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Recovery and Aftercare</h2>
-        
-        <div class="bg-primary-50 p-6 rounded-lg mb-8">
-          <h3 class="text-xl font-bold text-gray-800 mb-4">Post-Procedure Care Tips:</h3>
-          <ul class="space-y-4">
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Manage Discomfort:</strong>
-                <p class="text-gray-600">Take prescribed or over-the-counter pain medication as directed</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Avoid Hard Foods:</strong>
-                <p class="text-gray-600">Stick to soft foods until the permanent crown is placed</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Maintain Oral Hygiene:</strong>
-                <p class="text-gray-600">Continue brushing and flossing, being gentle around the treated area</p>
-              </div>
-            </li>
-            <li class="flex items-start gap-3">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary-600 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-              </svg>
-              <div>
-                <strong class="text-gray-800">Follow-up Visits:</strong>
-                <p class="text-gray-600">Attend all scheduled appointments for crown placement and checkups</p>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <!-- FAQs -->
-      <section class="mb-16 max-w-3xl mx-auto" data-aos="fade-up">
-        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-6">Frequently Asked Questions</h2>
-        
-        <div class="space-y-4">
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Is a root canal painful?</h3>
-            <p class="text-gray-600">
-              Modern root canal procedures are virtually painless thanks to local anesthesia and 
-              advanced techniques. Most patients report that it's no more uncomfortable than getting a filling.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">How long does recovery take?</h3>
-            <p class="text-gray-600">
-              Most patients return to normal activities the next day. Any mild discomfort typically 
-              subsides within a few days.
-            </p>
-          </div>
-
-          <div class="bg-white shadow-sm border border-gray-100 rounded-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-2">How long does the procedure take?</h3>
-            <p class="text-gray-600">
-              A root canal typically takes 60-90 minutes, though complex cases may require multiple visits.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Call to Action -->
-      <section class="max-w-3xl mx-auto" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg text-center">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">Experiencing Tooth Pain?</h2>
-          <p class="text-gray-600 mb-6">
-            Don't wait until the pain becomes severe. Contact us for an evaluation to determine if 
-            you need a root canal treatment.
+        <div class="bg-primary-50 p-6 rounded-lg not-prose mt-8 text-center">
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Experiencing Tooth Pain?</h3>
+          <p class="text-gray-600 mb-4">
+            Don't wait until it gets worse. Contact {clinicInfo.name} immediately.
           </p>
           <div class="flex flex-wrap justify-center gap-4">
-            <a 
-              href="/book-appointment" 
-              class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-md hover:bg-primary-700 transition-colors duration-200"
-            >
-              Book Appointment
-            </a>
-            <a 
-              href="tel:+17376008776" 
-              class="inline-flex items-center px-6 py-3 border border-primary-600 text-primary-600 font-medium rounded-md hover:bg-primary-50 transition-colors duration-200"
-            >
-              Call Us
-            </a>
+            <Button 
+              href="/contact" 
+              text="Book Appointment" 
+              variant="primary"
+            />
+            <Button
+              href={`tel:${clinicInfo.phone}`}
+              text="Call Us"
+              variant="outline"
+            />
           </div>
         </div>
-      </section>
+      </article>
     </div>
   </div>
 </Layout>

@@ -2,40 +2,42 @@
 import Layout from '../../layouts/Layout.astro';
 import Hero from '../../components/Hero.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import Button from '../../components/Button.astro';
-import BeforeAfterGallery from '../../components/BeforeAfterGallery.tsx';
+import BeforeAfterGallery from '../../components/BeforeAfterGallery'; // Assuming this component exists or is similar to the one in smile-gallery
 import { clinicInfo } from '../../utils/clinicInfo';
+// ✅ ADD THIS IMPORT
+import { HERO_IMAGES, GALLERY_IMAGES } from '../../utils/images';
 
 const breadcrumbItems = [
   { label: 'Home', href: '/' },
-  { label: 'Patient Education', href: '/patient-education' },
+  { label: 'Patient Education', href: '/patient-information' },
   { label: 'Before & After', href: '/patient-education/before-after' },
 ];
 
+// Reuse the transformations data or import it if centralized
 const transformations = [
   {
     title: "Professional Teeth Whitening",
-    description: "Dramatic smile brightening achieved in just one visit",
-    before: "/images/hero/dental-1.jpg",
-    after: "/images/hero/dental-2.jpg",
+    description: "Dramatic smile brightening achieved in just one visit.",
+    before: GALLERY_IMAGES.whiteningCase1.before,
+    after: GALLERY_IMAGES.whiteningCase1.after,
     treatment: "Zoom! Whitening",
     duration: "1 hour",
     concern: "Yellow, stained teeth"
   },
   {
-    title: "Porcelain Veneers",
-    description: "Complete smile makeover addressing multiple cosmetic concerns",
-    before: "/images/hero/dental-2.jpg",
-    after: "/images/hero/dental-3.jpg",
+    title: "Composite Filings",
+    description: "Complete smile makeover addressing multiple cosmetic concerns.",
+    before: GALLERY_IMAGES.fillingsCase1.before,
+    after: GALLERY_IMAGES.fillingsCase1.after,
     treatment: "Porcelain Veneers",
     duration: "2 weeks",
     concern: "Discolored and misaligned teeth"
   },
   {
     title: "Dental Implants",
-    description: "Permanent tooth replacement with natural-looking results",
-    before: "/images/hero/dental-3.jpg",
-    after: "/images/hero/dental-1.jpg",
+    description: "Permanent tooth replacement with natural-looking results.",
+    before: GALLERY_IMAGES.implantCase1.before,
+    after: GALLERY_IMAGES.implantCase1.after,
     treatment: "Dental Implant",
     duration: "4-6 months",
     concern: "Missing front tooth"
@@ -43,64 +45,33 @@ const transformations = [
 ];
 ---
 
-<Layout 
-  title="Before & After Gallery" 
-  description="View real patient transformations at NextGen Dental in Austin, TX. See our before and after gallery showcasing stunning smile makeovers."
+<Layout
+  title="Real Smile Transformations | NextGen Dental Austin"
+  description="View real patient transformations at NextGen Dental in South Austin. See our before and after gallery showcasing stunning smile makeovers."
 >
   <Hero
     title="Before & After Gallery"
-    subtitle="Real patient transformations and smile makeovers"
-    images={["/images/hero/dental-1.jpg"]}
+    subtitle="See the difference expert care makes"
+    images={[HERO_IMAGES.dental1]} 
     height="md"
   />
-  
+  {/* 👆 FIXED: Used HERO_IMAGES.dental1 instead of string path */}
+
   <Breadcrumbs items={breadcrumbItems} />
-  
+
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
-      <!-- Introduction -->
       <section class="mb-16 max-w-3xl mx-auto text-center" data-aos="fade-up">
-        <h2 class="text-3xl md:text-4xl font-bold font-heading text-gray-800 mb-6">
-          Real Patient Results
-        </h2>
+        <h2 class="text-3xl font-bold font-heading text-gray-800 mb-6">Real Results</h2>
         <p class="text-lg text-gray-600">
-          Browse our collection of smile transformations. These before and after photos showcase 
-          actual results achieved by our patients at {clinicInfo.name}.
+          Browse our collection of smile transformations. These photos showcase actual results achieved 
+          by our team at {clinicInfo.name}.
         </p>
       </section>
 
       <!-- Gallery Grid -->
       <section class="mb-16" data-aos="fade-up">
         <BeforeAfterGallery client:load transformations={transformations} />
-      </section>
-
-      <!-- CTA Section -->
-      <section class="max-w-3xl mx-auto text-center" data-aos="fade-up">
-        <div class="bg-primary-50 p-8 rounded-lg">
-          <h2 class="text-2xl font-bold font-heading text-gray-800 mb-4">
-            Ready to Transform Your Smile?
-          </h2>
-          <p class="text-gray-600 mb-6">
-            Schedule a consultation to discuss your smile goals and learn how we can help you 
-            achieve the smile you've always wanted.
-          </p>
-          <div class="flex flex-wrap justify-center gap-4">
-            <Button
-              href={clinicInfo.booking.url}
-              text="Book Consultation"
-              variant="primary"
-              size="lg"
-              target="_blank"
-              rel="noopener noreferrer"
-            />
-            <Button
-              href={`tel:${clinicInfo.phone}`}
-              text="Call Us"
-              variant="outline"
-              size="lg"
-            />
-          </div>
-        </div>
       </section>
     </div>
   </div>
