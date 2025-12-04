@@ -1,4 +1,4 @@
-# Lilac Dental Website
+# NextGen Dental Website
 
 A modern, responsive dental practice website built with Astro, TypeScript, and Tailwind CSS. Features appointment booking, patient education resources, service information, and more.
 
