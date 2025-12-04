@@ -33,3 +33,7 @@ terraform.tfstate.backup
 # Astro build cache or temporary files (if any specific to Astro)
 .cache/
 
+.astro/
+.bolt/
+.codesandbox/
+.vscode/
