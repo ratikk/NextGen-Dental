@@ -14,6 +14,7 @@ This project features a static-first architecture for speed, with interactive "i
     *   Secure Contact & Appointment forms (with reCAPTCHA v3).
     *   Interactive "Before & After" image sliders.
 *   **Centralized Config:** Global site data (Phone, Address, Hours) managed in a single file.
+*   
 
 ## 🛠 Tech Stack
 
