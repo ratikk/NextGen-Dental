@@ -8,20 +8,23 @@ export default function PhoneReveal() {
   const display = '(737) 910-3739';
 
   return (
-    <div>
+    <>
       {!revealed ? (
         <button
           onClick={() => setRevealed(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
+          className="inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-blue-600 bg-white rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl"
         >
-          Reveal Phone Number
+          Call Us
         </button>
       ) : (
-        <a href={`tel:${tel}`} className="ml-3 font-semibold text-lg text-blue-700 underline">
+        <a
+          href={`tel:${tel}`}
+          className="inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-blue-600 bg-white rounded-lg hover:bg-gray-100 transition-all duration-200 shadow-lg hover:shadow-xl"
+        >
           {display}
         </a>
       )}
-    </div>
+    </>
   );
 }
 

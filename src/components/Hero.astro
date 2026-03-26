@@ -1,5 +1,6 @@
 ---
 import Button from './Button.astro';
+import PhoneReveal from './PhoneReveal.astro';
 import { Image } from 'astro:assets';
 import { clinicInfo } from '../utils/clinicInfo';
 
@@ -71,6 +72,19 @@ const {
           </div>
 
           {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-40 pointer-events-none"></div>}
+
+          <!-- Call to Action Buttons -->
+          <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-4 z-10 w-full px-4 sm:w-auto">
+            <PhoneReveal />
+            <a
+              href="https://book.modento.io/nextgen-dental/patient-details"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center px-8 py-3 text-base font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              Book Appointment
+            </a>
+          </div>
         </div>
 
         {isHomePage && (
