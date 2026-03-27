@@ -53,16 +53,14 @@ const {
                   <div class="relative pb-[56.25%]">
                     <Image
                       src={image}
-                      alt="Dental care"
+                      alt={`Dental care image ${index + 1}`}
                       class="absolute inset-0 w-full h-full object-cover object-center"
-                      /* ✅ CRITICAL FIX: Generate multiple sizes */
-                      widths={[640, 1024, 1920]} 
+                      widths={[640, 1024, 1920]}
                       sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
-                      /* Load first image instantly, lazy load others */
-                      loading={index === 0 ? "eager" : "lazy"}
+                      loading="eager"
                       fetchpriority={index === 0 ? "high" : "auto"}
                       format="webp"
-                      quality={80} 
+                      quality={80}
                     />
                   </div>
                 </div>
@@ -189,25 +187,33 @@ const {
   import Swiper from 'swiper';
   import { Autoplay, Pagination } from 'swiper/modules';
 
-  const swiperEl = document.querySelector('.heroSwiper');
-  if (swiperEl) {
-    new Swiper('.heroSwiper', {
-      modules: [Autoplay, Pagination],
-      slidesPerView: 1,
-      loop: true,
-      speed: 800,
-      autoplay: {
-        delay: 3500,
-        disableOnInteraction: false,
-        pauseOnMouseEnter: true,
-      },
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      effect: 'slide',
-    });
-  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const swiperEl = document.querySelector('.heroSwiper');
+    if (swiperEl) {
+      const swiper = new Swiper('.heroSwiper', {
+        modules: [Autoplay, Pagination],
+        slidesPerView: 1,
+        loop: true,
+        speed: 800,
+        autoplay: {
+          delay: 3500,
+          disableOnInteraction: false,
+          pauseOnMouseEnter: true,
+        },
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+          dynamicBullets: false,
+        },
+        effect: 'slide',
+        watchSlidesProgress: true,
+        observer: true,
+        observeParents: true,
+      });
+
+      console.log('Swiper initialized with', swiper.slides.length, 'slides');
+    }
+  });
 
   const appointmentForm = document.getElementById('appointment-form');
   if (appointmentForm) {
@@ -235,8 +241,19 @@ const {
 </script>
 
 <style>
-  .swiper-slide {
+  .heroSwiper {
+    width: 100%;
     height: 100%;
+  }
+
+  .swiper-wrapper {
+    display: flex;
+  }
+
+  .swiper-slide {
+    width: 100%;
+    height: 100%;
+    flex-shrink: 0;
   }
 
   .swiper-pagination {
@@ -249,6 +266,7 @@ const {
     opacity: 0.6;
     width: 10px;
     height: 10px;
+    margin: 0 4px !important;
   }
 
   .swiper-pagination-bullet-active {
