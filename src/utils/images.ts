@@ -16,10 +16,24 @@ import drKiranmayee from '../assets/images/about/dr-kiranmayee.jpg';
 // Gallery Images
 import whiteningCase1Before from '../assets/images/gallery/whitening-case1-before.jpg';
 import whiteningCase1After from '../assets/images/gallery/whitening-case1-after.jpg';
+import whiteningCase2Before from '../assets/images/gallery/whitening-case2-before.jpg';
+import whiteningCase2After from '../assets/images/gallery/whitening-case2-after.jpg';
 import fillingsCase1Before from '../assets/images/gallery/fillings-case1-before.jpg';
 import fillingsCase1After from '../assets/images/gallery/fillings-case1-after.jpg';
 import implantCase1Before from '../assets/images/gallery/implant-case1-before.jpg';
 import implantCase1After from '../assets/images/gallery/implant-case1-after.jpg';
+import implantCase2Before from '../assets/images/gallery/implant-case2-before.jpg';
+import implantCase2After from '../assets/images/gallery/implant-case2-after.jpg';
+import veneersCase1Before from '../assets/images/gallery/veneers-case1-before.jpg';
+import veneersCase1After from '../assets/images/gallery/veneers-case1-after.jpg';
+import veneersCase2Before from '../assets/images/gallery/veneers-case2-before.jpg';
+import veneersCase2After from '../assets/images/gallery/veneers-case2-after.jpg';
+import orthodonticsCase1Before from '../assets/images/gallery/orthodontics-case1-before.jpg';
+import orthodonticsCase1After from '../assets/images/gallery/orthodontics-case1-after.jpg';
+import crownsCase1Before from '../assets/images/gallery/crowns-case1-before.jpg';
+import crownsCase1After from '../assets/images/gallery/crowns-case1-after.jpg';
+import cosmeticCase1Before from '../assets/images/gallery/cosmetic-case1-before.jpg';
+import cosmeticCase1After from '../assets/images/gallery/cosmetic-case1-after.jpg';
 
 export const HERO_IMAGES = {
   dental1,
@@ -40,13 +54,41 @@ export const GALLERY_IMAGES = {
     before: whiteningCase1Before,
     after: whiteningCase1After
   },
+  whiteningCase2: {
+    before: whiteningCase2Before,
+    after: whiteningCase2After
+  },
   fillingsCase1: {
     before: fillingsCase1Before,
-    after: fillingsCase1After 
+    after: fillingsCase1After
   },
   implantCase1: {
     before: implantCase1Before,
     after: implantCase1After
+  },
+  implantCase2: {
+    before: implantCase2Before,
+    after: implantCase2After
+  },
+  veneersCase1: {
+    before: veneersCase1Before,
+    after: veneersCase1After
+  },
+  veneersCase2: {
+    before: veneersCase2Before,
+    after: veneersCase2After
+  },
+  orthodonticsCase1: {
+    before: orthodonticsCase1Before,
+    after: orthodonticsCase1After
+  },
+  crownsCase1: {
+    before: crownsCase1Before,
+    after: crownsCase1After
+  },
+  cosmeticCase1: {
+    before: cosmeticCase1Before,
+    after: cosmeticCase1After
   }
 } as const;
 

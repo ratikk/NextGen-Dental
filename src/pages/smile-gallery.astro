@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import Button from '../components/Button.astro';
-import BeforeAfterGallery from '../components/BeforeAfterGallery.tsx';
+import ModernGallery from '../components/ModernGallery.tsx';
 import { clinicInfo } from '../utils/clinicInfo';
 import { GALLERY_IMAGES } from '../utils/images';
 
@@ -11,34 +11,67 @@ const breadcrumbItems = [
   { label: 'Smile Gallery', href: '/smile-gallery' },
 ];
 
-const transformations = [
+const galleryItems = [
   {
     title: "Professional Teeth Whitening",
-    description: "Dramatic smile brightening achieved in just one visit.",
+    category: "Whitening",
     before: GALLERY_IMAGES.whiteningCase1.before,
     after: GALLERY_IMAGES.whiteningCase1.after,
-    treatment: "Zoom! Whitening",
-    duration: "1 hour",
-    concern: "Yellow, stained teeth"
   },
   {
-    title: "Composite Filings",
-    description: "Complete smile makeover addressing multiple cosmetic concerns.",
+    title: "Zoom Whitening Treatment",
+    category: "Whitening",
+    before: GALLERY_IMAGES.whiteningCase2.before,
+    after: GALLERY_IMAGES.whiteningCase2.after,
+  },
+  {
+    title: "Composite Fillings Restoration",
+    category: "Restorative",
     before: GALLERY_IMAGES.fillingsCase1.before,
     after: GALLERY_IMAGES.fillingsCase1.after,
-    treatment: "Porcelain Veneers",
-    duration: "2 weeks",
-    concern: "Discolored and misaligned teeth"
   },
   {
-    title: "Dental Implants",
-    description: "Permanent tooth replacement with natural-looking results.",
+    title: "Single Dental Implant",
+    category: "Implants",
     before: GALLERY_IMAGES.implantCase1.before,
     after: GALLERY_IMAGES.implantCase1.after,
-    treatment: "Dental Implant",
-    duration: "4-6 months",
-    concern: "Missing front tooth"
-  }
+  },
+  {
+    title: "Multiple Dental Implants",
+    category: "Implants",
+    before: GALLERY_IMAGES.implantCase2.before,
+    after: GALLERY_IMAGES.implantCase2.after,
+  },
+  {
+    title: "Porcelain Veneers - Full Smile",
+    category: "Veneers",
+    before: GALLERY_IMAGES.veneersCase1.before,
+    after: GALLERY_IMAGES.veneersCase1.after,
+  },
+  {
+    title: "Veneers for Discolored Teeth",
+    category: "Veneers",
+    before: GALLERY_IMAGES.veneersCase2.before,
+    after: GALLERY_IMAGES.veneersCase2.after,
+  },
+  {
+    title: "Orthodontic Treatment",
+    category: "Orthodontics",
+    before: GALLERY_IMAGES.orthodonticsCase1.before,
+    after: GALLERY_IMAGES.orthodonticsCase1.after,
+  },
+  {
+    title: "Dental Crowns",
+    category: "Crowns",
+    before: GALLERY_IMAGES.crownsCase1.before,
+    after: GALLERY_IMAGES.crownsCase1.after,
+  },
+  {
+    title: "Complete Smile Makeover",
+    category: "Cosmetic",
+    before: GALLERY_IMAGES.cosmeticCase1.before,
+    after: GALLERY_IMAGES.cosmeticCase1.after,
+  },
 ];
 ---
 
@@ -75,13 +108,22 @@ const transformations = [
     </div>
   </div>
 
-  <div class="py-16 bg-white">
+  <div class="py-16 bg-gradient-to-b from-white to-gray-50">
     <div class="container mx-auto px-4">
-      
+
+      <!-- Intro Section -->
+      <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold font-heading text-gray-900 mb-4">
+          Transform Your Smile
+        </h2>
+        <p class="text-lg text-gray-600 leading-relaxed">
+          Explore our collection of real patient transformations. Each smile tells a unique story of confidence restored through advanced dental care.
+        </p>
+      </div>
+
       <!-- Gallery Grid -->
       <section class="mb-20" data-aos="fade-up">
-        <!-- We removed the Intro text block to get straight to the photos -->
-        <BeforeAfterGallery client:load transformations={transformations} />
+        <ModernGallery client:load items={galleryItems} />
       </section>
 
       <!-- CTA Section -->
