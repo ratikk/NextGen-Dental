@@ -74,7 +74,7 @@ const {
           {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-40 pointer-events-none"></div>}
 
           <!-- Call to Action Buttons -->
-          <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-4 z-10 w-full px-4 sm:w-auto">
+          <div class="absolute bottom-20 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-4 z-20 w-full px-4 sm:w-auto">
             <PhoneReveal />
             <a
               href="https://book.modento.io/nextgen-dental/patient-details"
@@ -195,14 +195,17 @@ const {
       modules: [Autoplay, Pagination],
       slidesPerView: 1,
       loop: true,
+      speed: 800,
       autoplay: {
-        delay: 4000,
+        delay: 3500,
         disableOnInteraction: false,
+        pauseOnMouseEnter: true,
       },
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
       },
+      effect: 'slide',
     });
   }
 
@@ -237,15 +240,19 @@ const {
   }
 
   .swiper-pagination {
-    bottom: 20px !important;
+    bottom: 12px !important;
+    z-index: 10;
   }
 
   .swiper-pagination-bullet {
     background: white !important;
-    opacity: 0.5;
+    opacity: 0.6;
+    width: 10px;
+    height: 10px;
   }
 
   .swiper-pagination-bullet-active {
     opacity: 1;
+    background: white !important;
   }
 </style>
