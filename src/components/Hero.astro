@@ -74,16 +74,21 @@ const {
           <!-- Pagination outside swiper but inside container -->
           <div class="swiper-pagination"></div>
 
-          <!-- Call to Action Buttons -->
-          <div class="absolute bottom-4 sm:bottom-8 md:bottom-16 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row gap-3 z-20 px-4 max-w-[280px] sm:max-w-none sm:w-auto">
-            <PhoneReveal />
+          <!-- Call to Action Buttons - Hidden on mobile, visible on desktop -->
+          <div class="hidden md:flex absolute bottom-8 left-1/2 transform -translate-x-1/2 items-center gap-4 z-20">
+            <a
+              href="tel:+17379103739"
+              class="inline-flex items-center justify-center text-lg px-4 py-2 font-semibold whitespace-nowrap bg-transparent border border-primary-600 text-primary-600 hover:bg-primary-50 rounded-md transition-colors duration-200 bg-white"
+            >
+              Call Us
+            </a>
             <a
               href="https://book.modento.io/nextgen-dental/patient-details"
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center px-6 sm:px-8 py-2.5 sm:py-3 text-sm sm:text-base font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+              class="inline-flex items-center justify-center text-lg px-4 py-2 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-sm rounded-md transition-colors duration-200"
             >
-              Book Appointment
+              Book Now
             </a>
           </div>
         </div>
@@ -270,7 +275,7 @@ const {
 
   .swiper-pagination {
     position: absolute !important;
-    bottom: 110px !important;
+    bottom: 20px !important;
     left: 0 !important;
     right: 0 !important;
     text-align: center !important;
@@ -280,15 +285,9 @@ const {
     gap: 8px !important;
   }
 
-  @media (min-width: 640px) {
-    .swiper-pagination {
-      bottom: 120px !important;
-    }
-  }
-
   @media (min-width: 768px) {
     .swiper-pagination {
-      bottom: 140px !important;
+      bottom: 70px !important;
     }
   }
 
