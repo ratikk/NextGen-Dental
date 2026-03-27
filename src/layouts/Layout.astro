@@ -3,17 +3,13 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BookingPopup from '../components/BookingPopup.astro';
 import { clinicInfo } from '../utils/clinicInfo';
-import '@fontsource/montserrat/400.css';
-import '@fontsource/montserrat/500.css';
-import '@fontsource/montserrat/600.css';
 import '@fontsource/montserrat/700.css';
+import '@fontsource/montserrat/600.css';
 import '@fontsource/open-sans/400.css';
-import '@fontsource/open-sans/500.css';
 import '@fontsource/open-sans/600.css';
-import 'aos/dist/aos.css';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import 'swiper/css/navigation';
+import 'aos/dist/aos.css';
 
 export interface Props {
   title: string;
@@ -137,26 +133,23 @@ const dentistSchema = {
       <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
     )}
 
-    <!-- Font Optimization -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://www.google.com" crossorigin />
-    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
-    <link rel="preload" href="/_astro/montserrat-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/_astro/open-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <!-- DNS Prefetch for third-party domains -->
+    <link rel="dns-prefetch" href="https://www.google.com" />
+    <link rel="dns-prefetch" href="https://www.gstatic.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-    <!-- Initialize Swiper -->
-    <script>
-      import Swiper from 'swiper';
-      import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-      Swiper.use([Autoplay, Pagination, Navigation]);
-      window.Swiper = Swiper;
-    </script>
+    <!-- Preload critical assets -->
+    <link rel="modulepreload" href="/src/components/Hero.astro" />
+    <link rel="preload" as="style" href="/_astro/montserrat-latin-700-normal.woff2" />
+    <link rel="preload" as="style" href="/_astro/open-sans-latin-400-normal.woff2" />
+
 
     <slot name="head" />
-    
+
     <style is:global>
-      @font-face { font-family: 'Montserrat'; font-display: swap; }
-      @font-face { font-family: 'Open Sans'; font-display: swap; }
+      :root {
+        font-display: swap;
+      }
     </style>
   </head>
   <body class="antialiased bg-gray-50 text-gray-800 min-h-screen flex flex-col">
@@ -167,12 +160,13 @@ const dentistSchema = {
     <Footer />
     <BookingPopup />
 
-    <!-- AOS Animation -->
+    <!-- AOS Animation - Deferred -->
     <script>
-      import AOS from 'aos';
-      document.addEventListener('DOMContentLoaded', () => {
-        AOS.init({ duration: 800, easing: 'ease-in-out', once: true, mirror: false });
-      });
+      setTimeout(() => {
+        import('aos').then((AOS) => {
+          AOS.default.init({ duration: 800, easing: 'ease-in-out', once: true, mirror: false });
+        });
+      }, 100);
     </script>
 
     <!-- ✅ GOOGLE ADS & ANALYTICS: DELAYED LOAD -->

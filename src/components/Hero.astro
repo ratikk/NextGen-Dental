@@ -4,10 +4,6 @@ import PhoneReveal from './PhoneReveal.astro';
 import { Image } from 'astro:assets';
 import { clinicInfo } from '../utils/clinicInfo';
 
-// CSS Imports
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/autoplay';
 
 export interface Props {
   // Update Type: It now accepts ImageMetadata (imported images) OR strings
@@ -56,12 +52,13 @@ const {
                       src={image}
                       alt={`Dental care image ${index + 1}`}
                       class="absolute inset-0 w-full h-full object-cover object-center"
-                      widths={[640, 1024, 1920]}
-                      sizes="(max-width: 640px) 640px, (max-width: 1024px) 1024px, 1920px"
-                      loading="eager"
-                      fetchpriority={index === 0 ? "high" : "auto"}
+                      widths={[640, 768, 1024, 1920]}
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 1024px, 1920px"
+                      loading={index === 0 ? "eager" : "lazy"}
+                      fetchpriority={index === 0 ? "high" : "low"}
                       format="webp"
-                      quality={80}
+                      quality={85}
+                      decoding={index === 0 ? "sync" : "async"}
                     />
                   </div>
                 </div>

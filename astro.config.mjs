@@ -19,7 +19,14 @@ export default defineConfig({
     service: {
       entrypoint: 'astro/assets/services/sharp',
     },
-    // Performance: Ensure images are compressed automatically
-    compress: true,
+    remotePatterns: [{ protocol: "https" }],
+  },
+  vite: {
+    build: {
+      cssCodeSplit: false,
+    },
+    ssr: {
+      noExternal: ['swiper', 'aos'],
+    },
   }
 });
