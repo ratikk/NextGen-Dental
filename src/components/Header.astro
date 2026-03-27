@@ -8,12 +8,12 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
 ---
 
 <header class="w-full fixed top-0 left-0 z-50 bg-white shadow-sm">
-  <div class="bg-gray-50 py-1.5 md:py-2">
+  <div class="hidden md:block bg-gray-50 py-2">
     <div class="container mx-auto px-4">
       <div class="flex justify-between items-center">
-        
+
         <a href="/" class="flex items-center gap-2" aria-label="Lilac Dental Homepage">
-          <img src="/images/logo.png" alt={`${clinicInfo.name} Logo`} class="h-6 md:h-8" />
+          <img src="/images/logo.png" alt={`${clinicInfo.name} Logo`} class="h-8" />
         </a>
 
         <div class="flex items-center gap-4">
@@ -21,7 +21,7 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
             href={clinicInfo.mapLink}
             target="_blank"
             rel="noopener noreferrer"
-            class="hidden md:flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
+            class="flex items-center gap-2 text-gray-600 hover:text-primary-600 transition-colors duration-200"
             aria-label="Open Google Maps Location"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,9 +43,12 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
     </div>
   </div>
 
-  <nav class="py-2 md:py-4 bg-white">
+  <nav class="py-3 md:py-4 bg-white">
     <div class="container mx-auto px-4">
       <div class="flex items-center justify-between">
+        <a href="/" class="lg:hidden flex items-center gap-2" aria-label="Lilac Dental Homepage">
+          <img src="/images/logo.png" alt={`${clinicInfo.name} Logo`} class="h-8" />
+        </a>
         <div class="hidden lg:flex items-center space-x-8">
           <a href="/" class="nav-link">Home</a>
           <a href="/about" class="nav-link">About</a>
