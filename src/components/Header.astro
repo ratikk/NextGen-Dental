@@ -49,6 +49,19 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
         <a href="/" class="lg:hidden flex items-center gap-2" aria-label="Lilac Dental Homepage">
           <img src="/images/logo.png" alt={`${clinicInfo.name} Logo`} class="h-8" />
         </a>
+
+        <div class="flex lg:hidden items-center gap-2">
+          <div class="secure-call-wrapper-mobile" data-phone={rawPhone}>
+            <Button href="/contact" text="Call Us" variant="outline" size="sm" />
+          </div>
+          <Button href={clinicInfo.booking.url} text="Book Now" variant="primary" size="sm" target="_blank" rel="noopener noreferrer" />
+          <button id="menu-toggle-right" class="text-gray-700 focus:outline-none ml-2" aria-label="Open Mobile Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+
         <div class="hidden lg:flex items-center space-x-8">
           <a href="/" class="nav-link">Home</a>
           <a href="/about" class="nav-link">About</a>
@@ -83,12 +96,6 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
           <a href="/reviews" class="nav-link">Reviews</a>
           <a href="/contact" class="nav-link">Contact</a>
         </div>
-
-        <button id="menu-toggle" class="lg:hidden text-gray-700 focus:outline-none" aria-label="Open Mobile Menu">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
-        </button>
       </div>
     </div>
   </nav>
@@ -100,18 +107,18 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
 </style>
 
 <script>
-  const menuToggle = document.getElementById('menu-toggle');
+  const menuToggleRight = document.getElementById('menu-toggle-right');
   const mobileMenu = document.getElementById('mobile-menu');
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener('click', () => {
+  if (menuToggleRight && mobileMenu) {
+    menuToggleRight.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
     });
   }
-  
+
   // Logic: Intercept the click on /contact and force a call instead
-  const callWrappers = document.querySelectorAll('.secure-call-wrapper');
+  const callWrappers = document.querySelectorAll('.secure-call-wrapper, .secure-call-wrapper-mobile');
   callWrappers.forEach(wrapper => {
-    const btn = wrapper.querySelector('a'); 
+    const btn = wrapper.querySelector('a');
     if (btn && wrapper instanceof HTMLElement) {
       btn.addEventListener('click', (e) => {
         e.preventDefault(); // STOP browser from going to /contact
