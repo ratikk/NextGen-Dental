@@ -1,0 +1,24 @@
+name: dr-suman
+title: Doctor of Dental Surgery
+image: /images/team/dr-suman.jpg
+credentials: DDS
+specialties:
+  - Restorative Dentistry
+  - Root Canal Therapy
+  - Preventive Care
+bio:
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Dr. Suman Vemuri is passionate about helping patients achieve optimal
+          oral health through comprehensive and personalized dental care. His
+          approach combines clinical excellence with a warm, patient-centered
+          philosophy.
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Dr. Vemuri takes pride in building lasting relationships with his
+          patients and ensuring they feel comfortable and informed throughout
+          their dental journey.

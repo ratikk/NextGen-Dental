@@ -1,0 +1,59 @@
+title: invisalign-benefits
+description: >-
+  Discover the advantages of Invisalign clear aligners over traditional braces
+  for straightening your teeth.
+date: '2024-03-15'
+author: dr-kiranmayee
+category: cosmetic
+featured: true
+image: /images/blog/invisalign.jpg
+content:
+  - type: heading
+    level: 2
+    children:
+      - type: text
+        text: Why Choose Invisalign?
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Invisalign has revolutionized orthodontic treatment, offering a
+          discreet and comfortable alternative to traditional braces.
+  - type: heading
+    level: 3
+    children:
+      - type: text
+        text: Key Benefits
+  - type: list
+    listType: unordered
+    children:
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: 'Nearly invisible: Clear aligners are hard to notice'
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: 'Removable: Take them out to eat and brush'
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: 'Comfortable: No metal brackets or wires'
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: 'Predictable results: See your treatment plan upfront'
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Schedule a consultation to see if Invisalign is right for your smile
+          transformation.

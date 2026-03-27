@@ -1,0 +1,23 @@
+siteName: NextGen Dental
+tagline: Modern Dental Care in Buda, TX
+phone: (512) 523-4000
+email: info@nextgendentalaustintx.com
+address: |
+  280 Cimarron Park Loop, Suite B
+  Buda, TX 78610
+hours:
+  - type: paragraph
+    children:
+      - type: text
+        text: 'Monday - Thursday: 8:00 AM - 5:00 PM'
+  - type: paragraph
+    children:
+      - type: text
+        text: 'Friday: 8:00 AM - 2:00 PM'
+  - type: paragraph
+    children:
+      - type: text
+        text: 'Saturday - Sunday: Closed'
+emergencyMessage: >-
+  For dental emergencies outside office hours, please call (512) 523-4000 and
+  follow the prompts for emergency assistance.

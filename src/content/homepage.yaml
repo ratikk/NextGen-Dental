@@ -1,0 +1,23 @@
+heroHeading: Your Smile is Our Priority
+heroSubheading: >-
+  Experience exceptional dental care in a comfortable, modern environment. Our
+  experienced team uses the latest technology to provide comprehensive dental
+  services for the whole family.
+ctaPrimaryText: Book Appointment
+ctaSecondaryText: Learn More
+welcomeHeading: Welcome to NextGen Dental
+welcomeText:
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          At NextGen Dental, we believe everyone deserves a healthy, beautiful
+          smile. Our practice combines advanced dental technology with
+          compassionate care to deliver exceptional results.
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          From routine checkups to complex restorative procedures, our
+          experienced team is committed to your oral health and comfort.
+featuresHeading: Why Choose NextGen Dental?

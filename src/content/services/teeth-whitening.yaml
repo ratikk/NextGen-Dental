@@ -1,0 +1,51 @@
+title: teeth-whitening
+description: >-
+  Professional teeth whitening treatments to brighten your smile and boost your
+  confidence.
+icon: sparkles
+featured: true
+content:
+  - type: heading
+    level: 2
+    children:
+      - type: text
+        text: Professional Teeth Whitening
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Achieve a brighter, more confident smile with our professional teeth
+          whitening services. We offer both in-office and take-home whitening
+          options.
+  - type: heading
+    level: 3
+    children:
+      - type: text
+        text: Whitening Options
+  - type: list
+    listType: unordered
+    children:
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: 'In-office whitening: Results in one visit'
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: 'Take-home kits: Whiten at your convenience'
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: Safe and effective treatments
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: Long-lasting results

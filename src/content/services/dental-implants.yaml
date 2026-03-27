@@ -1,0 +1,63 @@
+title: dental-implants
+description: >-
+  Replace missing teeth with permanent dental implants that look, feel, and
+  function like natural teeth.
+icon: tooth
+featured: true
+content:
+  - type: heading
+    level: 2
+    children:
+      - type: text
+        text: Restore Your Smile with Dental Implants
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Dental implants are the gold standard for replacing missing teeth.
+          They provide a permanent, natural-looking solution that restores both
+          function and aesthetics.
+  - type: heading
+    level: 3
+    children:
+      - type: text
+        text: Benefits of Dental Implants
+  - type: list
+    listType: unordered
+    children:
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: Permanent solution for missing teeth
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: Natural appearance and feel
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: Prevents bone loss
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: No impact on adjacent teeth
+      - type: list-item
+        children:
+          - type: list-item-content
+            children:
+              - type: text
+                text: High success rate
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Schedule a consultation to learn if dental implants are right for
+          you.

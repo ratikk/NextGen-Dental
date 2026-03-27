@@ -1,0 +1,24 @@
+name: dr-kiranmayee
+title: Doctor of Dental Surgery
+image: /images/team/dr-kiranmayee.jpg
+credentials: DDS
+specialties:
+  - Cosmetic Dentistry
+  - Dental Implants
+  - General Dentistry
+bio:
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Dr. Kiranmayee Bandla is dedicated to providing exceptional dental
+          care with a focus on patient comfort and satisfaction. With years of
+          experience in both general and cosmetic dentistry, she brings
+          expertise and a gentle touch to every procedure.
+  - type: paragraph
+    children:
+      - type: text
+        text: >-
+          Dr. Bandla believes in continuing education and stays current with the
+          latest advancements in dental technology and techniques to provide the
+          best care possible.

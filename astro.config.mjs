@@ -6,7 +6,7 @@ import react from '@astrojs/react';
 export default defineConfig({
   integrations: [tailwind(), sitemap(), react()],
   // ✅ UPDATED: The correct domain
-  site: 'https://nextgendentalaustintx.com', 
+  site: 'https://nextgendentalaustintx.com',
   output: 'static',
   server: {
     host: '0.0.0.0'
