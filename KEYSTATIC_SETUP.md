@@ -2,46 +2,45 @@
 
 ## Overview
 
-Keystatic has been integrated into your NextGen Dental site. It provides a beautiful admin interface for managing all your content without touching code.
+Keystatic has been integrated into your NextGen Dental site with all content schemas configured. Content is stored as YAML files in your repository.
 
-## Accessing the Admin Panel
+## Current Configuration
 
-1. **Local Development**: Visit `http://localhost:4321/keystatic`
-2. **Production**: Visit `https://your-domain.com/keystatic`
+Your Keystatic is configured for **local file editing**. This means:
+- Content is stored as YAML files in `src/content/`
+- No admin interface needed - edit files directly
+- All content is version controlled in Git
+- Perfect for static site deployment
 
-## First-Time Setup
+## Why File-Based Instead of Admin UI?
 
-### 1. Configure GitHub Repository
+For static S3 deployments, file-based editing is the best approach:
+- No server required - pure static hosting
+- Content changes tracked in Git history
+- Can edit in any text editor or GitHub UI
+- Automated deployments on Git push
 
-Edit `keystatic.config.ts` and update the storage configuration:
+## How to Edit Content
 
-```typescript
-storage: {
-  kind: 'github',
-  repo: 'YOUR_GITHUB_USERNAME/YOUR_REPO_NAME', // Update this
-},
-```
+### Method 1: Edit YAML Files Directly
 
-Replace with your actual GitHub username and repository name.
+All content is in `src/content/`:
+- `src/content/homepage.yaml` - Homepage content
+- `src/content/site-settings.yaml` - Contact info, hours
+- `src/content/services/` - Service pages
+- `src/content/blog/` - Blog posts
+- `src/content/team/` - Team member profiles
+- `src/content/gallery/` - Before/after cases
 
-### 2. GitHub OAuth Setup (Production Only)
+### Method 2: Edit on GitHub
 
-For production deployment, you need to set up GitHub OAuth:
+1. Go to your repository: `https://github.com/ratikk/NextGen-Dental`
+2. Navigate to `src/content/`
+3. Click any YAML file
+4. Click the pencil icon to edit
+5. Commit changes
 
-1. Go to GitHub Settings → Developer settings → OAuth Apps
-2. Click "New OAuth App"
-3. Fill in:
-   - **Application name**: NextGen Dental CMS
-   - **Homepage URL**: `https://your-domain.com`
-   - **Authorization callback URL**: `https://your-domain.com/api/keystatic/github/oauth/callback`
-4. Save the Client ID and Client Secret
-5. Add these as environment variables in your deployment:
-   - `PUBLIC_KEYSTATIC_GITHUB_CLIENT_ID`
-   - `PUBLIC_KEYSTATIC_GITHUB_CLIENT_SECRET`
-
-### 3. Local Development (No OAuth Required)
-
-For local development, Keystatic uses local file storage automatically. No GitHub authentication needed.
+Your CI/CD pipeline will automatically rebuild and deploy.
 
 ## What You Can Edit
 
@@ -85,34 +84,60 @@ For local development, Keystatic uses local file storage automatically. No GitHu
 - Organize by category
 - Rich text with images
 
-## Content Workflow
+## Content Examples
 
-1. **Edit Content**: Use the Keystatic admin panel to make changes
-2. **Preview**: Changes are saved as Git commits
-3. **Deploy**: Push to GitHub triggers automatic rebuild on S3
+### Example: Editing Homepage Hero
 
-## Rich Text Editor Features
+Edit `src/content/homepage.yaml`:
 
-- **Formatting**: Bold, italic, headings, lists
-- **Links**: Add internal and external links
-- **Images**: Upload and embed images
-- **Structure**: Dividers, code blocks, quotes
+```yaml
+heroHeading: Your Smile is Our Priority
+heroSubheading: >-
+  Experience exceptional dental care in a comfortable environment.
+ctaPrimaryText: Book Appointment
+ctaSecondaryText: Learn More
+```
+
+### Example: Adding a Blog Post
+
+Create `src/content/blog/my-new-post.yaml`:
+
+```yaml
+title: my-new-post
+description: A brief excerpt about the post
+date: '2024-03-27'
+author: dr-kiranmayee
+category: cosmetic
+featured: false
+image: /images/blog/my-image.jpg
+content:
+  - type: heading
+    level: 2
+    children:
+      - type: text
+        text: Your Heading Here
+  - type: paragraph
+    children:
+      - type: text
+        text: Your content goes here...
+```
+
+## Deployment Workflow
+
+1. **Edit Content**: Modify YAML files locally or on GitHub
+2. **Commit Changes**: Git commit and push to repository
+3. **Auto Deploy**: Your CI/CD pipeline rebuilds the site
+4. **Live Update**: Changes appear on your live site
 
 ## Tips
 
-- All content is stored in `src/content/` as YAML files
-- Images are stored in `public/images/`
-- Every edit creates a Git commit
-- You can revert changes using Git history
-- Content is type-safe and validated
+- Content is type-safe and validated by schemas
+- Images go in `public/images/` subdirectories
+- YAML format is human-readable and Git-friendly
+- Use GitHub's web editor for quick edits
+- All changes are tracked in Git history
 
 ## Support
 
-For Keystatic documentation, visit: https://keystatic.com/docs
-
-## Next Steps
-
-1. Update the GitHub repo configuration in `keystatic.config.ts`
-2. Test locally at `/keystatic`
-3. Set up GitHub OAuth for production
-4. Start editing your content!
+For YAML syntax help: https://yaml.org/
+For Keystatic schemas: https://keystatic.com/docs

@@ -2,8 +2,7 @@ import { config, fields, collection } from '@keystatic/core';
 
 export default config({
   storage: {
-    kind: 'github',
-    repo: 'ratikk/NextGen-Dental',
+    kind: 'local',
   },
 
   collections: {

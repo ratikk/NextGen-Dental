@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NextGen Dental - Content Management</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    #keystatic-root {
+      min-height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="keystatic-root"></div>
+  <script type="module">
+    import { makePage } from 'https://esm.sh/@keystatic/core@0.5.50/ui';
+    import keystaticConfig from './keystatic.config.ts';
+
+    makePage(keystaticConfig, document.getElementById('keystatic-root'));
+  </script>
+</body>
+</html>
