@@ -5,6 +5,9 @@ import ServiceCard from '../components/ServiceCard.astro';
 import FeatureCard from '../components/FeatureCard.astro';
 import Button from '../components/Button.astro';
 import { clinicInfo } from '../utils/clinicInfo';
+import { getHomepageContent } from '../utils/supabase';
+
+const homepageContent = await getHomepageContent();
 
 // ✅ STEP 1: Import images directly so Astro can optimize them
 import dental1 from '../assets/images/hero/dental-1.jpg';
@@ -90,8 +93,8 @@ const insuranceProviders = [
   
   <Hero
     images={heroImages}
-    title={`Your Trusted Family Dentist in South Austin`}
-    subtitle="Serving families in Austin, Buda, and Kyle with gentle, comprehensive care."
+    title={homepageContent?.hero_heading || `Your Trusted Family Dentist in South Austin`}
+    subtitle={homepageContent?.hero_subheading || "Serving families in Austin, Buda, and Kyle with gentle, comprehensive care."}
     showAppointmentForm={false}
     isHomePage={true}
   />
