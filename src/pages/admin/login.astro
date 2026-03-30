@@ -71,60 +71,16 @@ import Layout from '../../layouts/Layout.astro';
 </Layout>
 
 <script>
-  import { createClient } from '@supabase/supabase-js';
-
-  const supabaseUrl = import.meta.env.PUBLIC_SUPABASE_URL;
-  const supabaseAnonKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
   const form = document.getElementById('login-form') as HTMLFormElement;
   const errorDiv = document.getElementById('error-message') as HTMLDivElement;
-  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement;
-  const submitText = document.getElementById('submit-text') as HTMLSpanElement;
-  const loadingSpinner = document.getElementById('loading-spinner') as HTMLSpanElement;
 
   function showError(message: string) {
     errorDiv.textContent = message;
     errorDiv.classList.remove('hidden');
   }
 
-  function hideError() {
-    errorDiv.classList.add('hidden');
-  }
-
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    hideError();
-
-    const email = (document.getElementById('email') as HTMLInputElement).value;
-    const password = (document.getElementById('password') as HTMLInputElement).value;
-
-    submitBtn.disabled = true;
-    submitText.classList.add('hidden');
-    loadingSpinner.classList.remove('hidden');
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        showError(error.message);
-        submitBtn.disabled = false;
-        submitText.classList.remove('hidden');
-        loadingSpinner.classList.add('hidden');
-        return;
-      }
-
-      if (data.user) {
-        window.location.href = '/admin/dashboard';
-      }
-    } catch (err) {
-      showError('An unexpected error occurred. Please try again.');
-      submitBtn.disabled = false;
-      submitText.classList.remove('hidden');
-      loadingSpinner.classList.add('hidden');
-    }
+    showError('Admin login is currently disabled. Please use Keystatic CMS for content management.');
   });
 </script>
