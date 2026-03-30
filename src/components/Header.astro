@@ -36,7 +36,15 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
               <!-- SEO FIX: Point to /contact so bots see a valid link. JS will intercept for humans. -->
               <Button href="/contact" text="Call Us" variant="outline" size="lg" />
             </div>
-            <Button href={clinicInfo.booking.zocdoc} text="Book Online" variant="primary" size="lg" target="_blank" rel="noopener noreferrer" />
+            <a
+              href={clinicInfo.booking.zocdoc}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex flex-col items-center justify-center px-4 py-2 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200"
+            >
+              <span>Book Online</span>
+              <span class="text-[10px] font-normal opacity-75">Powered by ZocDoc</span>
+            </a>
             <Button href={clinicInfo.booking.modento} text="Patient Portal" variant="outline" size="lg" target="_blank" rel="noopener noreferrer" />
           </div>
         </div>
