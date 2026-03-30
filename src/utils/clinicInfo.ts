@@ -33,7 +33,8 @@ export const clinicInfo = {
     yelp: "https://www.yelp.com/biz/next-gen-dental-no-title"
   },
   booking: {
-    url: "https://book.modento.io/nextgen-dental/patient-details"
+    zocdoc: "https://www.zocdoc.com/practice/nextgen-dental-174383?lock=true&isNewPatient=false&referrerType=widget",
+    modento: "https://book.modento.io/nextgen-dental/patient-details"
   }
 };
 
