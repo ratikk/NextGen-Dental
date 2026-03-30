@@ -68,24 +68,52 @@ const {
 
           {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-40 pointer-events-none"></div>}
 
+          <!-- Mobile Booking Buttons - Above pagination dots -->
+          <div class="md:hidden absolute bottom-16 left-1/2 transform -translate-x-1/2 flex items-center gap-2 z-20">
+            <a
+              href={clinicInfo.booking.zocdoc}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center text-sm px-4 py-2 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-lg rounded-md transition-colors duration-200"
+            >
+              Book Online
+            </a>
+            <a
+              href={clinicInfo.booking.modento}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center text-sm px-4 py-2 font-semibold whitespace-nowrap bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 shadow-lg rounded-md transition-colors duration-200"
+            >
+              Patient Portal
+            </a>
+          </div>
+
           <!-- Pagination outside swiper but inside container -->
           <div class="swiper-pagination"></div>
 
-          <!-- Call to Action Buttons - Hidden on mobile, visible on desktop -->
+          <!-- Desktop Call to Action Buttons -->
           <div class="hidden md:flex absolute bottom-8 left-1/2 transform -translate-x-1/2 items-center gap-4 z-20">
             <a
-              href="tel:+17379103739"
-              class="inline-flex items-center justify-center text-lg px-4 py-2 font-semibold whitespace-nowrap bg-transparent border border-primary-600 text-primary-600 hover:bg-primary-50 rounded-md transition-colors duration-200 bg-white"
+              href={`tel:${clinicInfo.phone.replace(/\D/g, '')}`}
+              class="inline-flex items-center justify-center text-lg px-6 py-3 font-semibold whitespace-nowrap bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50 rounded-md transition-colors duration-200"
             >
               Call Us
             </a>
             <a
-              href="https://book.modento.io/nextgen-dental/patient-details"
+              href={clinicInfo.booking.zocdoc}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center text-lg px-4 py-2 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-sm rounded-md transition-colors duration-200"
+              class="inline-flex items-center justify-center text-lg px-6 py-3 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-sm rounded-md transition-colors duration-200"
             >
-              Book Now
+              Book Online
+            </a>
+            <a
+              href={clinicInfo.booking.modento}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center justify-center text-lg px-6 py-3 font-semibold whitespace-nowrap bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200"
+            >
+              Patient Portal
             </a>
           </div>
         </div>
