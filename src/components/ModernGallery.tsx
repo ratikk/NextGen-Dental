@@ -4,13 +4,17 @@ import type { ImageMetadata } from 'astro';
 interface GalleryItem {
   title: string;
   category: string;
-  before: ImageMetadata;
-  after: ImageMetadata;
+  before: ImageMetadata | string;
+  after: ImageMetadata | string;
 }
 
 interface Props {
   items: GalleryItem[];
 }
+
+const getImageSrc = (image: ImageMetadata | string): string => {
+  return typeof image === 'string' ? image : image.src;
+};
 
 export default function ModernGallery({ items }: Props) {
   const [selectedImage, setSelectedImage] = useState<{ src: string; title: string; type: 'before' | 'after' } | null>(null);
@@ -70,10 +74,10 @@ export default function ModernGallery({ items }: Props) {
               {/* Before Image */}
               <div
                 className="relative aspect-[3/4] cursor-pointer overflow-hidden group/img"
-                onClick={() => openLightbox(item.before.src, item.title, 'before')}
+                onClick={() => openLightbox(getImageSrc(item.before), item.title, 'before')}
               >
                 <img
-                  src={item.before.src}
+                  src={getImageSrc(item.before)}
                   alt={`Before ${item.title}`}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
                   loading="lazy"
@@ -95,10 +99,10 @@ export default function ModernGallery({ items }: Props) {
               {/* After Image */}
               <div
                 className="relative aspect-[3/4] cursor-pointer overflow-hidden group/img"
-                onClick={() => openLightbox(item.after.src, item.title, 'after')}
+                onClick={() => openLightbox(getImageSrc(item.after), item.title, 'after')}
               >
                 <img
-                  src={item.after.src}
+                  src={getImageSrc(item.after)}
                   alt={`After ${item.title}`}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-110"
                   loading="lazy"
