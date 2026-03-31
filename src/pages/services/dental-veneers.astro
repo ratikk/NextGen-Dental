@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Button from '../../components/Button.astro';
+import BeforeAfterSlider from '../../components/BeforeAfterSlider.jsx';
 import { clinicInfo } from '../../utils/clinicInfo';
 
 const breadcrumbItems = [
@@ -86,6 +87,19 @@ const veneerSchema = {
         <p class="text-lg text-gray-600 mb-6">
           Veneers are ultra-thin, custom-made shells of ceramic that are bonded to the front surface of your teeth. They instantly correct imperfections and create a durable, stain-resistant, and flawless appearance.
         </p>
+      </section>
+
+      <!-- Before & After -->
+      <section class="mb-16 max-w-4xl mx-auto" data-aos="fade-up">
+        <h2 class="text-2xl font-bold font-heading text-gray-800 mb-8 text-center">See the Transformation</h2>
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <BeforeAfterSlider
+            client:only="react"
+            beforeImage="/images/veneers/before.jpg"
+            afterImage="/images/veneers/after.jpg"
+          />
+        </div>
+        <p class="text-center text-sm text-gray-500 mt-4">Slide to see the dramatic difference veneers can make</p>
       </section>
 
       <!-- What Can Veneers Fix? -->
