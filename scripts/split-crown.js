@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, '..');
 
 async function splitCrownImage() {
-  const inputPath = join(projectRoot, 'src/assets/images/gallery/Crown_Ex.jpg');
+  const inputPath = join(projectRoot, 'public/images/crowns/Crown_Ex.jpg');
   const outputDir = join(projectRoot, 'public/images/crowns');
 
   try {
