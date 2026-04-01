@@ -33,6 +33,17 @@ export default function ModernGallery({ items }: Props) {
     document.body.style.overflow = 'auto';
   };
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedImage) {
+        closeLightbox();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedImage]);
+
   return (
     <>
       {/* Filter Tabs */}
@@ -128,35 +139,45 @@ export default function ModernGallery({ items }: Props) {
       {/* Lightbox Modal */}
       {selectedImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4 animate-fadeIn"
           onClick={closeLightbox}
         >
+          {/* Close Button - Top Right */}
           <button
             onClick={closeLightbox}
-            className="absolute top-6 right-6 text-white hover:text-gray-300 transition-colors z-50 bg-white/10 hover:bg-white/20 rounded-full p-3"
-            aria-label="Close lightbox"
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-all duration-200 z-50 bg-red-600 hover:bg-red-700 rounded-full p-3 shadow-2xl hover:scale-110"
+            aria-label="Close"
+            title="Close (ESC)"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-8 h-8">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={3} stroke="currentColor" className="w-7 h-7">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
-          <div className="relative max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
+          {/* Click anywhere message */}
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white/80 text-sm bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
+            Click anywhere to close
+          </div>
+
+          {/* Image Container */}
+          <div className="relative max-w-6xl w-full max-h-[90vh] flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
             <img
               src={selectedImage.src}
               alt={`${selectedImage.type} ${selectedImage.title}`}
-              className="w-full h-auto max-h-[85vh] object-contain rounded-lg shadow-2xl"
+              className="w-auto h-auto max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
             />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
-              <div className="flex items-center gap-3">
-                <span className={`px-4 py-2 text-sm font-bold rounded-full uppercase tracking-wider ${
+
+            {/* Info Bar at Bottom */}
+            <div className="absolute -bottom-16 left-0 right-0 bg-white/95 backdrop-blur-sm p-4 rounded-lg shadow-xl mx-auto max-w-md">
+              <div className="flex items-center justify-center gap-3">
+                <span className={`px-4 py-1.5 text-sm font-bold rounded-full uppercase tracking-wider ${
                   selectedImage.type === 'after'
                     ? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
-                    : 'bg-white text-gray-900'
+                    : 'bg-gray-800 text-white'
                 }`}>
                   {selectedImage.type}
                 </span>
-                <h3 className="text-white text-xl font-bold">{selectedImage.title}</h3>
+                <h3 className="text-gray-900 text-base font-bold">{selectedImage.title}</h3>
               </div>
             </div>
           </div>
