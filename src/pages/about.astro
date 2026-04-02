@@ -32,6 +32,17 @@ const teamMembers = [
       "Specializes in Aesthetic Restorations",
       "Expertise in Smile Enhancement & Cosmetics"
     ]
+  },
+  {
+    name: "Dr. Nivedita Seerpi",
+    title: "General Dentist",
+    image: "/images/about/Seerpi.jpg",
+    bio: "Dr. Nivedita Seerpi is a licensed General Dentist practicing at Brident Dental Services, LLC in **San Antonio, TX**. Dr. Seerpi is a part of the **Careington POS Network**, offering exclusive benefits to network members.\n\nFor a personalized consultation with Dr. Nivedita Seerpi, please schedule your appointment today. Remember to mention your affiliation with the Careington POS Network for exclusive benefits.\n\nTo learn more about DentalSave plans and additional member savings including vision, hearing, and pharmacy, visit nextgendentalaustintx.com.",
+    credentials: [
+      "Licensed General Dentist",
+      "Brident Dental Services, LLC - San Antonio, TX",
+      "Careington POS Network Provider"
+    ]
   }
 ];
 ---
@@ -80,17 +91,17 @@ const teamMembers = [
           </p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {teamMembers.map(member => (
             <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-xl transition-shadow duration-300">
               <div class="relative aspect-[4/3] overflow-hidden">
                 <!-- UPDATED CLASS: Changed object-center to object-top -->
                 <img
-                  src={member.image.src}
+                  src={typeof member.image === 'string' ? member.image : member.image.src}
                   alt={`${member.name} - Dentist in Austin TX`}
                   class="absolute inset-0 w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
-                  width={member.image.width}
-                  height={member.image.height}
+                  width={typeof member.image === 'string' ? 800 : member.image.width}
+                  height={typeof member.image === 'string' ? 600 : member.image.height}
                 />
               </div>
               <div class="p-8 flex flex-col flex-grow">
