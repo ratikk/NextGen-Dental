@@ -2,11 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import GoogleReviews from '../components/GoogleReviews';
 import { clinicInfo } from '../utils/clinicInfo';
-
 const pageTitle = "Patient Reviews";
 const pageDescription = `See what our patients are saying about their experience at ${clinicInfo.name}. Read real Google reviews and testimonials from our dental patients in Austin, TX.`;
 ---
-
 <Layout
   title={`${pageTitle} | ${clinicInfo.name}`}
   description={pageDescription}
@@ -43,7 +41,7 @@ const pageDescription = `See what our patients are saying about their experience
   <div class="py-16 bg-white">
     <div class="container mx-auto px-4">
       
-      <!-- Introduction (Kept short to get to reviews faster) -->
+      <!-- Introduction -->
       <section class="mb-12 max-w-3xl mx-auto text-center" data-aos="fade-up">
         <h2 class="text-3xl font-bold font-heading text-gray-800 mb-4">
           5-Star Care in Austin
@@ -55,7 +53,10 @@ const pageDescription = `See what our patients are saying about their experience
 
       <!-- Google Reviews Component -->
       <section class="mb-16" data-aos="fade-up">
-        <GoogleReviews client:load />
+        <GoogleReviews
+          client:load
+          apiUrl={import.meta.env.PUBLIC_GOOGLE_REVIEWS_ENDPOINT}
+        />
       </section>
 
       <!-- Leave a Review CTA -->
@@ -67,11 +68,8 @@ const pageDescription = `See what our patients are saying about their experience
           <p class="text-gray-600 mb-6">
             Had a great experience at {clinicInfo.name}? We'd love to hear about it! Your feedback helps us continue providing exceptional care to all our patients.
           </p>
-          
-          <!-- Note: clinicInfo.social.google might need to be set in your config, 
-               otherwise fallback to the generic search link or map link -->
           <a
-            href={clinicInfo.mapLink} 
+            href={clinicInfo.mapLink}
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center px-6 py-3 bg-white text-gray-800 font-bold border border-gray-200 rounded-md hover:bg-gray-50 hover:text-primary-600 transition-colors duration-200 shadow-sm"
@@ -81,6 +79,8 @@ const pageDescription = `See what our patients are saying about their experience
           </a>
         </div>
       </section>
+
     </div>
   </div>
 </Layout>
+
