@@ -1,89 +1,125 @@
 ---
-import Button from './Button.astro';
 import PhoneReveal from './PhoneReveal.astro';
 import { Image } from 'astro:assets';
 import { clinicInfo } from '../utils/clinicInfo';
 
+export interface HeroImage {
+  src: string | ImageMetadata;
+  alt: string;
+}
 
 export interface Props {
-  // Update Type: It now accepts ImageMetadata (imported images) OR strings
-  images?: (string | ImageMetadata)[]; 
+  // Accepts either a plain src (back-compat) or { src, alt } for meaningful alts
+  images?: (HeroImage | string | ImageMetadata)[];
   title?: string;
   subtitle?: string;
-  height?: 'sm' | 'md' | 'lg' | 'xl';
   overlay?: boolean;
   buttonText?: string;
   buttonLink?: string;
-  buttonVariant?: 'primary' | 'secondary' | 'outline';
-  secondaryButtonText?: string;
-  secondaryButtonLink?: string;
   showAppointmentForm?: boolean;
   isHomePage?: boolean;
+  /** e.g. "⭐ 4.9 on Google · 200+ reviews" */
+  trustSignal?: string;
+  /** Show the phone CTA next to the primary button on the homepage hero */
+  showPhoneCta?: boolean;
 }
 
 const {
   images = [],
   title,
   subtitle,
-  height = 'lg',
   overlay = true,
-  buttonText,
+  buttonText = 'Book Your Visit',
   buttonLink,
-  buttonVariant = 'primary',
-  secondaryButtonText,
-  secondaryButtonLink,
   showAppointmentForm = false,
   isHomePage = false,
+  trustSignal,
+  showPhoneCta = true,
 } = Astro.props;
+
+// Normalize images so every slide has meaningful alt text.
+// Back-compat: raw strings / ImageMetadata still work, but fall back to a
+// clinic-branded alt rather than "Dental care image N" (which is bad for both
+// SEO and accessibility).
+const normalizedImages: HeroImage[] = images.map((img, i) => {
+  if (img && typeof img === 'object' && 'src' in img && 'alt' in img) {
+    return img as HeroImage;
+  }
+  return {
+    src: img as string | ImageMetadata,
+    alt: `${clinicInfo.name} office – photo ${i + 1}`,
+  };
+});
+
+const resolvedTitle = title || (isHomePage ? `Welcome to ${clinicInfo.name}` : '');
+const resolvedSubtitle = subtitle || (isHomePage ? 'Your trusted partner in dental care' : '');
+const primaryLink = buttonLink || clinicInfo.booking.zocdoc;
+const headingId = 'hero-heading';
 ---
 
-<section class={`relative ${isHomePage ? 'mt-[60px] md:mt-32' : 'mt-[60px] md:mt-24'}`}>
+<section
+  class={`relative ${isHomePage ? 'mt-[60px] md:mt-32' : 'mt-[60px] md:mt-24'}`}
+  aria-labelledby={resolvedTitle ? headingId : undefined}
+  aria-label={resolvedTitle ? undefined : 'Hero'}
+>
   <div class={showAppointmentForm ? 'container mx-auto px-4 max-w-7xl' : ''}>
     <div class={showAppointmentForm ? 'grid grid-cols-12 gap-4 sm:gap-8' : ''}>
       <div class={`${showAppointmentForm ? 'col-span-12 lg:col-span-8' : 'w-full'} relative`}>
 
-        {isHomePage && (
+        {resolvedTitle && (
           <div class={`mb-6 sm:mb-8 text-center ${!showAppointmentForm ? 'container mx-auto px-4 max-w-5xl' : ''}`}>
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-heading mb-3 sm:mb-4 text-gray-800">
-              {title || `Welcome to ${clinicInfo.name}`}
+            <h1
+              id={headingId}
+              class={`font-bold font-heading mb-3 sm:mb-4 text-gray-800 ${
+                isHomePage ? 'text-3xl md:text-4xl lg:text-5xl' : 'text-3xl md:text-4xl'
+              }`}
+            >
+              {resolvedTitle}
             </h1>
-            <p class="text-lg md:text-xl text-gray-600 mb-6">{subtitle || "Your trusted partner in dental care"}</p>
-            <div class="flex justify-center">
-              <a
-                href={clinicInfo.booking.zocdoc}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center justify-center text-lg px-8 py-3 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-sm rounded-md transition-colors duration-200"
-              >
-                Book Your Visit
-              </a>
-            </div>
-          </div>
-        )}
-        {!isHomePage && title && (
-          <div class={`mb-6 sm:mb-8 text-center ${!showAppointmentForm ? 'container mx-auto px-4 max-w-5xl' : ''}`}>
-            <h1 class="text-3xl md:text-4xl font-bold font-heading mb-3 sm:mb-4 text-gray-800">{title}</h1>
-            {subtitle && <p class="text-lg md:text-xl text-gray-600">{subtitle}</p>}
+
+            {resolvedSubtitle && (
+              <p class="text-lg md:text-xl text-gray-600 mb-4">{resolvedSubtitle}</p>
+            )}
+
+            {trustSignal && (
+              <p class="text-sm md:text-base text-gray-700 font-medium mb-6">
+                {trustSignal}
+              </p>
+            )}
+
+            {isHomePage && (
+              <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                <a
+                  href={primaryLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center justify-center text-lg px-8 py-3 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-sm rounded-md transition-colors duration-200"
+                >
+                  {buttonText}
+                </a>
+                {showPhoneCta && <PhoneReveal />}
+              </div>
+            )}
           </div>
         )}
 
         <div class={`relative w-full overflow-hidden bg-gray-100 min-h-[300px] md:min-h-[500px] ${showAppointmentForm ? 'rounded-lg' : ''}`}>
-          <div class="swiper heroSwiper">
+          <div class="swiper heroSwiper" data-hero-swiper>
             <div class="swiper-wrapper">
-              {images.map((image, index) => (
+              {normalizedImages.map((image, index) => (
                 <div class="swiper-slide">
                   <div class="relative pb-[56.25%]">
                     <Image
-                      src={image}
-                      alt={`Dental care image ${index + 1}`}
+                      src={image.src}
+                      alt={image.alt}
                       class="absolute inset-0 w-full h-full object-cover object-center"
                       widths={[640, 768, 1024, 1920]}
                       sizes="(max-width: 768px) 100vw, (max-width: 1024px) 1024px, 1920px"
-                      loading={index === 0 ? "eager" : "lazy"}
-                      fetchpriority={index === 0 ? "high" : "low"}
+                      loading={index === 0 ? 'eager' : 'lazy'}
+                      fetchpriority={index === 0 ? 'high' : 'low'}
                       format="webp"
                       quality={85}
-                      decoding={index === 0 ? "sync" : "async"}
+                      decoding={index === 0 ? 'sync' : 'async'}
                     />
                   </div>
                 </div>
@@ -93,44 +129,53 @@ const {
 
           {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-20 pointer-events-none"></div>}
 
-          <div class="swiper-pagination"></div>
+          <div class="swiper-pagination" data-hero-pagination></div>
         </div>
       </div>
 
       {showAppointmentForm && (
-        <div class="col-span-12 lg:col-span-4">
+        <aside class="col-span-12 lg:col-span-4" aria-label="Appointment request">
           <div class="bg-white rounded-lg shadow-lg p-6" data-aos="fade-left">
             <h2 class="text-2xl font-bold text-primary-600 text-center mb-6">Request an Appointment</h2>
-            <form id="appointment-form" class="space-y-4">
+            <form id="appointment-form" class="space-y-4" novalidate>
               <div>
                 <label for="full-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                <input type="text" id="full-name" name="fullName" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Enter your full name" />
+                <input type="text" id="full-name" name="fullName" required autocomplete="name"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  placeholder="Enter your full name" />
               </div>
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                  <input type="email" id="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Your email" />
+                  <input type="email" id="email" name="email" required autocomplete="email"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Your email" />
                 </div>
                 <div>
                   <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                  <input type="tel" id="phone" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" placeholder="Your phone" />
+                  <input type="tel" id="phone" name="phone" required autocomplete="tel"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Your phone" />
                 </div>
               </div>
 
               <div>
                 <label for="dob" class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-                <input type="date" id="dob" name="dob" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                <input type="date" id="dob" name="dob" required autocomplete="bday"
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
               </div>
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
                   <label for="date" class="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
-                  <input type="date" id="date" name="preferredDate" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
+                  <input type="date" id="date" name="preferredDate" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500" />
                 </div>
                 <div>
                   <label for="time" class="block text-sm font-medium text-gray-700 mb-1">Preferred Time</label>
-                  <select id="time" name="preferredTime" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                  <select id="time" name="preferredTime" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                     <option value="">Select a time</option>
                     <option value="morning">Morning (8:00 AM - 12:00 PM)</option>
                     <option value="afternoon">Afternoon (12:00 PM - 5:00 PM)</option>
@@ -140,7 +185,8 @@ const {
 
               <div>
                 <label for="reason" class="block text-sm font-medium text-gray-700 mb-1">Reason for Visit</label>
-                <select id="reason" name="reasonForVisit" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
+                <select id="reason" name="reasonForVisit" required
+                  class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500">
                   <option value="">Select a reason</option>
                   <option value="checkup">Regular Checkup</option>
                   <option value="cleaning">Teeth Cleaning</option>
@@ -150,10 +196,13 @@ const {
                 </select>
               </div>
 
-              <div class="flex items-center">
-                <input type="checkbox" id="consent" name="smsConsent" required class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" />
+              {/* TCPA: SMS consent must be optional and cannot be a condition of service. */}
+              <div class="flex items-start">
+                <input type="checkbox" id="consent" name="smsConsent"
+                  class="mt-1 h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded" />
                 <label for="consent" class="ml-2 block text-sm text-gray-700">
-                  I consent to receiving text messages from {clinicInfo.name}
+                  I agree to receive appointment-related text messages from {clinicInfo.name}.
+                  Msg &amp; data rates may apply. Reply STOP to opt out. <span class="text-gray-500">(Optional)</span>
                 </label>
               </div>
 
@@ -167,12 +216,15 @@ const {
                 <a href="https://policies.google.com/terms" target="_blank" rel="noopener noreferrer" class="text-primary-600 hover:text-primary-700">Terms of Service</a> apply.
               </p>
 
-              <button type="submit" class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition-colors duration-200">
-                Request Appointment
+              <div id="form-status" role="status" aria-live="polite" class="text-sm min-h-[1.25rem]"></div>
+
+              <button type="submit"
+                class="w-full bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 transition-colors duration-200 disabled:opacity-60 disabled:cursor-not-allowed">
+                <span data-submit-label>Request Appointment</span>
               </button>
             </form>
           </div>
-        </div>
+        </aside>
       )}
     </div>
   </div>
@@ -183,63 +235,81 @@ const {
   import Swiper from 'swiper';
   import { Autoplay, Pagination } from 'swiper/modules';
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const swiperEl = document.querySelector('.heroSwiper');
-    const paginationEl = document.querySelector('.swiper-pagination');
+  // --- Hero carousel ---------------------------------------------------------
+  // Scope queries to this component via data attributes so multiple heroes on
+  // a page don't collide, and so the old global `.heroSwiper` / `.swiper-pagination`
+  // selectors don't accidentally match other carousels.
+  const heroEl = document.querySelector<HTMLElement>('[data-hero-swiper]');
+  const paginationEl = document.querySelector<HTMLElement>('[data-hero-pagination]');
 
-    if (swiperEl && paginationEl) {
-      const swiper = new Swiper('.heroSwiper', {
-        modules: [Autoplay, Pagination],
-        slidesPerView: 1,
-        loop: true,
-        speed: 800,
-        autoplay: {
-          delay: 3500,
-          disableOnInteraction: false,
-          pauseOnMouseEnter: true,
-        },
-        pagination: {
-          el: '.swiper-pagination',
-          clickable: true,
-          dynamicBullets: false,
-          type: 'bullets',
-          renderBullet: function (index, className) {
-            return '<span class="' + className + '"></span>';
-          },
-        },
-        effect: 'slide',
-        watchSlidesProgress: true,
-        observer: true,
-        observeParents: true,
-      });
+  if (heroEl && paginationEl) {
+    const slideCount = heroEl.querySelectorAll('.swiper-slide').length;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const shouldLoop = slideCount > 1;
+    const shouldAutoplay = shouldLoop && !reduceMotion;
 
-      console.log('Swiper initialized with', swiper.slides.length, 'slides');
-      console.log('Pagination element found:', paginationEl);
-    } else {
-      console.error('Swiper or pagination element not found');
-    }
-  });
+    new Swiper(heroEl, {
+      modules: [Autoplay, Pagination],
+      slidesPerView: 1,
+      loop: shouldLoop,
+      speed: 800,
+      autoplay: shouldAutoplay
+        ? { delay: 3500, disableOnInteraction: false, pauseOnMouseEnter: true }
+        : false,
+      pagination: shouldLoop
+        ? { el: paginationEl, clickable: true, type: 'bullets' }
+        : false,
+      effect: 'slide',
+      watchSlidesProgress: true,
+    });
+  }
 
-  const appointmentForm = document.getElementById('appointment-form');
-  if (appointmentForm) {
+  // --- Appointment form ------------------------------------------------------
+  const appointmentForm = document.getElementById('appointment-form') as HTMLFormElement | null;
+  const statusEl = document.getElementById('form-status');
+
+  if (appointmentForm && statusEl) {
+    const submitBtn = appointmentForm.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const submitLabel = appointmentForm.querySelector<HTMLElement>('[data-submit-label]');
+    const originalLabel = submitLabel?.textContent || 'Request Appointment';
+
+    const setStatus = (message: string, tone: 'idle' | 'success' | 'error' = 'idle') => {
+      statusEl.textContent = message;
+      const toneClass =
+        tone === 'success' ? 'text-green-700' :
+        tone === 'error' ? 'text-red-700' : 'text-gray-600';
+      statusEl.className = `text-sm min-h-[1.25rem] ${toneClass}`;
+    };
+
     appointmentForm.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      if (!appointmentForm.checkValidity()) {
+        appointmentForm.reportValidity();
+        return;
+      }
+
+      if (submitBtn) submitBtn.disabled = true;
+      if (submitLabel) submitLabel.textContent = 'Submitting…';
+      setStatus('');
+
       try {
-        const formData = new FormData(appointmentForm as HTMLFormElement);
+        const formData = new FormData(appointmentForm);
         const data = Object.fromEntries(formData.entries());
+        // Checkbox submits nothing when unchecked; normalize to explicit flag.
+        const consentEl = appointmentForm.elements.namedItem('smsConsent') as HTMLInputElement | null;
+        data.smsConsent = consentEl?.checked ? 'yes' : 'no';
 
-        await submitForm({
-          ...data,
-          formType: 'appointment'
-        });
+        await submitForm({ ...data, formType: 'appointment' });
 
-        alert('Appointment request submitted successfully! We will contact you shortly.');
+        setStatus("Thanks! We've received your request and will reach out shortly.", 'success');
         appointmentForm.reset();
-
       } catch (error) {
-        console.error('Error submitting form:', error);
-        alert('Failed to submit form. Please try again later.');
+        console.error('Error submitting appointment form:', error);
+        setStatus('Something went wrong. Please call us or try again.', 'error');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+        if (submitLabel) submitLabel.textContent = originalLabel;
       }
     });
   }
@@ -299,5 +369,11 @@ const {
     opacity: 1 !important;
     background: white !important;
     transform: scale(1.3) !important;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .swiper-wrapper {
+      transition: none !important;
+    }
   }
 </style>
