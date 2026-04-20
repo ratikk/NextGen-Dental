@@ -42,6 +42,31 @@ const {
     <div class={showAppointmentForm ? 'grid grid-cols-12 gap-4 sm:gap-8' : ''}>
       <div class={`${showAppointmentForm ? 'col-span-12 lg:col-span-8' : 'w-full'} relative`}>
 
+        {isHomePage && (
+          <div class={`mb-6 sm:mb-8 text-center ${!showAppointmentForm ? 'container mx-auto px-4 max-w-5xl' : ''}`}>
+            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-heading mb-3 sm:mb-4 text-gray-800">
+              {title || `Welcome to ${clinicInfo.name}`}
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 mb-6">{subtitle || "Your trusted partner in dental care"}</p>
+            <div class="flex justify-center">
+              <a
+                href={clinicInfo.booking.zocdoc}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center text-lg px-8 py-3 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-sm rounded-md transition-colors duration-200"
+              >
+                Book Your Visit
+              </a>
+            </div>
+          </div>
+        )}
+        {!isHomePage && title && (
+          <div class={`mb-6 sm:mb-8 text-center ${!showAppointmentForm ? 'container mx-auto px-4 max-w-5xl' : ''}`}>
+            <h1 class="text-3xl md:text-4xl font-bold font-heading mb-3 sm:mb-4 text-gray-800">{title}</h1>
+            {subtitle && <p class="text-lg md:text-xl text-gray-600">{subtitle}</p>}
+          </div>
+        )}
+
         <div class={`relative w-full overflow-hidden bg-gray-100 min-h-[300px] md:min-h-[500px] ${showAppointmentForm ? 'rounded-lg' : ''}`}>
           <div class="swiper heroSwiper">
             <div class="swiper-wrapper">
@@ -66,70 +91,10 @@ const {
             </div>
           </div>
 
-          {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-40 pointer-events-none"></div>}
+          {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-20 pointer-events-none"></div>}
 
-          <!-- Mobile Booking Buttons - Above pagination dots -->
-          <div class="md:hidden absolute bottom-16 left-1/2 transform -translate-x-1/2 flex items-center gap-2 z-20">
-            <a
-              href={`tel:${clinicInfo.phone.replace(/\D/g, '')}`}
-              class="inline-flex items-center justify-center text-sm px-4 py-2 font-semibold whitespace-nowrap bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50 shadow-lg rounded-md transition-colors duration-200"
-            >
-              Call Us
-            </a>
-            <a
-              href={clinicInfo.booking.zocdoc}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center text-sm px-4 py-2 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-lg rounded-md transition-colors duration-200"
-            >
-              Book Now
-            </a>
-          </div>
-
-          <!-- Pagination outside swiper but inside container -->
           <div class="swiper-pagination"></div>
-
-          <!-- Desktop Call to Action Buttons -->
-          <div class="hidden md:flex absolute bottom-8 left-1/2 transform -translate-x-1/2 items-center gap-4 z-20">
-            <a
-              href={`tel:${clinicInfo.phone.replace(/\D/g, '')}`}
-              class="inline-flex items-center justify-center text-lg px-6 py-3 font-semibold whitespace-nowrap bg-white border-2 border-primary-600 text-primary-600 hover:bg-primary-50 rounded-md transition-colors duration-200"
-            >
-              Call Us
-            </a>
-            <a
-              href={clinicInfo.booking.zocdoc}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center text-lg px-6 py-3 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-sm rounded-md transition-colors duration-200"
-            >
-              Book Online
-            </a>
-            <a
-              href={clinicInfo.booking.modento}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center text-lg px-6 py-3 font-semibold whitespace-nowrap bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50 rounded-md transition-colors duration-200"
-            >
-              Patient Portal
-            </a>
-          </div>
         </div>
-
-        {isHomePage && (
-          <div class={`mt-6 sm:mt-8 text-center ${!showAppointmentForm ? 'container mx-auto px-4 max-w-5xl' : ''}`}>
-            <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold font-heading mb-3 sm:mb-4 text-gray-800">
-              {title || `Welcome to ${clinicInfo.name}`}
-            </h1>
-            <p class="text-lg md:text-xl text-gray-600">{subtitle || "Your trusted partner in dental care"}</p>
-          </div>
-        )}
-        {!isHomePage && title && (
-          <div class={`mt-6 sm:mt-8 text-center ${!showAppointmentForm ? 'container mx-auto px-4 max-w-5xl' : ''}`}>
-            <h1 class="text-3xl md:text-4xl font-bold font-heading mb-3 sm:mb-4 text-gray-800">{title}</h1>
-            {subtitle && <p class="text-lg md:text-xl text-gray-600">{subtitle}</p>}
-          </div>
-        )}
       </div>
 
       {showAppointmentForm && (
