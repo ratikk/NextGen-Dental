@@ -25,7 +25,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'why-get-veneers',
     title: 'Why Do People Get Veneers?',
-    seoTitle: 'Dental Veneers Austin | Lilac Dental Cosmetic Dentistry',
+    seoTitle: 'Dental Veneers Austin | NextGen Dental Cosmetic Dentistry',
     seoDescription: 'Are dental veneers right for you? Learn how they fix chips, gaps, and stains for a perfect smile.',
     excerpt: 'The dental veneers market is booming. From fixing chips to closing gaps, see how this cosmetic treatment transforms smiles.',
     date: '2025-12-01',
@@ -38,7 +38,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'invisalign-vs-braces',
     title: 'Invisalign vs. Braces: What is Right for You?',
-    seoTitle: 'Invisalign vs Braces Austin | Lilac Dental',
+    seoTitle: 'Invisalign vs Braces Austin | NextGen Dental',
     seoDescription: 'Comparing clear aligners vs traditional metal braces in North Austin.',
     excerpt: 'Choosing between clear aligners and traditional metal braces is a big decision. We break down the cost, comfort, and speed.',
     date: '2025-11-27',
