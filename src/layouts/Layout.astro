@@ -24,8 +24,8 @@ export interface Props {
 
 const {
   title,
-  description = "Lilac Dental provides exceptional family and cosmetic dentistry in Austin, TX. Our experienced team offers exams, teeth cleaning, implants, and Invisalign with a gentle touch.",
-  image = "/images/og/lilac-dental-og.jpg",
+  description = "NextGen Dental is a top-rated family and cosmetic dentist in South Austin (78747). Gentle exams, cleanings, implants, Invisalign, and emergency care.",
+  image,
   canonical = Astro.url.pathname,
   type = 'website',
   publishDate,
@@ -37,13 +37,47 @@ const {
 const googleAdsId = import.meta.env.PUBLIC_GOOGLE_ADS_ID;
 const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 
-const siteUrl = Astro.site ? Astro.site.toString().slice(0, -1) : "https://lilacdentalaustintx.com";
+// Astro.site is set in astro.config.mjs; fallback should never fire but keep it pointing at the right domain.
+const siteUrl = Astro.site ? Astro.site.toString().slice(0, -1) : "https://nextgendentalaustintx.com";
 const fullCanonical = `${siteUrl}${canonical}`;
-const ogImage = image.startsWith('http') ? image : `${siteUrl}${image}`;
+// OG image is optional. If no per-page image is passed and no sitewide default exists, we skip the tag
+// rather than reference a file that doesn't exist.
+const ogImage = image
+  ? (image.startsWith('http') ? image : `${siteUrl}${image}`)
+  : null;
+
+// Extract @handle from the social Twitter/X URL (e.g. "https://x.com/nextgendentaltx" -> "@nextgendentaltx")
+const twitterHandle = clinicInfo.social.twitter
+  ? '@' + clinicInfo.social.twitter.replace(/\/$/, '').split('/').pop()
+  : null;
 
 const pageTitle = title === `Welcome to ${clinicInfo.name}`
   ? `${clinicInfo.name} | Top-Rated Dentist in Austin, TX | Family & Cosmetic Dentistry`
   : `${title} | ${clinicInfo.name} Austin, TX`;
+
+// Build opening hours from clinicInfo so schema stays in sync with displayed hours.
+// Schema.org expects 24h "HH:MM" format; our source data is "08:30 AM – 5:00 PM" style.
+// Days that are "Closed" or "By Appointment Only" are intentionally omitted.
+const dayRangeRegex = /^(\d{1,2}):(\d{2})\s*(AM|PM)\s*[–-]\s*(\d{1,2}):(\d{2})\s*(AM|PM)$/i;
+const to24h = (h: string, m: string, ampm: string) => {
+  let hour = parseInt(h, 10);
+  if (/pm/i.test(ampm) && hour !== 12) hour += 12;
+  if (/am/i.test(ampm) && hour === 12) hour = 0;
+  return `${String(hour).padStart(2, '0')}:${m}`;
+};
+const openingHoursSpecification = Object.entries(clinicInfo.hours)
+  .map(([day, value]) => {
+    const match = value.match(dayRangeRegex);
+    if (!match) return null; // skips "Closed", "By Appointment Only", etc.
+    const [, oH, oM, oA, cH, cM, cA] = match;
+    return {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": day,
+      "opens": to24h(oH, oM, oA),
+      "closes": to24h(cH, cM, cA),
+    };
+  })
+  .filter(Boolean);
 
 const dentistSchema = {
   "@context": "https://schema.org",
@@ -67,26 +101,7 @@ const dentistSchema = {
     "latitude": clinicInfo.coordinates.latitude,
     "longitude": clinicInfo.coordinates.longitude
   },
-  "openingHoursSpecification": [
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Wednesday", "Thursday"],
-      "opens": "09:00",
-      "closes": "17:00"
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": "Friday",
-      "opens": "10:00",
-      "closes": "14:00"
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": "Saturday",
-      "opens": "09:00",
-      "closes": "14:00"
-    }
-  ],
+  "openingHoursSpecification": openingHoursSpecification,
   "sameAs": [
     clinicInfo.social.facebook,
     clinicInfo.social.twitter,
@@ -118,14 +133,14 @@ const dentistSchema = {
     <meta property="og:url" content={fullCanonical} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={ogImage} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
     <meta property="og:site_name" content={clinicInfo.name} />
-    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:card" content={ogImage ? "summary_large_image" : "summary"} />
     <meta property="twitter:url" content={fullCanonical} />
     <meta property="twitter:title" content={pageTitle} />
     <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={ogImage} />
-    <meta name="twitter:creator" content="@lilacdentaltx" />
+    {ogImage && <meta property="twitter:image" content={ogImage} />}
+    {twitterHandle && <meta name="twitter:creator" content={twitterHandle} />}
 
     <!-- Schema -->
     <script type="application/ld+json" set:html={JSON.stringify(dentistSchema)} />
@@ -175,7 +190,7 @@ const dentistSchema = {
       <script is:inline define:vars={{ googleAdsId }}>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
-        
+
         // 1. Set config immediately (so it's ready when script loads)
         gtag('js', new Date());
         gtag('config', googleAdsId, { 'anonymize_ip': true }); // Added for privacy/best practice
@@ -211,7 +226,7 @@ const dentistSchema = {
             form.addEventListener('focusin', loadRecaptcha, { once: true });
             form.addEventListener('touchstart', loadRecaptcha, { once: true });
           });
-          setTimeout(loadRecaptcha, 4000); 
+          setTimeout(loadRecaptcha, 4000);
         }
         function onRecaptchaReady() { console.log("reCAPTCHA ready"); }
         document.addEventListener('DOMContentLoaded', initLazyLoad);
