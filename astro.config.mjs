@@ -4,7 +4,13 @@ import sitemap from '@astrojs/sitemap';
 import react from '@astrojs/react';
 
 export default defineConfig({
-  integrations: [tailwind(), sitemap(), react()],
+  integrations: [
+    tailwind(),
+    sitemap({
+      filter: (page) => !/\/admin\/|\/keystatic/.test(page),
+    }),
+    react(),
+  ],
   // ✅ UPDATED: The correct domain
   site: 'https://nextgendentalaustintx.com',
   output: 'static',

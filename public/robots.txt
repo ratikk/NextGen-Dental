@@ -1,4 +1,6 @@
 User-agent: *
+Disallow: /admin/
+Disallow: /keystatic
 Allow: /
 
 Sitemap: https://nextgendentalaustintx.com/sitemap-index.xml
