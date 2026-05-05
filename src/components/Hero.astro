@@ -1,5 +1,4 @@
 ---
-import PhoneReveal from './PhoneReveal.astro';
 import { Image } from 'astro:assets';
 import { clinicInfo } from '../utils/clinicInfo';
 
@@ -14,14 +13,10 @@ export interface Props {
   title?: string;
   subtitle?: string;
   overlay?: boolean;
-  buttonText?: string;
-  buttonLink?: string;
   showAppointmentForm?: boolean;
   isHomePage?: boolean;
   /** e.g. "⭐ 4.9 on Google · 200+ reviews" */
   trustSignal?: string;
-  /** Show the phone CTA next to the primary button on the homepage hero */
-  showPhoneCta?: boolean;
 }
 
 const {
@@ -29,12 +24,9 @@ const {
   title,
   subtitle,
   overlay = true,
-  buttonText = 'Book Your Visit',
-  buttonLink,
   showAppointmentForm = false,
   isHomePage = false,
   trustSignal,
-  showPhoneCta = true,
 } = Astro.props;
 
 // Normalize images so every slide has meaningful alt text.
@@ -53,7 +45,6 @@ const normalizedImages: HeroImage[] = images.map((img, i) => {
 
 const resolvedTitle = title || (isHomePage ? `Welcome to ${clinicInfo.name}` : '');
 const resolvedSubtitle = subtitle || (isHomePage ? 'Your trusted partner in dental care' : '');
-const primaryLink = buttonLink || clinicInfo.booking.zocdoc;
 const headingId = 'hero-heading';
 ---
 
@@ -87,19 +78,6 @@ const headingId = 'hero-heading';
               </p>
             )}
 
-            {isHomePage && (
-              <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
-                <a
-                  href={primaryLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="inline-flex items-center justify-center text-lg px-8 py-3 font-semibold whitespace-nowrap bg-primary-600 hover:bg-primary-700 text-white shadow-sm rounded-md transition-colors duration-200"
-                >
-                  {buttonText}
-                </a>
-                {showPhoneCta && <PhoneReveal />}
-              </div>
-            )}
           </div>
         )}
 
