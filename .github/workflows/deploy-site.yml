@@ -1,0 +1,103 @@
+name: deploy-site
+
+# App (site content) deployment. Branch selects environment:
+#   dev    branch -> dev.nextgendentalaustintx.com
+#   stg    branch -> stg.nextgendentalaustintx.com
+#   main   branch -> nextgendentalaustintx.com (prd, gated)
+#
+# Rebuild-per-env: each branch builds with its own .env so per-environment
+# config (API URLs etc.) is baked into the bundle.
+
+on:
+  push:
+    branches: [dev, stg, main]
+    paths-ignore:
+      - "infra/**"
+      - ".github/workflows/terraform.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    # Map branch -> environment name. `main` deploys to the protected prd env.
+    environment: >-
+      ${{ github.ref == 'refs/heads/dev' && 'dev'
+        || github.ref == 'refs/heads/stg' && 'stg'
+        || 'prd' }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve environment variables
+        id: env
+        run: |
+          case "${{ github.ref_name }}" in
+            dev)
+              echo "BUCKET=nextgendentalaustintx-website-dev"  >> "$GITHUB_OUTPUT"
+              echo "ROLE=arn:aws:iam::025037641706:role/github-actions-nextgendental-deploy-dev" >> "$GITHUB_OUTPUT"
+              echo "ENVFILE=.env.dev"        >> "$GITHUB_OUTPUT"
+              echo "DIST_ENV=DEV"            >> "$GITHUB_OUTPUT"
+              ;;
+            stg)
+              echo "BUCKET=nextgendentalaustintx-website-stg"  >> "$GITHUB_OUTPUT"
+              echo "ROLE=arn:aws:iam::025037641706:role/github-actions-nextgendental-deploy-stg" >> "$GITHUB_OUTPUT"
+              echo "ENVFILE=.env.stg"        >> "$GITHUB_OUTPUT"
+              echo "DIST_ENV=STG"            >> "$GITHUB_OUTPUT"
+              ;;
+            main)
+              echo "BUCKET=nextgendentalaustintx-website"      >> "$GITHUB_OUTPUT"
+              echo "ROLE=arn:aws:iam::025037641706:role/github-actions-nextgendental-deploy-prd" >> "$GITHUB_OUTPUT"
+              echo "ENVFILE=.env.production" >> "$GITHUB_OUTPUT"
+              echo "DIST_ENV=PRD"            >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ steps.env.outputs.ROLE }}
+          aws-region: us-east-2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+      - name: Build (per-env config)
+        run: |
+          if [ -f "${{ steps.env.outputs.ENVFILE }}" ]; then
+            cp "${{ steps.env.outputs.ENVFILE }}" .env.production.local
+          fi
+          npm run build
+
+      # Two-pass sync mirrors your existing deploy: immutable assets cached
+      # hard, HTML never cached.
+      - name: Sync assets (immutable)
+        run: |
+          aws s3 sync dist/ "s3://${{ steps.env.outputs.BUCKET }}/" \
+            --delete \
+            --exclude "*.html" \
+            --cache-control "public, max-age=31536000, immutable"
+
+      - name: Sync HTML (no-cache)
+        run: |
+          aws s3 sync dist/ "s3://${{ steps.env.outputs.BUCKET }}/" \
+            --exclude "*" --include "*.html" \
+            --cache-control "no-cache, no-store, must-revalidate"
+
+      - name: Resolve distribution id
+        id: dist
+        run: |
+          DID=$(aws cloudfront list-distributions \
+            --query "DistributionList.Items[?Comment=='nextgendentalaustintx-website${{ github.ref_name == 'main' && '' || format('-{0}', github.ref_name) }}'].Id | [0]" \
+            --output text)
+          echo "ID=$DID" >> "$GITHUB_OUTPUT"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ steps.dist.outputs.ID }}" \
+            --paths "/*"

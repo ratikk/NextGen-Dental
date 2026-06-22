@@ -1,0 +1,79 @@
+name: terraform
+
+# Plan on PRs (read-only role). Apply after merge, gated behind the protected
+# `production` environment (manual approval), using the write role.
+# No stored AWS secrets — auth is via GitHub OIDC -> STS AssumeRoleWithWebIdentity.
+
+on:
+  pull_request:
+    paths:
+      - "infra/**"
+      - ".github/workflows/terraform.yml"
+  push:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - ".github/workflows/terraform.yml"
+
+permissions:
+  id-token: write   # required to request the OIDC token
+  contents: read
+  pull-requests: write  # to post the plan summary as a PR comment
+
+env:
+  AWS_REGION: us-east-2
+  TF_WORKING_DIR: infra
+  PLAN_ROLE_ARN: arn:aws:iam::025037641706:role/github-actions-nextgendental-tf-plan
+  APPLY_ROLE_ARN: arn:aws:iam::025037641706:role/github-actions-nextgendental-tf-apply
+
+jobs:
+  plan:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.TF_WORKING_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC, plan role)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.PLAN_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ">= 1.5.0"
+
+      - run: terraform init
+      - run: terraform fmt -check
+      - run: terraform validate
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color -input=false
+        # With import blocks present, a correct first run shows resources to be
+        # imported and NO changes. Review that the plan reports no replacements.
+
+  apply:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production   # <-- protected: requires manual approval in repo settings
+    defaults:
+      run:
+        working-directory: ${{ env.TF_WORKING_DIR }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC, apply role)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.APPLY_ROLE_ARN }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ">= 1.5.0"
+
+      - run: terraform init
+      - run: terraform apply -auto-approve -input=false
