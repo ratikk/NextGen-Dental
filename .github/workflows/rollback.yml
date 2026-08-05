@@ -1,0 +1,109 @@
+name: rollback
+
+# Restore a previous known-good release to production.
+# Manual trigger only. Runs in the protected `production` environment, so it
+# still requires the production approver — approval takes seconds and total
+# recovery time stays well under the 30-minute objective.
+#
+# target:
+#   (empty)     -> the `previous` commit recorded in pointers/production.json
+#   <commit sha> -> that specific release from the releases bucket
+#   initial     -> the pre-CI/CD backup taken before the first pipeline deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Release to restore: empty = previous, a commit SHA, or 'initial'"
+        required: false
+        default: ""
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-main # never run concurrently with a deploy
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: us-east-2
+  RELEASES_BUCKET: nextgendental-releases
+  PROD_BUCKET: nextgendentalaustintx-website
+  PROD_DISTRIBUTION_ID: E2UFM2168GVUM7
+  PROD_ROLE: arn:aws:iam::025037641706:role/github-actions-nextgendental-deploy-prd
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://nextgendentalaustintx.com
+    steps:
+      - uses: actions/checkout@v4 # for scripts/ only
+
+      - name: Configure AWS credentials (OIDC, production role)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.PROD_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Resolve rollback target
+        id: target
+        run: |
+          TARGET="${{ inputs.target }}"
+          if [ -z "$TARGET" ]; then
+            aws s3 cp "s3://$RELEASES_BUCKET/pointers/production.json" pointer.json
+            TARGET=$(node -p "JSON.parse(require('fs').readFileSync('pointer.json','utf8')).previous")
+            if [ "$TARGET" = "none" ] || [ -z "$TARGET" ]; then
+              echo "No previous release recorded — specify a SHA or 'initial'." >&2
+              exit 1
+            fi
+          fi
+          echo "target=$TARGET" >> "$GITHUB_OUTPUT"
+          echo "Rolling back production to: $TARGET"
+
+      - name: Restore release
+        run: |
+          TARGET="${{ steps.target.outputs.target }}"
+          mkdir dist
+          if [ "$TARGET" = "initial" ]; then
+            aws s3 sync "s3://$RELEASES_BUCKET/backups/initial/" dist/ --no-progress
+          else
+            aws s3 cp "s3://$RELEASES_BUCKET/releases/$TARGET/site.tar.gz" .
+            aws s3 cp "s3://$RELEASES_BUCKET/releases/$TARGET/build-info.json" .
+            EXPECTED=$(node -p "JSON.parse(require('fs').readFileSync('build-info.json','utf8')).sha256")
+            echo "$EXPECTED  site.tar.gz" | sha256sum -c -
+            tar -xzf site.tar.gz -C dist
+          fi
+          aws s3 sync dist/ "s3://$PROD_BUCKET/" \
+            --exclude "*.html" \
+            --cache-control "public, max-age=31536000, immutable" --no-progress
+          aws s3 sync dist/ "s3://$PROD_BUCKET/" \
+            --exclude "*" --include "*.html" \
+            --cache-control "no-cache, no-store, must-revalidate" --no-progress
+          aws s3 sync dist/ "s3://$PROD_BUCKET/" --delete --no-progress
+
+      - name: Invalidate CloudFront (full — rollback favors speed)
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "$PROD_DISTRIBUTION_ID" --paths "/*"
+
+      - name: Post-rollback smoke tests
+        run: |
+          sleep 30
+          bash scripts/ci/smoke-test.sh https://nextgendentalaustintx.com
+
+      - name: Update release pointer
+        run: |
+          TARGET="${{ steps.target.outputs.target }}"
+          cat > production.json <<EOF
+          {
+            "commit": "$TARGET",
+            "previous": "rollback",
+            "deployed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "run_id": "${GITHUB_RUN_ID}",
+            "rollback": true
+          }
+          EOF
+          aws s3 cp production.json "s3://$RELEASES_BUCKET/pointers/production.json"

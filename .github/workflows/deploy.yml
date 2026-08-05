@@ -1,0 +1,251 @@
+name: deploy
+
+# Build-once / promote-once pipeline for the NextGen Dental site.
+#
+#   push to main
+#     └─ build       — clean build, immutable artifact + sha256 + manifest.
+#                      No AWS credentials.
+#     └─ staging     — GitHub environment `dev`: store artifact in the
+#                      releases bucket, deploy to the dev bucket, invalidate
+#                      dev CloudFront, smoke-test dev.nextgendentalaustintx.com.
+#     └─ production  — GitHub environment `production` (PROTECTED — requires
+#                      manual approval): promote the EXACT artifact tested in
+#                      staging. Never rebuilds. Targeted invalidation only.
+#
+# AWS auth is OIDC-only (no stored keys). Each job's role is scoped to its
+# environment's resources (see bootstrap/multienv-roles.tf).
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "infra/**"
+      - "bootstrap/**"
+      - "docs/**"
+      - "**.md"
+      - ".github/workflows/terraform.yml"
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-main
+  cancel-in-progress: false
+
+env:
+  AWS_REGION: us-east-2
+  RELEASES_BUCKET: nextgendental-releases
+  DEV_BUCKET: nextgendentalaustintx-website-dev
+  PROD_BUCKET: nextgendentalaustintx-website
+  PROD_DISTRIBUTION_ID: E2UFM2168GVUM7
+  DEV_ROLE: arn:aws:iam::025037641706:role/github-actions-nextgendental-deploy-dev
+  PROD_ROLE: arn:aws:iam::025037641706:role/github-actions-nextgendental-deploy-prd
+
+jobs:
+  # ---------------------------------------------------------------- build --
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      checksum: ${{ steps.pack.outputs.checksum }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build (single production build)
+        env:
+          PUBLIC_RECAPTCHA_SITE_KEY: ${{ vars.PUBLIC_RECAPTCHA_SITE_KEY }}
+          PUBLIC_LAMBDA_ENDPOINT: ${{ vars.PUBLIC_LAMBDA_ENDPOINT }}
+          PUBLIC_GOOGLE_REVIEWS_ENDPOINT: ${{ vars.PUBLIC_GOOGLE_REVIEWS_ENDPOINT }}
+          PUBLIC_GOOGLE_ADS_ID: ${{ vars.PUBLIC_GOOGLE_ADS_ID }}
+        run: npm run build
+
+      - name: Package immutable artifact
+        id: pack
+        run: |
+          node scripts/ci/make-manifest.mjs dist manifest.json
+          tar -czf site.tar.gz -C dist .
+          CHECKSUM=$(sha256sum site.tar.gz | cut -d' ' -f1)
+          echo "checksum=$CHECKSUM" >> "$GITHUB_OUTPUT"
+          cat > build-info.json <<EOF
+          {
+            "commit": "${GITHUB_SHA}",
+            "ref": "${GITHUB_REF_NAME}",
+            "run_id": "${GITHUB_RUN_ID}",
+            "built_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "artifact": "site.tar.gz",
+            "sha256": "$CHECKSUM"
+          }
+          EOF
+          echo "artifact sha256: $CHECKSUM"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-${{ github.sha }}
+          path: |
+            site.tar.gz
+            manifest.json
+            build-info.json
+          retention-days: 90
+          if-no-files-found: error
+
+  # -------------------------------------------------------------- staging --
+  staging:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: dev
+      url: https://dev.nextgendentalaustintx.com
+    steps:
+      - uses: actions/checkout@v4 # for scripts/ only
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-${{ github.sha }}
+
+      - name: Verify artifact checksum
+        run: |
+          echo "${{ needs.build.outputs.checksum }}  site.tar.gz" | sha256sum -c -
+
+      - name: Configure AWS credentials (OIDC, dev role)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.DEV_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Store immutable release artifact
+        run: |
+          aws s3 cp site.tar.gz    "s3://$RELEASES_BUCKET/releases/${GITHUB_SHA}/site.tar.gz"
+          aws s3 cp manifest.json  "s3://$RELEASES_BUCKET/releases/${GITHUB_SHA}/manifest.json"
+          aws s3 cp build-info.json "s3://$RELEASES_BUCKET/releases/${GITHUB_SHA}/build-info.json"
+
+      - name: Deploy artifact to dev bucket
+        run: |
+          mkdir dist && tar -xzf site.tar.gz -C dist
+          # Pass 1: hashed/static assets, long immutable cache
+          aws s3 sync dist/ "s3://$DEV_BUCKET/" \
+            --delete \
+            --exclude "*.html" \
+            --cache-control "public, max-age=31536000, immutable"
+          # Pass 2: HTML, never cached
+          aws s3 sync dist/ "s3://$DEV_BUCKET/" \
+            --exclude "*" --include "*.html" \
+            --cache-control "no-cache, no-store, must-revalidate"
+
+      - name: Invalidate dev CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id "${{ vars.DEV_DISTRIBUTION_ID }}" \
+            --paths "/*"
+
+      - name: Staging smoke tests
+        run: |
+          sleep 20  # allow invalidation to propagate
+          bash scripts/ci/smoke-test.sh https://dev.nextgendentalaustintx.com
+
+  # ----------------------------------------------------------- production --
+  production:
+    needs: [build, staging]
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://nextgendentalaustintx.com
+    steps:
+      - uses: actions/checkout@v4 # for scripts/ only
+
+      - name: Configure AWS credentials (OIDC, production role)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ env.PROD_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Retrieve the exact artifact tested in staging
+        run: |
+          aws s3 cp "s3://$RELEASES_BUCKET/releases/${GITHUB_SHA}/site.tar.gz" .
+          aws s3 cp "s3://$RELEASES_BUCKET/releases/${GITHUB_SHA}/manifest.json" .
+          aws s3 cp "s3://$RELEASES_BUCKET/releases/${GITHUB_SHA}/build-info.json" .
+          echo "${{ needs.build.outputs.checksum }}  site.tar.gz" | sha256sum -c -
+          mkdir dist && tar -xzf site.tar.gz -C dist
+
+      - name: One-time backup of pre-CI/CD production content
+        run: |
+          if ! aws s3api head-object --bucket "$RELEASES_BUCKET" --key pointers/production.json 2>/dev/null; then
+            echo "No release pointer found — backing up current production bucket once."
+            aws s3 sync "s3://$PROD_BUCKET/" "s3://$RELEASES_BUCKET/backups/initial/" --no-progress
+          else
+            echo "Release pointer exists — previous releases are already recoverable."
+          fi
+
+      - name: Fetch previous release manifest (for targeted invalidation)
+        id: prev
+        run: |
+          if aws s3 cp "s3://$RELEASES_BUCKET/pointers/production.json" pointer.json 2>/dev/null; then
+            PREV_SHA=$(node -p "JSON.parse(require('fs').readFileSync('pointer.json','utf8')).commit")
+            if aws s3 cp "s3://$RELEASES_BUCKET/releases/${PREV_SHA}/manifest.json" prev-manifest.json 2>/dev/null; then
+              echo "prev=prev-manifest.json" >> "$GITHUB_OUTPUT"
+              echo "prev_sha=$PREV_SHA" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+          echo "prev=-" >> "$GITHUB_OUTPUT"
+          echo "prev_sha=none" >> "$GITHUB_OUTPUT"
+
+      - name: Sync artifact to production (no deletions yet)
+        run: |
+          aws s3 sync dist/ "s3://$PROD_BUCKET/" \
+            --exclude "*.html" \
+            --cache-control "public, max-age=31536000, immutable" --no-progress
+          aws s3 sync dist/ "s3://$PROD_BUCKET/" \
+            --exclude "*" --include "*.html" \
+            --cache-control "no-cache, no-store, must-revalidate" --no-progress
+
+      - name: Validate manifest against bucket, then clean up stale objects
+        run: |
+          # Spot-check that key manifest entries exist in the bucket
+          for key in $(node -p "Object.keys(JSON.parse(require('fs').readFileSync('manifest.json','utf8')).files).filter(f=>f.endsWith('.html')).slice(0,8).join(' ')"); do
+            aws s3api head-object --bucket "$PROD_BUCKET" --key "$key" > /dev/null \
+              && echo "ok: $key" || { echo "MISSING after sync: $key"; exit 1; }
+          done
+          # Manifest validated — now remove objects not in this release
+          aws s3 sync dist/ "s3://$PROD_BUCKET/" --delete --no-progress
+
+      - name: Targeted CloudFront invalidation
+        run: |
+          node scripts/ci/invalidation-paths.mjs "${{ steps.prev.outputs.prev }}" manifest.json > paths.txt
+          echo "Invalidation paths:"; cat paths.txt
+          # aws cli expects space-separated path arguments
+          xargs -a paths.txt aws cloudfront create-invalidation \
+            --distribution-id "$PROD_DISTRIBUTION_ID" --paths
+
+      - name: Production smoke tests
+        run: |
+          sleep 30  # allow invalidation to propagate
+          bash scripts/ci/smoke-test.sh https://nextgendentalaustintx.com
+
+      - name: Record release pointer
+        run: |
+          cat > production.json <<EOF
+          {
+            "commit": "${GITHUB_SHA}",
+            "previous": "${{ steps.prev.outputs.prev_sha }}",
+            "deployed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
+            "run_id": "${GITHUB_RUN_ID}",
+            "sha256": "${{ needs.build.outputs.checksum }}"
+          }
+          EOF
+          aws s3 cp production.json "s3://$RELEASES_BUCKET/pointers/production.json"
+          echo "### Release recorded" >> "$GITHUB_STEP_SUMMARY"
+          cat production.json >> "$GITHUB_STEP_SUMMARY"
+
+      - name: On failure — rollback instructions
+        if: failure()
+        run: |
+          echo "### PRODUCTION DEPLOY FAILED" >> "$GITHUB_STEP_SUMMARY"
+          echo "Run the 'rollback' workflow (Actions tab) to restore the previous release: ${{ steps.prev.outputs.prev_sha }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "If this was the first pipeline release, roll back to 'initial' (pre-CI/CD backup)." >> "$GITHUB_STEP_SUMMARY"
