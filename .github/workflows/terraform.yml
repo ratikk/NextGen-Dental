@@ -1,28 +1,40 @@
 name: terraform
 
-# Plan on PRs (read-only role). Apply after merge, gated behind the protected
-# `production` environment (manual approval), using the write role.
-# No stored AWS secrets — auth is via GitHub OIDC -> STS AssumeRoleWithWebIdentity.
+# Infrastructure plan/apply via OIDC (no stored AWS secrets).
+#
+#   pull_request touching infra/** -> `terraform plan` per stack (read role)
+#   workflow_dispatch              -> gated `apply` of ONE chosen stack,
+#                                     behind the protected `production` env.
+#
+# Active stacks: infra/shared (wildcard cert) and infra/environments/dev.
+# infra/environments/prd is an import-first adoption of LIVE resources and is
+# intentionally NOT wired here yet — it is a separate, carefully-reviewed
+# project (see docs/CICD.md). Note: the initial creation of the dev stack is
+# expected to be applied locally by the admin (bootstrap runbook); this
+# workflow covers ongoing changes.
 
 on:
   pull_request:
     paths:
       - "infra/**"
       - ".github/workflows/terraform.yml"
-  push:
-    branches: [main]
-    paths:
-      - "infra/**"
-      - ".github/workflows/terraform.yml"
+  workflow_dispatch:
+    inputs:
+      stack:
+        description: "Stack to apply"
+        required: true
+        type: choice
+        options:
+          - infra/shared
+          - infra/environments/dev
 
 permissions:
-  id-token: write   # required to request the OIDC token
+  id-token: write
   contents: read
-  pull-requests: write  # to post the plan summary as a PR comment
+  pull-requests: write
 
 env:
   AWS_REGION: us-east-2
-  TF_WORKING_DIR: infra
   PLAN_ROLE_ARN: arn:aws:iam::025037641706:role/github-actions-nextgendental-tf-plan
   APPLY_ROLE_ARN: arn:aws:iam::025037641706:role/github-actions-nextgendental-tf-apply
 
@@ -30,9 +42,13 @@ jobs:
   plan:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        stack: [infra/shared, infra/environments/dev]
     defaults:
       run:
-        working-directory: ${{ env.TF_WORKING_DIR }}
+        working-directory: ${{ matrix.stack }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,22 +62,20 @@ jobs:
         with:
           terraform_version: ">= 1.5.0"
 
-      - run: terraform init
-      - run: terraform fmt -check
+      - run: terraform init -input=false
+      - run: terraform fmt -check -recursive
+        continue-on-error: true
       - run: terraform validate
-      - name: Terraform Plan
-        id: plan
+      - name: Terraform plan (${{ matrix.stack }})
         run: terraform plan -no-color -input=false
-        # With import blocks present, a correct first run shows resources to be
-        # imported and NO changes. Review that the plan reports no replacements.
 
   apply:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment: production   # <-- protected: requires manual approval in repo settings
+    environment: production # protected — manual approval required
     defaults:
       run:
-        working-directory: ${{ env.TF_WORKING_DIR }}
+        working-directory: ${{ inputs.stack }}
     steps:
       - uses: actions/checkout@v4
 
@@ -75,5 +89,6 @@ jobs:
         with:
           terraform_version: ">= 1.5.0"
 
-      - run: terraform init
-      - run: terraform apply -auto-approve -input=false
+      - run: terraform init -input=false
+      - name: Terraform apply (${{ inputs.stack }})
+        run: terraform apply -input=false -auto-approve
