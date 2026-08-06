@@ -7,16 +7,15 @@ import { clinicInfo } from '../../utils/clinicInfo';
 
 const pageTitle = "NextGen Dental Blog";
 const metaDescription = `Stay informed with the latest dental health tips, treatment guides, and oral care insights from the professionals at ${clinicInfo.name} in Austin, TX.`;
-const pageUrl = new URL(Astro.url.pathname, Astro.site || Astro.url.origin).toString();
-
 // UPDATED CATEGORIES: Removed "Orthodontics", added "Dental Veneers"
 const categories = ["All", "Preventive", "Invisalign", "Dental Veneers", "Cosmetic"];
 ---
 
+{/* Layout derives the canonical URL from the current path; the previous
+    `canonicalURL` prop name was not part of Layout's interface. */}
 <Layout
   title={`${pageTitle} | ${clinicInfo.name}`}
   description={metaDescription}
-  canonicalURL={pageUrl}
 >
   <!-- CLEAN HEADER SECTION -->
   <section class="pt-32 pb-12 bg-white">
@@ -33,11 +32,12 @@ const categories = ["All", "Preventive", "Invisalign", "Dental Veneers", "Cosmet
       </h1>
 
       <!-- CLICKABLE CATEGORY FILTER LINKS -->
-      <div class="flex flex-wrap justify-center gap-6 md:gap-10 text-sm font-medium text-gray-500 uppercase tracking-wide" id="category-filters">
+      <div class="flex flex-wrap justify-center gap-4 md:gap-8 text-sm font-medium text-gray-500 uppercase tracking-wide" id="category-filters" role="group" aria-label="Filter articles by category">
         {categories.map((cat, index) => (
-          <button 
+          <button
             data-category={cat}
-            class={`category-btn pb-1 border-b-2 transition-colors duration-200 ${index === 0 ? 'text-gray-900 border-gray-900 active-cat' : 'border-transparent hover:text-gray-900 hover:border-gray-300'}`}
+            aria-pressed={index === 0 ? 'true' : 'false'}
+            class={`category-btn px-2 py-2 min-h-[44px] border-b-2 transition-colors duration-200 ${index === 0 ? 'text-gray-900 border-gray-900 active-cat' : 'border-transparent hover:text-gray-900 hover:border-gray-300'}`}
           >
             {cat}
           </button>
@@ -64,7 +64,7 @@ const categories = ["All", "Preventive", "Invisalign", "Dental Veneers", "Cosmet
                     <Image
                       // @ts-ignore
                       src={post.image}
-                      alt={post.title}
+                      alt={post.imageAlt || post.title}
                       class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       width={800}
                       height={533}
@@ -72,7 +72,7 @@ const categories = ["All", "Preventive", "Invisalign", "Dental Veneers", "Cosmet
                   ) : (
                     <img
                       src={post.image as string}
-                      alt={post.title}
+                      alt={post.imageAlt || post.title}
                       class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   )
@@ -121,11 +121,13 @@ const categories = ["All", "Preventive", "Invisalign", "Dental Veneers", "Cosmet
         buttons.forEach(b => {
           b.classList.remove('text-gray-900', 'border-gray-900', 'active-cat');
           b.classList.add('border-transparent');
+          b.setAttribute('aria-pressed', 'false');
         });
 
         // 2. Add active class to clicked button
         btn.classList.remove('border-transparent');
         btn.classList.add('text-gray-900', 'border-gray-900', 'active-cat');
+        btn.setAttribute('aria-pressed', 'true');
 
         // 3. Filter Posts
         const filter = (btn as HTMLElement).dataset.category;
