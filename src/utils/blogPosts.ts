@@ -39,7 +39,7 @@ export const blogPosts: BlogPost[] = [
     id: 'invisalign-vs-braces',
     title: 'Invisalign vs. Braces: What is Right for You?',
     seoTitle: 'Invisalign vs Braces Austin | NextGen Dental',
-    seoDescription: 'Comparing clear aligners vs traditional metal braces in North Austin.',
+    seoDescription: 'Comparing clear aligners vs traditional metal braces in South Austin.',
     excerpt: 'Choosing between clear aligners and traditional metal braces is a big decision. We break down the cost, comfort, and speed.',
     date: '2025-11-27',
     author: 'Dr. Suman Kondragunta',
