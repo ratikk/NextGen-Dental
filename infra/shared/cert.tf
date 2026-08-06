@@ -45,6 +45,11 @@ resource "aws_acm_certificate" "wildcard" {
 
 # DNS validation records in Route53.
 resource "aws_route53_record" "validation" {
+  # The ACM validation CNAME for this domain already exists in Route 53
+  # (created when the original production cert was validated — ACM reuses the
+  # same record name/value per domain per account). Overwriting is safe and
+  # required for a clean apply.
+  allow_overwrite = true
   for_each = {
     for dvo in aws_acm_certificate.wildcard.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
