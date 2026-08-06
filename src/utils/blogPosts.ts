@@ -3,9 +3,9 @@ import { type ImageMetadata } from 'astro';
 
 // Import existing images to use as placeholders for now
 import dental1 from '../assets/images/hero/dental-1.jpg';
-import dental2 from '../assets/images/hero/dental-2.jpg';
 import dental3 from '../assets/images/hero/dental-3.jpg';
 import dental4 from '../assets/images/hero/dental-4.jpg';
+import blogInvisalign from '../assets/images/blog/invisalign.jpg';
 
 export interface BlogPost {
   id: string;
@@ -44,7 +44,7 @@ export const blogPosts: BlogPost[] = [
     date: '2025-11-27',
     author: 'Dr. Suman Kondragunta',
     category: 'Invisalign',
-    image: dental2, // Placeholder
+    image: blogInvisalign, // Topic image: clear aligner photo (src/assets/images/blog)
     tags: ['Invisalign', 'Orthodontics'],
     content: `<p>Choosing between <strong>Invisalign</strong> and traditional braces is a significant decision...</p>`
   },
