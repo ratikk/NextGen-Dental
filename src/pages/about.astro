@@ -46,12 +46,31 @@ const teamMembers = [
     ]
   }
 ];
+
+// Person structured data for each provider, generated from the visible bios.
+const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://nextgendentalaustintx.com';
+const personSchemas = team.map(member => ({
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": member.name,
+  "jobTitle": "Dentist",
+  "worksFor": {
+    "@type": "Dentist",
+    "name": clinicInfo.name,
+    "url": siteUrl
+  },
+  "hasCredential": member.credentials,
+  "url": `${siteUrl}/about`
+}));
 ---
 
 <Layout
   title="About NextGen Dental | Top Family Dentist in South Austin (78747)"
   description="Meet Dr. Suman Kondragunta & Dr. Kiranmayee Yanala at NextGen Dental. Providing expert family & cosmetic dentistry to South Austin, Buda, and the 78747 community."
 >
+  {personSchemas.map(schema => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  ))}
   <!-- CLEAN, SLIM HEADER -->
   <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
     <div class="absolute inset-0 opacity-10">
@@ -63,7 +82,7 @@ const teamMembers = [
     <div class="container mx-auto px-4 text-center relative z-10">
       <h1 class="text-4xl md:text-5xl font-bold font-heading mb-4">About NextGen Dental</h1>
       <p class="text-primary-200 text-lg max-w-2xl mx-auto">
-        Your trusted partners in dental health, serving South Austin since 2023.
+        Your trusted partners in dental health, serving South Austin since 2022.
       </p>
     </div>
   </div>

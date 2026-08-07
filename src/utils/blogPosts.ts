@@ -27,7 +27,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'why-get-veneers',
     title: 'Why Do People Get Veneers?',
-    seoTitle: 'Dental Veneers Austin | NextGen Dental Cosmetic Dentistry',
+    seoTitle: 'Why Do People Get Dental Veneers? Austin Cosmetic Dentistry',
     seoDescription: 'Are dental veneers right for you? Learn how they fix chips, gaps, and stains for a confident smile.',
     excerpt: 'The dental veneers market is booming. From fixing chips to closing gaps, see how this cosmetic treatment transforms smiles.',
     date: '2025-12-01',
@@ -63,7 +63,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'invisalign-vs-braces',
     title: 'Invisalign vs. Braces: What is Right for You?',
-    seoTitle: 'Invisalign vs Braces Austin | NextGen Dental',
+    seoTitle: 'Invisalign vs. Braces in Austin: Which Is Right for You?',
     seoDescription: 'Comparing clear aligners vs traditional metal braces in South Austin.',
     excerpt: 'Choosing between clear aligners and traditional metal braces is a big decision. We break down the cost, comfort, and speed.',
     date: '2025-11-27',
@@ -96,7 +96,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'tongue-pain-causes',
     title: 'Why Does The Side Of My Tongue Hurt?',
-    seoTitle: 'Tongue Pain Causes & Treatments | Austin Dentist',
+    seoTitle: 'Tongue Pain: Common Causes & When to See a Dentist',
     seoDescription: 'Experiencing tongue pain? Learn common causes from trauma to vitamin deficiency.',
     excerpt: 'It may not seem like a big deal at first, but tongue pain can indicate underlying issues. Here is what to look out for.',
     date: '2025-11-20',
@@ -129,7 +129,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'replace-toothbrush',
     title: 'How Often Should I Change My Toothbrush?',
-    seoTitle: 'How Often To Replace Your Toothbrush | NextGen Dental Austin',
+    seoTitle: 'How Often Should You Replace Your Toothbrush?',
     seoDescription: 'Worn bristles clean poorly. Learn how often to replace your toothbrush and the signs it is time for a new one.',
     excerpt: 'A worn-out toothbrush cannot clean your teeth effectively. Here is when to swap it out and why it matters.',
     date: '2025-11-10',
