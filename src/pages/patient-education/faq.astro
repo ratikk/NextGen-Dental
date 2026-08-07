@@ -44,12 +44,24 @@ const faqs = [
     ]
   }
 ];
+
+// FAQPage structured data generated from the visible Q&As above.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.flatMap(section => section.items.map(item => ({
+    "@type": "Question",
+    "name": item.q,
+    "acceptedAnswer": { "@type": "Answer", "text": item.a }
+  })))
+};
 ---
 
 <Layout
-  title="Dental FAQs | Common Questions Answered | NextGen Dental"
+  title="Dental FAQs | Common Questions Answered"
   description="Find answers to common dental questions about procedures, insurance, emergency care, and more at NextGen Dental in Austin, TX."
 >
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <Hero
     title="Frequently Asked Questions"
     subtitle="Answers to your common dental health questions"

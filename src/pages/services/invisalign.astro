@@ -48,6 +48,29 @@ const invisalignSchema = {
     ]
   }
 };
+
+// FAQPage structured data — mirrors the visible "Common Questions" section below.
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How long does treatment take?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Average treatment time is 12 to 18 months, though some minor cases can be finished in as little as 6 months." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I have to wear them all day?",
+      "acceptedAnswer": { "@type": "Answer", "text": "For the best results, aligners must be worn for 20-22 hours per day, removing them only to eat, drink, brush, and floss." }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it hurt?",
+      "acceptedAnswer": { "@type": "Answer", "text": "You may feel temporary pressure for the first day or two of a new tray, but it is generally much more comfortable than metal braces." }
+    }
+  ]
+};
 ---
 
 <Layout
@@ -55,6 +78,7 @@ const invisalignSchema = {
   description="Straighten your teeth discreetly with Invisalign at NextGen Dental in South Austin. The clear, comfortable alternative to metal braces. Book your consultation today."
   serviceSchema={invisalignSchema}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <!-- CLEAN, SLIM HEADER -->
   <div class="bg-primary-900 text-white pt-32 pb-16 relative overflow-hidden">
     <div class="absolute inset-0 opacity-10">

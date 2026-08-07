@@ -40,11 +40,11 @@ const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
 // Astro.site is set in astro.config.mjs; fallback should never fire but keep it pointing at the right domain.
 const siteUrl = Astro.site ? Astro.site.toString().slice(0, -1) : "https://nextgendentalaustintx.com";
 const fullCanonical = `${siteUrl}${canonical}`;
-// OG image is optional. If no per-page image is passed and no sitewide default exists, we skip the tag
-// rather than reference a file that doesn't exist.
+// OG image: per-page image when provided, otherwise the branded sitewide
+// default card (1200x630) so every shared link gets a proper preview.
 const ogImage = image
   ? (image.startsWith('http') ? image : `${siteUrl}${image}`)
-  : null;
+  : `${siteUrl}/images/og-default.jpg`;
 
 // Extract @handle from the social Twitter/X URL (e.g. "https://x.com/nextgendentaltx" -> "@nextgendentaltx")
 const twitterHandle = clinicInfo.social.twitter
