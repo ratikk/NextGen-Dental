@@ -111,9 +111,11 @@ const personSchemas = teamMembers.map(member => ({
           </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+        {/* items-start lets each card take its natural height; equal-height
+            stretching left large blank gaps in the shorter bios. */}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 items-start">
           {teamMembers.map(member => (
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col h-full hover:shadow-xl transition-shadow duration-300">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden flex flex-col hover:shadow-xl transition-shadow duration-300">
               <div class="relative aspect-[4/3] overflow-hidden">
                 <!-- UPDATED CLASS: Changed object-center to object-top -->
                 <img
@@ -124,17 +126,17 @@ const personSchemas = teamMembers.map(member => ({
                   height={typeof member.image === 'string' ? 600 : member.image.height}
                 />
               </div>
-              <div class="p-8 flex flex-col flex-grow">
+              <div class="p-8 flex flex-col">
                 <h3 class="text-2xl font-bold font-heading text-gray-800 mb-1">{member.name}</h3>
                 <p class="text-primary-600 font-bold uppercase tracking-wide text-sm mb-6">{member.title}</p>
-                
-                <div class="prose prose-lg text-gray-600 mb-8 flex-grow">
+
+                <div class="prose prose-lg text-gray-600 mb-8">
                   {member.bio.split('\n\n').map(paragraph => (
                     <p class="mb-4" set:html={paragraph.replace(/\*\*(.*?)\*\*/g, '<strong class="text-primary-800">$1</strong>')} />
                   ))}
                 </div>
 
-                <div class="bg-gray-50 rounded-xl p-5 mt-auto">
+                <div class="bg-gray-50 rounded-xl p-5">
                   <h4 class="font-bold text-gray-800 mb-3 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary-600" viewBox="0 0 20 20" fill="currentColor">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
