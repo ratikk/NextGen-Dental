@@ -67,6 +67,17 @@ jobs:
           PUBLIC_GOOGLE_ADS_ID: ${{ vars.PUBLIC_GOOGLE_ADS_ID }}
         run: npm run build
 
+      - name: Stamp build version (served at /version.json)
+        run: |
+          cat > dist/version.json <<EOF
+          {
+            "commit": "${GITHUB_SHA}",
+            "ref": "${GITHUB_REF_NAME}",
+            "run_id": "${GITHUB_RUN_ID}",
+            "built_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
       - name: Package immutable artifact
         id: pack
         run: |
@@ -130,13 +141,14 @@ jobs:
         run: |
           mkdir dist && tar -xzf site.tar.gz -C dist
           # Pass 1: hashed/static assets, long immutable cache
+          # (version.json excluded — it must never be cached)
           aws s3 sync dist/ "s3://$DEV_BUCKET/" \
             --delete \
-            --exclude "*.html" \
+            --exclude "*.html" --exclude "version.json" \
             --cache-control "public, max-age=31536000, immutable"
-          # Pass 2: HTML, never cached
+          # Pass 2: HTML + version stamp, never cached
           aws s3 sync dist/ "s3://$DEV_BUCKET/" \
-            --exclude "*" --include "*.html" \
+            --exclude "*" --include "*.html" --include "version.json" \
             --cache-control "no-cache, no-store, must-revalidate"
 
       - name: Invalidate dev CloudFront
@@ -149,6 +161,15 @@ jobs:
         run: |
           sleep 20  # allow invalidation to propagate
           bash scripts/ci/smoke-test.sh https://dev.nextgendentalaustintx.com
+
+      - name: Verify deployed version matches this commit
+        run: |
+          DEPLOYED=$(curl -fsS https://dev.nextgendentalaustintx.com/version.json | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).commit")
+          if [ "$DEPLOYED" = "$GITHUB_SHA" ]; then
+            echo "version OK: $DEPLOYED"
+          else
+            echo "VERSION MISMATCH: deployed=$DEPLOYED expected=$GITHUB_SHA"; exit 1
+          fi
 
   # ----------------------------------------------------------- production --
   production:
@@ -200,10 +221,10 @@ jobs:
       - name: Sync artifact to production (no deletions yet)
         run: |
           aws s3 sync dist/ "s3://$PROD_BUCKET/" \
-            --exclude "*.html" \
+            --exclude "*.html" --exclude "version.json" \
             --cache-control "public, max-age=31536000, immutable" --no-progress
           aws s3 sync dist/ "s3://$PROD_BUCKET/" \
-            --exclude "*" --include "*.html" \
+            --exclude "*" --include "*.html" --include "version.json" \
             --cache-control "no-cache, no-store, must-revalidate" --no-progress
 
       - name: Validate manifest against bucket, then clean up stale objects
@@ -228,6 +249,15 @@ jobs:
         run: |
           sleep 30  # allow invalidation to propagate
           bash scripts/ci/smoke-test.sh https://nextgendentalaustintx.com
+
+      - name: Verify deployed version matches this commit
+        run: |
+          DEPLOYED=$(curl -fsS https://nextgendentalaustintx.com/version.json | node -p "JSON.parse(require('fs').readFileSync(0,'utf8')).commit")
+          if [ "$DEPLOYED" = "$GITHUB_SHA" ]; then
+            echo "version OK: $DEPLOYED"
+          else
+            echo "VERSION MISMATCH: deployed=$DEPLOYED expected=$GITHUB_SHA"; exit 1
+          fi
 
       - name: Record release pointer
         run: |

@@ -77,10 +77,10 @@ jobs:
             tar -xzf site.tar.gz -C dist
           fi
           aws s3 sync dist/ "s3://$PROD_BUCKET/" \
-            --exclude "*.html" \
+            --exclude "*.html" --exclude "version.json" \
             --cache-control "public, max-age=31536000, immutable" --no-progress
           aws s3 sync dist/ "s3://$PROD_BUCKET/" \
-            --exclude "*" --include "*.html" \
+            --exclude "*" --include "*.html" --include "version.json" \
             --cache-control "no-cache, no-store, must-revalidate" --no-progress
           aws s3 sync dist/ "s3://$PROD_BUCKET/" --delete --no-progress
 
