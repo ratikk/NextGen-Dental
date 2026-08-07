@@ -25,6 +25,51 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: 'dental-emergency-what-to-do',
+    title: 'Dental Emergency in South Austin: What to Do First',
+    seoTitle: 'Dental Emergency in South Austin: What to Do First',
+    seoDescription: 'Knocked-out tooth, severe toothache, or swelling? A South Austin dentist explains what to do in the first hour and when to go to the ER.',
+    excerpt: 'The first hour matters most in a dental emergency. Here is exactly what to do for the most common situations — and when to skip the dentist and go straight to the ER.',
+    date: '2026-08-07',
+    author: 'Dr. Suman Kondragunta',
+    category: 'Emergency',
+    image: dental1,
+    imageAlt: 'Group of smiling young adults pointing toward the camera',
+    tags: ['Emergency', 'Oral Health'],
+    content: `<p>Dental emergencies rarely pick a convenient moment &mdash; a knocked-out tooth at Saturday soccer practice, a toothache that goes from annoying to unbearable overnight. What you do in the first hour often determines whether a tooth can be saved. Here is our practical guide for the most common situations we see at our South Austin practice.</p>
+
+<h2>First: is it a dentist emergency or an ER emergency?</h2>
+<p>Most dental emergencies belong at the dentist, where the tooth can actually be treated. But <strong>go to the emergency room first</strong> if you have facial swelling that affects breathing or swallowing, trauma to the head or neck, a possible broken jaw, or bleeding that will not stop. Those are medical emergencies; the tooth comes second. For everything below, call us &mdash; we hold time in our schedule every day for <a href="/services/emergency-dentistry">emergency appointments</a>.</p>
+
+<h2>Knocked-out permanent tooth: the one-hour window</h2>
+<p>This is the true race against the clock. A knocked-out adult tooth has the best chance of being saved if it is back in professional hands within 30 to 60 minutes.</p>
+<ul>
+<li>Pick the tooth up <strong>by the crown</strong> (the white chewing part) &mdash; never the root.</li>
+<li>If it is dirty, rinse it gently with water for a few seconds. Do not scrub, and do not wrap it in tissue.</li>
+<li>If you can, place it back into its socket and bite gently on a clean cloth to hold it there.</li>
+<li>If you cannot, keep it moist: a cup of cold milk is ideal; holding it inside your cheek works in a pinch for adults.</li>
+<li>Call a dentist immediately and say the words "knocked-out tooth" &mdash; that moves you to the front of any schedule.</li>
+</ul>
+<p>One important exception: <strong>do not reinsert a baby tooth.</strong> Pushing it back can damage the adult tooth developing underneath. Keep the tooth, comfort your child, and call us.</p>
+
+<h2>Severe toothache</h2>
+<p>Rinse with warm water and gently floss around the tooth &mdash; a surprising number of "emergencies" turn out to be a popcorn hull or seed lodged below the gumline. Take over-the-counter pain relief as directed, but <strong>never place aspirin directly on the gum</strong>; it burns the tissue. A cold compress on the outside of the cheek helps with swelling. A toothache that wakes you at night, is triggered by heat, or comes with swelling usually means the nerve is involved &mdash; that will not resolve on its own, so call rather than wait it out.</p>
+
+<h2>Chipped, cracked, or broken tooth</h2>
+<p>Save any pieces you can find, rinse your mouth with warm water, and cover any sharp edge with dental wax or sugar-free gum to protect your tongue. A small chip can often wait a day or two; a crack that hurts when you bite or release should be seen promptly, because cracks tend to spread.</p>
+
+<h2>Swelling or a bump on the gum</h2>
+<p>Swelling in the gum or face often signals an abscess &mdash; an infection that needs treatment, not just antibiotics from an urgent care clinic. Rinse with mild salt water and see a dentist quickly. If the swelling is spreading toward your eye or neck, or you develop fever and difficulty swallowing, that is ER territory &mdash; go now.</p>
+
+<h2>Lost crown or filling</h2>
+<p>Uncomfortable, but rarely urgent. Keep the crown if you have it, avoid chewing on that side, and drugstore temporary dental cement can protect the tooth for a few days until your visit.</p>
+
+<h2>What happens when you call us</h2>
+<p>Tell us what happened, when, and what hurts. We will tell you exactly what to do in the meantime and get you in the same day whenever possible. If your emergency happens outside office hours, our phone message includes instructions &mdash; and the guidance above covers the critical first steps for every situation.</p>
+
+<p>The best emergency, of course, is the one that never happens: most cracked teeth and abscesses start as small problems that a <a href="/services/dental-checkup">routine checkup</a> would have caught months earlier. If it has been a while, that is the cheapest emergency insurance there is.</p>`
+  },
+  {
     id: 'why-get-veneers',
     title: 'Why Do People Get Veneers?',
     seoTitle: 'Why Do People Get Dental Veneers? Austin Cosmetic Dentistry',
