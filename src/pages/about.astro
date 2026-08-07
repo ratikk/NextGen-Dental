@@ -49,7 +49,7 @@ const teamMembers = [
 
 // Person structured data for each provider, generated from the visible bios.
 const siteUrl = Astro.site ? Astro.site.toString().replace(/\/$/, '') : 'https://nextgendentalaustintx.com';
-const personSchemas = team.map(member => ({
+const personSchemas = teamMembers.map(member => ({
   "@context": "https://schema.org",
   "@type": "Person",
   "name": member.name,
