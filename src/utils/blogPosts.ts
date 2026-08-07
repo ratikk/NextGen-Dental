@@ -6,6 +6,7 @@ import dental1 from '../assets/images/hero/dental-1.jpg';
 import dental2 from '../assets/images/hero/dental-2.jpg';
 import dental3 from '../assets/images/hero/dental-3.jpg'; // two people holding clear aligners
 import dental4 from '../assets/images/hero/dental-4.jpg'; // bright smiles close together
+import dental6 from '../assets/images/hero/dental-6.jpg'; // multigenerational family outdoors
 
 export interface BlogPost {
   id: string;
@@ -24,6 +25,45 @@ export interface BlogPost {
 }
 
 export const blogPosts: BlogPost[] = [
+  {
+    id: 'dental-implant-process-recovery',
+    title: 'The Dental Implant Process: Timeline, Recovery, and What to Expect',
+    seoTitle: 'Dental Implant Process & Recovery: What to Expect',
+    seoDescription: 'From consultation to final crown: a South Austin dentist walks through the dental implant timeline, healing stages, and practical recovery tips.',
+    excerpt: 'Thinking about a dental implant but unsure what the journey involves? Here is the full timeline — consultation to final crown — and what recovery really feels like.',
+    date: '2026-08-07',
+    author: 'Dr. Kiranmayee Yanala',
+    category: 'Restorative',
+    image: dental6,
+    imageAlt: 'Multigenerational family smiling and walking together outdoors',
+    tags: ['Dental Implants', 'Restorative'],
+    content: `<p>Dental implants have a reputation for being a big, intimidating procedure &mdash; and then patients go through it and tell us the waiting was harder than the treatment. If you are considering an implant, knowing the actual timeline and what recovery feels like takes most of the anxiety out of the decision. Here is the honest walkthrough we give patients at our South Austin practice.</p>
+
+<h2>What an implant actually is</h2>
+<p>A dental implant has three parts: a small titanium post that takes the place of the tooth root, an abutment that connects to it, and a custom crown that becomes your visible tooth. Because the post integrates with your jawbone, the finished tooth is stable, does not rely on neighboring teeth (unlike a bridge), and helps preserve the bone that would otherwise shrink where a tooth is missing.</p>
+
+<h2>Step 1: Consultation and planning</h2>
+<p>Everything starts with an exam, digital X-rays, and 3D imaging. We are checking two things: the health of your gums and whether there is enough bone to anchor the post. Most people are candidates; if bone has thinned where a tooth has been missing a while, a grafting step can rebuild it &mdash; that adds time but rarely rules anyone out. This is also where we map the full timeline and <a href="/financing">cost and financing options</a>, so there are no surprises later.</p>
+
+<h2>Step 2: Placing the implant</h2>
+<p>The placement itself is a routine surgical visit under local anesthesia &mdash; most patients are surprised to find it gentler than a tooth extraction. Sedation options are available if dental visits make you anxious. You will leave with the post in place under the gum and, in visible areas, a temporary tooth so you are never without a smile.</p>
+
+<h2>Step 3: The healing months</h2>
+<p>This is the part that takes patience: over the next three to six months the bone grows onto the titanium post &mdash; a process called osseointegration &mdash; creating the foundation that makes implants so durable. The good news is that this phase is mostly uneventful for you: normal eating (with some early caution on that side), normal routines, occasional quick check-ins with us.</p>
+
+<h2>Step 4: Abutment and crown</h2>
+<p>Once the post is solid, we attach the abutment and take impressions for your final crown, matched to the shade and shape of your natural teeth. When it is fitted &mdash; usually a couple of visits later &mdash; the process is complete: a tooth you bite, chew, and brush like the one you were born with.</p>
+
+<h2>What recovery really feels like</h2>
+<ul>
+<li><strong>First 48 hours:</strong> some swelling and soreness, managed well with over-the-counter pain relief and ice. Stick to soft foods, skip straws and smoking (both interfere with healing), and take it easy.</li>
+<li><strong>First week:</strong> most patients are back to work the next day or the day after. Tenderness fades steadily; stitches, if any, dissolve or come out at a quick follow-up.</li>
+<li><strong>Long term:</strong> care for an implant exactly like a natural tooth &mdash; brushing, flossing, and <a href="/services/dental-checkup">regular checkups</a>. There is no special maintenance, and with good hygiene implants routinely last decades.</li>
+</ul>
+
+<h2>Is it worth the months of waiting?</h2>
+<p>Implants are among the most predictable procedures in modern dentistry, and they are the only tooth replacement that protects your jawbone long-term. That said, they are not the only option &mdash; bridges and dentures each have their place, and the right answer depends on your mouth, timeline, and budget. That conversation is exactly what a consultation is for: you can read more on our <a href="/services/dental-implants">dental implants page</a>, or come in and we will look at your specific situation together.</p>`
+  },
   {
     id: 'dental-emergency-what-to-do',
     title: 'Dental Emergency in South Austin: What to Do First',
