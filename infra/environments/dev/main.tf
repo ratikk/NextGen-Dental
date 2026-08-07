@@ -31,6 +31,9 @@ provider "aws" {
 variable "wildcard_certificate_arn" {
   type        = string
   description = "ARN of *.nextgendentalaustintx.com cert from infra/shared output."
+  # Default = the issued cert (2026-08-05 apply). Lets CI `terraform plan`
+  # run without -var while remaining overridable if the cert is ever reissued.
+  default     = "arn:aws:acm:us-east-1:025037641706:certificate/a1905c07-7fbe-4960-98ac-ea384b2eb5ca"
 }
 
 locals {
