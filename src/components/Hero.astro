@@ -17,6 +17,12 @@ export interface Props {
   isHomePage?: boolean;
   /** e.g. "⭐ 4.9 on Google · 200+ reviews" */
   trustSignal?: string;
+  /**
+   * Banner height on md+ screens. Below md the hero keeps a 16:9 ratio.
+   * 'lg' is the homepage default; interior pages should use 'md' or 'sm'.
+   * (Several pages already pass height="md" — this prop now actually works.)
+   */
+  height?: 'sm' | 'md' | 'lg';
 }
 
 const {
@@ -27,7 +33,19 @@ const {
   showAppointmentForm = false,
   isHomePage = false,
   trustSignal,
+  height = isHomePage ? 'lg' : 'md',
 } = Astro.props;
+
+// Fixed banner heights on md+ instead of a 16:9 ratio box. The old
+// pb-[56.25%] scaled height linearly with viewport width, so on wide
+// desktops the hero grew to ~1400px tall and filled the whole frame.
+// Below md the 16:9 ratio is kept (it produces sensible heights there).
+// Literal class strings so Tailwind's JIT can see them.
+const slideHeightClass = {
+  sm: 'relative pb-[56.25%] md:pb-0 md:h-[260px] lg:h-[300px]',
+  md: 'relative pb-[56.25%] md:pb-0 md:h-[340px] lg:h-[400px]',
+  lg: 'relative pb-[56.25%] md:pb-0 md:h-[440px] lg:h-[500px] xl:h-[540px]',
+}[height];
 
 // Normalize images so every slide has meaningful alt text.
 // Back-compat: raw strings / ImageMetadata still work, but fall back to a
@@ -81,18 +99,22 @@ const headingId = 'hero-heading';
           </div>
         )}
 
-        <div class={`relative w-full overflow-hidden bg-gray-100 min-h-[300px] md:min-h-[500px] ${showAppointmentForm ? 'rounded-lg' : ''}`}>
+        {/* On md+ the banner is constrained to the content column and rounded,
+            so ultra-wide monitors get a framed banner instead of an
+            edge-to-edge wall of image. */}
+        <div class={showAppointmentForm ? '' : 'md:container md:mx-auto md:px-4 md:max-w-7xl'}>
+        <div class={`relative w-full overflow-hidden bg-gray-100 min-h-[200px] ${showAppointmentForm ? 'rounded-lg' : 'md:rounded-2xl'}`}>
           <div class="swiper heroSwiper" data-hero-swiper>
             <div class="swiper-wrapper">
               {normalizedImages.map((image, index) => (
                 <div class="swiper-slide">
-                  <div class="relative pb-[56.25%]">
+                  <div class={slideHeightClass}>
                     <Image
                       src={image.src}
                       alt={image.alt}
                       class="absolute inset-0 w-full h-full object-cover object-center"
-                      widths={[640, 768, 1024, 1920]}
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 1024px, 1920px"
+                      widths={[640, 768, 1024, 1280, 1920]}
+                      sizes="(max-width: 767px) 100vw, (max-width: 1311px) calc(100vw - 32px), 1248px"
                       loading={index === 0 ? 'eager' : 'lazy'}
                       fetchpriority={index === 0 ? 'high' : 'low'}
                       format="webp"
@@ -108,6 +130,7 @@ const headingId = 'hero-heading';
           {overlay && <div class="absolute inset-0 bg-gray-900 bg-opacity-20 pointer-events-none"></div>}
 
           <div class="swiper-pagination" data-hero-pagination></div>
+        </div>
         </div>
       </div>
 
@@ -323,7 +346,7 @@ const headingId = 'hero-heading';
 
   @media (min-width: 768px) {
     .swiper-pagination {
-      bottom: 70px !important;
+      bottom: 24px !important;
     }
   }
 
