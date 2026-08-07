@@ -16,6 +16,7 @@ name: deploy
 # environment's resources (see bootstrap/multienv-roles.tf).
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
     paths-ignore:
