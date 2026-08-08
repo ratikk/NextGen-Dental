@@ -1,6 +1,0 @@
-# Copy to terraform.tfvars (committed — none of these are secrets) after
-# fetching real values in CloudShell:
-#   aws ec2 describe-vpcs --region us-east-2 --filters Name=is-default,Values=true --query 'Vpcs[0].VpcId' --output text
-#   aws ec2 describe-subnets --region us-east-2 --filters Name=vpc-id,Values=<VPC_ID> --query 'Subnets[0].SubnetId' --output text
-vpc_id    = "vpc-REPLACE"
-subnet_id = "subnet-REPLACE"

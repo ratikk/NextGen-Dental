@@ -23,12 +23,13 @@ variable "account_id" {
 }
 
 variable "vpc_id" {
-  description = "Target VPC (default VPC). Set in terraform.tfvars."
+  description = "Default VPC (static, non-secret; committed as default because .gitignore excludes *.tfvars)"
   type        = string
+  default     = "vpc-da7dd4b1"
 }
 
 variable "subnet_id" {
-  description = "Public subnet for the instance. Set in terraform.tfvars."
+  description = "Public subnet for the analytics instance (static, non-secret)"
   type        = string
+  default     = "subnet-02cdd055df92406e9"
 }
-
