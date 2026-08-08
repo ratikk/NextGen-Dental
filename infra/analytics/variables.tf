@@ -15,3 +15,24 @@ variable "bootstrap_secret_placeholder" {
   type        = string
   default     = "CHANGE-ME-AFTER-APPLY"
 }
+
+variable "account_id" {
+  description = "AWS account ID (not secret)"
+  type        = string
+  default     = "025037641706"
+}
+
+variable "vpc_id" {
+  description = "Target VPC (default VPC). Set in terraform.tfvars."
+  type        = string
+}
+
+variable "subnet_id" {
+  description = "Public subnet for the instance. Set in terraform.tfvars."
+  type        = string
+}
+
+variable "ami_id" {
+  description = "PINNED AL2023 arm64 AMI (deterministic plans; bump deliberately). Set in terraform.tfvars."
+  type        = string
+}

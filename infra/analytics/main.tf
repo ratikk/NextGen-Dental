@@ -24,35 +24,16 @@ provider "aws" {
   region = "us-east-2"
 }
 
-data "aws_route53_zone" "main" {
-  zone_id = var.zone_id
-}
-
-data "aws_vpc" "default" {
-  default = true
-}
-
-data "aws_subnets" "default" {
-  filter {
-    name   = "vpc-id"
-    values = [data.aws_vpc.default.id]
-  }
-}
-
-data "aws_ami" "al2023_arm" {
-  most_recent = true
-  owners      = ["amazon"]
-  filter {
-    name   = "name"
-    values = ["al2023-ami-2023*-arm64"]
-  }
-}
+# NOTE: no data sources that require EC2/Route53/STS read permissions —
+# the tf-plan role stays least-privilege. VPC, subnet, and a PINNED AMI are
+# supplied via terraform.tfvars (committed; none are secrets). Pinning the
+# AMI also makes plans deterministic (no most_recent drift).
 
 # ---------- network ----------
 resource "aws_security_group" "analytics" {
   name        = "analytics-umami"
   description = "Umami analytics: HTTPS only; admin via SSM (no SSH)"
-  vpc_id      = data.aws_vpc.default.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description = "HTTPS (tracker endpoint must be publicly reachable)"
@@ -124,7 +105,7 @@ data "aws_iam_policy_document" "scoped" {
   statement {
     sid       = "ReadOwnSecrets"
     actions   = ["ssm:GetParameter", "ssm:GetParameters"]
-    resources = ["arn:aws:ssm:us-east-2:${data.aws_caller_identity.current.account_id}:parameter/nextgendental/analytics/*"]
+    resources = ["arn:aws:ssm:us-east-2:${var.account_id}:parameter/nextgendental/analytics/*"]
   }
   statement {
     sid       = "WriteBackups"
@@ -137,8 +118,6 @@ data "aws_iam_policy_document" "scoped" {
     resources = ["${aws_cloudwatch_log_group.analytics.arn}:*"]
   }
 }
-
-data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role_policy" "scoped" {
   name   = "analytics-scoped"
@@ -204,9 +183,9 @@ resource "aws_volume_attachment" "data" {
 }
 
 resource "aws_instance" "analytics" {
-  ami                    = data.aws_ami.al2023_arm.id
+  ami                    = var.ami_id
   instance_type          = "t4g.small"
-  subnet_id              = data.aws_subnets.default.ids[0]
+  subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.analytics.id]
   iam_instance_profile   = aws_iam_instance_profile.analytics.name
   user_data              = file("${path.module}/user-data.sh")
@@ -230,7 +209,7 @@ resource "aws_eip" "analytics" {
 }
 
 resource "aws_route53_record" "analytics" {
-  zone_id = data.aws_route53_zone.main.zone_id
+  zone_id = var.zone_id
   name    = "analytics.nextgendentalaustintx.com"
   type    = "A"
   ttl     = 300
