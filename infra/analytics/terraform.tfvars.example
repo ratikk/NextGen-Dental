@@ -2,7 +2,5 @@
 # fetching real values in CloudShell:
 #   aws ec2 describe-vpcs --region us-east-2 --filters Name=is-default,Values=true --query 'Vpcs[0].VpcId' --output text
 #   aws ec2 describe-subnets --region us-east-2 --filters Name=vpc-id,Values=<VPC_ID> --query 'Subnets[0].SubnetId' --output text
-#   aws ssm get-parameter --region us-east-2 --name /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64 --query Parameter.Value --output text
 vpc_id    = "vpc-REPLACE"
 subnet_id = "subnet-REPLACE"
-ami_id    = "ami-REPLACE"

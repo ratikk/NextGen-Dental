@@ -32,7 +32,3 @@ variable "subnet_id" {
   type        = string
 }
 
-variable "ami_id" {
-  description = "PINNED AL2023 arm64 AMI (deterministic plans; bump deliberately). Set in terraform.tfvars."
-  type        = string
-}

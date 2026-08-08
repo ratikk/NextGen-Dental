@@ -24,10 +24,14 @@ provider "aws" {
   region = "us-east-2"
 }
 
-# NOTE: no data sources that require EC2/Route53/STS read permissions —
-# the tf-plan role stays least-privilege. VPC, subnet, and a PINNED AMI are
-# supplied via terraform.tfvars (committed; none are secrets). Pinning the
-# AMI also makes plans deterministic (no most_recent drift).
+# NOTE: VPC/subnet come from committed terraform.tfvars (static, not secret).
+# The AMI is DYNAMIC via AWS's public SSM parameter (per Ratik's decision) —
+# requires only ssm:GetParameter on the public /aws/service/ami-* namespace,
+# far narrower than ec2:DescribeImages. ignore_changes[ami] below prevents
+# new AL2023 releases from proposing instance replacement on unrelated plans.
+data "aws_ssm_parameter" "al2023_arm" {
+  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64"
+}
 
 # ---------- network ----------
 resource "aws_security_group" "analytics" {
@@ -183,7 +187,7 @@ resource "aws_volume_attachment" "data" {
 }
 
 resource "aws_instance" "analytics" {
-  ami                    = var.ami_id
+  ami                    = nonsensitive(data.aws_ssm_parameter.al2023_arm.value)
   instance_type          = "t4g.small"
   subnet_id              = var.subnet_id
   vpc_security_group_ids = [aws_security_group.analytics.id]
@@ -193,6 +197,9 @@ resource "aws_instance" "analytics" {
   metadata_options {
     http_tokens   = "required" # IMDSv2 only
     http_endpoint = "enabled"
+  }
+  lifecycle {
+    ignore_changes = [ami] # dynamic at create; AMI bumps are a deliberate replace, not plan drift
   }
   root_block_device {
     volume_type = "gp3"
