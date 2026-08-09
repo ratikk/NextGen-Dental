@@ -1,0 +1,83 @@
+---
+// Privacy-minimized analytics (self-hosted Umami).
+// - Tracker loads ONLY on the three known hostnames (dev/apex/www);
+//   localhost and previews get nothing.
+// - Query strings and hashes are excluded from collected URLs.
+// - Pageviews are automatic; custom events go EXCLUSIVELY through the
+//   validated trackApprovedEvent wrapper (5 approved events, enum-only
+//   properties, no identifiers, no form contents). Session replay is not
+//   loaded and must never be enabled — see docs/ANALYTICS.md.
+---
+<script is:inline>
+  // Inline: choose website ID by hostname and inject the tracker script.
+  (function () {
+    var ids = {
+      'dev.nextgendentalaustintx.com': '70b20ce6-d664-4105-976e-cf98cbe9b3ed',
+      'nextgendentalaustintx.com': '86e99b8f-36ca-443c-a88f-a6b2aa68c5ba',
+      'www.nextgendentalaustintx.com': '86e99b8f-36ca-443c-a88f-a6b2aa68c5ba'
+    };
+    var id = ids[window.location.hostname];
+    if (!id) return; // untracked host: no script, no requests
+    var s = document.createElement('script');
+    s.defer = true;
+    s.src = 'https://analytics.nextgendentalaustintx.com/script.js';
+    s.setAttribute('data-website-id', id);
+    s.setAttribute('data-exclude-search', 'true');
+    s.setAttribute('data-exclude-hash', 'true');
+    s.setAttribute('data-domains', 'dev.nextgendentalaustintx.com,nextgendentalaustintx.com,www.nextgendentalaustintx.com');
+    document.head.appendChild(s);
+  })();
+</script>
+
+<script>
+  import { sendApprovedEvent, pageCategoryFor } from '../utils/analytics/trackApprovedEvent.mjs';
+
+  // Service slug -> service_category enum (unknowns fold to 'other')
+  const SERVICE_CATEGORY: Record<string, string> = {
+    'dental-checkup': 'preventive', 'teeth-cleaning': 'preventive', 'oral-cancer-screening': 'preventive',
+    'pediatric-dentistry': 'preventive', 'teeth-whitening': 'cosmetic', 'dental-veneers': 'cosmetic',
+    'lumineers': 'cosmetic', 'dental-implants': 'restorative', 'dentures': 'restorative',
+    'root-canal': 'restorative', 'emergency-dentistry': 'emergency', 'invisalign': 'orthodontic',
+    'sedation-dentistry': 'other',
+  };
+  // Blog slug prefix -> article_category enum
+  const ARTICLE_CATEGORY: Record<string, string> = {
+    'dental-emergency-what-to-do': 'emergency', 'dental-implant-process-recovery': 'restorative',
+    'invisalign-vs-braces': 'invisalign', 'why-do-people-get-veneers': 'veneers',
+  };
+
+  const pageCategory = () => pageCategoryFor(window.location.pathname);
+  const ctaLocation = (el: Element) =>
+    el.closest('header') ? 'header' : el.closest('footer') ? 'footer' : 'body';
+
+  document.addEventListener('click', (e) => {
+    const a = (e.target as Element | null)?.closest?.('a');
+    if (!a) return;
+    const href = a.getAttribute('href') || '';
+    if (href.startsWith('tel:')) {
+      sendApprovedEvent('phone_click', { page_category: pageCategory(), cta_location: ctaLocation(a) });
+    } else if (/(^|\.)zocdoc\.com$/.test((a as HTMLAnchorElement).hostname || '')) {
+      sendApprovedEvent('appointment_click', {
+        page_category: pageCategory(), cta_location: ctaLocation(a), booking_provider: 'zocdoc',
+      });
+    } else if (window.location.pathname.startsWith('/blog/') && href.startsWith('/services/')) {
+      const articleSlug = window.location.pathname.split('/')[2] || '';
+      const serviceSlug = href.split('/')[2]?.split(/[?#]/)[0] || '';
+      sendApprovedEvent('blog_to_service_click', {
+        article_category: ARTICLE_CATEGORY[articleSlug] || 'other',
+        service_category: SERVICE_CATEGORY[serviceSlug] || 'other',
+      });
+    }
+  });
+
+  // form_start: once per form, on first interaction. Form type only — never
+  // field names, values, or validation details.
+  const startedForms = new WeakSet<HTMLFormElement>();
+  document.addEventListener('focusin', (e) => {
+    const form = (e.target as Element | null)?.closest?.('form');
+    if (!form || startedForms.has(form)) return;
+    startedForms.add(form);
+    const formType = form.id === 'appointment-form' ? 'appointment' : 'contact';
+    sendApprovedEvent('form_start', { form_type: formType });
+  });
+</script>

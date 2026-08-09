@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BookingPopup from '../components/BookingPopup.astro';
+import Analytics from '../components/Analytics.astro';
 import { clinicInfo } from '../utils/clinicInfo';
 import '@fontsource/montserrat/700.css';
 import '@fontsource/montserrat/600.css';
@@ -160,6 +161,7 @@ const dentistSchema = {
 
 
     <slot name="head" />
+    <Analytics />
 
     <style is:global>
       :root {
