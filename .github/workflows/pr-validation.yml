@@ -35,6 +35,9 @@ jobs:
       - name: Install dependencies (lock file)
         run: npm ci
 
+      - name: Analytics wrapper unit tests (blocking)
+        run: node src/utils/analytics/trackApprovedEvent.test.mjs
+
       - name: Astro type check (advisory)
         continue-on-error: true
         run: |

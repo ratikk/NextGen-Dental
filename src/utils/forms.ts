@@ -1,4 +1,5 @@
 import { getRecaptchaToken } from './recaptcha';
+import { sendApprovedEvent } from './analytics/trackApprovedEvent.mjs';
 
 const LAMBDA_ENDPOINT = import.meta.env.PUBLIC_LAMBDA_ENDPOINT;
 
@@ -61,7 +62,14 @@ export async function submitForm(data: FormData) {
       throw new Error(errorMessage);
     }
 
-    return await response.json();
+    const result = await response.json();
+
+    // Conversion signal: form type ONLY — never field contents. The wrapper
+    // validates against the event registry and fails silently; analytics can
+    // never break a patient's form submission.
+    sendApprovedEvent('form_submit_success', { form_type: data.formType });
+
+    return result;
 
   } catch (error) {
     console.error('Error in submitForm utility:', error);
