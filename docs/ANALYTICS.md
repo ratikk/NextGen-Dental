@@ -20,14 +20,17 @@ role-permission review.
         CloudWatch: logs(30d) + status alarm ─▶ SNS email  ▼
                                             s3://nextgendental-analytics-backups
                                             (KMS, versioned, PAB, 35-day lifecycle)
-        Weekly EBS snapshot via DLM (7 kept)
+        Daily EBS snapshot via DLM (7 kept)
 
 ## Key decisions (full rationale: reviewed architecture proposal, 2026-08-08)
 - Dedicated NEW instance; existing EC2s not reused (unassessed patch/exposure/roles).
 - Postgres co-located on encrypted EBS for the pilot; RDS = Option B (~$42–48/mo) if it graduates.
 - No ALB/CloudFront: Caddy terminates TLS (Let's Encrypt); traffic volume doesn't justify $16+/mo.
-- `/api/send` + `/script.js` public (tracker must be reachable); everything else behind
-  Caddy basic-auth AND Umami login (two layers). Sharing links disabled.
+- `/api/*` + `/script.js` + `/site.webmanifest` bypass the Caddy gate (the SPA's
+  fetch() calls don't carry browser basic-auth credentials; Umami's own token
+  auth protects every sensitive API route). The Caddy basic-auth layer guards
+  the dashboard pages; the STRONG Umami admin password is the primary security
+  boundary. Sharing links disabled; session replay never enabled.
 - Secrets in SSM Parameter Store (SecureString); placeholders in TF with
   `ignore_changes` — real values set out-of-band after apply. No secret outputs.
 - Privacy contract enforced at the site by `trackApprovedEvent` (v2.1, 113 tests):

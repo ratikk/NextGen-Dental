@@ -177,7 +177,7 @@ resource "aws_ebs_volume" "data" {
   size              = 20
   type              = "gp3"
   encrypted         = true
-  tags              = { Name = "analytics-umami-data", Project = "nextgendental-analytics", Snapshot = "analytics-weekly" }
+  tags              = { Name = "analytics-umami-data", Project = "nextgendental-analytics", Snapshot = "analytics-daily" }
 }
 
 resource "aws_volume_attachment" "data" {
@@ -238,14 +238,14 @@ resource "aws_iam_role_policy_attachment" "dlm" {
 }
 
 resource "aws_dlm_lifecycle_policy" "weekly" {
-  description        = "Weekly snapshot of analytics data volume"
+  description        = "Daily snapshot of analytics data volume (7 kept)"
   execution_role_arn = aws_iam_role.dlm.arn
   state              = "ENABLED"
   policy_details {
     resource_types = ["VOLUME"]
-    target_tags    = { Snapshot = "analytics-weekly" }
+    target_tags    = { Snapshot = "analytics-daily" }
     schedule {
-      name = "weekly"
+      name = "daily"
       create_rule {
         interval      = 24
         interval_unit = "HOURS"

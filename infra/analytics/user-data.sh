@@ -12,7 +12,7 @@ sed -i 's/apply_updates = no/apply_updates = yes/' /etc/dnf/automatic.conf
 systemctl enable --now dnf-automatic.timer
 
 # data volume (postgres data + caddy state live here)
-mkfs -t xfs -f /dev/xvdb || true
+blkid /dev/xvdb >/dev/null 2>&1 || mkfs -t xfs /dev/xvdb   # format ONLY if blank — protects data on instance replacement
 mkdir -p /data && mount /dev/xvdb /data && echo '/dev/xvdb /data xfs defaults,nofail 0 2' >> /etc/fstab
 mkdir -p /data/pg /data/caddy /opt/umami
 
@@ -24,8 +24,10 @@ BASICAUTH=$(get /nextgendental/analytics/dash_basicauth_hash)
 
 cat > /opt/umami/Caddyfile <<CADDY
 analytics.nextgendentalaustintx.com {
-  log { output file /data/caddy/access.log }
-  @public path /api/send /script.js
+  log {
+    output file /data/caddy/access.log
+  }
+  @public path /api/* /script.js /site.webmanifest
   handle @public {
     reverse_proxy umami:3000
   }
@@ -65,6 +67,7 @@ services:
     restart: always
 COMPOSE
 
+chmod 600 /opt/umami/Caddyfile /opt/umami/docker-compose.yml
 cd /opt/umami && /usr/local/bin/docker-compose up -d
 
 # nightly encrypted dump to S3 (bucket enforces SSE-KMS)
