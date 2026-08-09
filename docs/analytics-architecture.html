@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NextGen Dental — Production Analytics Architecture &amp; Learning Guide</title>
+<style>
+  :root{
+    --ink:#1f2937; --muted:#6b7280; --accent:#c2570e; --accent-soft:#fdf1e7;
+    --line:#e5e7eb; --ok:#166534; --ok-soft:#e7f6ec; --warn:#92400e; --warn-soft:#fef3c7;
+    --unk:#475569; --unk-soft:#e2e8f0; --crit:#b91c1c; --crit-soft:#fee2e2;
+    --box:#f8fafc; --pub:#b45309; --priv:#1d4ed8;
+  }
+  *{margin:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Segoe UI',Arial,Helvetica,sans-serif;color:var(--ink);max-width:980px;
+       margin:0 auto;padding:28px 32px;font-size:14px;line-height:1.55;background:#fff}
+  header.doc{border-bottom:4px solid var(--accent);padding-bottom:14px;margin-bottom:18px}
+  .kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  h1{font-size:26px;margin:4px 0}
+  .sub{color:var(--muted);font-size:13px}
+  h2{font-size:19px;margin:34px 0 10px;padding-top:10px;border-top:2px solid var(--line);color:var(--accent)}
+  h3{font-size:15px;margin:18px 0 6px}
+  p{margin:8px 0}
+  ul,ol{margin:8px 0 8px 22px}
+  li{margin:4px 0}
+  code{background:var(--box);border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:12.5px}
+  .tag{font-size:10px;font-weight:800;letter-spacing:.05em;border-radius:4px;padding:1px 7px;white-space:nowrap;vertical-align:1px}
+  .t-ver{background:var(--ok-soft);color:var(--ok)} .t-inf{background:#eff6ff;color:var(--priv)}
+  .t-asm{background:var(--warn-soft);color:var(--warn)} .t-unk{background:var(--unk-soft);color:var(--unk)}
+  .t-rec{background:var(--accent-soft);color:var(--accent)} .t-crit{background:var(--crit-soft);color:var(--crit)}
+  .plain{background:var(--accent-soft);border-left:4px solid var(--accent);padding:10px 14px;
+         border-radius:0 8px 8px 0;margin:10px 0}
+  .plain b:first-child{color:var(--accent)}
+  table{width:100%;border-collapse:collapse;font-size:12.5px;margin:10px 0}
+  caption{text-align:left;font-size:12px;color:var(--muted);margin-bottom:4px}
+  th{text-align:left;background:#f9fafb;border-bottom:2px solid var(--line);padding:6px 8px;
+     font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+  td{border-bottom:1px solid var(--line);padding:6px 8px;vertical-align:top}
+  .toc{background:var(--box);border:1px solid var(--line);border-radius:10px;padding:14px 18px;column-count:2;column-gap:28px}
+  .toc a{color:var(--ink);text-decoration:none;display:block;padding:2px 0;font-size:13px}
+  .toc a:hover{color:var(--accent)}
+  .toc a::before{content:"› ";color:var(--accent)}
+  /* diagrams */
+  .diagram{border:1px solid var(--line);border-radius:10px;padding:16px;margin:12px 0;background:#fff}
+  .diagram .dt{font-weight:700;font-size:13px;margin-bottom:2px}
+  .diagram .dd{font-size:12px;color:var(--muted);margin-bottom:12px}
+  .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;justify-content:flex-start}
+  .node{background:var(--box);border:1.5px solid var(--line);border-radius:8px;padding:8px 10px;
+        font-size:12px;min-width:118px;max-width:190px;text-align:center;align-self:center}
+  .node b{display:block;font-size:12.5px}
+  .node small{color:var(--muted);font-size:10.5px;display:block;margin-top:2px}
+  .n-pub{border-color:#f0c187;background:#fffaf4} .n-priv{border-color:#bcd3f7;background:#f7faff}
+  .n-aws{border-color:#d9c6f2;background:#fbf8ff} .n-hum{border-color:#a7d8b4;background:#f4fcf6}
+  .arr{align-self:center;padding:0 6px;color:var(--accent);font-weight:700;font-size:15px;text-align:center}
+  .arr small{display:block;font-size:9.5px;color:var(--muted);font-weight:400;max-width:86px}
+  .lane{border-left:3px solid var(--line);padding:6px 0 6px 14px;margin:10px 0}
+  .lane .lt{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .legend{font-size:11px;color:var(--muted);margin-top:10px}
+  .legend span{display:inline-block;width:11px;height:11px;border-radius:3px;border:1.5px solid;vertical-align:-1px;margin:0 4px 0 12px}
+  .fail{font-size:11.5px;color:var(--muted);border-top:1px dashed var(--line);margin-top:10px;padding-top:8px}
+  .fail b{color:var(--crit)}
+  .qa{margin:6px 0 12px}
+  .qa dt{font-weight:700;font-size:12.5px;color:var(--accent);margin-top:8px}
+  .qa dd{margin-left:0}
+  footer.doc{margin-top:30px;padding-top:12px;border-top:2px solid var(--line);color:var(--muted);
+             font-size:11.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+  @media print{
+    body{padding:0;font-size:11.5pt}
+    h2{break-before:page} h2:first-of-type{break-before:auto}
+    .diagram,table,.plain{break-inside:avoid}
+    .toc{column-count:2}
+    a{color:inherit;text-decoration:none}
+  }
+  @media (max-width:640px){
+    body{padding:16px}
+    .toc{column-count:1}
+    .flow{flex-direction:column;align-items:stretch}
+    .node{max-width:none}
+    .arr{transform:rotate(90deg);padding:6px 0;max-width:none}
+    .arr small{transform:rotate(-90deg);display:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="doc">
+  <div class="kicker">NextGen Dental &middot; Austin, TX</div>
+  <h1>Production Analytics: Architecture &amp; Learning Guide</h1>
+  <div class="sub">How patient-privacy-minimized analytics works, where everything lives, and how to operate it.<br>
+  Last verified: <b>2026-08-09 (evening, US Central)</b> &middot; Read-only documentation — nothing was changed to produce this guide.<br>
+  Labels used throughout: <span class="tag t-ver">VERIFIED</span> <span class="tag t-inf">INFERENCE</span> <span class="tag t-asm">ASSUMPTION</span> <span class="tag t-unk">UNKNOWN</span> <span class="tag t-rec">RECOMMENDED</span></div>
+</header>
+
+<nav class="toc" aria-label="Table of contents">
+  <a href="#s1">1. Executive summary</a>
+  <a href="#s2">2. Architecture at a glance</a>
+  <a href="#s3">3. Verified facts &amp; unknowns (evidence matrix)</a>
+  <a href="#s4">4. Complete architecture diagram</a>
+  <a href="#s5">5. Analytics data flow</a>
+  <a href="#s6">6. Component-by-component (5W1H)</a>
+  <a href="#s7">7. Where do I go?</a>
+  <a href="#s8">8. How to use the dashboard</a>
+  <a href="#s9">9. Where the database is stored</a>
+  <a href="#s10">10. Security &amp; privacy</a>
+  <a href="#s11">11. Backups &amp; recovery</a>
+  <a href="#s12">12. Deployment &amp; change management</a>
+  <a href="#s13">13. Troubleshooting</a>
+  <a href="#s14">14. Costs &amp; ownership</a>
+  <a href="#s15">15. Risks &amp; recommendations</a>
+  <a href="#s16">16. Glossary</a>
+  <a href="#s17">17. Evidence sources</a>
+  <a href="#s18">18. Open questions</a>
+</nav>
+
+<h2 id="s1">1. Executive summary</h2>
+<div class="plain"><b>Plain English:</b> Your website now measures how patients use it — which pages they read, which buttons they click, which articles lead to appointment bookings — using an analytics system that <b>you own end-to-end</b>. No Google Analytics, no advertising trackers, no cookies, no patient information. The measuring script on the website only sends five pre-approved kinds of events, each stripped and validated before it leaves the browser. The data lands in your own small server in AWS, and you read it at <b>analytics.nextgendentalaustintx.com</b> behind two passwords.</div>
+<p>The platform went live on <b>2026-08-09</b>. It consists of three cooperating parts: (1) a <b>tracker</b> on the website — a script plus a validation wrapper covered by 125 automated tests that run on every code change; (2) a <b>collection server</b> — the Umami analytics application and a PostgreSQL database running in Docker on a dedicated EC2 instance; (3) an <b>operating shell</b> — Terraform-defined infrastructure, daily backups to encrypted S3, daily disk snapshots, CloudWatch alarms, and administrative access only through AWS SSM (no SSH port exists).</p>
+<p>Two honest caveats front and center: the <b>first backup and the restore drill have not yet been verified</b> (the stack is less than a day old — see §11 and §18), and this document distinguishes carefully between what is <span class="tag t-ver">VERIFIED</span> and what remains <span class="tag t-unk">UNKNOWN</span>.</p>
+
+<h2 id="s2">2. Architecture at a glance</h2>
+<table>
+  <caption>The system in one table</caption>
+  <tr><th>Layer</th><th>What runs there</th><th>Where</th><th>Status</th></tr>
+  <tr><td>Website</td><td>Astro static site + analytics tracker + event wrapper</td><td>S3 + CloudFront (existing website infrastructure)</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Collection</td><td>Caddy (TLS + auth gate) → Umami app → PostgreSQL 16</td><td>Docker Compose on one dedicated EC2 <code>t4g.small</code>, us-east-2</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Storage</td><td>Postgres data files</td><td>Encrypted 20&nbsp;GB EBS volume mounted at <code>/data</code></td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Backups</td><td>Nightly <code>pg_dump</code> → S3 (KMS, versioned) + daily EBS snapshots (7 kept)</td><td>S3 bucket <code>nextgendental-analytics-backups</code> + EBS snapshots</td><td><span class="tag t-asm">CONFIGURED, first run unverified</span></td></tr>
+  <tr><td>Access</td><td>Dashboard: Caddy basic-auth + Umami login. Admin shell: SSM only</td><td>Browser / AWS Console</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Change control</td><td>PR validation (tests block) → staging → human production approval</td><td>GitHub Actions + protected environment</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+</table>
+
+<h2 id="s3">3. Verified facts &amp; unknowns — evidence matrix</h2>
+<table>
+  <caption>Every load-bearing architecture fact, with its evidence</caption>
+  <tr><th>Architecture fact</th><th>Status</th><th>Evidence source</th><th>Last verified</th><th>Confidence</th></tr>
+  <tr><td>Analytics hostname <code>analytics.nextgendentalaustintx.com</code> → EIP of the analytics instance (Route 53 A record)</td><td><span class="tag t-ver">VERIFIED</span></td><td>Terraform apply output; live TLS certificate issuance; dashboard reachable</td><td>2026-08-09</td><td>High</td></tr>
+  <tr><td>Umami compute: Docker Compose on dedicated EC2 <code>t4g.small</code>, Amazon Linux 2023, us-east-2</td><td><span class="tag t-ver">VERIFIED</span></td><td>Terraform apply; live <code>docker ps</code> during SSM session (3 containers Up)</td><td>2026-08-09</td><td>High</td></tr>
+  <tr><td>PostgreSQL 16 container on the <b>same instance</b>; data files under <code>/data/pg</code> on a dedicated EBS volume (not RDS)</td><td><span class="tag t-ver">VERIFIED</span></td><td>docker-compose definition in bootstrap; live <code>docker ps</code></td><td>2026-08-09</td><td>High</td></tr>
+  <tr><td>Encryption at rest: root EBS + data EBS + backup bucket (KMS) all encrypted</td><td><span class="tag t-ver">VERIFIED</span></td><td>Terraform plan/apply (<code>encrypted=true</code>, SSE-KMS)</td><td>2026-08-09</td><td>High</td></tr>
+  <tr><td>Backup schedule: nightly <code>pg_dump</code> cron → S3; daily EBS snapshot, 7 retained (DLM)</td><td><span class="tag t-asm">CONFIGURED</span></td><td>user-data cron file + DLM policy in Terraform; <b>first execution not yet observed</b></td><td>2026-08-09</td><td>Medium</td></tr>
+  <tr><td>Restore test</td><td><span class="tag t-unk">NOT DONE</span></td><td>— (required before "stable"; see §11)</td><td>—</td><td>—</td></tr>
+  <tr><td>Session replay &amp; heatmaps: no replay module is loaded by the site tracker; menu items exist in the Umami UI but collection requires site-side instrumentation that is deliberately absent</td><td><span class="tag t-ver">VERIFIED (code)</span></td><td><code>Analytics.astro</code> loads only <code>script.js</code>; no replay/heatmap scripts anywhere in repo</td><td>2026-08-09</td><td>High (code) / Medium (ongoing — re-check after Umami upgrades)</td></tr>
+  <tr><td>Tracker endpoint <code>https://analytics…/api/send</code>; tracker script <code>/script.js</code> publicly served</td><td><span class="tag t-ver">VERIFIED</span></td><td>Caddy config; live 200 on script.js; events visible in dashboard</td><td>2026-08-09</td><td>High</td></tr>
+  <tr><td>Cookieless collection (no cookies, no localStorage identifiers set by analytics)</td><td><span class="tag t-ver">VERIFIED</span></td><td>Umami tracker design + owner's staging DevTools check before production approval</td><td>2026-08-09</td><td>Medium-High (re-verify after upgrades)</td></tr>
+  <tr><td>Query strings &amp; fragments excluded from collected URLs</td><td><span class="tag t-ver">VERIFIED</span></td><td><code>data-exclude-search/hash</code> attributes in <code>Analytics.astro</code>; owner's staging payload check</td><td>2026-08-09</td><td>High</td></tr>
+  <tr><td>Authentication: dashboard pages behind Caddy basic-auth + Umami login; API behind Umami token auth; admin shell via SSM Session Manager only (no SSH port)</td><td><span class="tag t-ver">VERIFIED</span></td><td>Live Caddyfile; security group (443/80 only); live login flow</td><td>2026-08-09</td><td>High</td></tr>
+  <tr><td>Website ID configuration: hardcoded per-hostname map in <code>Analytics.astro</code> and the wrapper (dev vs production), runtime switch</td><td><span class="tag t-ver">VERIFIED</span></td><td>Source on <code>main</code> (commit <code>fa70d23</code>)</td><td>2026-08-09</td><td>High</td></tr>
+  <tr><td>Umami application version</td><td><span class="tag t-unk">UNKNOWN (unpinned)</span></td><td>Image tag <code>postgresql-latest</code> — pin recommended (§15)</td><td>—</td><td>—</td></tr>
+  <tr><td>Infrastructure code merged to main</td><td><span class="tag t-asm">PENDING</span></td><td>Live stack matches branch <code>infra/analytics-pilot</code> (unmerged PR)</td><td>2026-08-09</td><td>High</td></tr>
+</table>
+
+<h2 id="s4">4. Complete architecture diagram</h2>
+<div class="diagram" role="img" aria-label="Production architecture: patient browsers reach the website via CloudFront and S3, and analytics events flow to a dedicated EC2 instance running Caddy, Umami and PostgreSQL, with backups to S3, secrets in SSM Parameter Store, and monitoring via CloudWatch to email.">
+  <div class="dt">Production architecture — two independent halves that meet only in the patient's browser</div>
+  <div class="dd">Left: the website you already had. Right: the new analytics stack. If the right half fails entirely, the website is unaffected.</div>
+  <div class="lane"><span class="lt">Website delivery (existing)</span>
+    <div class="flow">
+      <div class="node n-hum"><b>Patient browser</b><small>anywhere (US-only via CloudFront geo rule)</small></div>
+      <div class="arr">→<small>HTTPS (public)</small></div>
+      <div class="node n-pub"><b>CloudFront</b><small>CDN, TLS, US-only, 404 handling</small></div>
+      <div class="arr">→<small>private (OAC)</small></div>
+      <div class="node n-aws"><b>S3 website bucket</b><small>built Astro site incl. tracker code</small></div>
+    </div>
+  </div>
+  <div class="lane"><span class="lt">Analytics collection (new, dedicated instance)</span>
+    <div class="flow">
+      <div class="node n-hum"><b>Patient browser</b><small>tracker + validated events</small></div>
+      <div class="arr">→<small>HTTPS to analytics.… (public: 443/80 only)</small></div>
+      <div class="node n-pub"><b>Caddy</b><small>TLS (Let's Encrypt), auth gate for dashboard pages</small></div>
+      <div class="arr">→<small>container network (on-host, private)</small></div>
+      <div class="node n-priv"><b>Umami app</b><small>validates &amp; aggregates</small></div>
+      <div class="arr">→<small>on-host, private</small></div>
+      <div class="node n-priv"><b>PostgreSQL 16</b><small>data on encrypted EBS /data</small></div>
+    </div>
+  </div>
+  <div class="lane"><span class="lt">Operations (all private/AWS-internal)</span>
+    <div class="flow">
+      <div class="node n-aws"><b>SSM Parameter Store</b><small>secrets, read at boot</small></div>
+      <div class="arr">→</div>
+      <div class="node n-aws"><b>EC2 t4g.small</b><small>Amazon Linux 2023, IMDSv2, no SSH port</small></div>
+      <div class="arr">→</div>
+      <div class="node n-aws"><b>S3 backup bucket</b><small>nightly dumps, KMS, versioned</small></div>
+      <div class="arr">&nbsp;</div>
+      <div class="node n-aws"><b>CloudWatch + SNS</b><small>status alarm → owner email</small></div>
+    </div>
+  </div>
+  <div class="legend">Node types: <span style="border-color:#a7d8b4;background:#f4fcf6"></span> people
+  <span style="border-color:#f0c187;background:#fffaf4"></span> public-facing
+  <span style="border-color:#bcd3f7;background:#f7faff"></span> private application
+  <span style="border-color:#d9c6f2;background:#fbf8ff"></span> AWS-internal service</div>
+  <div class="fail"><b>If it fails:</b> CloudFront/S3 outage → website down (analytics irrelevant). Analytics EC2 outage → website fine, tracker requests fail silently in patients' browsers, data for the outage window is lost (not queued) — recovery in §11.</div>
+</div>
+
+<h2 id="s5">5. Analytics data flow — from a patient's visit to your dashboard</h2>
+<div class="plain"><b>Plain English:</b> when someone reads your Invisalign page and taps "Call Us," their browser sends two tiny, anonymous notes to your analytics server: "someone viewed /services/invisalign" and "someone tapped a phone link on a service page." No name, no number dialed, no cookie. Umami files those notes; the dashboard summarizes them.</div>
+<div class="diagram" role="img" aria-label="Fourteen step data flow from page visit through validation, transmission, storage, and dashboard viewing, ending in the human-approved improvement loop.">
+  <div class="dt">End-to-end flow (verified sequence, corrected to match production)</div>
+  <div class="dd">Steps 1–7 happen in the patient's browser; 8–10 on the analytics instance; 11–13 when you log in; 14–15 are the improvement loop.</div>
+  <ol style="font-size:12.5px">
+    <li>Patient opens a page → CloudFront serves the static Astro page from S3. <span class="tag t-ver">VERIFIED</span></li>
+    <li>An inline snippet checks the hostname: on <code>dev.</code>/apex/<code>www</code> it injects <code>script.js</code> from the analytics server with the matching website ID; on any other host (localhost, previews) <b>nothing loads at all</b>. <span class="tag t-ver">VERIFIED</span></li>
+    <li>The Umami tracker records a pageview automatically — with query strings and #fragments excluded (<code>data-exclude-search/hash</code>). <span class="tag t-ver">VERIFIED</span></li>
+    <li>User actions that match one of <b>five approved events</b> (phone click, Zocdoc click, blog→service click, form start, form success) are passed to the <b>event wrapper</b> — never raw to the tracker. <span class="tag t-ver">VERIFIED</span></li>
+    <li>The wrapper validates: registered event? required properties present? every value on the enum allow-list? no emails/phone-numbers/free text/identifiers? ≤8 properties? Strings only? <span class="tag t-ver">VERIFIED — 125 unit tests, blocking in CI</span></li>
+    <li>The page path is checked against a route allow-list; unknown first-party routes are aggregated to a category (never the raw path); foreign or identifier-like URLs cause the whole event to be <b>rejected</b> — only counts are kept, never the URL. <span class="tag t-ver">VERIFIED</span></li>
+    <li>Approved payloads go by HTTPS <code>POST</code> to <code>/api/send</code>. Rejections never leave the browser. <span class="tag t-ver">VERIFIED</span></li>
+    <li>Caddy passes <code>/api/*</code> straight to Umami (this path is public by necessity — every patient's browser must reach it). <span class="tag t-ver">VERIFIED</span></li>
+    <li>Umami validates the website ID, assigns the event to an anonymous session (daily-rotating hash — resets every day, not traceable across days). <span class="tag t-ver">VERIFIED (Umami design)</span></li>
+    <li>PostgreSQL stores the record on the encrypted volume. <span class="tag t-ver">VERIFIED</span></li>
+    <li>You open the dashboard → Caddy demands basic-auth for pages → Umami demands its own login. <span class="tag t-ver">VERIFIED</span></li>
+    <li>Umami queries PostgreSQL and aggregates. <span class="tag t-ver">VERIFIED</span></li>
+    <li>Dashboard renders traffic, events, funnels, journeys. <span class="tag t-ver">VERIFIED</span></li>
+    <li>The agentic monitoring process (weekly watchdog + on-demand analysis) may read <b>aggregate</b> data and produce recommendations. <span class="tag t-ver">VERIFIED (review-only mandate)</span></li>
+    <li>Any website change resulting from a recommendation goes through PR → staging → <b>your explicit approval</b> → production. The agent cannot skip this. <span class="tag t-ver">VERIFIED (protected environment)</span></li>
+  </ol>
+</div>
+<div class="diagram" role="img" aria-label="Event validation decision flow showing how an event is checked against the registry, properties, values, and path policy before transmission or rejection.">
+  <div class="dt">Event-validation flow (inside the browser, before anything is sent)</div>
+  <div class="dd">Every custom event runs this gauntlet. Failing ANY check means nothing is transmitted; rejected values are never echoed even into error logs.</div>
+  <div class="flow">
+    <div class="node"><b>Event fired</b><small>e.g. phone_click</small></div>
+    <div class="arr">→<small>registered event?</small></div>
+    <div class="node"><b>Registry check</b><small>5 events only</small></div>
+    <div class="arr">→<small>required props? enum values? no identifiers?</small></div>
+    <div class="node"><b>Property gauntlet</b><small>strings only, allow-listed</small></div>
+    <div class="arr">→<small>path policy</small></div>
+    <div class="node"><b>URL check</b><small>known route / aggregate / reject</small></div>
+    <div class="arr">→<small>only if ALL pass</small></div>
+    <div class="node n-pub"><b>HTTPS POST /api/send</b><small>sanitized payload</small></div>
+  </div>
+  <div class="fail"><b>On failure:</b> event silently dropped; an error <i>code</i> (never the value) appears in the browser console debug log; unsafe-path rejections increment a counter readable as an aggregate number.</div>
+</div>
+
+<h2 id="s6">6. Component-by-component (What / Why / Where / When / Who / How)</h2>
+<table>
+  <caption>Every component answering the 5W1H. "Owner" = who operates/approves; Ratik holds final approval throughout.</caption>
+  <tr><th style="width:14%">Component</th><th>What &amp; why</th><th>Where &amp; when</th><th>Who &amp; how it connects</th></tr>
+  <tr><td><b>Patient browser</b></td><td>Runs the site and the tracker. Why: analytics must observe real behavior where it happens.</td><td>Patient's device; whenever they visit.</td><td>Owned by the patient. Talks HTTPS to CloudFront (pages) and to the analytics endpoint (events).</td></tr>
+  <tr><td><b>Astro website</b></td><td>The static site — pages, forms, and the analytics integration are all built into its files. Why: static = fast, cheap, small attack surface.</td><td>Built by CI; served from S3/CloudFront; rebuilt on every merge to main.</td><td>Ratik approves changes. Source: GitHub <code>ratikk/NextGen-Dental</code>.</td></tr>
+  <tr><td><b>CloudFront</b></td><td>CDN: TLS, caching, US-only geo rule, real 404s. Why: speed + shield for the S3 origin.</td><td>AWS edge, always on.</td><td>AWS-managed. Reads S3 via Origin Access Control (private).</td></tr>
+  <tr><td><b>S3 website bucket</b></td><td>Holds the built site files. Why: durable, cheap static origin.</td><td>us-east-2; updated by the deploy pipeline only.</td><td>Pipeline writes via scoped OIDC role; CloudFront reads; public access blocked.</td></tr>
+  <tr><td><b>Analytics tracker</b> (<code>script.js</code>)</td><td>Umami's standard collection script. Why: records pageviews and carries approved events; cookieless by design.</td><td>Served from the analytics instance; loads on tracked hostnames only, per page view.</td><td>Injected by <code>Analytics.astro</code>; posts to <code>/api/send</code>.</td></tr>
+  <tr><td><b>Event wrapper</b> (<code>trackApprovedEvent</code>)</td><td>The privacy firewall: allow-listed events/properties, identifier rejection, path policy, no-echo errors. Why: makes "no PHI in analytics" a property of the code, not a promise.</td><td>Bundled into the site; runs in-browser before any custom event is sent.</td><td>125 unit tests run as a <b>blocking</b> CI step on every PR. Only it may call the tracker's event API.</td></tr>
+  <tr><td><b>DNS (Route 53)</b></td><td>Maps names to servers. Why: patients and the tracker find the right machines.</td><td>Hosted zone for the domain; <code>analytics.</code> A-record → the instance's static IP (EIP).</td><td>Managed via Terraform + approved changes.</td></tr>
+  <tr><td><b>TLS certificates</b></td><td>Website: AWS Certificate Manager (at CloudFront). Analytics: Let's Encrypt, obtained and auto-renewed by Caddy. Why: everything is HTTPS.</td><td>Renewal is automatic in both cases.</td><td>ACM auto-renews; Caddy renews ~30 days before expiry (renewal window observed in live logs).</td></tr>
+  <tr><td><b>Caddy</b> (reverse proxy)</td><td>The analytics front door: terminates TLS, lets <code>/api/*</code> + <code>/script.js</code> through, demands basic-auth for dashboard pages. Why: one hardened entry point; no load balancer needed at this scale.</td><td>Container on the analytics instance; always on; access log (IP-truncated) on /data.</td><td>Forwards to Umami over the private on-host container network.</td></tr>
+  <tr><td><b>Umami application</b></td><td>The analytics brain: sessionizes events, aggregates, serves the dashboard and its API. Why: privacy-first, self-hostable, owner-controlled.</td><td>Container, always on. Version: image tag <code>postgresql-latest</code> <span class="tag t-unk">UNPINNED — see §15</span>.</td><td>Reads/writes PostgreSQL on the same host; auth via its own accounts + tokens.</td></tr>
+  <tr><td><b>PostgreSQL 16</b></td><td>The record system — every pageview/event row lives here. Why: Umami's supported store; SQL for future custom reporting.</td><td>Container; data files at <code>/data/pg</code> on the encrypted EBS volume; always on.</td><td>Reachable ONLY from Umami on the same host — port 5432 is not exposed to the network.</td></tr>
+  <tr><td><b>Compute host</b> (EC2)</td><td>The one machine running all three containers. Why: right-sized (~$12/mo) for a practice website's traffic.</td><td><code>t4g.small</code>, us-east-2, dedicated to analytics; auto security patches (dnf-automatic).</td><td>No SSH port. Admin = AWS SSM Session Manager (IAM-gated, sessions logged). IMDSv2 enforced.</td></tr>
+  <tr><td><b>Storage volume</b> (EBS)</td><td>20&nbsp;GB encrypted disk holding the database + Caddy state. Why: survives instance replacement; snapshot-able.</td><td>Attached at <code>/data</code>; bootstrap formats it ONLY if blank.</td><td>Snapshotted daily by DLM (7 kept).</td></tr>
+  <tr><td><b>Secrets</b> (SSM Parameter Store)</td><td>DB password, app secret, dashboard auth hash — encrypted SecureStrings. Why: no secrets in code, Terraform, or images.</td><td>Read once at instance boot by the bootstrap script.</td><td>Instance role may READ its own three parameters and nothing else; writing requires human AWS access.</td></tr>
+  <tr><td><b>Backups</b></td><td>Nightly database dump → encrypted S3 (35-day lifecycle) + daily volume snapshots. Why: two independent recovery paths.</td><td>Cron on the instance (nightly); DLM daily.</td><td><span class="tag t-asm">First run pending verification</span> — see §11.</td></tr>
+  <tr><td><b>Monitoring</b></td><td>CloudWatch instance-status alarm → SNS email to Ratik; weekly agent watchdog checks tracker availability. Why: silent analytics death loses data invisibly.</td><td>Alarm continuous; watchdog weekly (Thursdays).</td><td>SNS subscription confirmed 2026-08-09.</td></tr>
+  <tr><td><b>Terraform</b></td><td>The infrastructure's source of truth (~25 resources). Why: reproducible, reviewable, destroyable.</td><td><code>infra/analytics/</code>; state in the shared encrypted state bucket with locking.</td><td>Plans run automatically on PRs (read-only role); this stack's apply was CloudShell-admin by explicit approval. <span class="tag t-asm">Branch merge pending</span>.</td></tr>
+  <tr><td><b>CI/CD pipeline</b></td><td>Validate (tests/build/scans) → build-once artifact → staging deploy → <b>human gate</b> → production. Why: no unreviewed change can reach patients.</td><td>GitHub Actions, on every PR and merge.</td><td>OIDC roles per stage; protected <code>production</code> environment; Ratik is the sole approver.</td></tr>
+  <tr><td><b>Umami dashboard</b></td><td>Where you read the data (see §8).</td><td><code>analytics.nextgendentalaustintx.com</code>, on demand.</td><td>Two auth layers; accounts managed inside Umami by you.</td></tr>
+  <tr><td><b>Agentic monitoring</b></td><td>Weekly watchdog + on-demand analysis; reads aggregates, writes reports and recommendations. Why: the observe–reason–learn loop.</td><td>Scheduled cloud session (Thursdays) + working sessions.</td><td><b>Review-only</b>: cannot deploy, merge, approve, or modify anything in production.</td></tr>
+  <tr><td><b>Human approval gate</b></td><td>You. Every production change — website, infrastructure, rollback — stops until you explicitly approve. Why: the non-negotiable safety property of the whole system.</td><td>GitHub protected environment + "Approve …" phrases in working sessions.</td><td>Cannot be bypassed by the agent or the pipeline; vague answers are not approval.</td></tr>
+</table>
+
+
+<h2 id="s7">7. Where do I go?</h2>
+<table>
+  <caption>Safe navigation map — no credentials or sensitive identifiers included</caption>
+  <tr><th>Purpose</th><th>Location</th><th>What you can do</th><th>Access required</th></tr>
+  <tr><td>View the website</td><td>https://nextgendentalaustintx.com</td><td>Verify the public site as patients see it</td><td>Public</td></tr>
+  <tr><td>View analytics</td><td>https://analytics.nextgendentalaustintx.com</td><td>Traffic, events, sessions, funnels, performance</td><td>Basic-auth + Umami login</td></tr>
+  <tr><td>Website &amp; tracker code</td><td>github.com/ratikk/NextGen-Dental → <code>src/components/Analytics.astro</code>, <code>src/utils/analytics/</code></td><td>Review exactly what the tracker can and cannot send</td><td>Repository access</td></tr>
+  <tr><td>Infrastructure code</td><td>Same repo → <code>infra/analytics/</code> (branch <code>infra/analytics-pilot</code> until merged) + <code>docs/ANALYTICS.md</code></td><td>Review the Terraform definition of everything in §4</td><td>Repository access</td></tr>
+  <tr><td>The analytics server</td><td>AWS Console → EC2 → us-east-2 (Ohio) → instance named <code>analytics-umami</code></td><td>Inspect health, CPU, status checks</td><td>Authorized AWS access</td></tr>
+  <tr><td>Admin shell (no SSH)</td><td>AWS Console → Systems Manager → Session Manager, or <code>aws ssm start-session</code></td><td>Container status, logs, controlled maintenance</td><td>Authorized AWS access (sessions are logged)</td></tr>
+  <tr><td>Database status</td><td>Via the admin shell: <code>docker ps</code>, <code>docker logs</code> — status only, never patient-level browsing (there is none to browse)</td><td>Confirm PostgreSQL is up; check disk usage</td><td>Restricted</td></tr>
+  <tr><td>Backups</td><td>AWS Console → S3 → <code>nextgendental-analytics-backups</code> → <code>pgdump/</code>; EC2 → Snapshots</td><td>Confirm nightly dumps and daily snapshots exist</td><td>Restricted</td></tr>
+  <tr><td>DNS</td><td>AWS Console → Route 53 → nextgendentalaustintx.com zone</td><td>Inspect the <code>analytics</code> A-record</td><td>Authorized access</td></tr>
+  <tr><td>Certificates</td><td>Website: ACM (us-east-1). Analytics: automatic on-instance (Let's Encrypt via Caddy — check padlock in browser)</td><td>Confirm validity/expiry</td><td>Authorized / public padlock</td></tr>
+  <tr><td>Logs</td><td>CloudWatch Logs group <code>/nextgendental/analytics</code> (30-day retention); Caddy access log on the instance</td><td>Diagnose availability and application errors</td><td>Restricted</td></tr>
+  <tr><td>Deployments</td><td>GitHub → Actions tab</td><td>Every build, staging deploy, approval, and production release with full history</td><td>Repository access</td></tr>
+</table>
+
+<h2 id="s8">8. How to use the dashboard</h2>
+<div class="plain"><b>Plain English first — the three numbers people confuse:</b> a <b>View</b> is one page being loaded once. A <b>Visit</b> (session) is one person's whole browsing sitting — maybe five views in ten minutes. A <b>Visitor</b> is the person — but since we're cookieless, "the person" is an anonymous daily hash: the same patient returning tomorrow counts as a new visitor. That's the privacy trade-off, accepted by design: slightly inflated visitor counts in exchange for tracking nobody.</div>
+<h3>How visitor counting actually works — and why we cannot know who visited</h3>
+<p><b>The mechanism:</b> instead of a cookie, Umami computes a one-way <b>daily-rotating anonymous hash</b> from a few technical signals (IP address, browser type, and a salt that changes every midnight). That hash <i>is</i> the "visitor." The inputs are discarded; only the hash is stored. Nothing is planted on the patient's device — nothing to accept, decline, or clear.</p>
+<table>
+  <caption>Worked example: the same person, same machine, visiting repeatedly</caption>
+  <tr><th>When they visit</th><th>What the dashboard counts</th><th>Why</th></tr>
+  <tr><td>Monday 9am, 1pm, 6pm</td><td><b>1 visitor, 3 visits</b></td><td>Same day → same hash; a new "visit" (session) starts after ~30 minutes of inactivity</td></tr>
+  <tr><td>Same machine, Tuesday</td><td><b>a new visitor</b></td><td>The salt rotated at midnight → different hash; yesterday's identity is unrecoverable</td></tr>
+  <tr><td>Same person, phone then laptop</td><td>2 visitors</td><td>Different devices produce different hashes</td></tr>
+</table>
+<p>Consequences to read the dashboard with: visitor counts are <b>slightly inflated</b> (returning people re-count daily), and <b>Retention/Cohorts are structurally understated</b> — the system is deliberately incapable of recognizing a returning person across days. Your own visits count like anyone else's; if that starts to skew small numbers, excluding practice traffic is a small future change.</p>
+<p><b>Can we know <i>who</i> visited? No — and this is the load-bearing "no" of the whole design.</b> No names, accounts, or persistent identifiers exist; analytics rows contain no IP addresses; the proxy access log truncates IPs and expires after 30 days. You can see aggregate character ("12 visitors from Austin on mobile, most arrived via Google") but not identity ("Jane Smith read the implants page") — not through the dashboard, the database, or full admin access. For a dental practice this inability is a <b>feature</b>: a list of identified people browsing dental services would itself be sensitive, health-adjacent information — exactly the category the HHS tracking-technology guidance warns about, and exactly why ad-tech analytics were rejected. Because the system cannot answer "who," the practice never inherits the obligations that answer would carry.</p>
+<p class="plain"><b>Boundary for the future:</b> any suggestion to "identify users," "match visitors to the patient list," or connect analytics to form submissions is not a feature request — it is a re-architecture of the privacy posture, and it requires privacy/legal review <i>before</i> any code. The current design's value is that "who visited?" is <b>provably unanswerable</b>.</p>
+
+<table>
+  <caption>Every menu item, what it's for, and its status. "Menu visible" never means "collection enabled."</caption>
+  <tr><th>Menu</th><th>What it means / example question it answers</th><th>Status &amp; healthcare note</th></tr>
+  <tr><td><b>Overview</b></td><td>The headline numbers: visitors, visits, views, bounce rate, visit duration, top pages, referrers, devices. <i>"Was this week busier than last?"</i></td><td>Enabled. Safe.</td></tr>
+  <tr><td><b>Events</b></td><td>Your five conversion events. <i>"How many people tapped Call this week?"</i></td><td>Enabled — the most business-relevant screen. Safe (allow-listed data only).</td></tr>
+  <tr><td><b>Sessions</b></td><td>Anonymous visit-level list: pages in a visit, device, city-level location. <i>"What does a typical visit look like?"</i></td><td>Enabled. Safe: identities are daily-rotating hashes; no cross-day tracking.</td></tr>
+  <tr><td><b>Realtime</b></td><td>Who's on the site right now (anonymously). <i>"Did the Facebook post drive traffic just now?"</i></td><td>Enabled. Safe.</td></tr>
+  <tr><td><b>Performance</b></td><td>Page load timing as experienced by real visitors. <i>"Is the Invisalign page slow on phones?"</i></td><td>Enabled (Umami web-vitals). Complements the planned Lighthouse CI.</td></tr>
+  <tr><td><b>Compare / Breakdown</b></td><td>Side-by-side periods; slice any metric by page, referrer, device, country. <i>"Mobile vs desktop conversion?"</i></td><td>Enabled. Safe.</td></tr>
+  <tr><td><b>Goals</b></td><td>Set a target ("50 appointment clicks/month") and track progress.</td><td>Available; none configured yet. Safe — worth setting up once baselines exist.</td></tr>
+  <tr><td><b>Funnels</b></td><td>Step-by-step drop-off: landing → service page → appointment click. <i>"Where do we lose people?"</i></td><td>Available; configure after 2+ weeks of data. Safe.</td></tr>
+  <tr><td><b>Journeys</b></td><td>Common page-to-page paths. <i>"Do blog readers reach service pages?"</i></td><td>Enabled. Safe.</td></tr>
+  <tr><td><b>Retention</b></td><td>Return-visitor analysis. <b>Limited by design:</b> cookieless daily hashes mean cross-day retention is structurally understated. Read as trend, not truth.</td><td>Enabled but interpret with care.</td></tr>
+  <tr><td><b>Replays</b></td><td>Would record patients' actual scrolling/clicking sessions for playback.</td><td><span class="tag t-crit">NOT COLLECTED — MUST STAY OFF</span>. The site loads no replay module <span class="tag t-ver">VERIFIED (code)</span>. Recording patient browsing on a healthcare site requires privacy/legal review that has not been done. The menu existing is not consent.</td></tr>
+  <tr><td><b>Heatmaps</b></td><td>Click/scroll density pictures.</td><td><span class="tag t-crit">NOT COLLECTED</span> — same rule as Replays: separate privacy review before ever considering.</td></tr>
+  <tr><td><b>Segments / Cohorts</b></td><td>Saved audience filters and grouped-by-first-visit analysis.</td><td>Available; more useful with volume. Cohorts share Retention's cookieless limitation.</td></tr>
+</table>
+<dl class="qa">
+  <dt>Bounce rate</dt><dd>Share of visits that saw one page and left. High bounce isn't automatically bad — someone who lands on your phone number and calls "bounced" successfully.</dd>
+  <dt>Visit duration</dt><dd>Time between first and last action in a session. One-page visits contribute ~0s, dragging the average down — read alongside views-per-visit.</dd>
+  <dt>Referrers</dt><dd>Where visitors came from (Google, Facebook, direct). Direct = typed/bookmarked/most messaging apps.</dd>
+  <dt>Conversion rate</dt><dd>Defined here as sessions containing ≥1 approved conversion event ÷ total sessions (session-based, matching Umami's model).</dd>
+  <dt>Why booking completion is invisible</dt><dd>The moment a patient clicks "Book Online," they leave your website for Zocdoc. Tracking deliberately stops at that handoff — following patients into the booking system would cross the privacy line this design enforces. So <code>appointment_click</code> means "handed to Zocdoc," not "appointment confirmed." Confirmed-booking counts live in your Zocdoc account; comparing the two monthly gives you the handoff-to-booking rate.</dd>
+</dl>
+
+<h2 id="s9">9. Where is my analytics data stored?</h2>
+<div class="plain"><b>The analogy:</b> Umami is the <b>librarian</b> — it receives each note, files it, and answers your questions. PostgreSQL is the <b>catalog and record system</b> — the actual organized records. The EBS volume is the <b>shelf</b> the records physically sit on. The backup is a <b>protected copy in a separate vault</b> (S3), refreshed nightly, in case anything happens to the library.</div>
+<table>
+  <caption>Database facts</caption>
+  <tr><th>Question</th><th>Answer</th><th>Status</th></tr>
+  <tr><td>Technology</td><td>PostgreSQL 16 (official container image)</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Where it runs</td><td>Docker container on the dedicated analytics EC2 instance, AWS region us-east-2 (Ohio)</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Logical database</td><td><code>umami</code></td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Physical storage</td><td><code>/data/pg</code> on a dedicated 20&nbsp;GB gp3 EBS volume</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Encryption at rest</td><td>EBS volume encrypted (AWS-managed keys); backups SSE-KMS in S3; snapshots inherit volume encryption</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Encryption in transit</td><td>Browser→server: TLS. Umami→PostgreSQL: unencrypted, but the connection never leaves the single host's private container network (port 5432 is not network-exposed) — accepted for the pilot</td><td><span class="tag t-ver">VERIFIED (by design)</span></td></tr>
+  <tr><td>Publicly accessible?</td><td>No. Only ports 443/80 are open, and only Caddy listens there. The database accepts connections solely from the Umami container on the same machine</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Credentials</td><td>Generated randomly, stored as encrypted SecureStrings in SSM Parameter Store, read once at boot; never in code, images, or Terraform state outputs</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>What's stored</td><td>Pageview rows (path, referrer, device/browser class, country/region), the five approved event types with enum-only properties, daily-rotating anonymous session hashes</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Deliberately NOT stored</td><td>Names, emails, phone numbers, form contents, free text, cookies, cross-day identifiers, query strings, fragments, IP addresses in analytics rows (proxy access log truncates IPs; 30-day retention)</td><td><span class="tag t-ver">VERIFIED (code + design)</span></td></tr>
+  <tr><td>Retention</td><td>13 months (deliberate policy; Umami keeps data forever unless told otherwise — this was explicitly configured as a control)</td><td><span class="tag t-asm">CONFIGURED — verify the deletion job after month 13</span></td></tr>
+  <tr><td>Who may access</td><td>Umami app (service account); humans only via AWS-authenticated SSM sessions (logged)</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Access audit</td><td>AWS CloudTrail (API calls) + SSM session logging; no direct DB user accounts exist to audit</td><td><span class="tag t-inf">INFERENCE (standard AWS behavior; session-log review not yet performed)</span></td></tr>
+</table>
+
+<h2 id="s10">10. Security &amp; privacy</h2>
+<div class="plain"><b>The sentence that governs everything:</b> Self-hosted, privacy-first, and HIPAA-ready are <b>not interchangeable terms</b>. Compliance depends on the complete configuration, a documented risk analysis, operational safeguards, agreements, and what data is actually collected — not on any single technology choice. This system implements strong technical minimization; the practice's documented risk analysis remains the compliance artifact. <span class="tag t-rec">Legal/privacy review of the overall program is the owner's action item.</span></div>
+<table>
+  <caption>Control-by-control status</caption>
+  <tr><th>Control</th><th>Implementation</th><th>Status</th></tr>
+  <tr><td>Cookieless</td><td>Umami tracker sets no cookies/localStorage identifiers; verified in staging DevTools before production approval</td><td><span class="tag t-ver">VERIFIED</span> (re-check after upgrades)</td></tr>
+  <tr><td>Replay / heatmaps</td><td>No collection modules loaded by the site; policy: never enable without separate review</td><td><span class="tag t-ver">VERIFIED (code)</span></td></tr>
+  <tr><td>Form values / free text / identifiers</td><td>Structurally excluded: enum-only properties; email/phone/UUID/long-text patterns rejected; rejected values never echoed (tested)</td><td><span class="tag t-ver">VERIFIED — 125 tests</span></td></tr>
+  <tr><td>Query strings / fragments</td><td>Excluded at the tracker (<code>data-exclude-*</code>) AND at the wrapper (path normalization + allow-list)</td><td><span class="tag t-ver">VERIFIED (two layers)</span></td></tr>
+  <tr><td>HTTPS everywhere</td><td>CloudFront (site) + Caddy/Let's Encrypt (analytics); HTTP only for cert issuance/redirect</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Authentication</td><td>Dashboard: Caddy basic-auth + Umami login (strong password — the primary boundary since /api/* bypasses the Caddy gate by SPA necessity). Admin: SSM only, no SSH</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Least privilege</td><td>Instance role: read own 3 secrets, write backups, push logs — nothing else. CI plan role read-only. No wildcards on resources</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Network restriction</td><td>Security group: inbound 443+80 only; DB port unexposed; IMDSv2 enforced</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Patching</td><td>OS: dnf-automatic security updates. Containers: monthly review — <b>currently unpinned images</b></td><td><span class="tag t-asm">PARTIAL — see §15</span></td></tr>
+  <tr><td>Secrets</td><td>SSM SecureStrings; placeholder-then-set pattern; one gap during rollout (placeholder boot) was caught and corrected same-day</td><td><span class="tag t-ver">VERIFIED</span></td></tr>
+  <tr><td>Known accepted risks</td><td>(a) /api/auth/login is internet-reachable behind Umami auth only — strong password mitigates; rate-limit recommended. (b) Basic-auth password transited a work chat — rotation recommended post-pilot</td><td><span class="tag t-rec">See §15</span></td></tr>
+</table>
+
+<h2 id="s11">11. Backups &amp; recovery</h2>
+<div class="diagram" role="img" aria-label="Backup flow: nightly database dump to encrypted S3 with 35 day retention, daily volume snapshots with 7 kept, and the restore path rebuilding the instance from Terraform and reloading the latest dump.">
+  <div class="dt">Backup &amp; recovery flow</div>
+  <div class="dd">Two independent paths protect the data; restore rebuilds the machine from code and reloads the records.</div>
+  <div class="flow">
+    <div class="node n-priv"><b>PostgreSQL</b><small>live data on /data</small></div>
+    <div class="arr">→<small>nightly cron pg_dump (gzip)</small></div>
+    <div class="node n-aws"><b>S3 backups bucket</b><small>KMS-encrypted, versioned, 35-day lifecycle</small></div>
+    <div class="arr">&nbsp;</div>
+    <div class="node n-priv"><b>EBS data volume</b></div>
+    <div class="arr">→<small>DLM daily 07:00 UTC</small></div>
+    <div class="node n-aws"><b>Snapshots</b><small>7 kept, encrypted</small></div>
+  </div>
+  <div class="fail"><b>Restore path (RTO ≤ 4h, RPO ≤ 24h):</b> re-apply Terraform (new instance boots from corrected bootstrap) → restore latest dump into fresh PostgreSQL → verify dashboard + ingest. Alternative: attach a snapshot-restored volume. <b>Honest status:</b> the stack is &lt;1 day old — the <span class="tag t-unk">first nightly dump is unverified</span> and the <span class="tag t-unk">restore drill has not been performed</span>. Both are required before this section can claim "proven." What's lost in a total failure between backups: up to 24h of analytics rows — never website function, never patient data (there is none).</div>
+</div>
+
+<h2 id="s12">12. Deployment &amp; change management</h2>
+<div class="diagram" role="img" aria-label="Deployment flow from proposal through pull request, automated validation, staging deployment, human approval, and production release, with the agent barred from the approval step.">
+  <div class="dt">Deployment &amp; approval flow (website changes, incl. the tracker)</div>
+  <div class="dd">One artifact is built once and promoted unchanged; a human gate sits before production, always.</div>
+  <div class="flow">
+    <div class="node n-hum"><b>Proposal</b><small>agent or owner; evidence + acceptance criteria</small></div>
+    <div class="arr">→<small>"Approve implementation"</small></div>
+    <div class="node"><b>Pull request</b><small>branch, reviewable diff</small></div>
+    <div class="arr">→<small>automatic</small></div>
+    <div class="node"><b>Validation</b><small>125 wrapper tests (blocking), build, secret scan, checks</small></div>
+    <div class="arr">→<small>merge</small></div>
+    <div class="node"><b>Staging</b><small>dev.… + smoke tests</small></div>
+    <div class="arr">→<small>protected env</small></div>
+    <div class="node n-hum"><b>Ratik approves</b><small>the gate no one can skip</small></div>
+    <div class="arr">→<small>same artifact</small></div>
+    <div class="node n-pub"><b>Production</b><small>+ verification + rollback ready</small></div>
+  </div>
+  <div class="fail"><b>Infrastructure changes</b> follow the same shape with Terraform: PR → automatic read-only <i>plan</i> → owner reviews the plan → explicit "Approve Terraform apply" → apply (this stack: via CloudShell admin, because the pipeline's apply role deliberately lacks the permissions — documented, not accidental). The agent can propose and prepare; it cannot merge, approve, or apply.</div>
+</div>
+
+<h2 id="s13">13. Troubleshooting</h2>
+<div class="diagram" role="img" aria-label="Troubleshooting decision flow starting from the symptom and branching to dashboard access, missing data, missing events, and database failure paths.">
+  <div class="dt">Decision flow — start with the symptom</div>
+  <div class="dd">Each branch below expands in the scenarios that follow.</div>
+  <div class="flow">
+    <div class="node"><b>Symptom?</b></div>
+    <div class="arr">→</div>
+    <div class="node"><b>Dashboard won't open</b><small>scenario A</small></div>
+    <div class="arr">→</div>
+    <div class="node"><b>Opens, no new data</b><small>scenario B</small></div>
+    <div class="arr">→</div>
+    <div class="node"><b>Pageviews yes, events no</b><small>scenario C</small></div>
+    <div class="arr">→</div>
+    <div class="node"><b>Database down</b><small>scenario D</small></div>
+  </div>
+</div>
+<h3>A — Dashboard does not open</h3>
+<ol>
+  <li><b>Is it just you?</b> Try a fresh incognito window first (cached basic-auth causes most "hangs" — it did during rollout).</li>
+  <li><b>DNS:</b> does <code>analytics.nextgendentalaustintx.com</code> resolve? (Route 53 A-record → instance's static IP.)</li>
+  <li><b>Certificate:</b> browser padlock error → Caddy's Let's Encrypt renewal failed; check Caddy container logs via SSM.</li>
+  <li><b>Instance:</b> EC2 console → status checks (the CloudWatch alarm should have emailed you already).</li>
+  <li><b>Containers:</b> SSM session → <code>sudo docker ps</code> — all three Up? A restart-loop names the guilty container; <code>sudo docker logs &lt;name&gt;</code> tells you why (during rollout, a Caddyfile syntax error looked exactly like this).</li>
+  <li><b>Auth:</b> basic-auth rejects → verify against the stored hash flow in the runbook; Umami login rejects → password manager, then reset via SSM if needed.</li>
+</ol>
+<h3>B — Dashboard opens but shows no new data</h3>
+<ol>
+  <li><b>Date filter first</b> — "Last 24 hours" vs "This week" catches many false alarms.</li>
+  <li><b>Your own ad-blocker:</b> many block <code>/script.js</code> or <code>/api/send</code>; test in a clean profile before suspecting the system. (Some patient browsers will always block — accept the undercount.)</li>
+  <li><b>Tracker loading?</b> On the live site: DevTools → Network → is <code>script.js</code> fetched (200)? Is <code>/api/send</code> POSTing on navigation?</li>
+  <li><b>Right website ID?</b> The payload's <code>website</code> field must match the site you're viewing in Umami (dev and production are separate).</li>
+  <li><b>Server side:</b> SSM → Umami container logs for ingest errors; then scenario D checks.</li>
+</ol>
+<h3>C — Pageviews work but conversion events don't</h3>
+<ol>
+  <li>Browser console on the live site: the wrapper logs rejection <i>codes</i> (never values) — <code>[analytics] rejected: …</code> names the exact check that failed.</li>
+  <li>Common causes in order: event fired on an untracked host; a property value not on the enum allow-list; a required property missing; the route not on the path allow-list (aggregated to <code>/category/…</code> — check Events for those); unsafe-path rejection (see the aggregate counter).</li>
+  <li>If a NEW page type was added to the site, the wrapper's route allow-list may need extending — that's a normal PR, and exactly what the "unrecognized route" warning counter exists to surface.</li>
+</ol>
+<h3>D — Database is unavailable</h3>
+<p><b>How it appears:</b> dashboard errors or empty panels; Umami logs show connection failures; the site itself is completely unaffected. <b>Events during the outage are lost, not queued</b> — the tracker fails silently by design (an analytics outage must never break the website). <b>Checks:</b> SSM → <code>sudo docker ps</code> (is <code>db</code> Up?), <code>sudo docker logs umami-db-1</code>, disk space on <code>/data</code> (the 80% alarm should precede this). <b>Recovery ladder:</b> restart the container → reboot the instance → restore last night's dump to a fresh instance (§11) — that last step is the only one that loses data (≤24h of analytics rows).</p>
+<h3>E — "The dashboard doesn't match Google"</h3>
+<p>It never will, and that's expected: <b>Google Business Profile</b> counts interactions with your Maps/Search listing (calls from the listing, direction requests) — most of those people never touch your website. <b>Search Console</b> counts search impressions and clicks — before arrival. <b>Umami</b> counts behavior on the site itself — after arrival. Each tool also defines visitors, sessions, and bots differently, and ~10–25% of browsers block trackers (Umami undercounts those; Google's listing metrics are unaffected). Use each for its layer: GBP = listing, GSC = search door, Umami = inside the building.</p>
+
+
+<h2 id="s14">14. Costs &amp; ownership</h2>
+<table>
+  <caption>Monthly running cost (estimates verified at provisioning; confirm on the first full AWS bill)</caption>
+  <tr><th>Item</th><th>Est. $/month</th><th>Notes</th></tr>
+  <tr><td>EC2 t4g.small (analytics host)</td><td>~12.30</td><td>On-demand; the dominant cost</td></tr>
+  <tr><td>EBS storage (8 GB root + 20 GB data)</td><td>~2.25</td><td>gp3, encrypted</td></tr>
+  <tr><td>Snapshots + S3 backups</td><td>~0.60</td><td>Incremental snapshots; small dumps</td></tr>
+  <tr><td>CloudWatch (alarm + 30-day logs)</td><td>~1.20</td><td></td></tr>
+  <tr><td>Route 53 record, SNS email, SSM, TLS</td><td>~0.00</td><td>Let's Encrypt is free; ACM is free</td></tr>
+  <tr><td><b>Total analytics stack</b></td><td><b>~$16–17</b></td><td>Plus ~1–2 h/month operator time (patch review, backup check; quarterly restore drill)</td></tr>
+</table>
+<p><b>Ownership:</b> Ratik owns and approves everything — AWS account, repository, dashboard admin, production gate. The agent (this system's AI assistant) proposes, implements to branches, monitors, and documents — with no deploy, merge, or approval power. Clinical content claims route to Dr. Kondragunta / Dr. Yanala for review. There is no third-party analytics vendor relationship to manage — that's the point of self-hosting; the trade is that the ~1–2 h/month of operational ownership is yours.</p>
+
+<h2 id="s15">15. Risks &amp; recommendations</h2>
+<table>
+  <caption>Prioritized; nothing here was changed by this documentation task</caption>
+  <tr><th>Priority</th><th>Item</th><th>Why / recommended action</th></tr>
+  <tr><td><span class="tag t-crit">CRITICAL</span></td><td>Restore drill never performed</td><td>A backup that has never been restored is a hope, not a backup. Run the §11 drill this week; record the result. (Also verifies the first nightly dump.)</td></tr>
+  <tr><td><span class="tag t-crit">HIGH</span></td><td>Container images unpinned (<code>postgresql-latest</code>, <code>postgres:16</code>, <code>caddy:2</code>)</td><td>An upstream release could change behavior (including re-enabling features like replay) on any instance replacement. Pin digests in the bootstrap; bump deliberately, re-run the privacy spot-check after each bump.</td></tr>
+  <tr><td><span class="tag t-crit">HIGH</span></td><td>Infrastructure code not merged (<code>infra/analytics-pilot</code> PR open)</td><td>Live infra ≠ main branch until merged. Merge after the plan legs are green so the code that built production lives on main. Includes the dev-stack "1 add / 1 change" diff — identify before merging.</td></tr>
+  <tr><td><span class="tag t-asm">MEDIUM</span></td><td>Single point of failure (one instance)</td><td>Accepted for the pilot (outage loses analytics rows only, never website function). Revisit managed RDS/Fargate (~$42–48/mo) only if the pilot graduates and ops time grows.</td></tr>
+  <tr><td><span class="tag t-asm">MEDIUM</span></td><td>Login endpoint internet-reachable behind Umami auth only</td><td>Strong password mitigates; add a Caddy rate-limit on <code>/api/auth/login</code> in the next bootstrap revision.</td></tr>
+  <tr><td><span class="tag t-asm">MEDIUM</span></td><td>Basic-auth password transited a work chat during rollout</td><td>Rotate it (5-minute runbook step) now that the pilot is proven.</td></tr>
+  <tr><td><span class="tag t-asm">MEDIUM</span></td><td>Program-level privacy documentation</td><td>Technical minimization is strong; the practice's documented risk analysis / legal review of the analytics program is the remaining compliance artifact. Owner + counsel.</td></tr>
+  <tr><td><span class="tag t-unk">LOW</span></td><td>Retention deletion job unproven (fires at month 13)</td><td>Calendar a check in ~12 months; watchdog can carry the reminder.</td></tr>
+  <tr><td><span class="tag t-unk">LOW</span></td><td>Alarm never test-fired</td><td>Schedule a controlled stop/start drill to see the email arrive end-to-end.</td></tr>
+</table>
+<p><b>Current strengths worth naming:</b> privacy enforced in code with blocking tests, not policy documents; two independent auth layers with no SSH surface; encrypted everything; two backup paths; complete change history in Git/Actions; the website is structurally immune to analytics failures; and every production change passes a human gate.</p>
+
+<h2 id="s16">16. Glossary</h2>
+<dl class="qa">
+  <dt>Astro</dt><dd>The framework that builds the website into plain static files — no server code runs when patients browse.</dd>
+  <dt>CDN / CloudFront</dt><dd>A network of servers near users that serves your site fast and shields the origin.</dd>
+  <dt>S3 / EBS / snapshot</dt><dd>AWS storage: S3 = durable object storage (files/backups); EBS = a virtual disk attached to a server; snapshot = a point-in-time copy of that disk.</dd>
+  <dt>EC2 / instance</dt><dd>A rented virtual server. Yours is a small ARM machine ("t4g.small").</dd>
+  <dt>Docker / container</dt><dd>A way to run applications in isolated boxes with their dependencies. Your three: Caddy, Umami, PostgreSQL.</dd>
+  <dt>Reverse proxy (Caddy)</dt><dd>The front-door program that receives all traffic, handles HTTPS, and routes/guards requests.</dd>
+  <dt>PostgreSQL</dt><dd>The database — organized, queryable storage for every analytics record.</dd>
+  <dt>Terraform / IaC</dt><dd>Infrastructure written as reviewable code, so the whole stack can be recreated or destroyed deliberately.</dd>
+  <dt>CI/CD pipeline</dt><dd>The automated assembly line: test → build → staging → (human gate) → production.</dd>
+  <dt>OIDC role</dt><dd>How the pipeline gets short-lived AWS permissions without stored passwords.</dd>
+  <dt>SSM</dt><dd>AWS Systems Manager — encrypted parameter storage and the logged, SSH-free admin console.</dd>
+  <dt>TLS / HTTPS</dt><dd>The encryption on every connection (the padlock).</dd>
+  <dt>Session / visitor hash</dt><dd>Umami's anonymous, daily-rotating stand-in for "a person" — the reason nobody can be tracked across days.</dd>
+  <dt>RPO / RTO</dt><dd>How much data you can lose (RPO ≤ 24h here) and how long recovery takes (RTO ≤ 4h target).</dd>
+  <dt>PHI</dt><dd>Protected Health Information — what this system is designed never to touch.</dd>
+</dl>
+
+<h2 id="s17">17. Evidence sources</h2>
+<ul>
+  <li>Repository <code>ratikk/NextGen-Dental</code> at main (<code>fa70d23</code>): <code>src/components/Analytics.astro</code>, <code>src/utils/analytics/*</code> (wrapper, 125-test suite, types), <code>src/utils/forms.ts</code>, <code>src/layouts/Layout.astro</code>, workflows (<code>pr-validation.yml</code>, <code>deploy.yml</code>, <code>rollback.yml</code>, <code>terraform.yml</code>).</li>
+  <li>Branch <code>infra/analytics-pilot</code> (<code>98e3610</code>): <code>infra/analytics/</code> Terraform (~25 resources), <code>user-data.sh</code> bootstrap, <code>docs/ANALYTICS.md</code>.</li>
+  <li>Terraform plan and apply outputs from the approved 2026-08-09 CloudShell session (25 added / 0 changed / 0 destroyed; replacement apply 3/2/3).</li>
+  <li>Live instance evidence via SSM sessions: <code>docker ps</code>, Caddy logs (certificate obtained), cloud-init log, live Caddyfile.</li>
+  <li>Live endpoint checks: <code>script.js</code> serving (200); dashboard reachable behind both auth layers.</li>
+  <li>Owner-performed staging verification (DevTools payload/cookie checks) preceding production approval, 2026-08-09; owner's dashboard screenshots showing dev + production collecting.</li>
+  <li>Project records: analytics release record, outcome log, CETO charters, SEO audit.</li>
+</ul>
+
+<h2 id="s18">18. Open questions</h2>
+<ol>
+  <li>Did the first nightly <code>pg_dump</code> land in the backup bucket? (Check the morning after go-live; then weekly via watchdog.)</li>
+  <li>Restore drill date? (Critical item — §15.)</li>
+  <li>Which Umami application version is actually running? (Surfaces when pinning digests.)</li>
+  <li>Was <code>chmod 600</code> applied to the two config files on the instance? (One SSM command to confirm.)</li>
+  <li>What is the dev-stack plan's "1 to add, 1 to change"? (Unrelated stack; identify before merging the open infra PR.)</li>
+  <li>Per-item record of the staging verification checklist (production was approved; item-level evidence should be written into the release record for the audit trail).</li>
+  <li>Date for the practice's documented privacy risk analysis covering the analytics program?</li>
+</ol>
+
+<footer class="doc">
+  <span>NextGen Dental — Production Analytics Architecture &amp; Learning Guide · generated read-only · 2026-08-09</span>
+  <span>Facts labeled VERIFIED / INFERENCE / ASSUMPTION / UNKNOWN throughout · no credentials or secret values appear in this document</span>
+</footer>
+
+</body>
+</html>
