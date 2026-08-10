@@ -1,0 +1,50 @@
+name: ads-as-code validate
+on:
+  pull_request:
+    paths: ["marketing/ads/**", ".github/workflows/ads-validate.yml"]
+  push:
+    branches: ["main"]
+    paths: ["marketing/ads/**", ".github/workflows/ads-validate.yml"]
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "Validation mode (release modes require genuine approvals + evidence)"
+        required: true
+        default: draft
+        type: choice
+        options: [draft, release-plan-a, release-plan-b, release-plan-c]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Install dependencies
+        run: pip install -r marketing/ads/requirements.txt
+
+      # 1) Validate the COMMITTED artifacts first — never regenerate before
+      #    checking them, or stale/hand-edited files would be silently repaired.
+      - name: Validate committed artifact parity
+        run: python3 marketing/ads/validate.py --draft
+
+      # 2) Only then prove regeneration is a no-op.
+      - name: Regenerate artifacts
+        run: python3 marketing/ads/generate.py
+      - name: Verify regeneration produced no changes
+        run: git diff --exit-code -- marketing/ads/import/
+
+      - name: Negative-keyword semantics tests
+        run: python3 marketing/ads/test_negatives.py
+      - name: Governance scenario tests
+        run: python3 marketing/ads/test_governance.py
+      - name: Draft validation (offline)
+        run: python3 marketing/ads/validate.py --draft
+      - name: Draft validation (online, live landing page)
+        run: python3 marketing/ads/validate.py --draft --online
+
+      # Release validation is intentionally NOT part of routine CI: genuine human
+      # approvals are legitimately incomplete in an inactive draft.
+      - name: Release validation (manual dispatch only)
+        if: github.event_name == 'workflow_dispatch' && inputs.mode != 'draft'
+        run: python3 marketing/ads/validate.py --${{ inputs.mode }} --online

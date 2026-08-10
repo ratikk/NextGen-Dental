@@ -1,0 +1,103 @@
+schema_version: 1
+campaign:
+  name: "Search | Dental Implants | South Austin"
+  practice: "NextGen Dental"
+  objective: "Paid-intent implant consultations (appointment handoff / phone click)"
+  status_after_apply: "PAUSED"
+  evidence:
+    - source: "Google Ads search terms report CSV (owner-exported)"
+      period: "2026-07-11..2026-08-09"
+      sample: "876 real search-term rows analysed (5 total/summary rows excluded from the 881-row file); implant queries $279.98 / 59 clicks = largest visible intent cluster; 'dental implant clinic near me' 11 clicks"
+      status: verified
+      observed_at: "2026-08-10"
+    - source: "Umami production analytics"
+      period: "live since 2026-08-09"
+      sample: "insufficient production history; conversion performance to be established during pilot"
+      status: insufficient_data
+      observed_at: "2026-08-10"
+  geography:
+    include: ["Austin, TX (south metro service area)", "Buda, TX", "Kyle, TX"]
+    exclude: []
+    target_setting: "PRESENCE_ONLY"
+  languages: ["English"]   # Spanish would require a SEPARATE campaign with reviewed
+                           # Spanish ad copy AND a Spanish landing page (none exists today)
+  schedule: { timezone: "America/Chicago", approved_hours: [] }
+  budget:
+    average_daily_amount: 8
+    governance_monthly_threshold: 250   # NOT enforced by Google — see PLAN-A budget-guardrail section
+    currency: "USD"
+  bidding: { strategy: "MANUAL_CPC", maximum_cpc: 6.00 }
+  networks: { search: true, display: false, search_partners: false }
+  landing_page:
+    url: "https://nextgendentalaustintx.com/services/dental-implants"
+    repository_page_exists: true          # src/pages/services/dental-implants.astro on main
+    production_status: VERIFIED_200
+    production_status_history:
+      - { at: "2026-08-10", status: FAILED_404, source: "independent check + validate.py --online (both clean and UTM URLs; no canonical)" }
+      - { at: "2026-08-10", status: OBSERVED_SERVING, source: "reviewer browser load — NOT sufficient evidence to approve" }
+      - { at: "2026-08-10", status: VERIFIED_200, source: "machine observation: `validate.py --draft --online` on commit fc48ed3 reported 0 failures for BOTH the clean and UTM URLs (reported by the reviewing environment; this agent cannot reach the network and did not observe it independently)" }
+    note: >
+      The repository file existing is NOT evidence the URL works, and neither is
+      a browser load. This page returned 404 earlier today and has since been
+      observed serving; the state changed without a recorded cause, which is
+      itself a reason to demand machine evidence. Approval requires a fresh
+      `validate.py --online` run capturing BOTH URLs at 200 with correct final
+      host, title and canonical, recorded in gates.landing_page_verified.evidence.
+      See claude/ads-landing-page-404.md for the diagnosis ladder.
+  tracking:
+    utm: { utm_source: google, utm_medium: cpc, utm_campaign: search_dental_implants_south_austin }
+    attribution_decision: PENDING          # validator BLOCKS activation while PENDING
+    note: >
+      Umami strips ALL query strings by design, so these UTMs are invisible there.
+      Referrer + landing path CANNOT distinguish this campaign from PMax, other
+      Google Ads traffic, or organic Google traffic landing on the same page.
+      One option must be chosen and privacy-reviewed before activation:
+        A. Allow-list ONLY utm_source/utm_medium/utm_campaign with enumerated
+           values in the tracker wrapper (never gclid, never free-form) - small
+           PR, changes the privacy posture, needs review.
+        B. Emit a separate approved campaign-category event (no URL data).
+        C. Use a distinct approved landing path for paid traffic.
+        D. Accept the limit: campaign reporting from Google Ads aggregate data
+           only; Umami measures page-level conversions without campaign split.
+      Recommendation: D for the pilot (zero privacy change, sufficient for a
+      one-campaign test), revisit A if multiple campaigns run concurrently.
+  ad_groups:
+    - name: "General Dental Implants"
+      keywords:
+        exact: ["dental implants austin", "dental implants south austin", "dental implants near me", "implant dentist austin", "dental implant clinic near me"]
+        phrase: ["dental implant consultation", "dental implants cost austin", "implant dentist near me"]
+      responsive_search_ads:
+        - headlines: ["Dental Implants South Austin", "Implant Consultations",
+                      "Request Appointment Online", "New Patients Welcome",
+                      "Modern Dental Technology", "Financing Options Available",
+                      "Serving Austin Buda & Kyle", "South Austin Dental Office"]
+          descriptions:
+            - "Dental implant consultations in South Austin. Request an appointment online."
+            - "Our team will contact you to confirm availability. New patients welcome."
+            - "Tooth replacement options discussed at your consultation with our dentists."
+    - name: "Single-Tooth Replacement"
+      keywords:
+        exact: ["tooth implant austin", "single tooth implant", "tooth replacement austin"]
+        phrase: ["replace missing tooth", "single tooth implant cost"]
+      responsive_search_ads:
+        - headlines: ["Missing a Tooth?", "Single Tooth Replacement",
+                      "Request Appointment Online", "Implant Consultations",
+                      "New Patients Welcome", "Serving Austin Buda & Kyle",
+                      "South Austin Dental Office", "Financing Options Available"]
+          descriptions:
+            - "Single-tooth implant consultations in South Austin. Request an appointment online."
+            - "Our team will contact you to confirm availability. New patients welcome."
+            - "Tooth replacement options discussed at your consultation with our dentists."
+  claims_review:   # EVERY factual/care claim used in copy, per 2026-08-10 review
+    - { claim: "Financing Options Available", basis: "site /financing page exists", needs: "owner confirms current terms" }
+    - { claim: "Modern Dental Technology", basis: "site copy (existing)", needs: "dentist confirmation" }
+    - { claim: "New Patients Welcome", basis: "site patient-information page states it", needs: "owner confirmation" }
+    - { claim: "Serving Austin Buda & Kyle", basis: "site location pages", needs: "owner confirmation" }
+    - { claim: "Tooth replacement options discussed at your consultation", basis: "neutral wording", needs: "dentist sign-off (implant treatment language)" }
+    - { claim: "Implant Consultations offered", basis: "site /services/dental-implants", needs: "dentist confirmation service is offered as described" }
+  excluded_claims:  # deliberately NOT used pending verification
+    - "Most PPO Insurance Accepted (verify against current insurance list first)"
+    - "Book online in under a minute (unmeasured)"
+    - "Permanent, natural-looking tooth replacement (outcome claim - dentist approval first)"
+    - "I-35 & Slaughter Ln location wording (confirm preferred phrasing)"
+  full_mouth_ad_group: "EXCLUDED until dentists confirm full-mouth/implant-denture services offered"

@@ -1,0 +1,3 @@
+# Python >= 3.9. Install: pip install -r requirements.txt
+# Test: python3 generate.py && python3 validate.py  (expected: 0 failed)
+PyYAML==6.0.2
