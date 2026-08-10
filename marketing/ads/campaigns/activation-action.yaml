@@ -1,0 +1,28 @@
+# The ACTIVATION MUTATION as code (v4). Previously activation existed only as
+# prose in PLAN-C; it is now an explicit, generated, digest-bound artifact.
+# Kept SEPARATE from negative-list attachment: two different actions, two
+# different approvals, two different digests.
+schema_version: 1
+activation_action:
+  campaign: "Search | Dental Implants | South Austin"
+  previous_status: "PAUSED"
+  requested_status: "ENABLED"
+  rollback_status: "PAUSED"
+  budget_daily: 8
+  maximum_cpc: 6
+  currency: "USD"
+  governance_monthly_threshold: 250
+  preconditions:
+    - "landing page returns HTTP 200 on BOTH clean and UTM URLs (re-verified same day)"
+    - "Plan A posted; EDITOR-PREVIEW-EVIDENCE.md completed and matching"
+    - "Plan B attachment decision recorded (attach or explicitly decline)"
+    - "tracking.attribution_decision no longer PENDING"
+    - "all prerequisite gates APPROVED with chronologically-ordered timestamps"
+  financial_exposure_after_activation:
+    daily_average: 8
+    monthly_estimate_basis: "$8 x 30.4 = $243.20 maximum charge under Google's averaging"
+    governance_threshold: 250
+  rollback:
+    action: "Set campaign status back to PAUSED (single change, immediate)"
+    recoverable: false
+    note: "Spend already incurred is not recoverable; Google Ads change history is permanent."

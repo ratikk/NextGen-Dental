@@ -1,0 +1,65 @@
+# Approval RECORD-KEEPING file (v6). Validates approval COMPLETENESS, authorized
+# identity LABELS, chronology and digest binding. It does NOT prove authenticity:
+# that rests on protected branches, verified PR reviewer identity and retained
+# external evidence. A YAML string never proves a named person approved anything.
+plan_version: "2026-08-10.6"
+expires: "2026-09-10"
+authorized_approvers:
+  owner: ["ratikk"]
+  clinical: ["dr-kondragunta", "dr-yanala"]
+# Every key here is asserted to exist by validate.py; unknown/stale keys fail.
+digests:
+  campaign_spec_sha256:     "cc345ec0034ab9658d1abf6a0ed7a36174bef054e388ca4fe964cf7cccc1b10d"
+  plan_a_package_sha256:    "bacebae45e67f3429c81faf2ea49f7aa2c2632ce9df310b157bfc725d7494306"
+  plan_b_package_sha256:    "60b8a615db5ca318439bfcec18b9af05a092001b8e3300c5468c2cd447bd9aea"
+  plan_c_attach_sha256:     "726caea5953d0300c4ccea95ef9f358fcbae4e75037ccc99d6424e099f9bc686"
+  plan_c_activation_sha256: "1ea56000c25dd516a5e7de3698d3f851517018c028c9c0635d6d400b72b97848"
+gates:
+  marketing: { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  clinical:  { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  budget:    { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  # Plan-A-time landing verification. evidence must cover BOTH URLs.
+  landing_page_verified:
+    status: NOT_APPROVED
+    approved_by: null
+    approved_at: null
+    evidence: null          # {tested_at, tested_by, spec_digest, clean_url{...}, utm_url{...}}
+  import_gate: { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  # Proof Plan A was actually posted AND the account verified afterwards.
+  plan_a_applied:
+    status: NOT_APPROVED
+    applied_at: null
+    applied_by: null
+    package_digest: null
+    account_verification_evidence: null   # structured object; a bare string fails
+  # Same-day landing recheck for activation. Plan-A-time verification does not
+  # remain valid forever.
+  activation_landing_recheck:
+    status: NOT_APPROVED
+    approved_by: null
+    approved_at: null
+    evidence: null          # {tested_at, tested_by, spec_digest, clean_url{...}, utm_url{...}}
+  activation: { status: NOT_APPROVED, approved_by: null, approved_at: null }
+plan_b_decision:
+  status: PENDING           # PENDING | ATTACH_APPROVED | DECLINED
+  decided_by: null
+  decided_at: null
+  rationale: null
+# Dormant unless activation is actually executed. NOT_EXECUTED keeps the
+# inactive draft valid; any other status demands full post-execution evidence.
+activation_execution:
+  status: NOT_EXECUTED
+  executed_at: null
+  executed_by: null
+  activation_digest: null
+  account_verification_evidence: null
+attachment:
+  "NEG | Freebie Intent (low-risk)":
+    leads_campaign: { status: NOT_APPROVED, approved_by: null, approved_at: null }
+    new_campaign:   { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  "NEG | Competitor Brands (strategy decision)":
+    leads_campaign: { status: NOT_APPROVED, approved_by: null, approved_at: null }
+    new_campaign:   { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  "NEG | Far Geography (clearly outside strategy)":
+    leads_campaign: { status: NOT_APPROVED, approved_by: null, approved_at: null }
+    new_campaign:   { status: NOT_APPROVED, approved_by: null, approved_at: null }
