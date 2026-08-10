@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Campaign-as-code validator v6.
+"""Campaign-as-code validator v6.1.
   python3 validate.py [--online] [--draft | --release-plan-a | --release-plan-b | --release-plan-c]
 
 Draft mode: schemas, deterministic parity, checksums, financial parity, evidence
@@ -9,6 +9,7 @@ evidence, chronology and digest binding. Exit 1 on any failure."""
 import sys, re, os, csv, glob, hashlib, subprocess, tempfile, shutil, time
 from datetime import datetime, timezone, date
 import urllib.request, urllib.error
+from urllib.parse import urlsplit, parse_qsl
 import yaml
 try:
     from zoneinfo import ZoneInfo
@@ -22,7 +23,10 @@ fails, warns = [], []
 F, W = fails.append, warns.append
 NOW = datetime.now(timezone.utc); TODAY = NOW.date()
 FORBIDDEN = re.compile(r'\b(guarantee[ds]?|painless|pain[- ]free|best|#1|cure[sd]?|free|miracle|top[- ]rated)\b', re.I)
-SECRETY = re.compile(r'(AKIA[0-9A-Z]{16}|-----BEGIN|password\s*[:=]|@gmail\.|\b\d{3}[-.]\d{3}[-.]\d{4}\b|\b\d{3}-\d{3}-\d{4}\b)', re.I)
+SECRETY = re.compile(r'(AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|-----BEGIN|password\s*[:=]|secret\s*[:=]\s*["\']?\S|token\s*[:=]\s*["\']?[A-Za-z0-9._-]{12}|@gmail\.|@yahoo\.|\b\d{3}[-.]\d{3}[-.]\d{4}\b)', re.I)
+# A POPULATED Google Ads customer id (not a prose mention of the term).
+CUSTOMER_ID = re.compile(r'customer[ _-]?id\s*[:=]\s*["\']?\d{3}[- ]?\d{3}[- ]?\d{4}', re.I)
+SCAN_FILES = ['approval-manifest.yaml', 'preview-evidence.yaml', 'activation-preview-evidence.yaml']
 APPROVED_GEO = {"Austin, TX (south metro service area)", "Buda, TX", "Kyle, TX"}
 APPROVED_LANGS = {"English"}
 DOMAIN = "nextgendentalaustintx.com"
@@ -47,11 +51,40 @@ def num(x):
 def order(a, b, la, lb):
     if a and b and a > b: F(f'chronology: {la} occurred AFTER {lb}')
 
+def check_exact_url(u, expect_utm, label, base, approved_utm):
+    """The stored URL must be EXACTLY the approved clean or UTM URL: same scheme,
+    host, path, and — for the UTM form — exactly the approved key/value pairs with
+    no missing, altered or extra parameters (order-insensitive)."""
+    if not u: F(f'{label}: url missing'); return
+    try: sp = urlsplit(str(u))
+    except Exception: F(f'{label}: unparseable url'); return
+    if sp.scheme != 'https': F(f'{label}: must be https')
+    if sp.netloc != DOMAIN: F(f'{label}: host {sp.netloc!r} is not the approved domain')
+    if sp.path.rstrip('/') != urlsplit(base).path.rstrip('/'):
+        F(f'{label}: path {sp.path!r} is not the approved landing-page path')
+    if sp.fragment: F(f'{label}: URL fragments are not permitted')
+    q = parse_qsl(sp.query, keep_blank_values=True)
+    if len(q) != len(dict(q)): F(f'{label}: duplicated query parameters')
+    q = dict(q)
+    if expect_utm:
+        for k, v in approved_utm.items():
+            if k not in q: F(f'{label}: missing UTM parameter {k}')
+            elif q[k] != str(v): F(f'{label}: {k}={q[k]!r} but approved value is {v!r}')
+        for k in q:
+            if k not in approved_utm: F(f'{label}: unapproved query parameter {k!r}')
+    elif q:
+        F(f'{label}: clean URL must carry no query parameters (found {sorted(q)})')
+
 # ---------------- campaign specs ----------------
 names, campaigns = [], []
+for extra in SCAN_FILES:
+    _raw = open(f'{ROOT}/{extra}').read()
+    if SECRETY.search(_raw): F(f'{extra}: possible secret/PII pattern')
+    if CUSTOMER_ID.search(_raw): F(f'{extra}: a populated Google Ads customer ID must never be stored here')
 for path in sorted(glob.glob(f'{ROOT}/campaigns/*.yaml')):
     raw = open(path).read()
     if SECRETY.search(raw): F(f'{path}: possible secret/PII pattern')
+    if CUSTOMER_ID.search(raw): F(f'{path}: a populated Google Ads customer ID must never be stored here')
     doc = yaml.safe_load(raw)
     if doc.get('schema_version') != 1: F(f'{path}: schema_version must be 1')
     if 'campaign' not in doc: continue
@@ -250,6 +283,8 @@ def check_landing_evidence(gname, ev, same_day_as=None):
         F(f'{gname} evidence captured against a different campaign spec')
     te = ts(ev.get('tested_at'), f'{gname} evidence tested_at')
     want_clean = {c['landing_page']['url'] for c in campaigns}
+    base = spec['landing_page']['url'] if spec else ''
+    approved_utm = (spec.get('tracking') or {}).get('utm', {}) if spec else {}
     for key, expect_utm in (('clean_url', False), ('utm_url', True)):
         u = ev.get(key)
         if not isinstance(u, dict): F(f'{gname} evidence.{key} must be an object'); continue
@@ -262,10 +297,7 @@ def check_landing_evidence(gname, ev, same_day_as=None):
         can = str(u.get('canonical','')).split('?')[0].rstrip('/')
         if can and can not in {w.rstrip('/') for w in want_clean}: F(f'{gname} evidence.{key}: canonical is not the approved landing page')
         if u.get('analytics_loader_present') is not True: F(f'{gname} evidence.{key}: analytics loader not present')
-        base = str(u.get('url','')); has_utm = '?' in base and 'utm_' in base
-        if expect_utm and not has_utm: F(f'{gname} evidence.utm_url must be the UTM-bearing URL')
-        if not expect_utm and has_utm: F(f'{gname} evidence.clean_url must be the clean URL')
-        if base and base.split('?')[0] not in want_clean: F(f'{gname} evidence.{key}: url is not the campaign landing page')
+        check_exact_url(u.get('url'), expect_utm, f'{gname} evidence.{key}', base, approved_utm)
     ga = gtime(gname)
     order(te, ga, f'{gname} tested_at', f'{gname} approval')
     if same_day_as and te and same_day_as and te.date() != same_day_as.date():
@@ -280,14 +312,17 @@ if approved['activation_landing_recheck']:
 def kw_counts():
     rows = list(csv.reader(open(f'{ROOT}/import/plan-a/keywords.csv')))[1:]
     return len(rows), sum(1 for r in rows if r[3]=='Exact'), sum(1 for r in rows if r[3]=='Phrase')
-def check_warnings(obj, label):
+def check_warnings(obj, label, preview_t=None, approval_t=None):
     w = obj.get('warnings')
     has = bool(w) and str(w).strip().lower() not in ('none','[]','')
     if has:
         wa = obj.get('warning_acceptance') or {}
         if not wa.get('accepted'): F(f'{label}: warnings present but not accepted')
         if wa.get('accepted_by') not in AUTH.get('owner', []): F(f'{label}: warning acceptance not by an authorized owner')
-        ts(wa.get('accepted_at'), f'{label} warning_acceptance.accepted_at')
+        if not wa.get('accepted_at'): F(f'{label}: warning acceptance without accepted_at timestamp')
+        ta_ = ts(wa.get('accepted_at'), f'{label} warning_acceptance.accepted_at')
+        order(preview_t, ta_, f'{label} preview', f'{label} warning acceptance')
+        order(ta_, approval_t, f'{label} warning acceptance', f'{label} approval')
         if not wa.get('rationale'): F(f'{label}: warning acceptance without rationale')
     e = obj.get('errors')
     if bool(e) and str(e).strip().lower() not in ('none','[]',''):
@@ -305,7 +340,7 @@ def check_plan_a_preview():
     if not prev.get('account_confirmed'): F('preview evidence: account_confirmed empty')
     if not prev.get('evidence_reference'): F('preview evidence: evidence_reference empty')
     if prev.get('result') != 'MATCHES_PLAN': F(f'preview evidence: result is {prev.get("result")!r}')
-    check_warnings(prev, 'Plan A preview')
+    check_warnings(prev, 'Plan A preview', tp, gtime('import_gate'))
     o = prev.get('observed') or {}
     exp = {'campaigns': 1, 'campaign_name': spec['name'] if spec else None, 'campaign_type': 'Search',
            'campaign_status': 'Paused', 'daily_budget': spec['budget']['average_daily_amount'] if spec else None,
@@ -326,8 +361,11 @@ def check_plan_a_preview():
     if {re.sub(r'[ ,]+',' ',x.strip().lower()) for x in (o.get('locations') or [])} != {'austin tx','buda tx','kyle tx'}:
         F(f'preview locations={o.get("locations")!r} != approved Austin/Buda/Kyle targeting')
     fu = o.get('final_urls') or []
-    if [str(x) for x in (fu if isinstance(fu, list) else [fu])] != [GEN_FINAL_URL]:
-        F(f'preview final_urls != generated approved UTM URL')
+    fu = [str(x) for x in (fu if isinstance(fu, list) else [fu])]
+    if fu != [GEN_FINAL_URL]: F('preview final_urls != generated approved UTM URL')
+    for u in fu:
+        check_exact_url(u, True, 'preview final_url', spec['landing_page']['url'] if spec else '',
+                        (spec.get('tracking') or {}).get('utm', {}) if spec else {})
     return tp
 
 # ---------------- Plan A applied + account verification ----------------
@@ -335,8 +373,7 @@ def check_plan_a_applied():
     pa = G.get('plan_a_applied') or {}
     if not approved['import_gate']: F('plan_a_applied recorded without import_gate approval')
     tap = gtime('plan_a_applied'); ti = gtime('import_gate')
-    order(tap, None, '', '') ; order(ti, tap, 'import approval', 'Plan A application') if (ti and tap and ti > tap) else None
-    if ti and tap and tap < ti: F('chronology: Plan A applied BEFORE import approval')
+    order(ti, tap, 'import approval', 'Plan A application')   # single canonical check
     if pa.get('package_digest') != CUR['plan_a_package_sha256']: F('plan_a_applied.package_digest does not match the current Plan A package')
     ev = pa.get('account_verification_evidence')
     if not isinstance(ev, dict):
@@ -399,6 +436,42 @@ if pbd == 'DECLINED':
     if leads_approved: F('plan_b_decision DECLINED but a Leads attachment gate is APPROVED')
     if planb_rows: F('plan_b_decision DECLINED but Plan B CSV is not empty')
 
+# ---------------- Plan B chronology (independent of activation) ----------------
+def plan_b_chronology(t_verified_):
+    if pbd in ('ATTACH_APPROVED','DECLINED'):
+        if t_verified_ and tpb and tpb < t_verified_:
+            F('chronology: Plan B decision BEFORE Plan A account verification')
+
+# ---------------- activation execution (dormant unless recorded) ----------------
+def check_activation_execution():
+    ex = man.get('activation_execution') or {}
+    st = ex.get('status')
+    if st not in ('NOT_EXECUTED','EXECUTED','VERIFIED'):
+        F(f'activation_execution.status invalid: {st!r}'); return None
+    if st == 'NOT_EXECUTED':
+        return None                      # dormant: the inactive draft stays valid
+    if not approved['activation']: F('activation_execution recorded without activation approval')
+    if ex.get('executed_by') not in AUTH.get('owner', []): F('activation_execution: executed_by not an authorized owner')
+    if not ex.get('executed_at'): F('activation_execution: missing executed_at')
+    te_ = ts(ex.get('executed_at'), 'activation_execution.executed_at')
+    order(gtime('activation'), te_, 'activation approval', 'activation execution')
+    if ex.get('activation_digest') != CUR['plan_c_activation_sha256']:
+        F('activation_execution: activation_digest does not match the approved Plan C activation package')
+    ev = ex.get('account_verification_evidence')
+    if not isinstance(ev, dict):
+        F('activation_execution: account_verification_evidence must be a structured object'); return te_
+    for k in ('verified_at','verified_by','evidence_reference','campaign_status','daily_budget',
+              'max_cpc','unexpected_changes','errors','result'):
+        if ev.get(k) is None: F(f'activation_execution evidence missing {k}')
+    if ev.get('campaign_status') != 'Enabled': F('activation_execution: campaign is not Enabled after execution')
+    if spec and num(ev.get('daily_budget')) != num(spec['budget']['average_daily_amount']): F('activation_execution: daily budget changed')
+    if spec and num(ev.get('max_cpc')) != num(spec['bidding']['maximum_cpc']): F('activation_execution: max CPC changed')
+    if ev.get('unexpected_changes') is not False: F('activation_execution: unexpected account changes')
+    if str(ev.get('errors')).strip().lower() not in ('none','[]',''): F('activation_execution: verification errors present')
+    if not ev.get('evidence_reference'): F('activation_execution: evidence_reference empty')
+    if ev.get('result') != 'MATCHES_PLAN': F(f'activation_execution: result is {ev.get("result")!r}')
+    return te_
+
 # ---------------- activation preview evidence ----------------
 def check_activation_preview():
     if not aprev.get('completed'): F('activation Editor preview not completed'); return None
@@ -410,7 +483,7 @@ def check_activation_preview():
     if aprev.get('editor_column_compatibility') != 'ACCEPTED':
         F('activation preview: editor_column_compatibility must be ACCEPTED (real Editor evidence required)')
     if aprev.get('result') != 'MATCHES_PLAN': F(f'activation preview: result is {aprev.get("result")!r}')
-    check_warnings(aprev, 'activation preview')
+    check_warnings(aprev, 'activation preview', tap_, gtime('activation'))
     o = aprev.get('observed') or {}
     if num(o.get('campaigns_changed')) != 1: F('activation preview: must change exactly one campaign')
     if spec and o.get('campaign_name') != spec['name']: F('activation preview: campaign name mismatch')
@@ -433,6 +506,8 @@ if approved['import_gate']:
         if not approved[pre]: F(f'import_gate APPROVED before prerequisite gate {pre}')
         order(gtime(pre), gtime('import_gate'), f'{pre} approval', 'import approval')
     order(t_preview, gtime('import_gate'), 'Editor preview', 'import approval')
+plan_b_chronology(t_verified)
+t_exec = check_activation_execution()
 t_actprev = check_activation_preview() if approved['activation'] else None
 if approved['activation']:
     ta = gtime('activation')
@@ -451,7 +526,7 @@ if approved['activation']:
     order(tpb, ta, 'Plan B decision', 'activation approval')
     order(t_actprev, ta, 'activation Editor preview', 'activation approval')
     if t_verified and t_actprev and t_actprev < t_verified: F('chronology: activation preview BEFORE Plan A verification')
-    if t_verified and tpb and tpb < t_verified: F('chronology: Plan B decision BEFORE Plan A verification')
+
 
 # ---------------- online landing check ----------------
 def fetch(url, tries=3):
@@ -498,6 +573,8 @@ if MODE.startswith('release-'):
     if MODE == 'release-plan-b':
         if pbd != 'ATTACH_APPROVED': F('[release-plan-b] plan_b_decision is not ATTACH_APPROVED')
         if not planb_rows: F('[release-plan-b] no approved attachments - nothing to release')
+        if not leads_approved: F('[release-plan-b] no Leads attachment gate is APPROVED')
+        if CUR['plan_b_package_sha256'] != MD.get('plan_b_package_sha256'): F('[release-plan-b] Plan B digest STALE')
     if MODE == 'release-plan-c':
         if pbd not in ('ATTACH_APPROVED','DECLINED'): F('[release-plan-c] plan_b_decision still PENDING')
         for c in campaigns:
@@ -506,7 +583,7 @@ if MODE.startswith('release-'):
         if not aprev.get('completed'): F('[release-plan-c] activation Editor preview not completed')
     if not ONLINE: F(f'[{MODE}] release validation must be run with --online')
 
-print(f'campaign-as-code validation v6 [{MODE}]: {len(fails)} failed, {len(warns)} warnings   [{TODAY} UTC]')
+print(f'campaign-as-code validation v6.1 [{MODE}]: {len(fails)} failed, {len(warns)} warnings   [{TODAY} UTC]')
 for x in fails: print('  FAIL:', x)
 for x in warns: print('  WARN:', x)
 sys.exit(1 if fails else 0)

@@ -45,6 +45,14 @@ plan_b_decision:
   decided_by: null
   decided_at: null
   rationale: null
+# Dormant unless activation is actually executed. NOT_EXECUTED keeps the
+# inactive draft valid; any other status demands full post-execution evidence.
+activation_execution:
+  status: NOT_EXECUTED
+  executed_at: null
+  executed_by: null
+  activation_digest: null
+  account_verification_evidence: null
 attachment:
   "NEG | Freebie Intent (low-risk)":
     leads_campaign: { status: NOT_APPROVED, approved_by: null, approved_at: null }

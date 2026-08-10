@@ -113,6 +113,32 @@ def build_golden(dst):
     yaml.safe_dump(ap, open(f'{dst}/activation-preview-evidence.yaml', 'w'), sort_keys=False)
     return dst
 
+def restamp(d):
+    subprocess.run([PY, 'generate.py'], cwd=d, check=True, capture_output=True)
+    dig = {}
+    for line in open(f'{d}/import/CHECKSUMS.txt'):
+        dig[line.split()[-1]] = line.split()[0]
+    man = yaml.safe_load(open(f'{d}/approval-manifest.yaml'))
+    man['digests'] = {'campaign_spec_sha256': dig['CAMPAIGN-SPEC-DIGEST'],
+                      'plan_a_package_sha256': dig['PLAN-A-PACKAGE-DIGEST'],
+                      'plan_b_package_sha256': dig['PLAN-B-PACKAGE-DIGEST'],
+                      'plan_c_attach_sha256': dig['PLAN-C-ATTACH-DIGEST'],
+                      'plan_c_activation_sha256': dig['PLAN-C-ACTIVATION-DIGEST']}
+    yaml.safe_dump(man, open(f'{d}/approval-manifest.yaml','w'), sort_keys=False)
+    return dig
+
+def make_plan_b_approved(d):
+    """Turn the golden fixture into a fully valid ATTACH_APPROVED Plan B state:
+    attachment approved BEFORE the decision, CSV regenerated, digests re-stamped."""
+    def m(y):
+        y['attachment']['NEG | Freebie Intent (low-risk)']['leads_campaign'] = {
+            'status': 'APPROVED', 'approved_by': 'ratikk', 'approved_at': T(215)}
+        y['plan_b_decision'] = {'status': 'ATTACH_APPROVED', 'decided_by': 'ratikk',
+                                'decided_at': T(200),
+                                'rationale': 'Freebie-intent exclusions approved for the live Leads campaign.'}
+    edit(d, MAN, m)
+    restamp(d)
+
 def run(d, mode):
     r = subprocess.run([PY, 'validate.py', f'--{mode}'], cwd=d, capture_output=True, text=True)
     return r.stdout + r.stderr
@@ -166,7 +192,7 @@ scen('preview: not completed', 'release-plan-a', 'preview not completed',
 # ---- Plan A applied / verification ----
 scen('applied: string evidence "yes"', 'release-plan-c', 'must be a structured object',
      lambda d: edit(d, MAN, lambda y: y['gates']['plan_a_applied'].update(account_verification_evidence='yes')))
-scen('applied: before import approval', 'release-plan-c', 'Plan A applied BEFORE import approval',
+scen('applied: before import approval', 'release-plan-c', 'import approval occurred AFTER Plan A application',
      lambda d: edit(d, MAN, lambda y: y['gates']['plan_a_applied'].update(applied_at=T(280))))
 scen('applied: verified before applied', 'release-plan-c', 'account verification BEFORE Plan A application',
      lambda d: edit(d, MAN, lambda y: y['gates']['plan_a_applied']['account_verification_evidence'].update(verified_at=T(250))))
@@ -196,7 +222,7 @@ scen('plan B: ATTACH_APPROVED with zero attachments', 'draft', 'no Leads attachm
      lambda d: edit(d, MAN, attach_approved_no_gates))
 scen('plan B: PENDING blocks activation', 'release-plan-c', 'plan_b_decision is PENDING',
      lambda d: edit(d, MAN, lambda y: y['plan_b_decision'].update(status='PENDING', decided_by=None, decided_at=None, rationale=None)))
-scen('plan B: decision before Plan A verification', 'release-plan-c', 'Plan B decision BEFORE Plan A verification',
+scen('plan B: decision before Plan A verification', 'release-plan-c', 'Plan B decision BEFORE Plan A account verification',
      lambda d: edit(d, MAN, lambda y: y['plan_b_decision'].update(decided_at=T(260))))
 def attach_after_decision(y):
     y['plan_b_decision'].update(status='ATTACH_APPROVED')
@@ -263,6 +289,116 @@ def spec_change(d):
     subprocess.run([PY, 'generate.py'], cwd=d, check=True, capture_output=True)
 scen('digests: spec change invalidates approvals', 'release-plan-a', 'campaign-spec digest STALE', spec_change)
 
+# ---- (V6.1) warning acceptance ----
+def warn(y, **kw):
+    y['warnings'] = ['low search volume']
+    y.setdefault('warning_acceptance', {}).update(kw)
+scen('warning: present without acceptance', 'release-plan-a', 'warnings present but not accepted',
+     lambda d: edit(d, PREV, lambda y: warn(y, accepted=False)))
+scen('warning: accepted without timestamp', 'release-plan-a', 'warning acceptance without accepted_at timestamp',
+     lambda d: edit(d, PREV, lambda y: warn(y, accepted=True, accepted_by='ratikk', accepted_at=None, rationale='ok')))
+scen('warning: accepted BEFORE the preview', 'release-plan-a', 'warning acceptance',
+     lambda d: edit(d, PREV, lambda y: warn(y, accepted=True, accepted_by='ratikk', accepted_at=T(290), rationale='ok')))
+scen('warning: accepted AFTER the approval', 'release-plan-a', 'warning acceptance',
+     lambda d: edit(d, PREV, lambda y: warn(y, accepted=True, accepted_by='ratikk', accepted_at=T(5), rationale='ok')))
+scen('warning: unauthorized acceptor', 'release-plan-a', 'warning acceptance not by an authorized owner',
+     lambda d: edit(d, PREV, lambda y: warn(y, accepted=True, accepted_by='mallory', accepted_at=T(275), rationale='ok')))
+scen('warning: no rationale', 'release-plan-a', 'warning acceptance without rationale',
+     lambda d: edit(d, PREV, lambda y: warn(y, accepted=True, accepted_by='ratikk', accepted_at=T(275), rationale=None)))
+scen('warning: activation preview warning unaccepted', 'release-plan-c', 'warnings present but not accepted',
+     lambda d: edit(d, APREV, lambda y: warn(y, accepted=False)))
+scen('errors: cannot be overridden by acceptance', 'release-plan-a', 'errors can never be overridden',
+     lambda d: edit(d, PREV, lambda y: (y.update(errors=['bad asset']),
+                                        warn(y, accepted=True, accepted_by='ratikk', accepted_at=T(275), rationale='ok'))))
+
+# ---- (V6.1) exact clean/UTM URL evidence ----
+def set_url(d, key, url, gate='landing_page_verified'):
+    edit(d, MAN, lambda y: y['gates'][gate]['evidence'][key].update(url=url))
+BASE = 'https://nextgendentalaustintx.com/services/dental-implants'
+UTM  = BASE + '?utm_source=google&utm_medium=cpc&utm_campaign=search_dental_implants_south_austin'
+scen('url: clean URL is a different path', 'release-plan-a', 'is not the approved landing-page path',
+     lambda d: set_url(d, 'clean_url', 'https://nextgendentalaustintx.com/services/invisalign'))
+scen('url: clean URL carries query parameters', 'release-plan-a', 'clean URL must carry no query parameters',
+     lambda d: set_url(d, 'clean_url', BASE + '?utm_source=google'))
+scen('url: UTM missing a parameter', 'release-plan-a', 'missing UTM parameter utm_campaign',
+     lambda d: set_url(d, 'utm_url', BASE + '?utm_source=google&utm_medium=cpc'))
+scen('url: UTM wrong value', 'release-plan-a', 'approved value is',
+     lambda d: set_url(d, 'utm_url', BASE + '?utm_source=bing&utm_medium=cpc&utm_campaign=search_dental_implants_south_austin'))
+scen('url: UTM wrong key', 'release-plan-a', 'unapproved query parameter',
+     lambda d: set_url(d, 'utm_url', BASE + '?utm_source=google&utm_med=cpc&utm_campaign=search_dental_implants_south_austin'))
+scen('url: extra arbitrary parameter', 'release-plan-a', "unapproved query parameter 'gclid'",
+     lambda d: set_url(d, 'utm_url', UTM + '&gclid=abc123'))
+scen('url: off-domain evidence URL', 'release-plan-a', 'is not the approved domain',
+     lambda d: set_url(d, 'clean_url', 'https://evil.example.com/services/dental-implants'))
+scen('url: fragment present', 'release-plan-a', 'fragments are not permitted',
+     lambda d: set_url(d, 'clean_url', BASE + '#book'))
+scen('url: activation recheck UTM tampered', 'release-plan-c', 'unapproved query parameter',
+     lambda d: set_url(d, 'utm_url', UTM + '&foo=bar', gate='activation_landing_recheck'))
+
+# ---- (V6.1) activation execution ----
+def exec_rec(y, **kw):
+    base = {'status': 'EXECUTED', 'executed_by': 'ratikk', 'executed_at': T(10),
+            'activation_digest': y['digests']['plan_c_activation_sha256'],
+            'account_verification_evidence': {
+                'verified_at': T(5), 'verified_by': 'ratikk', 'evidence_reference': 'post-exec.png',
+                'campaign_status': 'Enabled', 'daily_budget': 8, 'max_cpc': 6,
+                'unexpected_changes': False, 'errors': 'none', 'result': 'MATCHES_PLAN'}}
+    base.update(kw); y['activation_execution'] = base
+scen('execution: NOT_EXECUTED stays valid', 'draft', None, lambda d: None)   # positive control
+scen('execution: before activation approval', 'release-plan-c', 'activation approval',
+     lambda d: edit(d, MAN, lambda y: exec_rec(y, executed_at=T(200))))
+scen('execution: unauthorized identity', 'release-plan-c', 'executed_by not an authorized owner',
+     lambda d: edit(d, MAN, lambda y: exec_rec(y, executed_by='mallory')))
+scen('execution: missing timestamp', 'release-plan-c', 'missing executed_at',
+     lambda d: edit(d, MAN, lambda y: exec_rec(y, executed_at=None)))
+scen('execution: stale activation digest', 'release-plan-c', 'activation_digest does not match',
+     lambda d: edit(d, MAN, lambda y: exec_rec(y, activation_digest='0'*64)))
+scen('execution: campaign not Enabled', 'release-plan-c', 'campaign is not Enabled after execution',
+     lambda d: edit(d, MAN, lambda y: (exec_rec(y), y['activation_execution']['account_verification_evidence'].update(campaign_status='Paused'))))
+scen('execution: budget divergence', 'release-plan-c', 'daily budget changed',
+     lambda d: edit(d, MAN, lambda y: (exec_rec(y), y['activation_execution']['account_verification_evidence'].update(daily_budget=100))))
+scen('execution: CPC divergence', 'release-plan-c', 'max CPC changed',
+     lambda d: edit(d, MAN, lambda y: (exec_rec(y), y['activation_execution']['account_verification_evidence'].update(max_cpc=25))))
+scen('execution: unexpected account changes', 'release-plan-c', 'unexpected account changes',
+     lambda d: edit(d, MAN, lambda y: (exec_rec(y), y['activation_execution']['account_verification_evidence'].update(unexpected_changes=True))))
+scen('execution: string evidence', 'release-plan-c', 'must be a structured object',
+     lambda d: edit(d, MAN, lambda y: exec_rec(y, account_verification_evidence='done')))
+
+# ---- (V6.1) privacy ----
+scen('privacy: populated customer id in manifest', 'draft', 'customer ID must never be stored',
+     lambda d: edit(d, MAN, lambda y: y.update(customer_id=1234567890)))
+scen('privacy: hyphenated customer id in preview evidence', 'draft', 'customer ID must never be stored',
+     lambda d: edit(d, PREV, lambda y: y.update(customer_id='123-456-7890')))
+
+# ---- (V6.1) Plan B independent chronology + golden path ----
+def pb_before_verification(d):
+    make_plan_b_approved(d)
+    edit(d, MAN, lambda y: y['plan_b_decision'].update(decided_at=T(260)))
+scen('plan B: decision before Plan A verification (release-plan-b)', 'release-plan-b',
+     'Plan B decision BEFORE Plan A account verification', pb_before_verification)
+def pb_attach_after_decision(d):
+    make_plan_b_approved(d)
+    edit(d, MAN, lambda y: y['attachment']['NEG | Freebie Intent (low-risk)']['leads_campaign'].update(approved_at=T(100)))
+scen('plan B: attachment approved after decision (release-plan-b)', 'release-plan-b',
+     'attachment approval occurred AFTER the Plan B decision', pb_attach_after_decision)
+def pb_declined_with_csv(d):
+    make_plan_b_approved(d)
+    edit(d, MAN, lambda y: y['plan_b_decision'].update(status='DECLINED'))
+scen('plan B: DECLINED but CSV populated', 'release-plan-b', 'DECLINED but Plan B CSV is not empty', pb_declined_with_csv)
+def pb_unapproved_row(d):
+    make_plan_b_approved(d)
+    p = f'{d}/import/plan-b/attach-leads.csv'
+    rows = list(csv.reader(open(p))); rows[1][1] = 'NEG | Far Geography (clearly outside strategy)'
+    with open(p,'w',newline='') as f: csv.writer(f, lineterminator='\n').writerows(rows)
+scen('plan B: CSV row without an approved gate', 'release-plan-b', 'differs from regenerated output', pb_unapproved_row)
+
+# ---- (V6.1) stale checksums / duplicate chronology ----
+def stale_checksums(d):
+    p = f'{d}/import/CHECKSUMS.txt'
+    s_ = open(p).read().replace('PLAN-A-PACKAGE-DIGEST', 'PLAN-A-PACKAGE-DIGEST-OLD')
+    open(p,'w').write(s_)
+scen('artifacts: stale CHECKSUMS.txt', 'draft', 'no digest for plan_a_package_sha256', stale_checksums)
+
 # ---------------- run ----------------
 base = tempfile.mkdtemp(prefix='ads-golden-')
 golden = build_golden(os.path.join(base, 'ads'))
@@ -271,14 +407,43 @@ non_online = [l for l in out.splitlines() if l.startswith('  FAIL') and 'must be
 print('GOLDEN fixture (release-plan-c, offline):',
       'clean apart from the --online requirement' if not non_online else 'UNEXPECTED FAILURES')
 for l in non_online: print('   ', l)
+# ATTACH_APPROVED Plan B golden path must be clean apart from --online
+pb_dir = tempfile.mkdtemp(prefix='ads-planb-')
+pb = os.path.join(pb_dir, 'ads'); shutil.copytree(golden, pb)
+make_plan_b_approved(pb)
+pb_out = run(pb, 'release-plan-b')
+pb_fail = [l for l in pb_out.splitlines() if l.startswith('  FAIL') and 'must be run with --online' not in l]
+print('GOLDEN Plan B ATTACH_APPROVED (release-plan-b, offline):',
+      'clean apart from the --online requirement' if not pb_fail else 'UNEXPECTED FAILURES')
+for l in pb_fail: print('   ', l)
+shutil.rmtree(pb_dir, ignore_errors=True)
+
+# duplicate chronology: the same violation must be reported exactly once
+dup_dir = tempfile.mkdtemp(prefix='ads-dup-')
+dd = os.path.join(dup_dir, 'ads'); shutil.copytree(golden, dd)
+edit(dd, MAN, lambda y: y['gates']['plan_a_applied'].update(applied_at=T(280)))
+dup_out = run(dd, 'release-plan-c')
+n_dup = sum(1 for l in dup_out.splitlines() if 'import approval' in l and 'Plan A application' in l)
+print(f'duplicate-chronology check: violation reported {n_dup} time(s)',
+      '(expected exactly 1)' if n_dup == 1 else '*** EXPECTED 1 ***')
+shutil.rmtree(dup_dir, ignore_errors=True)
+
 passed = failed = 0
 if non_online: failed += 1
+if pb_fail: failed += 1
+if n_dup != 1: failed += 1
 for name, mode, expect, mutate in S:
     d = tempfile.mkdtemp(prefix='ads-scen-')
     tgt = os.path.join(d, 'ads'); shutil.copytree(golden, tgt)
     try:
         mutate(tgt)
         out = run(tgt, mode)
+        if expect is None:
+            bad = [l for l in out.splitlines() if l.startswith('  FAIL') and 'must be run with --online' not in l]
+            if not bad: passed += 1
+            else:
+                failed += 1; print(f'FAIL  {name}: expected clean, got:'); [print('        ', b.strip()) for b in bad]
+            continue
         if expect.lower() in out.lower(): passed += 1
         else:
             failed += 1

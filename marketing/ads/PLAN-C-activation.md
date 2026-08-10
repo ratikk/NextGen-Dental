@@ -40,5 +40,7 @@ review identity and retained evidence.
 $8/day average (≈$243/mo). Governance threshold $250/mo with 70/85/100% alerts.
 First week: check search terms daily, spend vs threshold, policy disapprovals.
 
-Approval phrase: **"Approve campaign activation"**. Rollback: pause (one click,
+Approval phrase: **"Approve campaign activation"**.
+After execution (if ever approved and performed), record `activation_execution`
+with the post-execution account evidence; it is validated the same way. Rollback: pause (one click,
 immediate); spend already incurred is not recoverable.

@@ -1,4 +1,4 @@
-# Google Ads as Code — NextGen Dental (CETO v6)
+# Google Ads as Code — NextGen Dental (CETO v6.1)
 
 > **POSTING IS NOT AUTHORIZED.** Nothing in this directory may be posted to
 > Google Ads, attached to a live campaign, or activated without the specific
@@ -19,7 +19,7 @@
 | `test_negatives.py` | Semantics tests: which searches must be blocked vs must still serve. |
 | `preview-evidence.yaml` | **Machine-validated** Plan A Editor preview: every observed setting (status, budget, CPC, networks, language, locations, presence option, counts, final URLs) is compared against the spec and generated artifacts. |
 | `activation-preview-evidence.yaml` | **Machine-validated** Plan C activation preview, incl. `editor_column_compatibility` — Editor compatibility is NOT claimed until real preview evidence exists. |
-| `test_governance.py` | 53 scenario tests: builds a golden approved fixture in a temp dir (never committed) and proves each control fails correctly. |
+| `test_governance.py` | 87 scenario tests (two golden approved paths + 85 tamper cases): builds a golden approved fixture in a temp dir (never committed) and proves each control fails correctly. |
 | `approval-manifest.yaml` | Approval record-keeping: completeness + authorized identity *labels*. Authenticity comes from protected branches, PR review identity and retained external evidence. |
 | `preflight-landing-check.sh` | curl ground-truth landing-page check — run from EC2, not from an agent sandbox. |
 | `EDITOR-PREVIEW-EVIDENCE.md` | Fill in from the Ads Editor preview BEFORE posting. |
@@ -42,7 +42,7 @@ python3 validate.py --release-plan-a --online   # refuses unless Plan A approval
 python3 validate.py --release-plan-b --online   # chronological and digest-bound
 python3 validate.py --release-plan-c --online
 python3 compute_evidence.py <export.csv> # verify the evidence numbers against source data
-python3 test_governance.py               # expect: 53 run, 53 passed, 0 failed
+python3 test_governance.py               # expect: 87 run, 87 passed, 0 failed
 ```
 CI runs all three on PRs and pushes touching `marketing/ads/**`.
 
@@ -95,3 +95,33 @@ PR reviewer identity and retained external evidence — especially for clinical 
 
 **Still unauthorized:** posting Plan A, attaching negative lists to any campaign, and
 enabling the campaign. Nothing in this directory has been applied to the Google Ads account.
+
+## V6.1 additions
+
+**CI checks committed artifacts BEFORE regenerating.** The order is: validate →
+generate → `git diff --exit-code -- marketing/ads/import/`. Regenerating first
+would silently repair a stale or hand-edited artifact instead of failing on it.
+
+**Plan B chronology is enforced independently of activation.** A decision made
+before Plan A account verification, or an attachment approved after the decision,
+fails in `--release-plan-b` — it no longer requires Plan C to be in play.
+
+**Warning acceptance is time-ordered.** Warnings block unless accepted by an
+authorized owner with a valid, non-future, timezone-aware timestamp, a rationale,
+and correct ordering: preview ≤ acceptance ≤ approval (per plan). Errors always
+block and can never be overridden.
+
+**Landing evidence must be the EXACT approved URLs.** The clean URL must carry no
+query parameters; the UTM URL must carry exactly `utm_source=google`,
+`utm_medium=cpc`, `utm_campaign=search_dental_implants_south_austin` — no missing,
+altered, or extra parameters (`gclid` included), no fragments, no off-domain host.
+Comparison is order-insensitive on parsed key/value pairs.
+
+**Activation execution is governed but dormant.** `activation_execution` sits at
+`NOT_EXECUTED` and the draft stays valid. If it is ever recorded, it demands an
+approved activation, an authorized executor, ordered timestamps, a matching
+activation digest, and structured post-execution evidence (campaign Enabled,
+budget $8, max CPC $6, no unexpected changes, no errors).
+
+**Populated Google Ads customer IDs are rejected** wherever they appear in the
+specs, manifest or evidence files. A prose mention of the term is fine; a value is not.
