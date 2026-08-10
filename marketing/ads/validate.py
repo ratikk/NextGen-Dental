@@ -463,6 +463,11 @@ def check_activation_execution():
     for k in ('verified_at','verified_by','evidence_reference','campaign_status','daily_budget',
               'max_cpc','unexpected_changes','errors','result'):
         if ev.get(k) is None: F(f'activation_execution evidence missing {k}')
+    # identity + time of the POST-EXECUTION verification (presence alone is not enough)
+    if ev.get('verified_by') not in AUTH.get('owner', []):
+        F('activation_execution: verified_by not an authorized owner')
+    tv_ = ts(ev.get('verified_at'), 'activation_execution evidence verified_at')
+    order(te_, tv_, 'activation execution', 'post-execution verification')
     if ev.get('campaign_status') != 'Enabled': F('activation_execution: campaign is not Enabled after execution')
     if spec and num(ev.get('daily_budget')) != num(spec['budget']['average_daily_amount']): F('activation_execution: daily budget changed')
     if spec and num(ev.get('max_cpc')) != num(spec['bidding']['maximum_cpc']): F('activation_execution: max CPC changed')

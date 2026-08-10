@@ -19,7 +19,7 @@
 | `test_negatives.py` | Semantics tests: which searches must be blocked vs must still serve. |
 | `preview-evidence.yaml` | **Machine-validated** Plan A Editor preview: every observed setting (status, budget, CPC, networks, language, locations, presence option, counts, final URLs) is compared against the spec and generated artifacts. |
 | `activation-preview-evidence.yaml` | **Machine-validated** Plan C activation preview, incl. `editor_column_compatibility` — Editor compatibility is NOT claimed until real preview evidence exists. |
-| `test_governance.py` | 87 scenario tests (two golden approved paths + 85 tamper cases): builds a golden approved fixture in a temp dir (never committed) and proves each control fails correctly. |
+| `test_governance.py` | 93 scenario tests (two golden approved paths + 91 tamper cases): builds a golden approved fixture in a temp dir (never committed) and proves each control fails correctly. |
 | `approval-manifest.yaml` | Approval record-keeping: completeness + authorized identity *labels*. Authenticity comes from protected branches, PR review identity and retained external evidence. |
 | `preflight-landing-check.sh` | curl ground-truth landing-page check — run from EC2, not from an agent sandbox. |
 | `EDITOR-PREVIEW-EVIDENCE.md` | Fill in from the Ads Editor preview BEFORE posting. |
@@ -42,7 +42,7 @@ python3 validate.py --release-plan-a --online   # refuses unless Plan A approval
 python3 validate.py --release-plan-b --online   # chronological and digest-bound
 python3 validate.py --release-plan-c --online
 python3 compute_evidence.py <export.csv> # verify the evidence numbers against source data
-python3 test_governance.py               # expect: 87 run, 87 passed, 0 failed
+python3 test_governance.py               # expect: 93 run, 93 passed, 0 failed
 ```
 CI runs all three on PRs and pushes touching `marketing/ads/**`.
 
@@ -122,6 +122,10 @@ Comparison is order-insensitive on parsed key/value pairs.
 approved activation, an authorized executor, ordered timestamps, a matching
 activation digest, and structured post-execution evidence (campaign Enabled,
 budget $8, max CPC $6, no unexpected changes, no errors).
+
+**Post-execution verification is identity- and time-checked**, not merely present:
+`verified_by` must be an authorized owner and `verified_at` a valid, timezone-aware,
+non-future timestamp at or after the execution time.
 
 **Populated Google Ads customer IDs are rejected** wherever they appear in the
 specs, manifest or evidence files. A prose mention of the term is fine; a value is not.

@@ -363,6 +363,20 @@ scen('execution: unexpected account changes', 'release-plan-c', 'unexpected acco
      lambda d: edit(d, MAN, lambda y: (exec_rec(y), y['activation_execution']['account_verification_evidence'].update(unexpected_changes=True))))
 scen('execution: string evidence', 'release-plan-c', 'must be a structured object',
      lambda d: edit(d, MAN, lambda y: exec_rec(y, account_verification_evidence='done')))
+def exec_ev(y, **kw):
+    exec_rec(y); y['activation_execution']['account_verification_evidence'].update(kw)
+scen('execution: unauthorized verifier', 'release-plan-c', 'verified_by not an authorized owner',
+     lambda d: edit(d, MAN, lambda y: exec_ev(y, verified_by='mallory')))
+scen('execution: missing verification timestamp', 'release-plan-c', 'evidence missing verified_at',
+     lambda d: edit(d, MAN, lambda y: exec_ev(y, verified_at=None)))
+scen('execution: invalid verification timestamp', 'release-plan-c', 'not a valid ISO timestamp',
+     lambda d: edit(d, MAN, lambda y: exec_ev(y, verified_at='invalid-value')))
+scen('execution: timezone-naive verification timestamp', 'release-plan-c', 'must be timezone-aware',
+     lambda d: edit(d, MAN, lambda y: exec_ev(y, verified_at='2026-08-10T12:00:00')))
+scen('execution: future verification timestamp', 'release-plan-c', 'timestamp is in the future',
+     lambda d: edit(d, MAN, lambda y: exec_ev(y, verified_at='2027-01-01T00:00:00Z')))
+scen('execution: verification BEFORE execution', 'release-plan-c', 'activation execution',
+     lambda d: edit(d, MAN, lambda y: exec_ev(y, verified_at=T(60))))
 
 # ---- (V6.1) privacy ----
 scen('privacy: populated customer id in manifest', 'draft', 'customer ID must never be stored',
