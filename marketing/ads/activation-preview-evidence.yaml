@@ -1,0 +1,26 @@
+# Google Ads Editor preview evidence for the PLAN C ACTIVATION mutation.
+# Also the record that Editor accepts the four activation columns as intended.
+# Leave PENDING unless a real Editor preview was performed. DO NOT invent values.
+completed: false
+activation_digest: null      # must equal digests.plan_c_activation_sha256
+previewed_at: null           # tz-aware UTC; after Plan A verification, <= activation approval
+previewed_by: null           # authorized owner
+account_confirmed: null
+evidence_reference: null
+editor_column_compatibility: PENDING   # PENDING | ACCEPTED  (Editor parsed all 4 columns as intended)
+observed:
+  campaigns_changed: null    # 1
+  campaign_name: null        # "Search | Dental Implants | South Austin"
+  previous_status: null      # "Paused"
+  requested_status: null     # "Enabled"
+  daily_budget: null         # 8
+  max_cpc: null              # 6
+  unexpected_changes: null   # false
+errors: null
+warnings: null
+warning_acceptance:
+  accepted: false
+  accepted_by: null
+  accepted_at: null
+  rationale: null
+result: null                 # MATCHES_PLAN | MISMATCH

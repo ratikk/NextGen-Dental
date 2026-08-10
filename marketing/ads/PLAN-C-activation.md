@@ -25,7 +25,12 @@ review identity and retained evidence.
    (each with authorized approver + UTC timestamp, before plan expiry)
 2. Plan A posted and the account verified against EDITOR-PREVIEW-EVIDENCE.md
 3. Plan B decision made (attach or explicitly decline)
-4. `tracking.attribution_decision` is no longer PENDING — one of:
+4. `activation-preview-evidence.yaml` completed from a real Editor preview, with
+   `editor_column_compatibility: ACCEPTED` — Editor's handling of the four activation
+   columns is NOT assumed from CSV structure
+5. `gates.activation_landing_recheck` APPROVED with same-UTC-date evidence for BOTH URLs
+6. `plan_b_decision` is ATTACH_APPROVED or DECLINED (PENDING blocks activation)
+7. `tracking.attribution_decision` is no longer PENDING — one of:
    A allow-list utm keys (privacy-posture change, needs review) · B campaign-category
    event · C distinct landing path · D accept Google-aggregate-only reporting
    (validator BLOCKS activation while PENDING — otherwise Measure/Learn is undefined)

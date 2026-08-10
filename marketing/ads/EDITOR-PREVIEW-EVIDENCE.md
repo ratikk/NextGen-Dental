@@ -19,8 +19,8 @@ Record after loading Plan A into Google Ads Editor, BEFORE recording the import 
 | Locations | Austin TX; Buda TX; Kyle TX | | |
 | Location option | People in your targeted locations (presence) | | |
 | Ad groups | 2 (General Dental Implants; Single-Tooth Replacement) | | |
-| Keywords | 13 (8 exact, 5 phrase), all Paused | | |
-| Ads | 2 responsive search ads, Paused, final URL with UTMs | | |
+| Keywords | 13 (8 exact, 5 phrase), all Paused; 0 Enabled | | |
+| Ads | 2 responsive search ads, Paused (0 Enabled), final URL with UTMs | | |
 | Negative lists created | **3 shared sets, 55 phrases** | | |
 | Shared-list ATTACHMENTS | **0** (Plan A attaches nothing) | | |
 | Import warnings/errors | none expected — record any | | |

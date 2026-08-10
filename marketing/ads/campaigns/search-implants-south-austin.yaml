@@ -31,10 +31,11 @@ campaign:
   landing_page:
     url: "https://nextgendentalaustintx.com/services/dental-implants"
     repository_page_exists: true          # src/pages/services/dental-implants.astro on main
-    production_status: REQUIRES_REVERIFICATION
+    production_status: VERIFIED_200
     production_status_history:
       - { at: "2026-08-10", status: FAILED_404, source: "independent check + validate.py --online (both clean and UTM URLs; no canonical)" }
       - { at: "2026-08-10", status: OBSERVED_SERVING, source: "reviewer browser load — NOT sufficient evidence to approve" }
+      - { at: "2026-08-10", status: VERIFIED_200, source: "machine observation: `validate.py --draft --online` on commit fc48ed3 reported 0 failures for BOTH the clean and UTM URLs (reported by the reviewing environment; this agent cannot reach the network and did not observe it independently)" }
     note: >
       The repository file existing is NOT evidence the URL works, and neither is
       a browser load. This page returned 404 earlier today and has since been

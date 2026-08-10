@@ -58,9 +58,17 @@ and conversion quality. The Price-Sensitive list was **deleted in v4** (matched 
 would have blocked a recorded conversion — hence review-only.
 
 ## Rollback (operational, not historical)
-Remove the campaign and delete the 4 lists in Editor/UI (<10 min). Google Ads
+Remove the campaign and delete the 3 lists in Editor/UI (<10 min). Google Ads
 change history retains the record permanently; any traffic effects occurring
 before rollback are not recoverable.
+
+## Editor preview is an INPUT to approval
+Complete `EDITOR-PREVIEW-EVIDENCE.md` (human worksheet) **and**
+`preview-evidence.yaml` (machine-validated) from a real Ads Editor preview BEFORE
+recording `gates.import_gate`. The validator compares every observed setting and
+count against the specification and generated artifacts; errors always block, and
+warnings block unless explicitly accepted with an authorized identity, timestamp
+and rationale.
 
 ## Gates required before posting
 marketing · clinical · budget · landing_page_verified · import_gate — all with

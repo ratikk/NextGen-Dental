@@ -1,25 +1,45 @@
-# Google Ads Editor preview evidence — STRUCTURED so validate.py can check it.
-# Complete this from the Editor preview BEFORE recording gates.import_gate.
-# Counts are cross-checked against the generated artifacts; a mismatch fails.
+# Google Ads Editor preview evidence for PLAN A — machine-validated.
+# Complete from a real Editor preview BEFORE recording gates.import_gate.
+# validate.py independently compares every observed value against the campaign
+# specification and the generated artifacts; a self-declared result is not enough.
+# DO NOT populate with invented values.
 completed: false
-plan_a_digest: null            # must equal digests.plan_a_package_sha256
-previewed_at: null             # tz-aware UTC, not future, <= import_gate.approved_at
-previewed_by: null             # authorized owner
-account_confirmed: null        # e.g. "NextGen Dental (name verified on screen)"
+plan_a_digest: null          # must equal digests.plan_a_package_sha256
+previewed_at: null           # tz-aware UTC, not future, <= import_gate.approved_at
+previewed_by: null           # authorized owner
+account_confirmed: null      # e.g. "NextGen Dental (account name verified on screen)"
+evidence_reference: null     # screenshot/export filename or ticket reference
 observed:
-  campaigns: null              # expected 1
-  campaign_status: null        # expected "Paused"
-  ad_groups: null              # expected 2
-  keywords: null               # expected 13
-  ads: null                    # expected 2
-  negative_lists: null         # expected 3
-  negative_phrases: null       # expected 55
-  shared_list_attachments: null # expected 0 for Plan A
-  daily_budget: null           # expected 8
-  max_cpc: null                # expected 6
-  networks: null               # expected "Google search only"
-  languages: null              # expected "English"
-  location_option: null        # expected presence-only
-errors: null                   # list, or "none"
-warnings: null                 # list, or "none"
-result: null                   # MATCHES_PLAN | MISMATCH
+  campaigns: null                 # 1
+  campaign_name: null             # "Search | Dental Implants | South Austin"
+  campaign_type: null             # "Search"
+  campaign_status: null           # "Paused"
+  daily_budget: null              # 8
+  budget_type: null               # "Daily"
+  bid_strategy: null              # "Manual CPC"
+  max_cpc: null                   # 6
+  networks: null                  # "Google search only"
+  display_network: null           # false
+  search_partners: null           # false
+  languages: null                 # ["English"]
+  locations: null                 # ["Austin TX","Buda TX","Kyle TX"]
+  location_option: null           # "People in your targeted locations"
+  ad_groups: null                 # 2
+  keywords: null                  # 13
+  exact_keywords: null            # 8
+  phrase_keywords: null           # 5
+  enabled_keywords: null          # 0
+  ads: null                       # 2
+  enabled_ads: null               # 0
+  negative_lists: null            # 3
+  negative_phrases: null          # 55
+  shared_list_attachments: null   # 0
+  final_urls: null                # [generated UTM URL]
+errors: null                 # list, or "none"
+warnings: null               # list, or "none"
+warning_acceptance:
+  accepted: false
+  accepted_by: null
+  accepted_at: null
+  rationale: null
+result: null                 # MATCHES_PLAN | MISMATCH
