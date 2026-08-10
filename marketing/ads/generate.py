@@ -72,10 +72,12 @@ write('plan-c/attach-new-campaign.csv', c_)
 
 # ---------- Plan C: the ACTIVATION MUTATION, as its own artifact ----------
 act = yaml.safe_load(open(f'{ROOT}/campaigns/activation-action.yaml'))['activation_action']
+# Only columns Google Ads Editor recognises. Previous/rollback state, thresholds
+# and preconditions are governance metadata and live in activation-action.yaml
+# + the approval manifest, NOT in the import file.
 write('plan-c/activation.csv', [
-    ['Campaign','Campaign status','Previous status','Rollback status','Budget','Max CPC'],
+    ['Campaign','Campaign status','Budget','Max CPC'],
     [act['campaign'], 'Enabled' if act['requested_status'] == 'ENABLED' else act['requested_status'],
-     act['previous_status'].title(), act['rollback_status'].title(),
      act['budget_daily'], act['maximum_cpc']]])
 
 # ---------- per-plan digests ----------

@@ -1,0 +1,25 @@
+# Google Ads Editor preview evidence — STRUCTURED so validate.py can check it.
+# Complete this from the Editor preview BEFORE recording gates.import_gate.
+# Counts are cross-checked against the generated artifacts; a mismatch fails.
+completed: false
+plan_a_digest: null            # must equal digests.plan_a_package_sha256
+previewed_at: null             # tz-aware UTC, not future, <= import_gate.approved_at
+previewed_by: null             # authorized owner
+account_confirmed: null        # e.g. "NextGen Dental (name verified on screen)"
+observed:
+  campaigns: null              # expected 1
+  campaign_status: null        # expected "Paused"
+  ad_groups: null              # expected 2
+  keywords: null               # expected 13
+  ads: null                    # expected 2
+  negative_lists: null         # expected 3
+  negative_phrases: null       # expected 55
+  shared_list_attachments: null # expected 0 for Plan A
+  daily_budget: null           # expected 8
+  max_cpc: null                # expected 6
+  networks: null               # expected "Google search only"
+  languages: null              # expected "English"
+  location_option: null        # expected presence-only
+errors: null                   # list, or "none"
+warnings: null                 # list, or "none"
+result: null                   # MATCHES_PLAN | MISMATCH

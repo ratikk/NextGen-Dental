@@ -1,6 +1,10 @@
-# Ads Editor preview evidence (complete BEFORE posting; no account IDs in this file)
+# Ads Editor preview evidence — HUMAN worksheet
+> The machine-checked record is **`preview-evidence.yaml`**. Fill that in too:
+> `validate.py` requires it to be completed, digest-matched, owner-attributed and
+> timestamped BEFORE `gates.import_gate`, and cross-checks every count below
+> against the generated artifacts. This markdown is the working copy.
 
-Record after loading Plan A into Google Ads Editor and BEFORE clicking Post.
+Record after loading Plan A into Google Ads Editor, BEFORE recording the import approval and BEFORE clicking Post.
 
 | Item | Expected (Plan A) | Observed | OK? |
 |---|---|---|---|
@@ -17,7 +21,7 @@ Record after loading Plan A into Google Ads Editor and BEFORE clicking Post.
 | Ad groups | 2 (General Dental Implants; Single-Tooth Replacement) | | |
 | Keywords | 13 (8 exact, 5 phrase), all Paused | | |
 | Ads | 2 responsive search ads, Paused, final URL with UTMs | | |
-| Negative lists created | 4 shared sets, 58 phrases | | |
+| Negative lists created | **3 shared sets, 55 phrases** | | |
 | Shared-list ATTACHMENTS | **0** (Plan A attaches nothing) | | |
 | Import warnings/errors | none expected — record any | | |
 | Screenshot/export of proposed changes attached | yes/no | | |

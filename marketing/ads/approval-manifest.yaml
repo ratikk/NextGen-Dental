@@ -1,36 +1,49 @@
-# The approval RECORD-KEEPING file. It validates approval completeness and
+# Approval RECORD-KEEPING file (v5). It validates approval COMPLETENESS and
 # authorized identity LABELS. Authenticity depends on protected-branch controls,
 # verified reviewer identity in the PR, and retained external evidence (e.g. an
-# approved PR review, or a written dentist confirmation) - a YAML string alone
-# does not prove a named person approved anything. Statuses are meaningless without approved_by + approved_at.
-# The validator enforces: authorized role, non-empty identity, valid UTC timestamp
-# before expiry, digest match against the plan's own package, and gate ordering.
-# Any regeneration of artifacts changes the digest and INVALIDATES approvals.
-plan_version: "2026-08-10.3"
+# approved PR review, or written dentist confirmation) — a YAML string alone does
+# not prove a named person approved anything.
+plan_version: "2026-08-10.5"
 expires: "2026-09-10"
 authorized_approvers:
   owner: ["ratikk"]                                  # marketing, budget, import, activation
   clinical: ["dr-kondragunta", "dr-yanala"]          # clinical/treatment claims ONLY
-# Per-plan digests (from import/CHECKSUMS.txt). Approving Plan A must NOT imply
-# approval of artifacts capable of changing the live Leads campaign.
+# Per-action digests from import/CHECKSUMS.txt. validate.py asserts that every
+# digest key it references EXISTS here (guards against silent key drift, which
+# is exactly how the v4 plan_c_* mismatch slipped through).
 digests:
-  campaign_spec_sha256: "34e8f3ff250213bde35a69c2da4b3e673bf44b7e6af2771f04dd962fd6cb5c36"
-  plan_a_package_sha256: "bacebae45e67f3429c81faf2ea49f7aa2c2632ce9df310b157bfc725d7494306"
-  plan_b_package_sha256: "60b8a615db5ca318439bfcec18b9af05a092001b8e3300c5468c2cd447bd9aea"
-  plan_c_package_sha256: "f9abfe6f6d5f9186a1529f286104e18e6e7c9e52d875f4e3acfeec597a37452c"
+  campaign_spec_sha256:     "f8be968dbed321b8458bc26f3378dcd75ee1a6458ab90edba6740a1574d77754"
+  plan_a_package_sha256:    "bacebae45e67f3429c81faf2ea49f7aa2c2632ce9df310b157bfc725d7494306"
+  plan_b_package_sha256:    "60b8a615db5ca318439bfcec18b9af05a092001b8e3300c5468c2cd447bd9aea"
+  plan_c_attach_sha256:     "726caea5953d0300c4ccea95ef9f358fcbae4e75037ccc99d6424e099f9bc686"
+  plan_c_activation_sha256: "1ea56000c25dd516a5e7de3698d3f851517018c028c9c0635d6d400b72b97848"
 gates:
-  marketing:   { status: NOT_APPROVED, approved_by: null, approved_at: null }
-  clinical:    { status: NOT_APPROVED, approved_by: null, approved_at: null }
-  budget:      { status: NOT_APPROVED, approved_by: null, approved_at: null }
-  # evidence is REQUIRED when this gate is APPROVED; must include url, http_status,
-  # final_url, tested_at (UTC), tested_by (person or CI run ref), spec_digest.
+  marketing: { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  clinical:  { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  budget:    { status: NOT_APPROVED, approved_by: null, approved_at: null }
+  # evidence REQUIRED when APPROVED: url, http_status(=200), final_url, tested_at
+  # (tz-aware, not future, <= approval time), tested_by, spec_digest (current).
   landing_page_verified:
     status: NOT_APPROVED
     approved_by: null
     approved_at: null
     evidence: null
-  import_gate: { status: NOT_APPROVED, approved_by: null, approved_at: null }   # Plan A posting
-  activation:  { status: NOT_APPROVED, approved_by: null, approved_at: null }   # Plan C
+  import_gate: { status: NOT_APPROVED, approved_by: null, approved_at: null }   # authorises POSTING Plan A
+  # Proof that Plan A was actually posted AND the account verified afterwards.
+  # import_gate authorises the action; this records that it happened.
+  plan_a_applied:
+    status: NOT_APPROVED
+    applied_at: null
+    applied_by: null
+    package_digest: null
+    account_verification_evidence: null
+  activation: { status: NOT_APPROVED, approved_by: null, approved_at: null }    # Plan C
+# Plan B must reach a real decision before activation — silence is not a decision.
+plan_b_decision:
+  status: PENDING            # PENDING | ATTACH_APPROVED | DECLINED
+  decided_by: null
+  decided_at: null
+  rationale: null
 # Explicit per-list, per-campaign attachment decisions. The GENERATOR emits only
 # APPROVED pairs. General activation approval NEVER implies these.
 attachment:

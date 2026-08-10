@@ -11,7 +11,16 @@ budget $8/day, max CPC $6) and is the ONLY file permitted to contain a
 non-Paused entity — the validator enforces that exception narrowly and checks
 the artifact against its spec.
 
-## Prerequisites — ALL enforced by validate.py
+## Prerequisites
+Machine-enforced by `validate.py --release-plan-c --online`: gate approvals with
+authorized identity, chronological ordering, per-action digests, `plan_a_applied`
+(posted package digest + account verification evidence), a non-PENDING
+`plan_b_decision`, a non-PENDING `attribution_decision`, `production_status:
+VERIFIED_200`, and a live landing-page check.
+NOT machine-enforceable (external human controls): that the named approver truly
+approved, that the dentists actually reviewed the claims, and that the Editor
+preview screenshots match what was posted. Those rest on branch protection, PR
+review identity and retained evidence.
 1. gates.marketing / clinical / budget / landing_page_verified / import_gate = APPROVED
    (each with authorized approver + UTC timestamp, before plan expiry)
 2. Plan A posted and the account verified against EDITOR-PREVIEW-EVIDENCE.md

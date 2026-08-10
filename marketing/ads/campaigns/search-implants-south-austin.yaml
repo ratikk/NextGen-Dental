@@ -31,13 +31,18 @@ campaign:
   landing_page:
     url: "https://nextgendentalaustintx.com/services/dental-implants"
     repository_page_exists: true          # src/pages/services/dental-implants.astro on main
-    production_status: FAILED_404         # CONFIRMED 2026-08-10 by independent check + CI --online
-    production_status_checked_at: "2026-08-10"
+    production_status: REQUIRES_REVERIFICATION
+    production_status_history:
+      - { at: "2026-08-10", status: FAILED_404, source: "independent check + validate.py --online (both clean and UTM URLs; no canonical)" }
+      - { at: "2026-08-10", status: OBSERVED_SERVING, source: "reviewer browser load — NOT sufficient evidence to approve" }
     note: >
-      The repository file existing is NOT evidence the URL works. Production
-      returns 404 for both the clean and UTM URLs, and no canonical tag is
-      present (it is the custom error page). This BLOCKS preview, posting and
-      activation. See claude/ads-landing-page-404.md for the diagnosis ladder.
+      The repository file existing is NOT evidence the URL works, and neither is
+      a browser load. This page returned 404 earlier today and has since been
+      observed serving; the state changed without a recorded cause, which is
+      itself a reason to demand machine evidence. Approval requires a fresh
+      `validate.py --online` run capturing BOTH URLs at 200 with correct final
+      host, title and canonical, recorded in gates.landing_page_verified.evidence.
+      See claude/ads-landing-page-404.md for the diagnosis ladder.
   tracking:
     utm: { utm_source: google, utm_medium: cpc, utm_campaign: search_dental_implants_south_austin }
     attribution_decision: PENDING          # validator BLOCKS activation while PENDING

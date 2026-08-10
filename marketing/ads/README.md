@@ -1,4 +1,4 @@
-# Google Ads as Code — NextGen Dental (CETO v3)
+# Google Ads as Code — NextGen Dental (CETO v5)
 
 > **POSTING IS NOT AUTHORIZED.** Nothing in this directory may be posted to
 > Google Ads, attached to a live campaign, or activated without the specific
@@ -17,6 +17,7 @@
 | `import/CHECKSUMS.txt` | Per-file + per-plan digests; approvals bind to these. |
 | `validate.py` | 40+ governance checks incl. CSV parity, all-Paused, approval identity/order, live landing page. |
 | `test_negatives.py` | Semantics tests: which searches must be blocked vs must still serve. |
+| `preview-evidence.yaml` | Machine-checked Ads Editor preview record (counts cross-checked against artifacts). |
 | `approval-manifest.yaml` | Approval record-keeping: completeness + authorized identity *labels*. Authenticity comes from protected branches, PR review identity and retained external evidence. |
 | `preflight-landing-check.sh` | curl ground-truth landing-page check — run from EC2, not from an agent sandbox. |
 | `EDITOR-PREVIEW-EVIDENCE.md` | Fill in from the Ads Editor preview BEFORE posting. |
@@ -47,6 +48,9 @@ CI runs all three on PRs and pushes touching `marketing/ads/**`.
    paste evidence into `gates.landing_page_verified`.
 2. Dentists review `campaign.claims_review`; record `gates.clinical`.
 3. Owner records `gates.marketing`, `gates.budget`, then `gates.import_gate`
+   (and later `gates.plan_a_applied` with the posted package digest + account
+   verification evidence, and a `plan_b_decision` of ATTACH_APPROVED or DECLINED —
+   activation refuses to release without both)
    (each: status APPROVED + approved_by + approved_at UTC). Digests must match
    the current package or the validator invalidates the approval.
 4. Load `import/plan-a/` into Ads Editor and complete `EDITOR-PREVIEW-EVIDENCE.md`

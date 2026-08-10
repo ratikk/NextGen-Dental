@@ -17,12 +17,13 @@ Plan A artifacts live in `import/plan-a/` ONLY — they cannot modify any existi
 Campaign and all children are Paused; the lists attach to nothing. Attaching to
 the live Leads campaign is **Plan B** (separate approval); activation is **Plan C**.
 
-## BLOCKED — the landing page is confirmed broken in production
-`https://nextgendentalaustintx.com/services/dental-implants` returns **HTTP 404**
-on both the clean and UTM URLs (independently measured and reproduced by
-`validate.py --online`, 2026-08-10). No canonical tag is present because the
-custom error page is being served. The agent's own proxied fetch returned a
-rendered page and was WRONG — proxied observations are not evidence here.
+## BLOCKED — landing page requires machine re-verification
+`https://nextgendentalaustintx.com/services/dental-implants` returned **HTTP 404**
+on both the clean and UTM URLs earlier on 2026-08-10 (independently measured and
+reproduced by `validate.py --online`), and has since been **observed serving** in
+a browser. The state changed without a recorded cause. A browser load is not
+evidence and neither is an agent fetch (the agent's proxy returned a rendered
+page while the URL was genuinely 404 — proxied observations carry no weight).
 
 **Nothing in this plan may be previewed, posted or activated until the page is
 fixed and re-verified 200.** Diagnosis ladder: claude/ads-landing-page-404.md.
