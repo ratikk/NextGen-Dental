@@ -5,77 +5,74 @@ campaign:
   objective: "Paid-intent implant consultations (appointment handoff / phone click)"
   status_after_apply: "PAUSED"
   evidence:
-    - "Implant queries = $279.98 / 59 clicks in 30d, largest visible intent cluster"
-    - "'dental implant clinic near me' 11 clicks; 'dental implants austin' proven serving"
-    - "Umami: /services/dental-implants among top-converting service pages; implant guide article live"
-    - "Freebie fence: NEG | Freebie & Non-Patient Intent list attached"
+    - source: "Google Ads search terms report CSV (owner-exported)"
+      period: "2026-07-11..2026-08-09"
+      sample: "implant queries $279.98 / 59 clicks (largest visible intent cluster); 'dental implant clinic near me' 11 clicks"
+      status: verified
+      observed_at: "2026-08-10"
+    - source: "Umami production analytics"
+      period: "live since 2026-08-09"
+      sample: "insufficient production history; conversion performance to be established during pilot"
+      status: insufficient_data
+      observed_at: "2026-08-10"
   geography:
-    include:
-      - "Austin, TX (south metro service area)"
-      - "Buda, TX"
-      - "Kyle, TX"
+    include: ["Austin, TX (south metro service area)", "Buda, TX", "Kyle, TX"]
     exclude: []
-    target_setting: "PRESENCE_ONLY"   # people IN the area, never 'interest'
-  schedule:
-    timezone: "America/Chicago"
-    approved_hours: []                 # all hours until owner sets schedule
+    target_setting: "PRESENCE_ONLY"
+  schedule: { timezone: "America/Chicago", approved_hours: [] }
   budget:
     average_daily_amount: 8
-    approved_monthly_limit: 250
+    governance_monthly_threshold: 250   # NOT enforced by Google — see PLAN-A budget-guardrail section
     currency: "USD"
-  bidding:
-    strategy: "MANUAL_CPC"             # no conversion signal exists; manual until measurement matures
-    maximum_cpc: 6.00
-  networks:
-    search: true
-    display: false
-    search_partners: false
+  bidding: { strategy: "MANUAL_CPC", maximum_cpc: 6.00 }
+  networks: { search: true, display: false, search_partners: false }
   landing_page:
     url: "https://nextgendentalaustintx.com/services/dental-implants"
-    verified_exists: true              # repo: src/pages/services/dental-implants.astro
+    verified_exists: true   # repo: src/pages/services/dental-implants.astro
+  tracking:
+    utm: { utm_source: google, utm_medium: cpc, utm_campaign: search_dental_implants_south_austin }
+    note: >
+      UTMs serve Google-side reporting and future dashboard use. Umami currently
+      strips ALL query strings by design (privacy posture), so these parameters
+      are NOT visible in Umami; campaign distinction there relies on referrer +
+      landing path. Allow-listing utm keys is a separate privacy-posture change.
   ad_groups:
-    - name: "Implants - Local Intent"
+    - name: "General Dental Implants"
       keywords:
-        exact:
-          - "dental implants austin"
-          - "dental implants south austin"
-          - "dental implant clinic near me"
-          - "tooth implant austin"
-          - "dental implants near me"
-          - "implant dentist austin"
-        phrase:
-          - "dental implant consultation"
-          - "dental implants cost austin"
-          - "full mouth dental implants"
-          - "implant dentist near me"
-          - "replace missing tooth austin"
-      negative_keywords: []            # shared lists cover free/trial/school/competitor/geo
+        exact: ["dental implants austin", "dental implants south austin", "dental implants near me", "implant dentist austin", "dental implant clinic near me"]
+        phrase: ["dental implant consultation", "dental implants cost austin", "implant dentist near me"]
       responsive_search_ads:
-        - final_url: "https://nextgendentalaustintx.com/services/dental-implants"
-          headlines:                   # <=30 chars each (validator-enforced)
-            - "Dental Implants South Austin"
-            - "Implant Consultations"
-            - "Missing a Tooth?"
-            - "Book Online in Minutes"
-            - "Modern Dental Technology"
-            - "Most PPO Insurance Accepted"
-            - "New Patients Welcome"
-            - "Financing Options Available"
-            - "Serving Austin Buda & Kyle"
-            - "Gentle, Modern Dentistry"
-          descriptions:                # <=90 chars each
-            - "Dental implant consultations in South Austin. Modern technology and gentle care."
-            - "Request your appointment online in under a minute. New patients welcome."
-            - "Permanent, natural-looking tooth replacement. Financing options available."
-            - "Located at I-35 & Slaughter Ln. Serving Austin, Buda and Kyle families."
-  clinical_claims_flagged:
-    - claim: "Permanent, natural-looking tooth replacement"
-      reason: "Material treatment claim - requires dentist sign-off (matches existing site copy)"
-    - claim: "Gentle, Modern Dentistry"
-      reason: "Care-experience claim - dentist/owner confirmation"
-  approvals:
-    marketing: "PENDING"
-    clinical: "PENDING (Dr. Kondragunta / Dr. Yanala)"
-    budget_owner: "PENDING"
-    activation: "PENDING - campaign is created PAUSED"
-    expires: "2026-09-10"
+        - headlines: ["Dental Implants South Austin", "Implant Consultations",
+                      "Request Appointment Online", "New Patients Welcome",
+                      "Modern Dental Technology", "Financing Options Available",
+                      "Serving Austin Buda & Kyle", "South Austin Dental Office"]
+          descriptions:
+            - "Dental implant consultations in South Austin. Request an appointment online."
+            - "Our team will contact you to confirm availability. New patients welcome."
+            - "Tooth replacement options discussed at your consultation with our dentists."
+    - name: "Single-Tooth Replacement"
+      keywords:
+        exact: ["tooth implant austin", "single tooth implant", "tooth replacement austin"]
+        phrase: ["replace missing tooth", "single tooth implant cost"]
+      responsive_search_ads:
+        - headlines: ["Missing a Tooth?", "Single Tooth Replacement",
+                      "Request Appointment Online", "Implant Consultations",
+                      "New Patients Welcome", "Serving Austin Buda & Kyle",
+                      "South Austin Dental Office", "Financing Options Available"]
+          descriptions:
+            - "Single-tooth implant consultations in South Austin. Request an appointment online."
+            - "Our team will contact you to confirm availability. New patients welcome."
+            - "Tooth replacement options discussed at your consultation with our dentists."
+  claims_review:   # EVERY factual/care claim used in copy, per 2026-08-10 review
+    - { claim: "Financing Options Available", basis: "site /financing page exists", needs: "owner confirms current terms" }
+    - { claim: "Modern Dental Technology", basis: "site copy (existing)", needs: "dentist confirmation" }
+    - { claim: "New Patients Welcome", basis: "site patient-information page states it", needs: "owner confirmation" }
+    - { claim: "Serving Austin Buda & Kyle", basis: "site location pages", needs: "owner confirmation" }
+    - { claim: "Tooth replacement options discussed at your consultation", basis: "neutral wording", needs: "dentist sign-off (implant treatment language)" }
+    - { claim: "Implant Consultations offered", basis: "site /services/dental-implants", needs: "dentist confirmation service is offered as described" }
+  excluded_claims:  # deliberately NOT used pending verification
+    - "Most PPO Insurance Accepted (verify against current insurance list first)"
+    - "Book online in under a minute (unmeasured)"
+    - "Permanent, natural-looking tooth replacement (outcome claim - dentist approval first)"
+    - "I-35 & Slaughter Ln location wording (confirm preferred phrasing)"
+  full_mouth_ad_group: "EXCLUDED until dentists confirm full-mouth/implant-denture services offered"

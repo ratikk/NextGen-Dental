@@ -1,0 +1,14 @@
+name: ads-as-code validate
+on:
+  pull_request:
+    paths: ["marketing/ads/**"]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r marketing/ads/requirements.txt
+      - name: Validate specs, CSV parity, checksums, approvals
+        run: python3 marketing/ads/validate.py --online
