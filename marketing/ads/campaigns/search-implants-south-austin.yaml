@@ -1,0 +1,81 @@
+schema_version: 1
+campaign:
+  name: "Search | Dental Implants | South Austin"
+  practice: "NextGen Dental"
+  objective: "Paid-intent implant consultations (appointment handoff / phone click)"
+  status_after_apply: "PAUSED"
+  evidence:
+    - "Implant queries = $279.98 / 59 clicks in 30d, largest visible intent cluster"
+    - "'dental implant clinic near me' 11 clicks; 'dental implants austin' proven serving"
+    - "Umami: /services/dental-implants among top-converting service pages; implant guide article live"
+    - "Freebie fence: NEG | Freebie & Non-Patient Intent list attached"
+  geography:
+    include:
+      - "Austin, TX (south metro service area)"
+      - "Buda, TX"
+      - "Kyle, TX"
+    exclude: []
+    target_setting: "PRESENCE_ONLY"   # people IN the area, never 'interest'
+  schedule:
+    timezone: "America/Chicago"
+    approved_hours: []                 # all hours until owner sets schedule
+  budget:
+    average_daily_amount: 8
+    approved_monthly_limit: 250
+    currency: "USD"
+  bidding:
+    strategy: "MANUAL_CPC"             # no conversion signal exists; manual until measurement matures
+    maximum_cpc: 6.00
+  networks:
+    search: true
+    display: false
+    search_partners: false
+  landing_page:
+    url: "https://nextgendentalaustintx.com/services/dental-implants"
+    verified_exists: true              # repo: src/pages/services/dental-implants.astro
+  ad_groups:
+    - name: "Implants - Local Intent"
+      keywords:
+        exact:
+          - "dental implants austin"
+          - "dental implants south austin"
+          - "dental implant clinic near me"
+          - "tooth implant austin"
+          - "dental implants near me"
+          - "implant dentist austin"
+        phrase:
+          - "dental implant consultation"
+          - "dental implants cost austin"
+          - "full mouth dental implants"
+          - "implant dentist near me"
+          - "replace missing tooth austin"
+      negative_keywords: []            # shared lists cover free/trial/school/competitor/geo
+      responsive_search_ads:
+        - final_url: "https://nextgendentalaustintx.com/services/dental-implants"
+          headlines:                   # <=30 chars each (validator-enforced)
+            - "Dental Implants South Austin"
+            - "Implant Consultations"
+            - "Missing a Tooth?"
+            - "Book Online in Minutes"
+            - "Modern Dental Technology"
+            - "Most PPO Insurance Accepted"
+            - "New Patients Welcome"
+            - "Financing Options Available"
+            - "Serving Austin Buda & Kyle"
+            - "Gentle, Modern Dentistry"
+          descriptions:                # <=90 chars each
+            - "Dental implant consultations in South Austin. Modern technology and gentle care."
+            - "Request your appointment online in under a minute. New patients welcome."
+            - "Permanent, natural-looking tooth replacement. Financing options available."
+            - "Located at I-35 & Slaughter Ln. Serving Austin, Buda and Kyle families."
+  clinical_claims_flagged:
+    - claim: "Permanent, natural-looking tooth replacement"
+      reason: "Material treatment claim - requires dentist sign-off (matches existing site copy)"
+    - claim: "Gentle, Modern Dentistry"
+      reason: "Care-experience claim - dentist/owner confirmation"
+  approvals:
+    marketing: "PENDING"
+    clinical: "PENDING (Dr. Kondragunta / Dr. Yanala)"
+    budget_owner: "PENDING"
+    activation: "PENDING - campaign is created PAUSED"
+    expires: "2026-09-10"

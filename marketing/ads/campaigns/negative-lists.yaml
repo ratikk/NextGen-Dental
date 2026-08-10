@@ -1,0 +1,87 @@
+# Shared negative-keyword lists (campaign-as-code)
+# Evidence: Search terms report Jul 11 - Aug 9, 2026 (881 terms analyzed).
+# Apply as ACCOUNT-LEVEL shared lists, attached to Leads + any new campaign.
+# NOTE: "medicaid" deliberately ABSENT pending Ratik's answer on acceptance.
+schema_version: 1
+negative_lists:
+  - name: "NEG | Freebie & Non-Patient Intent"
+    evidence: "$155.33 / 29 clicks on free/study/trial/school queries; 1 junk conversion"
+    match_type: phrase
+    terms:
+      - free
+      - "no cost"
+      - study
+      - studies
+      - trial
+      - trials
+      - "clinical trial"
+      - volunteer
+      - grant
+      - grants
+      - donation
+      - "dental school"
+      - "hygiene school"
+      - cheapest
+  - name: "NEG | Competitor Brands"
+    evidence: "~$110 on navigational searches for other practices; 2 misdial conversions"
+    match_type: phrase
+    terms:
+      - "aspen dental"
+      - "castle dental"
+      - "ideal dental"
+      - "rodeo dental"
+      - "7 to 7 dental"
+      - "ace dental"
+      - "trident dental"
+      - "kovar dental"
+      - "stonehaven dental"
+      - "forest family dentistry"
+      - "access dental"
+      - "elite dentistry"
+      - "smile haus"
+      - "enamel dentistry"
+      - "avery ranch dental"
+      - "vida dental"
+      - "carus dental"
+      - "hutto smiles"
+      - "tooth time"
+      - "rose dental"
+      - "reveal dental"
+      - "airport dental"
+      - "dr king dental"
+      - "cool creek dental"
+      - "onion creek family dentistry"   # exact competitor name ONLY — must never block "dentist onion creek"
+      - "mint dentistry"
+      - "bright now"
+      - "western dental"
+      - "jefferson dental"
+      - "affordable dentures"
+  - name: "NEG | Out-of-Area Geography"
+    evidence: "$11.16 + 325 impressions from 60-120min-away cities"
+    match_type: phrase
+    terms:
+      - temple
+      - killeen
+      - kerrville
+      - cibolo
+      - "harker heights"
+      - waco
+      - belton
+      - "copperas cove"
+      - "new braunfels"
+      - schertz
+      - seguin
+      - lockhart
+      - "san antonio"
+      - georgetown
+      - "round rock"
+      - "cedar park"
+      - leander
+      - hutto
+      - taylor
+      - fredericksburg
+      - boerne
+approvals:
+  marketing: "PENDING"
+  budget_owner: "PENDING (no spend impact - reduces waste only)"
+  expires: "2026-09-10"
