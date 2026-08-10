@@ -1,4 +1,8 @@
-# THE approval record. Statuses are meaningless without approved_by + approved_at.
+# The approval RECORD-KEEPING file. It validates approval completeness and
+# authorized identity LABELS. Authenticity depends on protected-branch controls,
+# verified reviewer identity in the PR, and retained external evidence (e.g. an
+# approved PR review, or a written dentist confirmation) - a YAML string alone
+# does not prove a named person approved anything. Statuses are meaningless without approved_by + approved_at.
 # The validator enforces: authorized role, non-empty identity, valid UTC timestamp
 # before expiry, digest match against the plan's own package, and gate ordering.
 # Any regeneration of artifacts changes the digest and INVALIDATES approvals.
@@ -10,24 +14,27 @@ authorized_approvers:
 # Per-plan digests (from import/CHECKSUMS.txt). Approving Plan A must NOT imply
 # approval of artifacts capable of changing the live Leads campaign.
 digests:
-  campaign_spec_sha256: "ce84233ec6f1f18f5d7bfb41a1fb33c69f0629d4312755b1cb0b9be31ae0af4f"
-  plan_a_package_sha256: "d4012880f3b08f6748bab494c6f3f9da54b70f9e0db45716544e29c8018fe570"
+  campaign_spec_sha256: "34e8f3ff250213bde35a69c2da4b3e673bf44b7e6af2771f04dd962fd6cb5c36"
+  plan_a_package_sha256: "bacebae45e67f3429c81faf2ea49f7aa2c2632ce9df310b157bfc725d7494306"
   plan_b_package_sha256: "60b8a615db5ca318439bfcec18b9af05a092001b8e3300c5468c2cd447bd9aea"
   plan_c_package_sha256: "f9abfe6f6d5f9186a1529f286104e18e6e7c9e52d875f4e3acfeec597a37452c"
 gates:
   marketing:   { status: NOT_APPROVED, approved_by: null, approved_at: null }
   clinical:    { status: NOT_APPROVED, approved_by: null, approved_at: null }
   budget:      { status: NOT_APPROVED, approved_by: null, approved_at: null }
-  landing_page_verified: { status: NOT_APPROVED, approved_by: null, approved_at: null, evidence: null }
+  # evidence is REQUIRED when this gate is APPROVED; must include url, http_status,
+  # final_url, tested_at (UTC), tested_by (person or CI run ref), spec_digest.
+  landing_page_verified:
+    status: NOT_APPROVED
+    approved_by: null
+    approved_at: null
+    evidence: null
   import_gate: { status: NOT_APPROVED, approved_by: null, approved_at: null }   # Plan A posting
   activation:  { status: NOT_APPROVED, approved_by: null, approved_at: null }   # Plan C
 # Explicit per-list, per-campaign attachment decisions. The GENERATOR emits only
 # APPROVED pairs. General activation approval NEVER implies these.
 attachment:
   "NEG | Freebie Intent (low-risk)":
-    leads_campaign: { status: NOT_APPROVED, approved_by: null, approved_at: null }
-    new_campaign:   { status: NOT_APPROVED, approved_by: null, approved_at: null }
-  "NEG | Price-Sensitive (needs business confirmation)":
     leads_campaign: { status: NOT_APPROVED, approved_by: null, approved_at: null }
     new_campaign:   { status: NOT_APPROVED, approved_by: null, approved_at: null }
   "NEG | Competitor Brands (strategy decision)":

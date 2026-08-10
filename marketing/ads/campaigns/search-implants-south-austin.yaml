@@ -30,7 +30,14 @@ campaign:
   networks: { search: true, display: false, search_partners: false }
   landing_page:
     url: "https://nextgendentalaustintx.com/services/dental-implants"
-    verified_exists: true   # repo: src/pages/services/dental-implants.astro
+    repository_page_exists: true          # src/pages/services/dental-implants.astro on main
+    production_status: FAILED_404         # CONFIRMED 2026-08-10 by independent check + CI --online
+    production_status_checked_at: "2026-08-10"
+    note: >
+      The repository file existing is NOT evidence the URL works. Production
+      returns 404 for both the clean and UTM URLs, and no canonical tag is
+      present (it is the custom error page). This BLOCKS preview, posting and
+      activation. See claude/ads-landing-page-404.md for the diagnosis ladder.
   tracking:
     utm: { utm_source: google, utm_medium: cpc, utm_campaign: search_dental_implants_south_austin }
     attribution_decision: PENDING          # validator BLOCKS activation while PENDING

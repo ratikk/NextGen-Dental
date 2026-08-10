@@ -17,4 +17,4 @@ jobs:
       - name: Negative-keyword semantics tests
         run: python3 marketing/ads/test_negatives.py
       - name: Validate specs, CSV parity, digests, approvals, LIVE landing page (blocking)
-        run: python3 marketing/ads/validate.py --online
+        run: python3 marketing/ads/validate.py --draft --online

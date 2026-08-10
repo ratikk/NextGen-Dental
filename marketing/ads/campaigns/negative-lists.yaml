@@ -1,6 +1,8 @@
 # Shared negative-keyword lists — v3 (evidence recomputed per EXACT phrase, 2026-08-10)
 # Method: each phrase matched against the 876 real search-term rows (5 total/summary
 # rows excluded) using word-sequence containment; spend attributed by campaign.
+# The Price-Sensitive list was REMOVED in v4: it matched $0.00 of the observed
+# window (zero evidence); creating it would only add account clutter.
 # Lists are CREATED UNATTACHED in Plan A. Attachment requires explicit per-list,
 # per-campaign approval in approval-manifest.yaml (attachment section).
 schema_version: 1
@@ -24,19 +26,6 @@ negative_lists:
         caveat: "These lists CANNOT attach to Performance Max; ~89% of this historical spend is therefore unaffected by any attachment proposed here."
     match_type: phrase
     terms: [free, "no cost", study, studies, trial, trials, "clinical trial", volunteer, grant, grants, "dental school"]
-  - name: "NEG | Price-Sensitive (needs business confirmation)"
-    risk_tier: confirm
-    phrase_count: 3
-    evidence:
-      - source: "search terms report, exact-phrase match of THIS list"
-        period: "2026-07-11..2026-08-09"
-        sample: "0 of 876 terms matched; $0.00; NO supporting evidence in the observed window"
-        spend_by_campaign: "none"
-        status: no_evidence
-        observed_at: "2026-08-10"
-        caveat: "Speculative list. RECOMMENDATION: do not attach anywhere until a future report shows matching waste. Retained only as a named candidate."
-    match_type: phrase
-    terms: [cheapest, donation, "hygiene school"]
   - name: "NEG | Competitor Brands (strategy decision)"
     risk_tier: confirm
     phrase_count: 30

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Campaign-as-code validator v3.  python3 validate.py [--online]
+"""Campaign-as-code validator v4.
+  python3 validate.py [--online] [--draft | --release-plan-a | --release-plan-b | --release-plan-c]
+Draft mode (default) checks structure/parity/evidence. RELEASE modes additionally
+require the exact approvals for that plan to be complete, chronological and
+digest-bound - a draft-clean tree is NOT a released one.
 Blocking gates: spec schema, CSV parity, all-Paused, per-plan digests, approval
 identity/ordering/expiry, attachment approvals, and (with --online) a real
 landing-page health check. Exit 1 on any failure."""
@@ -13,6 +17,7 @@ except ImportError:
     ZoneInfo = None
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
+MODE = next((a[2:] for a in sys.argv[1:] if a.startswith('--') and a[2:].startswith(('draft','release-plan-'))), 'draft')
 fails, warns = [], []
 F, W = fails.append, warns.append
 TODAY = datetime.now(timezone.utc).date()          # v3: real current date, UTC
@@ -124,16 +129,32 @@ finally:
     shutil.rmtree(tmp)
 
 # ---------------- CSV safety: all Paused, uniform widths ----------------
+ACTIVATION_CSV = os.path.join(ROOT, 'import/plan-c/activation.csv')
 for p in glob.glob(f'{ROOT}/import/**/*.csv', recursive=True):
     rows = list(csv.reader(open(p)))
     if not rows: continue
     hdr = rows[0]
     if len({len(r) for r in rows}) != 1: F(f'{p}: ragged CSV (inconsistent column count)')
+    if os.path.abspath(p) == ACTIVATION_CSV:
+        continue   # the ONE governed exception - checked against its spec below
     for col_name in ('Status','Campaign status'):
         if col_name in hdr:
             i = hdr.index(col_name)
             for r in rows[1:]:
                 if len(r) > i and r[i] != 'Paused': F(f'{p}: non-Paused entity: {r[:3]}')
+
+# the activation artifact must match its spec exactly and touch exactly one campaign
+act = yaml.safe_load(open(f'{ROOT}/campaigns/activation-action.yaml')).get('activation_action', {})
+arows = list(csv.reader(open(ACTIVATION_CSV)))
+if len(arows) != 2: F('activation.csv must contain exactly one campaign mutation')
+else:
+    a = dict(zip(arows[0], arows[1]))
+    if a.get('Campaign') not in names: F('activation.csv targets an unknown campaign')
+    if act.get('previous_status') != 'PAUSED' or act.get('rollback_status') != 'PAUSED':
+        F('activation-action: previous/rollback status must be PAUSED')
+    if a.get('Campaign status') != 'Enabled': F('activation.csv status must be Enabled')
+    if str(act.get('budget_daily')) != a.get('Budget'): F('activation.csv budget != spec')
+    if not act.get('preconditions'): F('activation-action: no preconditions listed')
 
 # ---------------- approvals: identity, time, order, digests ----------------
 def digest(label):
@@ -143,7 +164,8 @@ def digest(label):
 CUR = {'campaign_spec_sha256': digest('CAMPAIGN-SPEC-DIGEST'),
        'plan_a_package_sha256': digest('PLAN-A-PACKAGE-DIGEST'),
        'plan_b_package_sha256': digest('PLAN-B-PACKAGE-DIGEST'),
-       'plan_c_package_sha256': digest('PLAN-C-PACKAGE-DIGEST')}
+       'plan_c_attach_sha256': digest('PLAN-C-ATTACH-DIGEST'),
+       'plan_c_activation_sha256': digest('PLAN-C-ACTIVATION-DIGEST')}
 try:
     EXP = date.fromisoformat(str(man.get('expires')))
     if EXP < TODAY: F(f'plan expired {EXP} (today {TODAY})')
@@ -170,8 +192,36 @@ def check_gate(name, gate, role='owner'):
     return True
 
 G = man.get('gates', {})
-approved = {k: check_gate(k, G.get(k), 'clinical' if k == 'clinical' else 'owner')
-            for k in ('marketing','clinical','budget','landing_page_verified','import_gate','activation')}
+GATES = ('marketing','clinical','budget','landing_page_verified','import_gate','activation')
+approved = {k: check_gate(k, G.get(k), 'clinical' if k == 'clinical' else 'owner') for k in GATES}
+
+def gate_time(k):
+    try: return datetime.fromisoformat(str(G[k]['approved_at']).replace('Z','+00:00'))
+    except Exception: return None
+
+# landing-page evidence is mandatory once that gate is APPROVED
+if approved['landing_page_verified']:
+    ev = (G.get('landing_page_verified') or {}).get('evidence')
+    if not isinstance(ev, dict):
+        F('landing_page_verified APPROVED without structured evidence')
+    else:
+        for k in ('url','http_status','final_url','tested_at','tested_by','spec_digest'):
+            if not ev.get(k): F(f'landing_page_verified evidence missing {k}')
+        if str(ev.get('http_status')) != '200': F(f'landing_page_verified evidence http_status={ev.get("http_status")} (must be 200)')
+        if ev.get('spec_digest') and ev['spec_digest'] != CUR['campaign_spec_sha256']:
+            F('landing_page_verified evidence was captured against a different campaign spec')
+
+# chronological ordering: prerequisites <= import <= activation
+PRE = ('marketing','clinical','budget','landing_page_verified')
+if approved['import_gate']:
+    ti = gate_time('import_gate')
+    for k in PRE:
+        tk = gate_time(k)
+        if approved[k] and ti and tk and tk > ti:
+            F(f'gate order: {k} approved AFTER import_gate ({tk.isoformat()} > {ti.isoformat()})')
+if approved['activation']:
+    ta = gate_time('activation'); ti = gate_time('import_gate')
+    if ta and ti and ti > ta: F('gate order: import_gate approved AFTER activation')
 if approved['import_gate']:
     if CUR['plan_a_package_sha256'] != man['digests'].get('plan_a_package_sha256'):
         F('import_gate APPROVED but Plan A package digest STALE - approval invalidated')
@@ -181,8 +231,8 @@ if approved['import_gate']:
         if not approved[pre]: F(f'import_gate APPROVED before prerequisite gate {pre}')
 if approved['activation']:
     if not approved['import_gate']: F('activation APPROVED before import_gate')
-    if CUR['plan_c_package_sha256'] != man['digests'].get('plan_c_package_sha256'):
-        F('activation APPROVED but Plan C package digest STALE')
+    if CUR['plan_c_activation_sha256'] != man['digests'].get('plan_c_activation_sha256'):
+        F('activation APPROVED but Plan C ACTIVATION digest STALE')
     for c in campaigns:
         if (c.get('tracking') or {}).get('attribution_decision') == 'PENDING':
             F('activation APPROVED while attribution_decision is PENDING (Measure/Learn loop undefined)')
@@ -190,9 +240,12 @@ for lname, targets in (man.get('attachment') or {}).items():
     known = {nl['name'] for nl in negdoc['negative_lists']}
     if lname not in known: F(f'attachment references unknown list {lname!r}')
     for tgt, gate in (targets or {}).items():
-        if check_gate(f'attachment[{lname}][{tgt}]', gate, 'owner') and tgt == 'leads_campaign':
-            if CUR['plan_b_package_sha256'] != man['digests'].get('plan_b_package_sha256'):
+        if check_gate(f'attachment[{lname}][{tgt}]', gate, 'owner'):
+            if tgt == 'leads_campaign' and CUR['plan_b_package_sha256'] != man['digests'].get('plan_b_package_sha256'):
                 F('live-Leads attachment APPROVED but Plan B package digest STALE')
+            # independent of the activation gate:
+            if tgt == 'new_campaign' and CUR['plan_c_attach_sha256'] != man['digests'].get('plan_c_attach_sha256'):
+                F('new-campaign attachment APPROVED but Plan C ATTACH digest STALE')
 
 # ---------------- landing page: BLOCKING (v3) ----------------
 def fetch(url, tries=3):
@@ -218,10 +271,9 @@ if '--online' in sys.argv:
             except Exception as e:
                 F(f'landing page {url}: unreachable after 3 attempts ({e})'); continue
             if code != 200: F(f'landing page {url}: HTTP {code} (paid traffic must never hit a non-200)')
-            if DOMAIN not in final.split('/')[2:3][0] if '//' in final else True:
-                pass
-            host = final.split('/')[2] if '//' in final else ''
-            if host and not host.endswith(DOMAIN): F(f'landing page {url}: redirected off-domain to {host}')
+            host = final.split('/')[2].split('@')[-1].split(':')[0] if '//' in final else ''
+            if host and not (host == DOMAIN or host.endswith('.' + DOMAIN)):
+                F(f'landing page {url}: redirected off-domain to {host!r}')
             title = re.search(r'<title[^>]*>(.*?)</title>', body, re.S | re.I)
             title = (title.group(1).strip() if title else '')
             if re.search(r'not found|404', title, re.I): F(f'landing page {url}: error-page title {title!r}')
@@ -234,7 +286,23 @@ if '--online' in sys.argv:
 else:
     W('landing-page health NOT checked (run with --online; CI does this and it is BLOCKING)')
 
-print(f'campaign-as-code validation v3: {len(fails)} failed, {len(warns)} warnings   [{TODAY} UTC]')
+REQUIRED = {'release-plan-a': ('marketing','clinical','budget','landing_page_verified','import_gate'),
+            'release-plan-b': (),          # per-list attachment gates, checked below
+            'release-plan-c': ('marketing','clinical','budget','landing_page_verified','import_gate','activation')}
+if MODE.startswith('release-'):
+    for k in REQUIRED[MODE]:
+        if not approved.get(k): F(f'[{MODE}] gate {k} is not APPROVED - release blocked')
+    if MODE == 'release-plan-b':
+        rows = list(csv.reader(open(f'{ROOT}/import/plan-b/attach-leads.csv')))
+        if len(rows) <= 1: F('[release-plan-b] no approved attachments - nothing to release')
+    if MODE == 'release-plan-c':
+        for c in campaigns:
+            if (c.get('tracking') or {}).get('attribution_decision') == 'PENDING':
+                F('[release-plan-c] attribution_decision still PENDING')
+    if '--online' not in sys.argv:
+        F(f'[{MODE}] release validation must be run with --online (live landing-page check)')
+
+print(f'campaign-as-code validation v4 [{MODE}]: {len(fails)} failed, {len(warns)} warnings   [{TODAY} UTC]')
 for x in fails: print('  FAIL:', x)
 for x in warns: print('  WARN:', x)
 sys.exit(1 if fails else 0)

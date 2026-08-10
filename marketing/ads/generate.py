@@ -70,6 +70,14 @@ c_ = attach_rows('new_campaign', camp['name'])
 write('plan-b/attach-leads.csv', b)
 write('plan-c/attach-new-campaign.csv', c_)
 
+# ---------- Plan C: the ACTIVATION MUTATION, as its own artifact ----------
+act = yaml.safe_load(open(f'{ROOT}/campaigns/activation-action.yaml'))['activation_action']
+write('plan-c/activation.csv', [
+    ['Campaign','Campaign status','Previous status','Rollback status','Budget','Max CPC'],
+    [act['campaign'], 'Enabled' if act['requested_status'] == 'ENABLED' else act['requested_status'],
+     act['previous_status'].title(), act['rollback_status'].title(),
+     act['budget_daily'], act['maximum_cpc']]])
+
 # ---------- per-plan digests ----------
 def digest_dir(sub):
     # plan name is part of the digest so two structurally-identical (e.g. empty)
@@ -84,12 +92,18 @@ spec_h = hashlib.sha256(
     open(f'{ROOT}/campaigns/search-implants-south-austin.yaml','rb').read()
     + open(f'{ROOT}/campaigns/negative-lists.yaml','rb').read()).hexdigest()
 lines = [f'{spec_h}  CAMPAIGN-SPEC-DIGEST']
-for sub in ('plan-a','plan-b','plan-c'):
+for sub in ('plan-a','plan-b'):
     lines.append(f'{digest_dir(sub)}  {sub.upper()}-PACKAGE-DIGEST')
+# Plan C carries TWO independently-approvable actions -> two digests
+for fname, label in (('attach-new-campaign.csv','PLAN-C-ATTACH-DIGEST'),
+                     ('activation.csv','PLAN-C-ACTIVATION-DIGEST')):
+    h = hashlib.sha256(('plan-c/' + fname).encode() + b'\x00')
+    h.update(open(os.path.join(IMP, 'plan-c', fname), 'rb').read())
+    lines.append(f'{h.hexdigest()}  {label}')
 for sub in ('plan-a','plan-b','plan-c'):
     for p in sorted(os.listdir(os.path.join(IMP, sub))):
         fp = os.path.join(IMP, sub, p)
         lines.append(f'{hashlib.sha256(open(fp,"rb").read()).hexdigest()}  import/{sub}/{p}')
 open(os.path.join(IMP, 'CHECKSUMS.txt'), 'w').write('\n'.join(lines) + '\n')
 print(f'generated. plan-a: {len(kw)-1} keywords, {len(ads)-1} ads, {len(neg_rows)-1} negatives | '
-      f'plan-b attachments: {len(b)-1} | plan-c attachments: {len(c_)-1}')
+      f'plan-b attachments: {len(b)-1} | plan-c attachments: {len(c_)-1} | activation artifact: 1')
