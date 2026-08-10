@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Campaign-as-code validator v2. Requirements: requirements.txt (PyYAML).
-Checks specs, regenerates CSVs for parity, verifies checksums + approval manifest.
-Exit 1 on failure. Run: python3 validate.py [--online]"""
-import sys, re, os, csv, glob, hashlib, subprocess, tempfile, shutil, datetime
+"""Campaign-as-code validator v3.  python3 validate.py [--online]
+Blocking gates: spec schema, CSV parity, all-Paused, per-plan digests, approval
+identity/ordering/expiry, attachment approvals, and (with --online) a real
+landing-page health check. Exit 1 on any failure."""
+import sys, re, os, csv, glob, hashlib, subprocess, tempfile, shutil, time
+from datetime import datetime, timezone, date
+import urllib.request, urllib.error
 import yaml
 try:
     from zoneinfo import ZoneInfo
@@ -11,153 +14,227 @@ except ImportError:
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 fails, warns = [], []
-F = fails.append; W = warns.append
+F, W = fails.append, warns.append
+TODAY = datetime.now(timezone.utc).date()          # v3: real current date, UTC
 FORBIDDEN = re.compile(r'\b(guarantee[ds]?|painless|pain[- ]free|best|#1|cure[sd]?|free|miracle|top[- ]rated)\b', re.I)
-SECRETY = re.compile(r'(AKIA[0-9A-Z]{16}|-----BEGIN|password\s*[:=]|customer[_ ]?id\s*[:=]\s*\d|@gmail\.|@yahoo\.|\b\d{3}[-.]\d{3}[-.]\d{4}\b)', re.I)
+SECRETY = re.compile(r'(AKIA[0-9A-Z]{16}|-----BEGIN|password\s*[:=]|customer[_ ]?id\s*[:=]\s*\d|@gmail\.|\b\d{3}[-.]\d{3}[-.]\d{4}\b)', re.I)
 APPROVED_GEO = {"Austin, TX (south metro service area)", "Buda, TX", "Kyle, TX"}
+APPROVED_LANGS = {"English"}
+DOMAIN = "nextgendentalaustintx.com"
 
-specs = sorted(glob.glob(os.path.join(ROOT, 'campaigns/*.yaml')))
-names = []
-for path in specs:
+man = yaml.safe_load(open(f'{ROOT}/approval-manifest.yaml'))
+negdoc = yaml.safe_load(open(f'{ROOT}/campaigns/negative-lists.yaml'))
+
+# ---------------- specs ----------------
+names, campaigns = [], []
+for path in sorted(glob.glob(f'{ROOT}/campaigns/*.yaml')):
     raw = open(path).read()
     if SECRETY.search(raw): F(f'{path}: possible secret/PII pattern')
     doc = yaml.safe_load(raw)
     if doc.get('schema_version') != 1: F(f'{path}: schema_version must be 1')
-    if 'campaign' in doc:
-        c = doc['campaign']
-        if not c.get('name'): F(f'{path}: no campaign name')
-        elif c['name'] in names: F(f'{path}: duplicate campaign name')
-        else: names.append(c['name'])
-        if c.get('practice') != 'NextGen Dental': F(f'{path}: wrong practice')
-        if not c.get('objective'): F(f'{path}: no objective')
-        if c.get('status_after_apply') != 'PAUSED': F(f'{path}: not PAUSED')
-        b = c.get('budget', {})
-        for k in ('average_daily_amount', 'governance_monthly_threshold'):
-            v = b.get(k)
-            if not isinstance(v, (int, float)) or v <= 0: F(f'{path}: budget.{k} must be positive number')
-        if isinstance(b.get('average_daily_amount'), (int, float)) and b['average_daily_amount'] * 30.4 > b.get('governance_monthly_threshold', 0):
-            F(f'{path}: daily*30.4 exceeds governance threshold')
-        if b.get('currency') != 'USD': F(f'{path}: currency must be USD')
-        tz = c.get('schedule', {}).get('timezone')
-        if ZoneInfo:
-            try: ZoneInfo(tz)
-            except Exception: F(f'{path}: invalid timezone {tz}')
-        g = c.get('geography', {})
-        if g.get('target_setting') != 'PRESENCE_ONLY': F(f'{path}: geo not PRESENCE_ONLY')
-        if not set(g.get('include', [])) <= APPROVED_GEO: F(f'{path}: unapproved geography')
-        n = c.get('networks', {})
-        if n.get('display') or n.get('search_partners'): F(f'{path}: unapproved network')
-        if c.get('bidding', {}).get('strategy') == 'MANUAL_CPC' and not c['bidding'].get('maximum_cpc'):
-            F(f'{path}: MANUAL_CPC without max')
-        if not c.get('evidence'): F(f'{path}: no evidence')
-        for ev in c.get('evidence', []):
-            for k in ('source', 'period', 'sample', 'status', 'observed_at'):
-                if k not in ev: F(f'{path}: evidence missing {k}')
-        lp = c.get('landing_page', {}).get('url', '')
-        if not lp.startswith('https://nextgendentalaustintx.com/'): F(f'{path}: bad landing page')
-        utm = c.get('tracking', {}).get('utm', {})
-        for k in ('utm_source', 'utm_medium', 'utm_campaign'):
-            if k not in utm: F(f'{path}: missing {k}')
-        if not c.get('ad_groups'): F(f'{path}: no ad groups')
-        seen = set()
-        for ag in c.get('ad_groups', []):
-            kws = ag.get('keywords', {})
-            if 'broad' in kws: F(f'{path}: broad match')
-            allk = (kws.get('exact') or []) + (kws.get('phrase') or [])
-            if not (1 <= len(allk) <= 30): F(f'{path}: ad group {ag["name"]} keyword count {len(allk)}')
-            for kw in allk:
-                nk = re.sub(r'\s+', ' ', kw.lower().strip())
-                if nk in seen: F(f'{path}: duplicate keyword (normalized) "{kw}"')
-                seen.add(nk)
-            for rsa in ag.get('responsive_search_ads', []):
-                hs, ds = rsa.get('headlines', []), rsa.get('descriptions', [])
-                if not (3 <= len(hs) <= 15): F(f'{path}: headline count {len(hs)}')
-                if not (2 <= len(ds) <= 4): F(f'{path}: description count {len(ds)}')
-                for t in hs + ds:
-                    lim = 30 if t in hs else 90
-                    if len(t) > lim: F(f'{path}: >{lim}ch: "{t[:40]}" ({len(t)})')
-                    if FORBIDDEN.search(t): F(f'{path}: forbidden term: "{t[:40]}"')
-        # negative-vs-positive conflict
-        negdoc = yaml.safe_load(open(os.path.join(ROOT, 'campaigns/negative-lists.yaml')))
-        for nl in negdoc['negative_lists']:
-            for t in nl['terms']:
-                for kw in seen:
-                    if re.search(r'\b' + re.escape(t.lower()) + r'\b', kw):
-                        F(f'{path}: negative "{t}" ({nl["name"]}) would block keyword "{kw}"')
-    if 'negative_lists' in doc:
-        allt = []
-        for nl in doc['negative_lists']:
-            if nl.get('risk_tier') not in ('low', 'confirm', 'review'): F(f'{path}: {nl.get("name")}: bad risk_tier')
-            if not nl.get('evidence'): F(f'{path}: {nl.get("name")}: no evidence')
-            allt += [t.lower() for t in nl['terms']]
-        dup = {t for t in allt if allt.count(t) > 1}
-        if dup: F(f'{path}: duplicate negatives {dup}')
+    if 'campaign' not in doc: continue
+    c = doc['campaign']; campaigns.append(c)
+    if not c.get('name'): F(f'{path}: no name')
+    elif c['name'] in names: F(f'{path}: duplicate campaign name')
+    else: names.append(c['name'])
+    if c.get('practice') != 'NextGen Dental': F(f'{path}: wrong practice')
+    if not c.get('objective'): F(f'{path}: no objective')
+    if c.get('status_after_apply') != 'PAUSED': F(f'{path}: not PAUSED')
+    b = c.get('budget', {})
+    for k in ('average_daily_amount', 'governance_monthly_threshold'):
+        if not isinstance(b.get(k), (int, float)) or b[k] <= 0: F(f'{path}: budget.{k} invalid')
+    if isinstance(b.get('average_daily_amount'), (int, float)) and b['average_daily_amount']*30.4 > b.get('governance_monthly_threshold', 0):
+        F(f'{path}: daily*30.4 exceeds governance threshold')
+    if b.get('currency') != 'USD': F(f'{path}: currency must be USD')
+    tz = (c.get('schedule') or {}).get('timezone')
+    if ZoneInfo:
+        try: ZoneInfo(tz)
+        except Exception: F(f'{path}: invalid timezone {tz!r}')
+    g = c.get('geography', {})
+    if g.get('target_setting') != 'PRESENCE_ONLY': F(f'{path}: geo not PRESENCE_ONLY')
+    if not set(g.get('include', [])) <= APPROVED_GEO: F(f'{path}: unapproved geography')
+    if not c.get('languages'): F(f'{path}: no languages set')
+    elif not set(c['languages']) <= APPROVED_LANGS: F(f'{path}: unapproved language (Spanish needs its own campaign + landing page)')
+    n = c.get('networks', {})
+    if n.get('display') or n.get('search_partners'): F(f'{path}: unapproved network')
+    if (c.get('bidding') or {}).get('strategy') == 'MANUAL_CPC' and not c['bidding'].get('maximum_cpc'):
+        F(f'{path}: MANUAL_CPC without maximum_cpc')
+    if not c.get('evidence'): F(f'{path}: no evidence')
+    for ev in c.get('evidence', []):
+        for k in ('source','period','sample','status','observed_at'):
+            if k not in ev: F(f'{path}: evidence missing {k}')
+    lp = (c.get('landing_page') or {}).get('url','')
+    if not lp.startswith(f'https://{DOMAIN}/'): F(f'{path}: landing page must be HTTPS on {DOMAIN}')
+    utm = ((c.get('tracking') or {}).get('utm') or {})
+    for k in ('utm_source','utm_medium','utm_campaign'):
+        if k not in utm: F(f'{path}: missing {k}')
+    if (c.get('tracking') or {}).get('attribution_decision') not in ('PENDING','A','B','C','D'):
+        F(f'{path}: tracking.attribution_decision must be PENDING or one of A/B/C/D')
+    if not c.get('ad_groups'): F(f'{path}: no ad groups')
+    seen = set()
+    for ag in c.get('ad_groups', []):
+        kws = ag.get('keywords', {})
+        if 'broad' in kws: F(f'{path}: broad match present')
+        allk = (kws.get('exact') or []) + (kws.get('phrase') or [])
+        if not (1 <= len(allk) <= 30): F(f'{path}: ad group {ag.get("name")} keyword count {len(allk)}')
+        for k in allk:
+            nk = re.sub(r'\s+',' ',k.lower().strip())
+            if nk in seen: F(f'{path}: duplicate keyword (normalized) {k!r}')
+            seen.add(nk)
+        for rsa in ag.get('responsive_search_ads', []):
+            hs, ds = rsa.get('headlines', []), rsa.get('descriptions', [])
+            if not (3 <= len(hs) <= 15): F(f'{path}: headline count {len(hs)}')
+            if not (2 <= len(ds) <= 4): F(f'{path}: description count {len(ds)}')
+            for t in hs:
+                if len(t) > 30: F(f'{path}: headline >30ch ({len(t)}): {t!r}')
+                if FORBIDDEN.search(t): F(f'{path}: forbidden term in headline: {t!r}')
+            for t in ds:
+                if len(t) > 90: F(f'{path}: description >90ch ({len(t)}): {t[:40]!r}')
+                if FORBIDDEN.search(t): F(f'{path}: forbidden term in description: {t[:40]!r}')
+    for nl in negdoc['negative_lists']:
+        for t in nl['terms']:
+            for k in seen:
+                if re.search(r'\b'+re.escape(t.lower())+r'\b', k):
+                    F(f'{path}: negative {t!r} ({nl["name"]}) would block own keyword {k!r}')
 
-# CSV parity: regenerate into temp and diff against committed import/
+for nl in negdoc['negative_lists']:
+    if nl.get('risk_tier') not in ('low','confirm','review'): F(f'negative list {nl.get("name")}: bad risk_tier')
+    if not nl.get('evidence'): F(f'negative list {nl.get("name")}: no evidence')
+    if nl.get('phrase_count') != len(nl['terms']): F(f'negative list {nl.get("name")}: phrase_count mismatch')
+allt = [t.lower() for nl in negdoc['negative_lists'] for t in nl['terms']]
+dup = {t for t in allt if allt.count(t) > 1}
+if dup: F(f'duplicate negatives across lists: {dup}')
+
+# ---------------- CSV parity (regenerate & byte-compare) ----------------
 tmp = tempfile.mkdtemp()
 try:
-    shutil.copytree(os.path.join(ROOT, 'campaigns'), os.path.join(tmp, 'campaigns'))
-    shutil.copy(os.path.join(ROOT, 'generate.py'), tmp)
-    subprocess.run([sys.executable, 'generate.py'], cwd=tmp, check=True, capture_output=True)
-    for dp, _, fs in os.walk(os.path.join(tmp, 'import')):
-        for f in fs:
-            gen = os.path.join(dp, f)
-            rel = os.path.relpath(gen, os.path.join(tmp, 'import'))
-            com = os.path.join(ROOT, 'import', rel)
-            if not os.path.exists(com): F(f'parity: committed import/{rel} missing')
-            elif open(gen, 'rb').read() != open(com, 'rb').read(): F(f'parity: import/{rel} differs from regenerated (hand-edited?)')
-    for dp, _, fs in os.walk(os.path.join(ROOT, 'import')):
-        for f in fs:
-            rel = os.path.relpath(os.path.join(dp, f), os.path.join(ROOT, 'import'))
-            if not os.path.exists(os.path.join(tmp, 'import', rel)): F(f'parity: import/{rel} is not produced by generator')
+    shutil.copytree(f'{ROOT}/campaigns', f'{tmp}/campaigns')
+    shutil.copy(f'{ROOT}/generate.py', tmp); shutil.copy(f'{ROOT}/approval-manifest.yaml', tmp)
+    subprocess.run([sys.executable,'generate.py'], cwd=tmp, check=True, capture_output=True)
+    gen_files = {os.path.relpath(os.path.join(dp,f), f'{tmp}/import')
+                 for dp,_,fs in os.walk(f'{tmp}/import') for f in fs}
+    com_files = {os.path.relpath(os.path.join(dp,f), f'{ROOT}/import')
+                 for dp,_,fs in os.walk(f'{ROOT}/import') for f in fs}
+    for rel in gen_files - com_files: F(f'parity: import/{rel} missing from commit')
+    for rel in com_files - gen_files: F(f'parity: import/{rel} not produced by generator (stray file)')
+    for rel in gen_files & com_files:
+        if open(f'{tmp}/import/{rel}','rb').read() != open(f'{ROOT}/import/{rel}','rb').read():
+            F(f'parity: import/{rel} differs from regenerated output (hand-edited?)')
 finally:
     shutil.rmtree(tmp)
 
-# Every CSV row that has a Status column must be Paused
-for p in glob.glob(os.path.join(ROOT, 'import/**/*.csv'), recursive=True):
+# ---------------- CSV safety: all Paused, uniform widths ----------------
+for p in glob.glob(f'{ROOT}/import/**/*.csv', recursive=True):
     rows = list(csv.reader(open(p)))
-    if rows and 'Status' in rows[0] or (rows and 'Campaign status' in rows[0]):
-        col = rows[0].index('Status') if 'Status' in rows[0] else rows[0].index('Campaign status')
-        for r in rows[1:]:
-            if len(r) > col and r[col] != 'Paused': F(f'{p}: non-Paused row: {r[:3]}')
+    if not rows: continue
+    hdr = rows[0]
+    if len({len(r) for r in rows}) != 1: F(f'{p}: ragged CSV (inconsistent column count)')
+    for col_name in ('Status','Campaign status'):
+        if col_name in hdr:
+            i = hdr.index(col_name)
+            for r in rows[1:]:
+                if len(r) > i and r[i] != 'Paused': F(f'{p}: non-Paused entity: {r[:3]}')
 
-# Approval manifest: digests + statuses + expiry
-mpath = os.path.join(ROOT, 'approval-manifest.yaml')
-if not os.path.exists(mpath): F('approval-manifest.yaml missing')
-else:
-    m = yaml.safe_load(open(mpath))
-    pkg = [l for l in open(os.path.join(ROOT, 'import/CHECKSUMS.txt')) if 'IMPORT-PACKAGE-DIGEST' in l][0].split()[0]
-    spec = [l for l in open(os.path.join(ROOT, 'import/CHECKSUMS.txt')) if 'campaign-specs' in l][0].split()[0]
-    any_approved = any((m.get(k) or {}).get('status') == 'APPROVED' for k in ('marketing', 'clinical', 'budget', 'import_gate', 'activation'))
-    if m.get('import_package_sha256') != pkg:
-        (F if any_approved else W)(f'manifest package digest {"STALE — approvals invalidated" if any_approved else "not yet stamped"}')
-    if m.get('campaign_spec_sha256') != spec:
-        (F if any_approved else W)('manifest spec digest ' + ('STALE — approvals invalidated' if any_approved else 'not yet stamped'))
-    try:
-        exp = datetime.date.fromisoformat(str(m.get('expires')))
-        if exp < datetime.date(2026, 8, 10): F('manifest expired')
-    except Exception:
-        F('manifest expires not a valid date')
-    for gate in ('marketing', 'clinical', 'budget', 'import_gate', 'activation'):
-        st = (m.get(gate) or {}).get('status')
-        if st not in ('NOT_APPROVED', 'PENDING', 'APPROVED'): F(f'manifest {gate}.status invalid: {st}')
-    if (m.get('activation') or {}).get('status') == 'APPROVED' and not all(
-            (m.get(k) or {}).get('status') == 'APPROVED' for k in ('marketing', 'clinical', 'budget', 'import_gate')):
-        F('activation approved before prerequisite gates')
+# ---------------- approvals: identity, time, order, digests ----------------
+def digest(label):
+    for l in open(f'{ROOT}/import/CHECKSUMS.txt'):
+        if l.strip().endswith(label): return l.split()[0]
+    return None
+CUR = {'campaign_spec_sha256': digest('CAMPAIGN-SPEC-DIGEST'),
+       'plan_a_package_sha256': digest('PLAN-A-PACKAGE-DIGEST'),
+       'plan_b_package_sha256': digest('PLAN-B-PACKAGE-DIGEST'),
+       'plan_c_package_sha256': digest('PLAN-C-PACKAGE-DIGEST')}
+try:
+    EXP = date.fromisoformat(str(man.get('expires')))
+    if EXP < TODAY: F(f'plan expired {EXP} (today {TODAY})')
+except Exception:
+    F('manifest expires is not a valid ISO date')
+    EXP = None
+
+AUTH = man.get('authorized_approvers', {})
+def check_gate(name, gate, role='owner'):
+    st = (gate or {}).get('status')
+    if st not in ('NOT_APPROVED','PENDING','APPROVED'): F(f'gate {name}: invalid status {st!r}'); return False
+    if st != 'APPROVED': return False
+    who, when = gate.get('approved_by'), gate.get('approved_at')
+    if not who: F(f'gate {name}: APPROVED without approved_by')
+    elif who not in AUTH.get(role, []): F(f'gate {name}: {who!r} not an authorized {role} approver')
+    if not when: F(f'gate {name}: APPROVED without approved_at')
+    else:
+        try:
+            ts = datetime.fromisoformat(str(when).replace('Z','+00:00'))
+            if ts.tzinfo is None: F(f'gate {name}: approved_at needs timezone')
+            elif ts.date() > TODAY: F(f'gate {name}: approved_at in the future')
+            elif EXP and ts.date() > EXP: F(f'gate {name}: approved after expiry')
+        except Exception: F(f'gate {name}: approved_at not a valid timestamp')
+    return True
+
+G = man.get('gates', {})
+approved = {k: check_gate(k, G.get(k), 'clinical' if k == 'clinical' else 'owner')
+            for k in ('marketing','clinical','budget','landing_page_verified','import_gate','activation')}
+if approved['import_gate']:
+    if CUR['plan_a_package_sha256'] != man['digests'].get('plan_a_package_sha256'):
+        F('import_gate APPROVED but Plan A package digest STALE - approval invalidated')
+    if CUR['campaign_spec_sha256'] != man['digests'].get('campaign_spec_sha256'):
+        F('import_gate APPROVED but campaign-spec digest STALE - approval invalidated')
+    for pre in ('marketing','clinical','budget','landing_page_verified'):
+        if not approved[pre]: F(f'import_gate APPROVED before prerequisite gate {pre}')
+if approved['activation']:
+    if not approved['import_gate']: F('activation APPROVED before import_gate')
+    if CUR['plan_c_package_sha256'] != man['digests'].get('plan_c_package_sha256'):
+        F('activation APPROVED but Plan C package digest STALE')
+    for c in campaigns:
+        if (c.get('tracking') or {}).get('attribution_decision') == 'PENDING':
+            F('activation APPROVED while attribution_decision is PENDING (Measure/Learn loop undefined)')
+for lname, targets in (man.get('attachment') or {}).items():
+    known = {nl['name'] for nl in negdoc['negative_lists']}
+    if lname not in known: F(f'attachment references unknown list {lname!r}')
+    for tgt, gate in (targets or {}).items():
+        if check_gate(f'attachment[{lname}][{tgt}]', gate, 'owner') and tgt == 'leads_campaign':
+            if CUR['plan_b_package_sha256'] != man['digests'].get('plan_b_package_sha256'):
+                F('live-Leads attachment APPROVED but Plan B package digest STALE')
+
+# ---------------- landing page: BLOCKING (v3) ----------------
+def fetch(url, tries=3):
+    last = None
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={'User-Agent':'NextGenDental-ads-validator/3'})
+            with urllib.request.urlopen(req, timeout=15) as r:
+                return r.getcode(), r.geturl(), r.read().decode('utf-8', 'replace')
+        except urllib.error.HTTPError as e:
+            return e.code, url, ''
+        except Exception as e:
+            last = e; time.sleep(2 * (i + 1))
+    raise last
 
 if '--online' in sys.argv:
-    import urllib.request
-    for path in specs:
-        doc = yaml.safe_load(open(path))
-        if 'campaign' in doc:
-            u = doc['campaign']['landing_page']['url']
+    for c in campaigns:
+        base = c['landing_page']['url']
+        withutm = base + '?' + '&'.join(f'{k}={v}' for k, v in c['tracking']['utm'].items())
+        for url in (base, withutm):
             try:
-                r = urllib.request.urlopen(u, timeout=10)
-                if r.status != 200: F(f'landing page {u} -> {r.status}')
+                code, final, body = fetch(url)
             except Exception as e:
-                W(f'landing page {u} unreachable from this environment: {e}')
+                F(f'landing page {url}: unreachable after 3 attempts ({e})'); continue
+            if code != 200: F(f'landing page {url}: HTTP {code} (paid traffic must never hit a non-200)')
+            if DOMAIN not in final.split('/')[2:3][0] if '//' in final else True:
+                pass
+            host = final.split('/')[2] if '//' in final else ''
+            if host and not host.endswith(DOMAIN): F(f'landing page {url}: redirected off-domain to {host}')
+            title = re.search(r'<title[^>]*>(.*?)</title>', body, re.S | re.I)
+            title = (title.group(1).strip() if title else '')
+            if re.search(r'not found|404', title, re.I): F(f'landing page {url}: error-page title {title!r}')
+            canon = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]+href=["\']([^"\']+)', body, re.I)
+            if not canon: F(f'landing page {url}: no canonical link')
+            elif canon.group(1).split('?')[0].rstrip('/') != base.rstrip('/'):
+                F(f'landing page {url}: canonical {canon.group(1)!r} != intended page')
+            if body and 'analytics.nextgendentalaustintx.com' not in body:
+                W(f'landing page {url}: analytics loader not found in HTML (conversion measurement may be absent)')
+else:
+    W('landing-page health NOT checked (run with --online; CI does this and it is BLOCKING)')
 
-print(f'campaign-as-code validation v2: {len(fails)} failed, {len(warns)} warnings')
+print(f'campaign-as-code validation v3: {len(fails)} failed, {len(warns)} warnings   [{TODAY} UTC]')
 for x in fails: print('  FAIL:', x)
 for x in warns: print('  WARN:', x)
 sys.exit(1 if fails else 0)

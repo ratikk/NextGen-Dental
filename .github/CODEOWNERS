@@ -1,0 +1,8 @@
+# Advertising changes require the account owner's review; clinical claims require a dentist.
+# (GitHub enforces this only with branch protection: require PR review from Code Owners.)
+/marketing/ads/                 @ratikk
+/marketing/ads/campaigns/       @ratikk
+/.github/workflows/ads-validate.yml @ratikk
+# Clinical claim review is a HUMAN gate recorded in approval-manifest.yaml
+# (gates.clinical, authorized_approvers.clinical) - GitHub handles cannot be
+# assumed for the dentists; the manifest is the record of their sign-off.

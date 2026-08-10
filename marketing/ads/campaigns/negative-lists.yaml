@@ -1,37 +1,53 @@
-# Shared negative-keyword lists (campaign-as-code) — REVISED per 2026-08-10 review.
-# Lists are CREATED UNATTACHED (Plan A). Attachment to the live Leads campaign is
-# Plan B (separate impact review + approval). Attachment to the new paused
-# campaign happens with Plan C activation review.
+# Shared negative-keyword lists — v3 (evidence recomputed per EXACT phrase, 2026-08-10)
+# Method: each phrase matched against the 876 real search-term rows (5 total/summary
+# rows excluded) using word-sequence containment; spend attributed by campaign.
+# Lists are CREATED UNATTACHED in Plan A. Attachment requires explicit per-list,
+# per-campaign approval in approval-manifest.yaml (attachment section).
 schema_version: 1
+source_report:
+  name: "Google Ads search terms report (owner-exported CSV)"
+  period: "2026-07-11..2026-08-09"
+  rows_total_in_file: 881
+  rows_actual_search_terms: 876      # corrected: 5 rows were totals/summaries
+  observed_at: "2026-08-10"
 negative_lists:
   - name: "NEG | Freebie Intent (low-risk)"
     risk_tier: low
+    phrase_count: 11
     evidence:
-      - source: "Google Ads search terms report CSV (owner-exported)"
+      - source: "search terms report, exact-phrase match of THIS list"
         period: "2026-07-11..2026-08-09"
-        sample: "881 terms; this category $155.33 / 29 clicks / 1 conversion"
+        sample: "21 of 876 terms matched; 29 clicks; $155.33 total; 1 conversion"
+        spend_by_campaign: "Performance Max $138.90 (24 clicks) | Leads $16.43 (5 clicks)"
         status: verified
         observed_at: "2026-08-10"
+        caveat: "These lists CANNOT attach to Performance Max; ~89% of this historical spend is therefore unaffected by any attachment proposed here."
     match_type: phrase
     terms: [free, "no cost", study, studies, trial, trials, "clinical trial", volunteer, grant, grants, "dental school"]
   - name: "NEG | Price-Sensitive (needs business confirmation)"
     risk_tier: confirm
+    phrase_count: 3
     evidence:
-      - source: "Same report; low volume"
+      - source: "search terms report, exact-phrase match of THIS list"
         period: "2026-07-11..2026-08-09"
-        sample: "minor spend; excluding may block price-conscious but bookable patients"
-        status: inferred
+        sample: "0 of 876 terms matched; $0.00; NO supporting evidence in the observed window"
+        spend_by_campaign: "none"
+        status: no_evidence
         observed_at: "2026-08-10"
+        caveat: "Speculative list. RECOMMENDATION: do not attach anywhere until a future report shows matching waste. Retained only as a named candidate."
     match_type: phrase
     terms: [cheapest, donation, "hygiene school"]
   - name: "NEG | Competitor Brands (strategy decision)"
     risk_tier: confirm
+    phrase_count: 30
     evidence:
-      - source: "Same report"
+      - source: "search terms report, exact-phrase match of THIS list"
         period: "2026-07-11..2026-08-09"
-        sample: "~$110 on navigational queries for other practices; 2 conversions of UNKNOWN quality (misdial hypothesis unproven)"
-        status: verified_spend_inferred_quality
+        sample: "127 of 876 terms matched (mostly zero-click impressions); 6 clicks; $84.57; 1 conversion of UNKNOWN quality"
+        spend_by_campaign: "Performance Max $84.57 (6 clicks, 1 conv) | Leads $0.00 (0 clicks)"
+        status: verified_spend_unknown_quality
         observed_at: "2026-08-10"
+        caveat: "Attaching to Leads would have affected $0.00 historically. Value is prospective only. The 1 conversion means exclusion could remove a (possibly real) lead — business/strategy decision, not a data-driven cleanup."
     match_type: phrase
     terms: ["aspen dental", "castle dental", "ideal dental", "rodeo dental", "7 to 7 dental",
             "ace dental", "trident dental", "kovar dental", "stonehaven dental",
@@ -42,23 +58,28 @@ negative_lists:
             "mint dentistry", "bright now", "western dental", "jefferson dental", "affordable dentures"]
   - name: "NEG | Far Geography (clearly outside strategy)"
     risk_tier: low
+    phrase_count: 14
     evidence:
-      - source: "Same report"
+      - source: "search terms report, exact-phrase match of THIS list"
         period: "2026-07-11..2026-08-09"
-        sample: "$11.16 / 325 impressions from 60-120min-away cities"
+        sample: "21 of 876 terms matched; 1 click; $3.41; 0 conversions"
+        spend_by_campaign: "Performance Max $3.41 (1 click) | Leads $0.00"
         status: verified
         observed_at: "2026-08-10"
+        caveat: "Earlier draft cited $11.16 using a broader city set than this list contains. Corrected. Presence-only geo targeting already provides the primary control; this list is defence-in-depth with near-zero measured impact."
     match_type: phrase
     terms: [temple, killeen, kerrville, cibolo, "harker heights", waco, belton,
             "copperas cove", "new braunfels", schertz, seguin, boerne, fredericksburg, "san antonio"]
-  - name: "NEG | Near-Metro (REVIEW ONLY - not for initial attachment)"
+  - name: "NEG | Near-Metro (REVIEW ONLY - never generated for import)"
     risk_tier: review
+    phrase_count: 7
     evidence:
-      - source: "Reviewer guidance 2026-08-10: a South Austin patient may legitimately compare against these; presence targeting already limits geography"
-        period: "n/a"
-        sample: "n/a"
-        status: policy
+      - source: "search terms report, exact-phrase match of THIS list"
+        period: "2026-07-11..2026-08-09"
+        sample: "65 of 876 terms matched; 1 click; $7.75; 1 CONVERSION ('cedar park modern dentistry')"
+        spend_by_campaign: "Performance Max $7.75 (1 click, 1 conv) | Leads $0.00"
+        status: counter_evidence
         observed_at: "2026-08-10"
+        caveat: "Blocking these would have blocked a recorded conversion. A South Austin resident may legitimately compare north-metro practices. NOT generated for import under any plan."
     match_type: phrase
     terms: [georgetown, "round rock", "cedar park", leander, hutto, taylor, lockhart]
-approvals_note: "See approval-manifest.yaml — plain YAML fields are not approval evidence."
