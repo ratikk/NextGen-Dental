@@ -37,3 +37,29 @@ terraform.tfstate.backup
 .bolt/
 .codesandbox/
 .vscode/
+
+# Python (test suites under marketing/ads write bytecode next to the sources)
+__pycache__/
+*.py[cod]
+.pytest_cache/
+venv/
+.venv/
+
+# Terraform working directories and variable files.
+# terraform.tfstate is already ignored above; .terraform/ holds provider
+# binaries and cached backend config, and *.tfvars routinely holds secrets.
+# NOTE: .terraform.lock.hcl is deliberately NOT ignored — it pins provider
+# versions and belongs in version control for reproducible plans.
+.terraform/
+*.tfvars
+*.tfvars.json
+crash.log
+
+# Local transfer artifacts. Files downloaded to the box arrive with the
+# punctuation stripped from their names (install-x.txt -> installx.txt), so
+# these patterns are deliberately loose.
+*.bundle
+*.tar.gz
+*.patch
+install*.txt
+install*.sh
