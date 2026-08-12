@@ -37,6 +37,33 @@ check "/contact" "200" ""
 check "/robots.txt" "200" ""
 check "/sitemap-index.xml" "200" "sitemap"
 
+# Every individual service page (Google Ads + organic landing pages).
+# Derived from the repo source, so a future service page is covered
+# automatically with no edit here. Added after the 2026-08-10 incident where
+# /services/dental-implants served a 404 for hours: only /services/ (the index)
+# was checked, so no automation saw it — an advertiser did.
+#
+# SMOKE_SERVICES=off skips this block. rollback.yml sets it, because a rollback
+# target may predate a service page that exists in the checked-out source, and
+# an emergency restore must never be blocked by that mismatch.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SERVICES_DIR="$SCRIPT_DIR/../../src/pages/services"
+if [ "${SMOKE_SERVICES:-on}" = "off" ]; then
+  echo "SKIP  service-page sweep (SMOKE_SERVICES=off)"
+elif [ -d "$SERVICES_DIR" ]; then
+  SERVICE_COUNT=0
+  for f in "$SERVICES_DIR"/*.astro; do
+    [ -e "$f" ] || continue                 # no matches: glob stayed literal
+    slug=$(basename "$f" .astro)
+    [ "$slug" = "index" ] && continue       # /services/ is checked above
+    check "/services/$slug" "200" ""
+    SERVICE_COUNT=$((SERVICE_COUNT + 1))
+  done
+  echo "INFO  service-page sweep covered $SERVICE_COUNT pages"
+else
+  echo "WARN  $SERVICES_DIR not found — service-page sweep skipped"
+fi
+
 # A hashed asset referenced by the homepage must load
 ASSET=$(curl -sS --max-time 30 "$BASE/" | grep -oE '/_astro/[^"]+\.(css|js)' | head -1 || true)
 if [ -n "$ASSET" ]; then
