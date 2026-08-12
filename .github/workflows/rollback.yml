@@ -90,6 +90,11 @@ jobs:
             --distribution-id "$PROD_DISTRIBUTION_ID" --paths "/*"
 
       - name: Post-rollback smoke tests
+        env:
+          # The restored release may predate a service page that exists in the
+          # checked-out source; an emergency restore must not be blocked by that
+          # mismatch. Core-page checks still apply.
+          SMOKE_SERVICES: "off"
         run: |
           sleep 30
           bash scripts/ci/smoke-test.sh https://nextgendentalaustintx.com
