@@ -9,7 +9,7 @@
 
 import {
   auditPage, findMarkdownArtifacts, imagesMissingAlt, invalidJsonLd,
-  visibleText, expectedCanonical, LIMITS, SITE,
+  visibleText, expectedCanonical, decodeHtmlEntities, LIMITS, SITE,
 } from './seo-audit.mjs';
 
 let pass = 0, fail = 0;
@@ -55,6 +55,43 @@ console.log('title rules');
 
   check('60-char title passes', audit({ route: '/', title: 'Your Trusted Family Dentist in South Austin | NextGen Dental' }).errors.length === 0);
   check('missing <title> -> error', auditPage('<html><head><link rel="canonical" href="' + SITE + '/x"/></head><body><h1>x</h1></body></html>', '/x').errors.some((e) => e.includes('missing <title>')));
+}
+
+console.log('HTML entities are decoded before measuring');
+{
+  // First real run against dist/ failed 4 in-limit titles because `&` ships as
+  // `&amp;`. The audit was measuring markup, not what a search engine renders.
+  check('&amp; -> &', decodeHtmlEntities('Braces &amp; Aligners') === 'Braces & Aligners');
+  check('&lt; &gt; -> < >', decodeHtmlEntities('a &lt;b&gt; c') === 'a <b> c');
+  check('numeric entity', decodeHtmlEntities('&#39;s') === "'s");
+  check('hex entity', decodeHtmlEntities('&#x2019;') === '\u2019');
+  check('single pass: &amp;lt; stays &lt;', decodeHtmlEntities('&amp;lt;') === '&lt;');
+  check('&amp; decodes to one displayed character',
+    decodeHtmlEntities('Dental Financing &amp; Insurance') === 'Dental Financing & Insurance');
+  check('numeric and hex ampersands both decode',
+    decodeHtmlEntities('Austin &#38; Buda &#x26; Kyle') === 'Austin & Buda & Kyle');
+  check('title length uses rendered text, not encoded HTML',
+    audit({ title: 'Dental Implant Process &amp; Recovery Timeline | NextGen Dental' })
+      .errors.every((e) => !e.includes('title 63 chars')));
+
+  // The four titles that actually failed CI, verbatim, as they appear in dist.
+  const shipped = [
+    'Dental Implant Process &amp; Recovery Timeline | NextGen Dental',
+    'Tongue Pain: Causes &amp; When to See a Dentist | NextGen Dental',
+    'Dental Financing &amp; Insurance | Austin, TX | NextGen Dental',
+    'Guide to Orthodontics | Braces &amp; Aligners | NextGen Dental',
+  ];
+  for (const t of shipped) {
+    const r = audit({ title: t });
+    check(`in-limit title with &amp; passes: ${decodeHtmlEntities(t).slice(0, 34)}...`,
+      !r.errors.some((e) => e.includes('chars (max')));
+  }
+  // and a genuinely over-limit title still fails after decoding
+  check('genuinely over-limit title still errors',
+    audit({ title: 'Dental Implant Process &amp; Recovery Timeline and More Words | NextGen Dental' })
+      .errors.some((e) => e.includes('chars (max')));
+  check('entity-encoded description measured decoded',
+    audit({ desc: 'Straighten teeth &amp; smile with Invisalign clear aligners at NextGen Dental in South Austin, Texas. Book your consultation with our team today.' }).warnings.length === 0);
 }
 
 console.log('canonical must self-reference');

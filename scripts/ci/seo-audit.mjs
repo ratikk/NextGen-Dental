@@ -41,15 +41,33 @@ export const LIMITS = {
 
 // ---------- tiny HTML helpers (regex is adequate for these specific assertions) ----------
 const stripComments = (h) => h.replace(/<!--[\s\S]*?-->/g, '');
+
+/**
+ * Decode HTML entities before measuring anything. Built output escapes `&` to
+ * `&amp;`, so "Braces & Aligners" occupies 5 more bytes in the file than the 1
+ * character a search engine renders. Measuring the raw markup made four
+ * in-limit titles look 4 chars over on this audit's first real run.
+ * Single pass, so `&amp;lt;` decodes to `&lt;` and not to `<`.
+ */
+export function decodeHtmlEntities(s) {
+  if (!s) return s;
+  return s.replace(/&(#x[0-9a-f]+|#\d+|amp|lt|gt|quot|apos|nbsp);/gi, (m, e) => {
+    const k = e.toLowerCase();
+    if (k.startsWith('#x')) return String.fromCodePoint(parseInt(k.slice(2), 16));
+    if (k.startsWith('#')) return String.fromCodePoint(parseInt(k.slice(1), 10));
+    return { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: '\u00a0' }[k] ?? m;
+  });
+}
+
 const tagText = (h, tag) => {
   const m = h.match(new RegExp(`<${tag}[^>]*>([\\s\\S]*?)</${tag}>`, 'i'));
-  return m ? m[1].replace(/<[^>]*>/g, '').trim() : null;
+  return m ? decodeHtmlEntities(m[1].replace(/<[^>]*>/g, '').trim()) : null;
 };
 const metaContent = (h, name) => {
   const m = h.match(new RegExp(`<meta[^>]+name=["']${name}["'][^>]*>`, 'i'));
   if (!m) return null;
   const c = m[0].match(/content=["']([^"']*)["']/i);
-  return c ? c[1] : null;
+  return c ? decodeHtmlEntities(c[1]) : null;
 };
 const linkHref = (h, rel) => {
   const m = h.match(new RegExp(`<link[^>]+rel=["']${rel}["'][^>]*>`, 'i'));
@@ -65,7 +83,8 @@ export function visibleText(html) {
     .replace(/<script[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style[\s\S]*?<\/style>/gi, ' ')
     .replace(/<head[\s\S]*?<\/head>/gi, ' ')
-    .replace(/<[^>]+>/g, ' ');
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&(#x[0-9a-f]+|#\d+|amp|lt|gt|quot|apos|nbsp);/gi, (m) => decodeHtmlEntities(m));
 }
 
 /** Literal markdown that leaked into rendered HTML — the PR #21 / Buda / About class. */
