@@ -16,7 +16,19 @@ const SERVICE_CATS    = Object.freeze(['preventive','cosmetic','restorative','em
 // Every provider we may switch to, enumerated NOW. The registry is deep-frozen and
 // guarded by blocking tests; a single-value enum meant that swapping booking vendor
 // would silently drop every appointment_click (fail-closed by design, so no throw).
-const BOOKING_PROVIDERS = Object.freeze(['zocdoc','direct','modento','other']);
+export const BOOKING_PROVIDERS = Object.freeze(['zocdoc','direct','modento','other']);
+
+/**
+ * Fold an unrecognised provider to 'other' instead of letting the event be
+ * rejected. clinicInfo.booking.provider is configured separately from this
+ * registry, so a future vendor added there but not here would fail the enum
+ * check — and because sendApprovedEvent is fail-closed, the appointment_click
+ * would vanish silently. Losing the vendor LABEL is acceptable; losing the
+ * CONVERSION COUNT is not.
+ */
+export function normalizeBookingProvider(provider) {
+  return BOOKING_PROVIDERS.includes(provider) ? provider : 'other';
+}
 const ARTICLE_CATS    = Object.freeze(['preventive','cosmetic','restorative','emergency','invisalign','veneers','other']);
 
 export const EVENT_REGISTRY = Object.freeze({

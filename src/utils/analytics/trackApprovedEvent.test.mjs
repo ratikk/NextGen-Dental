@@ -1,4 +1,4 @@
-import { trackApprovedEvent, normalizePath, classifyPageUrl, getPathPolicyStats, resetPathPolicyStats, EVENT_REGISTRY } from './trackApprovedEvent.mjs';
+import { trackApprovedEvent, normalizePath, classifyPageUrl, getPathPolicyStats, resetPathPolicyStats, EVENT_REGISTRY, BOOKING_PROVIDERS, normalizeBookingProvider } from './trackApprovedEvent.mjs';
 
 let pass = 0, fail = 0;
 const check = (label, cond) => { cond ? pass++ : fail++; if (!cond) console.log(`FAIL  ${label}`); };
@@ -147,6 +147,19 @@ for (const provider of ['zocdoc', 'direct', 'modento', 'other']) {
 }
 check('an unlisted provider is still rejected',
   ok('appointment_click', { page_category: 'home', cta_location: 'header', booking_provider: 'some-new-vendor' }, '/').error === 'value_not_in_allowlist');
+// normalizeBookingProvider is the backstop for the config/registry split: if
+// clinicInfo.booking.provider is ever set to a vendor missing from this enum,
+// fold to 'other' rather than let a fail-closed rejection eat the conversion.
+for (const p of BOOKING_PROVIDERS) {
+  check(`normalize keeps known provider ${p}`, normalizeBookingProvider(p) === p);
+}
+check('unknown vendor folds to other', normalizeBookingProvider('some-new-vendor') === 'other');
+check('undefined folds to other', normalizeBookingProvider(undefined) === 'other');
+check('empty string folds to other', normalizeBookingProvider('') === 'other');
+check('normalized unknown vendor is ACCEPTED by the registry (event survives)',
+  ok('appointment_click', { page_category: 'home', cta_location: 'header',
+      booking_provider: normalizeBookingProvider('brand-new-scheduler') }, '/').ok);
+
 check('provider enum is frozen', (() => {
   try { bp.push('rogue'); return false; } catch { return bp.length === 4; }
 })());

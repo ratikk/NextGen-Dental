@@ -123,9 +123,12 @@ const faqs = [
           Save time on your first visit by completing your new patient paperwork online. It's secure, easy, and lets us verify your insurance before you arrive.
         </p>
         <div class="flex flex-wrap justify-center gap-4">
+          <!-- Intake paperwork lives in the patient portal, not the booking
+               vendor. This previously sent patients promised "new patient
+               paperwork" to a booking widget. Not a booking click, so no
+               bookingProvider stamp. -->
           <Button
-            href={clinicInfo.booking.primary}
-            bookingProvider={clinicInfo.booking.provider}
+            href={clinicInfo.booking.patientPortal}
             text="Complete Forms Online"
             variant="primary"
             size="lg"

@@ -19,6 +19,30 @@ const { services } = Astro.props;
     </button>
   </div>
   
+  <!-- The mobile header bar has no room for a booking button (logo + directions
+       + phone + hamburger already fills 375px), so the menu is the only place a
+       mobile visitor can reach booking. Acquisition action first, above the nav,
+       so it is visible without scrolling past ten links. -->
+  <div class="flex flex-col gap-3 mb-6 pb-6 border-b border-gray-200">
+    <Button
+      href={clinicInfo.booking.primary}
+      bookingProvider={clinicInfo.booking.provider}
+      text="Book Online"
+      variant="primary"
+      size="lg"
+      target="_blank"
+      rel="noopener noreferrer"
+    />
+    <Button
+      href={clinicInfo.booking.patientPortal}
+      text="Patient Portal"
+      variant="outline"
+      size="lg"
+      target="_blank"
+      rel="noopener noreferrer"
+    />
+  </div>
+
   <nav class="flex flex-col gap-4">
     <a href="/" class="mobile-nav-link">Home</a>
     <a href="/about" class="mobile-nav-link">About</a>
@@ -81,14 +105,6 @@ const { services } = Astro.props;
     <a href="/reviews" class="mobile-nav-link">Reviews</a>
     <a href="/contact" class="mobile-nav-link">Contact</a>
 
-    <!-- Moved out of the mobile header bar to make room for the visible phone
-         number. Existing-patient action, so it belongs a level down. -->
-    <a
-      href={clinicInfo.booking.patientPortal}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="mobile-nav-link"
-    >Patient Portal</a>
   </nav>
 </div>
 

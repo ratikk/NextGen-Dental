@@ -1,3 +1,5 @@
+import type { BookingProvider } from './analytics/trackApprovedEvent';
+
 export const clinicInfo = {
   name: "NextGen Dental",
   phone: "(512) 649-4419",
@@ -37,8 +39,10 @@ export const clinicInfo = {
   booking: {
     /** Current: zocdoc. Future: direct scheduler URL. */
     primary: "https://www.zocdoc.com/practice/nextgen-dental-174383?lock=true&isNewPatient=false&referrerType=widget",
-    /** Must be a value in the booking_provider enum in trackApprovedEvent.mjs. */
-    provider: "zocdoc",
+    /** Typed against the analytics enum, so an unlisted vendor fails `astro check`
+     *  rather than silently dropping events. normalizeBookingProvider is the
+     *  runtime backstop if this ever gets past the type checker. */
+    provider: "zocdoc" as BookingProvider,
     patientPortal: "https://book.modento.io/nextgen-dental/patient-details"
   }
 };

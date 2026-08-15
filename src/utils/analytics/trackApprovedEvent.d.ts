@@ -7,5 +7,9 @@ export declare function normalizePath(rawUrl: string): string | null;
 export declare function getPathPolicyStats(): { aggregated: number; rejected: number };
 export declare function resetPathPolicyStats(): void;
 export declare function resolveWebsiteId(hostname: string): string | null;
+export declare const BOOKING_PROVIDERS: readonly ['zocdoc', 'direct', 'modento', 'other'];
+/** The only values clinicInfo.booking.provider may take. */
+export type BookingProvider = (typeof BOOKING_PROVIDERS)[number];
+export declare function normalizeBookingProvider(provider: string | undefined): BookingProvider;
 export declare function pageCategoryFor(pathname: string): string;
 export declare function sendApprovedEvent(eventName: string, props?: Record<string, string>): { ok: boolean; error?: string };
