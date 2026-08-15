@@ -3,92 +3,142 @@
  * Tests for seo-audit.mjs. Synthetic fixtures only — no build required.
  * Run: node scripts/ci/seo-audit.test.mjs
  *
- * Every check has both a positive case (fires on the real defect, taken verbatim
- * from what actually shipped) and a negative case (does not fire when clean).
+ * Every check has a positive case (fires on the real defect, taken verbatim from
+ * what actually shipped) and a negative case (silent when clean).
  */
 
-import { auditPage, findMarkdownArtifacts, imagesMissingAlt, invalidJsonLd, visibleText, LIMITS } from './seo-audit.mjs';
+import {
+  auditPage, findMarkdownArtifacts, imagesMissingAlt, invalidJsonLd,
+  visibleText, expectedCanonical, LIMITS, SITE,
+} from './seo-audit.mjs';
 
 let pass = 0, fail = 0;
 const check = (label, cond) => { if (cond) { pass++; } else { fail++; console.log(`  FAIL  ${label}`); } };
 
-const page = ({ title = 'Dental Implants in Austin, TX 78747 | NextGen Dental', desc = 'Replace missing teeth with dental implants at NextGen Dental in South Austin. Natural-looking, long-lasting restorations from experienced dentists.', body = '<h1>Dental Implants</h1><p>Hello</p>', head = '', robots = '' } = {}) => `<!DOCTYPE html><html><head>
+const DEFAULT_TITLE = 'Dental Implants in Austin, TX 78747 | NextGen Dental';
+const DEFAULT_DESC = 'Replace missing teeth with dental implants at NextGen Dental in South Austin. Natural-looking, long-lasting restorations from experienced dentists.';
+
+/** Build a page whose canonical self-references `route` unless overridden. */
+function html({ route = '/services/dental-implants', title = DEFAULT_TITLE, desc = DEFAULT_DESC,
+                body = '<h1>Dental Implants</h1><p>Hello</p>', head = '', robots = null,
+                canonical = undefined } = {}) {
+  const canon = canonical === undefined ? expectedCanonical(route) : canonical;
+  return `<!DOCTYPE html><html><head>
 <title>${title}</title>
 <meta name="description" content="${desc}" />
-${robots ? `<meta name="robots" content="${robots}" />` : ''}
-<link rel="canonical" href="https://nextgendentalaustintx.com/services/dental-implants" />
+${robots !== null ? `<meta name="robots" content="${robots}" />` : ''}
+${canon === null ? '' : `<link rel="canonical" href="${canon}" />`}
 ${head}</head><body>${body}</body></html>`;
+}
+const audit = (opts = {}) => auditPage(html(opts), opts.route || '/services/dental-implants');
 
 console.log('baseline');
 {
-  const r = auditPage(page(), '/services/dental-implants');
+  const r = audit();
   check('clean page has no errors', r.errors.length === 0);
   check('clean page has no warnings', r.warnings.length === 0);
+  check('homepage clean', audit({ route: '/', title: 'Family Dentist in South Austin, TX 78747 | NextGen Dental' }).errors.length === 0);
 }
 
 console.log('title rules');
 {
-  // The exact string that shipped before PR #21.
   const shipped = 'Sedation Dentist Austin, TX (78747) | Anxiety-Free Dentistry | NextGen Dental | NextGen Dental Austin, TX';
-  const r = auditPage(page({ title: shipped }), '/x');
+  const r = audit({ title: shipped });
   check('double-branded title -> error', r.errors.some((e) => e.includes('brand appears 2x')));
   check('over-length title -> error', r.errors.some((e) => e.includes(`max ${LIMITS.titleMax}`)));
 
-  // The exact string PR #21 shipped for the homepage: 65 chars, brand once.
+  // Exactly what PR #21 shipped for the homepage.
   const homepage = 'Top-Rated Family Dentist in South Austin (78747) | NextGen Dental';
-  const h = auditPage(page({ title: homepage }), '/');
-  check('65-char homepage title -> error (the bug the script exists to catch)',
-    h.errors.some((e) => e.includes('65 chars')));
-  check('65-char title is NOT flagged as double-branded', !h.errors.some((e) => e.includes('brand appears')));
+  const h = audit({ route: '/', title: homepage });
+  check('65-char homepage title -> error (the bug this gate exists for)', h.errors.some((e) => e.includes('65 chars')));
+  check('65-char title is not misreported as double-branded', !h.errors.some((e) => e.includes('brand appears')));
 
-  check('60-char title passes', auditPage(page({ title: 'Your Trusted Family Dentist in South Austin | NextGen Dental' }), '/').errors.length === 0);
-  check('missing title -> error', auditPage(`<html><head><link rel="canonical" href="https://x.com/"/></head><body><h1>x</h1></body></html>`, '/').errors.some((e) => e.includes('missing <title>')));
+  check('60-char title passes', audit({ route: '/', title: 'Your Trusted Family Dentist in South Austin | NextGen Dental' }).errors.length === 0);
+  check('missing <title> -> error', auditPage('<html><head><link rel="canonical" href="' + SITE + '/x"/></head><body><h1>x</h1></body></html>', '/x').errors.some((e) => e.includes('missing <title>')));
+}
+
+console.log('canonical must self-reference');
+{
+  check('expectedCanonical("/") is the bare origin', expectedCanonical('/') === SITE);
+  check('expectedCanonical strips trailing slash', expectedCanonical('/services/invisalign/') === `${SITE}/services/invisalign`);
+
+  check('correct self-referencing canonical passes',
+    audit({ route: '/services/invisalign', title: 'Invisalign® Clear Aligners | Austin, TX | NextGen Dental' }).errors.length === 0);
+
+  // Astro emits directory-format routes with a trailing slash; the built file path has none.
+  check('trailing-slash difference is tolerated',
+    audit({ route: '/services/invisalign', canonical: `${SITE}/services/invisalign/`,
+            title: 'Invisalign® Clear Aligners | Austin, TX | NextGen Dental' }).errors.length === 0);
+
+  check('canonical pointing at the homepage -> error',
+    audit({ route: '/services/invisalign', canonical: `${SITE}/` }).errors.some((e) => e.includes('canonical mismatch')));
+
+  check('canonical on the wrong domain -> error',
+    audit({ canonical: 'https://nextgendentaltx.com/services/dental-implants' }).errors.some((e) => e.includes('canonical mismatch')));
+
+  check('relative canonical -> error',
+    audit({ canonical: '/services/dental-implants' }).errors.some((e) => e.includes('not absolute')));
+
+  check('missing canonical -> error',
+    audit({ canonical: null }).errors.some((e) => e.includes('missing canonical')));
+}
+
+console.log('noindex: required on 404, forbidden elsewhere');
+{
+  const t404 = 'Page Not Found | NextGen Dental';
+  const d404 = 'The page you are looking for does not exist. Return to the NextGen Dental home page for South Austin family and cosmetic dentistry.';
+
+  check('404 WITHOUT noindex -> error',
+    auditPage(html({ route: '/404', title: t404, desc: d404, body: '<h1>404</h1>' }), '/404')
+      .errors.some((e) => e.includes('must be noindex')));
+
+  check('404 WITH noindex -> clean',
+    auditPage(html({ route: '/404', title: t404, desc: d404, robots: 'noindex, follow', body: '<h1>404</h1>' }), '/404').errors.length === 0);
+
+  check('noindex on an ordinary page -> error',
+    audit({ robots: 'noindex, nofollow' }).errors.some((e) => e.includes('unexpected noindex')));
+
+  check('index,follow on an ordinary page is fine', audit({ robots: 'index, follow' }).errors.length === 0);
+
+  // A 404's canonical is not meaningfully self-referencing; it must not be enforced.
+  check('404 is exempt from the canonical self-reference check',
+    auditPage(html({ route: '/404', title: t404, desc: d404, robots: 'noindex, follow',
+                     canonical: `${SITE}/`, body: '<h1>404</h1>' }), '/404')
+      .errors.every((e) => !e.includes('canonical mismatch')));
 }
 
 console.log('markdown artifacts (Buda / About class)');
 {
   check('** in body -> detected', findMarkdownArtifacts('<p>If you live in **Buda, Kyle, or Onion Creek**, you deserve</p>').length === 1);
-  check('the About line 169 case -> detected',
-    findMarkdownArtifacts('<p>families in **Austin (78747)**, Buda, and Kyle.</p>').length === 1);
-  check('bio-string case -> detected',
-    findMarkdownArtifacts('<p>Now proudly serving the **South Austin** community</p>').length === 1);
-  check('markdown -> page error', auditPage(page({ body: '<h1>t</h1><p>off **Interstate 35**, near</p>' }), '/x').errors.some((e) => e.includes('literal markdown')));
+  check('About line 169 case -> detected', findMarkdownArtifacts('<p>families in **Austin (78747)**, Buda, and Kyle.</p>').length === 1);
+  check('bio-string case -> detected', findMarkdownArtifacts('<p>Now proudly serving the **South Austin** community</p>').length === 1);
+  check('markdown -> page error', audit({ body: '<h1>t</h1><p>off **Interstate 35**, near</p>' }).errors.some((e) => e.includes('literal markdown')));
   check('<strong> is clean', findMarkdownArtifacts('<p>off <strong>Interstate 35</strong>, near</p>').length === 0);
-  check('CSS/JS asterisks in <style>/<script> ignored',
-    findMarkdownArtifacts('<style>/** comment */ a{}</style><script>a**b</script><p>fine</p>').length === 0);
+  check('CSS/JS asterisks ignored', findMarkdownArtifacts('<style>/** c */ a{}</style><script>a**b</script><p>fine</p>').length === 0);
   check('markdown link syntax -> detected', findMarkdownArtifacts('<p>See [our page](/services) now</p>').length === 1);
   check('heading syntax -> detected', findMarkdownArtifacts('<p>ok</p>\n## Not a heading\n').length === 1);
-  check('head is excluded from visible text', !visibleText(page({ head: '<meta name="x" content="**y**">' })).includes('**y**'));
+  check('head excluded from visible text', !visibleText(html({ head: '<meta name="x" content="**y**">' })).includes('**y**'));
 }
 
-console.log('noindex / canonical / h1');
+console.log('h1 and structured data');
 {
-  check('noindex -> error', auditPage(page({ robots: 'noindex, nofollow' }), '/x').errors.some((e) => e.includes('noindex')));
-  check('index,follow is fine', auditPage(page({ robots: 'index, follow' }), '/x').errors.length === 0);
-  check('missing canonical -> error', auditPage('<html><head><title>A reasonable title here</title></head><body><h1>x</h1></body></html>', '/x').errors.some((e) => e.includes('missing canonical')));
-  check('two h1 -> error', auditPage(page({ body: '<h1>a</h1><h1>b</h1>' }), '/x').errors.some((e) => e.includes('2 <h1>')));
-  check('zero h1 -> warning not error', (() => { const r = auditPage(page({ body: '<p>no heading</p>' }), '/x'); return r.warnings.some((w) => w.includes('no <h1>')) && !r.errors.length; })());
-}
-
-console.log('structured data');
-{
+  check('two h1 -> error', audit({ body: '<h1>a</h1><h1>b</h1>' }).errors.some((e) => e.includes('2 <h1>')));
+  check('zero h1 -> warning not error', (() => { const r = audit({ body: '<p>no heading</p>' }); return r.warnings.some((w) => w.includes('no <h1>')) && !r.errors.length; })());
   check('unparseable JSON-LD -> flagged', invalidJsonLd('<script type="application/ld+json">{bad json}</script>').length === 1);
   check('valid JSON-LD -> clean', invalidJsonLd('<script type="application/ld+json">{"@type":"Dentist"}</script>').length === 0);
-  // The Buda breadcrumb defect: href="#" reached BreadcrumbList as an item URL.
-  const bc = '<script type="application/ld+json">{"@type":"BreadcrumbList","itemListElement":[{"item":"https://nextgendentalaustintx.com/#"}]}</script>';
-  check('placeholder # URL in schema -> flagged', invalidJsonLd(bc).length === 1);
+  const bc = '<script type="application/ld+json">{"@type":"BreadcrumbList","itemListElement":[{"item":"' + SITE + '/#"}]}</script>';
+  check('placeholder "#" URL in schema -> flagged (the Buda breadcrumb)', invalidJsonLd(bc).length === 1);
 }
 
 console.log('images and descriptions');
 {
   check('img without alt -> flagged', imagesMissingAlt('<img src="a.jpg">').length === 1);
-  check('alt="" (decorative) is allowed', imagesMissingAlt('<img src="a.jpg" alt="">').length === 0);
-  check('img with alt is clean', imagesMissingAlt('<img src="a.jpg" alt="A dentist">').length === 0);
-  // The Buda description defect, verbatim.
+  check('alt="" (decorative) allowed', imagesMissingAlt('<img src="a.jpg" alt="">').length === 0);
+  check('img with alt clean', imagesMissingAlt('<img src="a.jpg" alt="A dentist">').length === 0);
   const buda = 'Looking for a top-rated dentist near Buda, TX? NextGen Dental is located just minutes north on I-35 in South Austin. comprehensive family & cosmetic dentistry.';
-  check('lowercase sentence start -> warning', auditPage(page({ desc: buda }), '/x').warnings.some((w) => w.includes('lowercase sentence start')));
-  check('well-formed description is clean', auditPage(page(), '/x').warnings.length === 0);
-  check('short description -> warning', auditPage(page({ desc: 'Too short.' }), '/x').warnings.some((w) => w.includes('min')));
+  check('lowercase sentence start -> warning', audit({ desc: buda }).warnings.some((w) => w.includes('lowercase sentence start')));
+  check('well-formed description clean', audit().warnings.length === 0);
+  check('short description -> warning', audit({ desc: 'Too short.' }).warnings.some((w) => w.includes('min')));
 }
 
 console.log(`\n${pass} passed, ${fail} failed`);

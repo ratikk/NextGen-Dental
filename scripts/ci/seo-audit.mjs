@@ -18,6 +18,20 @@ import { join, relative, sep } from 'node:path';
 
 const DIST = process.argv[2] || 'dist';
 
+// Must match `site` in astro.config.mjs. Override for a non-production build with
+// SEO_AUDIT_SITE, e.g. SEO_AUDIT_SITE=https://dev.nextgendentalaustintx.com
+export const SITE = (process.env.SEO_AUDIT_SITE || 'https://nextgendentalaustintx.com').replace(/\/$/, '');
+
+/** Routes that must be noindex. Everything else must not be. */
+const NOINDEX_ROUTES = new Set(['/404']);
+
+const normalizeUrl = (u) => u.replace(/\/+$/, '');
+
+/** The self-referencing canonical a given route must carry. */
+export function expectedCanonical(route) {
+  return normalizeUrl(route === '/' ? SITE : SITE + route);
+}
+
 export const LIMITS = {
   titleMax: 60,
   titleMin: 10,
@@ -123,12 +137,28 @@ export function auditPage(html, route) {
     if (occurrences > 1) errors.push(`brand appears ${occurrences}x in title: "${title}"`);
   }
 
+  // noindex is required on 404 and forbidden everywhere else. Treating any noindex
+  // as an error would have blocked the correct fix for the 404 page.
+  const mustNoindex = NOINDEX_ROUTES.has(normalizeUrl(route) || '/');
   const robots = metaContent(html, 'robots') || '';
-  if (/noindex/i.test(robots)) errors.push(`noindex present: "${robots}"`);
+  if (mustNoindex && !/noindex/i.test(robots)) {
+    errors.push(`this route must be noindex, robots is "${robots || '(absent)'}"`);
+  } else if (!mustNoindex && /noindex/i.test(robots)) {
+    errors.push(`unexpected noindex: "${robots}"`);
+  }
 
+  // A canonical that merely exists is not enough — every page pointing at the
+  // homepage would satisfy that and deindex the site.
   const canonical = linkHref(html, 'canonical');
-  if (!canonical) errors.push('missing canonical');
-  else if (!/^https?:\/\//i.test(canonical)) errors.push(`canonical not absolute: ${canonical}`);
+  if (!canonical) {
+    errors.push('missing canonical');
+  } else if (!/^https?:\/\//i.test(canonical)) {
+    errors.push(`canonical not absolute: ${canonical}`);
+  } else if (!mustNoindex) {
+    const actual = normalizeUrl(canonical);
+    const expected = expectedCanonical(route);
+    if (actual !== expected) errors.push(`canonical mismatch: expected ${expected}, got ${actual}`);
+  }
 
   const h1 = countTag(html, 'h1');
   if (h1 === 0) warnings.push('no <h1>');
@@ -191,6 +221,21 @@ function main() {
   }
   for (const [t, rs] of dupTitles) { console.log(`  ERROR  duplicate <title> on ${rs.join(', ')}: "${t}"`); nErr++; }
   for (const [, rs] of dupDescs) { console.log(`  warn   duplicate meta description on ${rs.join(', ')}`); nWarn++; }
+
+  // If nearly every page reports the same canonical origin mismatch, the SITE
+  // setting is wrong rather than the pages being wrong. Say so once, loudly,
+  // instead of printing the same error forty times and burying the cause.
+  const mism = results.flatMap((r) => r.errors.filter((e) => e.startsWith('canonical mismatch')));
+  if (mism.length >= 3 && mism.length >= results.length / 2) {
+    const origins = new Set(mism.map((e) => (e.match(/got (https?:\/\/[^/]+)/) || [])[1]).filter(Boolean));
+    if (origins.size === 1) {
+      const seen = [...origins][0];
+      console.log(`\n  HINT: ${mism.length}/${results.length} pages canonicalise to ${seen} but this`);
+      console.log(`  audit expects ${SITE}. That is a configuration mismatch, not ${mism.length} page defects.`);
+      console.log(`  Either \`site\` in astro.config.mjs changed, or this build is not production.`);
+      console.log(`  Re-run with: SEO_AUDIT_SITE=${seen} node scripts/ci/seo-audit.mjs ${DIST}`);
+    }
+  }
 
   console.log(`\n${nErr} error(s), ${nWarn} warning(s)`);
   if (nErr) {
