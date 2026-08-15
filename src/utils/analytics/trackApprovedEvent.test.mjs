@@ -134,5 +134,22 @@ check('category blog', pageCategoryFor('/blog/x') === 'blog');
 check('category patient-ed', pageCategoryFor('/patient-education/faq') === 'patient-info');
 check('category unknown', pageCategoryFor('/keystatic') === 'other');
 
+// ---------- booking provider is swappable (Zocdoc is paid marketing, temporary) ----------
+// Before this, booking_provider was Object.freeze(['zocdoc']). The day the vendor
+// changed, every appointment_click would have been rejected as value_not_in_allowlist
+// and dropped silently, because sendApprovedEvent is fail-closed and never throws.
+const bp = EVENT_REGISTRY.appointment_click.properties.booking_provider;
+check('enum carries every provider we may switch to',
+  bp.join(',') === 'zocdoc,direct,modento,other');
+for (const provider of ['zocdoc', 'direct', 'modento', 'other']) {
+  check(`booking_provider=${provider} accepted`,
+    ok('appointment_click', { page_category: 'home', cta_location: 'header', booking_provider: provider }, '/').ok);
+}
+check('an unlisted provider is still rejected',
+  ok('appointment_click', { page_category: 'home', cta_location: 'header', booking_provider: 'some-new-vendor' }, '/').error === 'value_not_in_allowlist');
+check('provider enum is frozen', (() => {
+  try { bp.push('rogue'); return false; } catch { return bp.length === 4; }
+})());
+
 console.log(`\nnode ${process.version} · ${pass} passed · ${fail} failed · exit ${fail ? 1 : 0}`);
 process.exit(fail ? 1 : 0);

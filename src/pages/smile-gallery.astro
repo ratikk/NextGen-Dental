@@ -125,7 +125,8 @@ const galleryItems = [
           </p>
           <div class="flex flex-wrap justify-center gap-4">
             <Button
-              href={clinicInfo.booking.zocdoc}
+              href={clinicInfo.booking.primary}
+              bookingProvider={clinicInfo.booking.provider}
               text="Book Consultation"
               variant="primary"
               size="lg"

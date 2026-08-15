@@ -13,12 +13,16 @@
 const PAGE_CATEGORIES = Object.freeze(['home','service','blog','location','patient-info','about','contact','financing','other']);
 const CTA_LOCATIONS   = Object.freeze(['header','hero','body','footer','sticky']);
 const SERVICE_CATS    = Object.freeze(['preventive','cosmetic','restorative','emergency','orthodontic','other']);
+// Every provider we may switch to, enumerated NOW. The registry is deep-frozen and
+// guarded by blocking tests; a single-value enum meant that swapping booking vendor
+// would silently drop every appointment_click (fail-closed by design, so no throw).
+const BOOKING_PROVIDERS = Object.freeze(['zocdoc','direct','modento','other']);
 const ARTICLE_CATS    = Object.freeze(['preventive','cosmetic','restorative','emergency','invisalign','veneers','other']);
 
 export const EVENT_REGISTRY = Object.freeze({
   appointment_click: Object.freeze({
     required: Object.freeze(['page_category','cta_location','booking_provider']),
-    properties: Object.freeze({ page_category: PAGE_CATEGORIES, cta_location: CTA_LOCATIONS, booking_provider: Object.freeze(['zocdoc']) }),
+    properties: Object.freeze({ page_category: PAGE_CATEGORIES, cta_location: CTA_LOCATIONS, booking_provider: BOOKING_PROVIDERS }),
   }),
   phone_click: Object.freeze({
     required: Object.freeze(['page_category','cta_location']),

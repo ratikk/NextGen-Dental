@@ -33,8 +33,8 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
 
           <div class="flex items-center gap-2">
             <Button href={`tel:${rawPhone}`} text={`Call ${clinicInfo.displayPhone}`} variant="outline" size="lg" />
-            <Button href={clinicInfo.booking.zocdoc} text="Book Online" variant="primary" size="lg" target="_blank" rel="noopener noreferrer" />
-            <Button href={clinicInfo.booking.modento} text="Patient Portal" variant="outline" size="lg" target="_blank" rel="noopener noreferrer" />
+            <Button href={clinicInfo.booking.primary} bookingProvider={clinicInfo.booking.provider} text="Book Online" variant="primary" size="lg" target="_blank" rel="noopener noreferrer" />
+            <Button href={clinicInfo.booking.patientPortal} text="Patient Portal" variant="outline" size="lg" target="_blank" rel="noopener noreferrer" />
           </div>
         </div>
       </div>

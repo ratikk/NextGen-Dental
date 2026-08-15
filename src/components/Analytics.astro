@@ -56,9 +56,13 @@
     const href = a.getAttribute('href') || '';
     if (href.startsWith('tel:')) {
       sendApprovedEvent('phone_click', { page_category: pageCategory(), cta_location: ctaLocation(a) });
-    } else if (/(^|\.)zocdoc\.com$/.test((a as HTMLAnchorElement).hostname || '')) {
+    } else if ((a as HTMLElement).dataset?.bookingProvider || /(^|\.)zocdoc\.com$/.test((a as HTMLAnchorElement).hostname || '')) {
+      // Prefer the stamped provider so this keeps working when the booking
+      // vendor changes. The zocdoc hostname test is a TRANSITION FALLBACK for any
+      // hardcoded URL that predates clinicInfo.booking — delete it with Zocdoc.
+      const provider = (a as HTMLElement).dataset?.bookingProvider || 'zocdoc';
       sendApprovedEvent('appointment_click', {
-        page_category: pageCategory(), cta_location: ctaLocation(a), booking_provider: 'zocdoc',
+        page_category: pageCategory(), cta_location: ctaLocation(a), booking_provider: provider,
       });
     } else if (window.location.pathname.startsWith('/blog/') && href.startsWith('/services/')) {
       const articleSlug = window.location.pathname.split('/')[2] || '';
