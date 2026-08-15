@@ -32,10 +32,7 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
           </a>
 
           <div class="flex items-center gap-2">
-            <div class="secure-call-wrapper" data-phone={rawPhone}>
-              <!-- SEO FIX: Point to /contact so bots see a valid link. JS will intercept for humans. -->
-              <Button href="/contact" text="Call Us" variant="outline" size="lg" />
-            </div>
+            <Button href={`tel:${rawPhone}`} text={`Call ${clinicInfo.displayPhone}`} variant="outline" size="lg" />
             <Button href={clinicInfo.booking.zocdoc} text="Book Online" variant="primary" size="lg" target="_blank" rel="noopener noreferrer" />
             <Button href={clinicInfo.booking.modento} text="Patient Portal" variant="outline" size="lg" target="_blank" rel="noopener noreferrer" />
           </div>
@@ -64,9 +61,7 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
               <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </a>
-          <div class="secure-call-wrapper-mobile" data-phone={rawPhone}>
-            <Button href="/contact" text="Call" variant="outline" size="sm" />
-          </div>
+          <Button href={`tel:${rawPhone}`} text="Call" variant="outline" size="sm" />
           <Button href={clinicInfo.booking.modento} text="Patient Portal" variant="outline" size="sm" target="_blank" rel="noopener noreferrer" />
           <button id="menu-toggle-right" class="text-gray-700 focus:outline-none ml-2" aria-label="Open Mobile Menu">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -127,17 +122,4 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
       mobileMenu.classList.toggle('hidden');
     });
   }
-
-  // Logic: Intercept the click on /contact and force a call instead
-  const callWrappers = document.querySelectorAll('.secure-call-wrapper, .secure-call-wrapper-mobile');
-  callWrappers.forEach(wrapper => {
-    const btn = wrapper.querySelector('a');
-    if (btn && wrapper instanceof HTMLElement) {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault(); // STOP browser from going to /contact
-        const phone = wrapper.dataset.phone;
-        if (phone) window.location.href = `tel:${phone}`; // Dial number instead
-      });
-    }
-  });
 </script>
