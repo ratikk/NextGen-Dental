@@ -28,7 +28,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'dental-implant-process-recovery',
     title: 'The Dental Implant Process: Timeline, Recovery, and What to Expect',
-    seoTitle: 'Dental Implant Process & Recovery: What to Expect',
+    seoTitle: 'Dental Implant Process & Recovery Timeline',
     seoDescription: 'From consultation to final crown: a South Austin dentist walks through the dental implant timeline, healing stages, and practical recovery tips.',
     excerpt: 'Thinking about a dental implant but unsure what the journey involves? Here is the full timeline — consultation to final crown — and what recovery really feels like.',
     date: '2026-08-07',
@@ -67,7 +67,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'dental-emergency-what-to-do',
     title: 'Dental Emergency in South Austin: What to Do First',
-    seoTitle: 'Dental Emergency in South Austin: What to Do First',
+    seoTitle: 'South Austin Dental Emergency: What to Do',
     seoDescription: 'Knocked-out tooth, severe toothache, or swelling? A South Austin dentist explains what to do in the first hour and when to go to the ER.',
     excerpt: 'The first hour matters most in a dental emergency. Here is exactly what to do for the most common situations — and when to skip the dentist and go straight to the ER.',
     date: '2026-08-07',
@@ -112,7 +112,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'why-get-veneers',
     title: 'Why Do People Get Veneers?',
-    seoTitle: 'Why Do People Get Dental Veneers? Austin Cosmetic Dentistry',
+    seoTitle: 'Why Do People Get Dental Veneers?',
     seoDescription: 'Are dental veneers right for you? Learn how they fix chips, gaps, and stains for a confident smile.',
     excerpt: 'The dental veneers market is booming. From fixing chips to closing gaps, see how this cosmetic treatment transforms smiles.',
     date: '2025-12-01',
@@ -148,7 +148,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'invisalign-vs-braces',
     title: 'Invisalign vs. Braces: What is Right for You?',
-    seoTitle: 'Invisalign vs. Braces in Austin: Which Is Right for You?',
+    seoTitle: 'Invisalign vs. Braces in Austin, TX',
     seoDescription: 'Comparing clear aligners vs traditional metal braces in South Austin.',
     excerpt: 'Choosing between clear aligners and traditional metal braces is a big decision. We break down the cost, comfort, and speed.',
     date: '2025-11-27',
@@ -181,7 +181,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'tongue-pain-causes',
     title: 'Why Does The Side Of My Tongue Hurt?',
-    seoTitle: 'Tongue Pain: Common Causes & When to See a Dentist',
+    seoTitle: 'Tongue Pain: Causes & When to See a Dentist',
     seoDescription: 'Experiencing tongue pain? Learn common causes from trauma to vitamin deficiency.',
     excerpt: 'It may not seem like a big deal at first, but tongue pain can indicate underlying issues. Here is what to look out for.',
     date: '2025-11-20',
@@ -214,7 +214,7 @@ export const blogPosts: BlogPost[] = [
   {
     id: 'replace-toothbrush',
     title: 'How Often Should I Change My Toothbrush?',
-    seoTitle: 'How Often Should You Replace Your Toothbrush?',
+    seoTitle: 'How Often to Replace Your Toothbrush',
     seoDescription: 'Worn bristles clean poorly. Learn how often to replace your toothbrush and the signs it is time for a new one.',
     excerpt: 'A worn-out toothbrush cannot clean your teeth effectively. Here is when to swap it out and why it matters.',
     date: '2025-11-10',

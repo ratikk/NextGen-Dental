@@ -52,6 +52,12 @@ jobs:
           PUBLIC_GOOGLE_ADS_ID: ${{ vars.PUBLIC_GOOGLE_ADS_ID }}
         run: npm run build
 
+      - name: SEO audit unit tests (blocking)
+        run: node scripts/ci/seo-audit.test.mjs
+
+      - name: SEO audit of built output (blocking on errors)
+        run: node scripts/ci/seo-audit.mjs dist
+
       - name: Generate artifact manifest (validation)
         run: node scripts/ci/make-manifest.mjs dist manifest.json && head -c 400 manifest.json
 
