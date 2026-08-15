@@ -80,6 +80,15 @@ const { services } = Astro.props;
     <a href="/financing" class="mobile-nav-link">Financing</a>
     <a href="/reviews" class="mobile-nav-link">Reviews</a>
     <a href="/contact" class="mobile-nav-link">Contact</a>
+
+    <!-- Moved out of the mobile header bar to make room for the visible phone
+         number. Existing-patient action, so it belongs a level down. -->
+    <a
+      href={clinicInfo.booking.modento}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mobile-nav-link"
+    >Patient Portal</a>
   </nav>
 </div>
 
