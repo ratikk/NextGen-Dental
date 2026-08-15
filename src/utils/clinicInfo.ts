@@ -28,8 +28,6 @@ export const clinicInfo = {
   social: {
     facebook: "https://www.facebook.com/people/Next-Gen-Dental/61558752512764/",
     // I added a placeholder for Twitter since it was missing in your source file
-    // to prevent build errors if the footer expects a string.
-    twitter: "https://x.com/nextgendentaltx", 
     yelp: "https://www.yelp.com/biz/next-gen-dental-no-title"
   },
   booking: {

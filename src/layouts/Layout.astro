@@ -13,7 +13,10 @@ import 'swiper/css/pagination';
 import 'aos/dist/aos.css';
 
 export interface Props {
+  /** Unbranded page title. The layout appends the practice name once. */
   title: string;
+  /** Full control of <title>. When set, the layout uses it verbatim. */
+  seoTitle?: string;
   description?: string;
   image?: string;
   canonical?: string;
@@ -25,6 +28,7 @@ export interface Props {
 
 const {
   title,
+  seoTitle,
   description = "NextGen Dental is a top-rated family and cosmetic dentist in South Austin (78747). Gentle exams, cleanings, implants, Invisalign, and emergency care.",
   image,
   canonical = Astro.url.pathname,
@@ -47,14 +51,16 @@ const ogImage = image
   ? (image.startsWith('http') ? image : `${siteUrl}${image}`)
   : `${siteUrl}/images/og-default.jpg`;
 
-// Extract @handle from the social Twitter/X URL (e.g. "https://x.com/nextgendentaltx" -> "@nextgendentaltx")
-const twitterHandle = clinicInfo.social.twitter
-  ? '@' + clinicInfo.social.twitter.replace(/\/$/, '').split('/').pop()
-  : null;
-
-const pageTitle = title === `Welcome to ${clinicInfo.name}`
-  ? `${clinicInfo.name} | Top-Rated Dentist in Austin, TX | Family & Cosmetic Dentistry`
-  : `${title} | ${clinicInfo.name} Austin, TX`;
+// Page title. Pages pass an UNBRANDED `title`; the brand is appended exactly once
+// here. A page may pass `seoTitle` to control the whole string. The `includes`
+// guard keeps this idempotent if a branded title is ever passed by mistake, so the
+// duplication this replaced ("... | NextGen Dental | NextGen Dental Austin, TX")
+// cannot silently return.
+const pageTitle = seoTitle
+  ? seoTitle
+  : title.includes(clinicInfo.name)
+    ? title
+    : `${title} | ${clinicInfo.name}`;
 
 // Build opening hours from clinicInfo so schema stays in sync with displayed hours.
 // Schema.org expects 24h "HH:MM" format; our source data is "08:30 AM – 5:00 PM" style.
@@ -103,9 +109,10 @@ const dentistSchema = {
     "longitude": clinicInfo.coordinates.longitude
   },
   "openingHoursSpecification": openingHoursSpecification,
+  // Only verified profiles belong in sameAs — an unverified URL asserts an entity
+  // relationship to search engines that may not exist.
   "sameAs": [
     clinicInfo.social.facebook,
-    clinicInfo.social.twitter,
     clinicInfo.social.yelp
   ]
 };
@@ -141,7 +148,6 @@ const dentistSchema = {
     <meta property="twitter:title" content={pageTitle} />
     <meta property="twitter:description" content={description} />
     {ogImage && <meta property="twitter:image" content={ogImage} />}
-    {twitterHandle && <meta name="twitter:creator" content={twitterHandle} />}
 
     <!-- Schema -->
     <script type="application/ld+json" set:html={JSON.stringify(dentistSchema)} />
@@ -155,9 +161,13 @@ const dentistSchema = {
     <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
     <!-- Preload critical assets -->
-    <link rel="modulepreload" href="/src/components/Hero.astro" />
-    <link rel="preload" as="style" href="/_astro/montserrat-latin-700-normal.woff2" />
-    <link rel="preload" as="style" href="/_astro/open-sans-latin-400-normal.woff2" />
+    <!-- Font preloads removed deliberately. @fontsource CSS is bundled by Vite, which
+         content-hashes the .woff2 filenames, so a hardcoded /_astro/<name>.woff2 path
+         cannot be correct. The previous tags also used as="style" (wrong for fonts) and
+         omitted crossorigin, so they warned in the console and preloaded nothing. The
+         modulepreload of /src/components/Hero.astro pointed at a source path that does
+         not exist in the build. If font preloading is wanted, generate the tags at build
+         time from the emitted asset names. -->
 
 
     <slot name="head" />
