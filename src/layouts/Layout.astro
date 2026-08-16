@@ -2,6 +2,7 @@
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '../components/Analytics.astro';
+import StickyActions from '../components/StickyActions.astro';
 import { clinicInfo } from '../utils/clinicInfo';
 import '@fontsource/montserrat/700.css';
 import '@fontsource/montserrat/600.css';
@@ -185,12 +186,13 @@ const dentistSchema = {
       }
     </style>
   </head>
-  <body class="antialiased bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+  <body class="antialiased bg-gray-50 text-gray-800 min-h-screen flex flex-col pb-14 lg:pb-0">
     <Header />
     <main class="flex-grow">
       <slot />
     </main>
     <Footer />
+    <StickyActions />
 
     <!-- AOS Animation - Deferred -->
     <script>
