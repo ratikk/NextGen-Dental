@@ -67,7 +67,6 @@ const normalizedImages: HeroImage[] = images.map((img, i) => {
 
 const resolvedTitle = title || (isHomePage ? `Welcome to ${clinicInfo.name}` : '');
 const resolvedSubtitle = subtitle || (isHomePage ? 'Your trusted partner in dental care' : '');
-const rawPhone = clinicInfo.phone.replace(/\D/g, '');
 // Default on for the homepage: 60% of visitors land there and the first booking
 // action was ~2,900px down the page.
 const renderCtas = showCtas ?? (isHomePage && !showAppointmentForm);
@@ -141,12 +140,17 @@ const headingId = 'hero-heading';
         </div>
         </div>
 
-        {/* Primary actions sit BELOW the image, not above it: the headline sets
-            context, the image carries it, then the visitor is asked to act.
-            Full-width stacked under sm so each is a comfortable tap target;
-            side by side from sm up. Patient Portal is deliberately absent — it
-            serves existing patients and must not compete with the two
-            revenue-generating actions on the acquisition page. */}
+        {/* Actions sit BELOW the image: the headline sets context, the image
+            carries it, then the visitor is asked to act.
+
+            No Call button here — the phone number is already a filled primary
+            control in the header on mobile and in the nav on desktop, and the
+            sticky bar carries Call once the visitor scrolls past this block.
+            Repeating it a third time in one viewport is what the device
+            screenshot showed going wrong.
+
+            Book Online is the new-patient action; Patient Portal is the
+            existing-patient one, labelled so nobody picks the wrong door. */}
         {renderCtas && (
           <div class="container mx-auto px-4 max-w-5xl">
             <div
@@ -154,16 +158,21 @@ const headingId = 'hero-heading';
               class="flex flex-col sm:flex-row sm:justify-center items-stretch gap-3 mt-6"
             >
               <Button
-                href={`tel:${rawPhone}`}
-                text={`Call ${clinicInfo.displayPhone}`}
-                variant="primary"
-                size="lg"
-                class="w-full sm:w-auto"
-              />
-              <Button
                 href={clinicInfo.booking.primary}
                 bookingProvider={clinicInfo.booking.provider}
                 text="Book Online"
+                variant="primary"
+                size="lg"
+                class="w-full sm:w-auto"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+              {/* Existing-patient path. No bookingProvider stamp: a portal visit
+                  is not a new-appointment conversion and must not inflate
+                  appointment_click. */}
+              <Button
+                href={clinicInfo.booking.patientPortal}
+                text="Existing Patient? Open Patient Portal"
                 variant="outline"
                 size="lg"
                 class="w-full sm:w-auto"
