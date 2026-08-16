@@ -58,13 +58,21 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
   if (bar && heroCtas && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver(
       ([entry]) => {
-        const overlapping = entry.isIntersecting;
-        bar.classList.toggle('translate-y-full', overlapping);
-        bar.setAttribute('aria-hidden', String(overlapping));
+        if (entry.isIntersecting) {
+          // aria-hidden alone is not enough: the links stay keyboard-focusable,
+          // so a tab user would land on an off-screen control. inert removes them
+          // from the focus order and the a11y tree together.
+          bar.classList.add('translate-y-full');
+          bar.setAttribute('aria-hidden', 'true');
+          bar.setAttribute('inert', '');
+        } else {
+          bar.classList.remove('translate-y-full');
+          bar.setAttribute('aria-hidden', 'false');
+          bar.removeAttribute('inert');
+        }
       },
       { threshold: 0.25 }
     );
     io.observe(heroCtas);
   }
 </script>
-
