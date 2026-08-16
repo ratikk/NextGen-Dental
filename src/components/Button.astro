@@ -9,6 +9,8 @@ export interface Props {
   onClick?: string;
   target?: string;
   rel?: string;
+  /** Emitted as data-booking-provider so analytics need not sniff the hostname. */
+  bookingProvider?: string;
 }
 
 const {
@@ -21,6 +23,7 @@ const {
   onClick,
   target,
   rel,
+  bookingProvider,
 } = Astro.props;
 
 const variants = {
@@ -47,6 +50,7 @@ const classes = `${baseClasses} ${variants[variant]} ${sizes[size]} ${className}
       class={classes} 
       target={target} 
       rel={rel}
+      data-booking-provider={bookingProvider}
     >
       {text}
       <slot />

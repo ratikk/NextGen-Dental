@@ -1,4 +1,4 @@
-import { trackApprovedEvent, normalizePath, classifyPageUrl, getPathPolicyStats, resetPathPolicyStats, EVENT_REGISTRY } from './trackApprovedEvent.mjs';
+import { trackApprovedEvent, normalizePath, classifyPageUrl, getPathPolicyStats, resetPathPolicyStats, EVENT_REGISTRY, BOOKING_PROVIDERS, normalizeBookingProvider } from './trackApprovedEvent.mjs';
 
 let pass = 0, fail = 0;
 const check = (label, cond) => { cond ? pass++ : fail++; if (!cond) console.log(`FAIL  ${label}`); };
@@ -133,6 +133,36 @@ check('category service', pageCategoryFor('/services/invisalign') === 'service')
 check('category blog', pageCategoryFor('/blog/x') === 'blog');
 check('category patient-ed', pageCategoryFor('/patient-education/faq') === 'patient-info');
 check('category unknown', pageCategoryFor('/keystatic') === 'other');
+
+// ---------- booking provider is swappable (Zocdoc is paid marketing, temporary) ----------
+// Before this, booking_provider was Object.freeze(['zocdoc']). The day the vendor
+// changed, every appointment_click would have been rejected as value_not_in_allowlist
+// and dropped silently, because sendApprovedEvent is fail-closed and never throws.
+const bp = EVENT_REGISTRY.appointment_click.properties.booking_provider;
+check('enum carries every provider we may switch to',
+  bp.join(',') === 'zocdoc,direct,modento,other');
+for (const provider of ['zocdoc', 'direct', 'modento', 'other']) {
+  check(`booking_provider=${provider} accepted`,
+    ok('appointment_click', { page_category: 'home', cta_location: 'header', booking_provider: provider }, '/').ok);
+}
+check('an unlisted provider is still rejected',
+  ok('appointment_click', { page_category: 'home', cta_location: 'header', booking_provider: 'some-new-vendor' }, '/').error === 'value_not_in_allowlist');
+// normalizeBookingProvider is the backstop for the config/registry split: if
+// clinicInfo.booking.provider is ever set to a vendor missing from this enum,
+// fold to 'other' rather than let a fail-closed rejection eat the conversion.
+for (const p of BOOKING_PROVIDERS) {
+  check(`normalize keeps known provider ${p}`, normalizeBookingProvider(p) === p);
+}
+check('unknown vendor folds to other', normalizeBookingProvider('some-new-vendor') === 'other');
+check('undefined folds to other', normalizeBookingProvider(undefined) === 'other');
+check('empty string folds to other', normalizeBookingProvider('') === 'other');
+check('normalized unknown vendor is ACCEPTED by the registry (event survives)',
+  ok('appointment_click', { page_category: 'home', cta_location: 'header',
+      booking_provider: normalizeBookingProvider('brand-new-scheduler') }, '/').ok);
+
+check('provider enum is frozen', (() => {
+  try { bp.push('rogue'); return false; } catch { return bp.length === 4; }
+})());
 
 console.log(`\nnode ${process.version} · ${pass} passed · ${fail} failed · exit ${fail ? 1 : 0}`);
 process.exit(fail ? 1 : 0);

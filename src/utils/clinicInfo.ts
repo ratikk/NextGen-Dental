@@ -1,3 +1,5 @@
+import type { BookingProvider } from './analytics/trackApprovedEvent';
+
 export const clinicInfo = {
   name: "NextGen Dental",
   phone: "(512) 649-4419",
@@ -30,9 +32,18 @@ export const clinicInfo = {
     // I added a placeholder for Twitter since it was missing in your source file
     yelp: "https://www.yelp.com/biz/next-gen-dental-no-title"
   },
+  // Booking destination is deliberately provider-agnostic. Zocdoc is PAID
+  // MARKETING and temporary; when it is replaced by a direct scheduler, change
+  // `primary` and `provider` here and nothing else. Never surface the vendor
+  // name in site copy — the button says "Book Online", not "Book with Zocdoc".
   booking: {
-    zocdoc: "https://www.zocdoc.com/practice/nextgen-dental-174383?lock=true&isNewPatient=false&referrerType=widget",
-    modento: "https://book.modento.io/nextgen-dental/patient-details"
+    /** Current: zocdoc. Future: direct scheduler URL. */
+    primary: "https://www.zocdoc.com/practice/nextgen-dental-174383?lock=true&isNewPatient=false&referrerType=widget",
+    /** Typed against the analytics enum, so an unlisted vendor fails `astro check`
+     *  rather than silently dropping events. normalizeBookingProvider is the
+     *  runtime backstop if this ever gets past the type checker. */
+    provider: "zocdoc" as BookingProvider,
+    patientPortal: "https://book.modento.io/nextgen-dental/patient-details"
   }
 };
 

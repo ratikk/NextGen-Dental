@@ -67,7 +67,8 @@ const breadcrumbItems = [
             </ul>
             <div class="mt-8">
               <Button
-                href={clinicInfo.booking.zocdoc}
+                href={clinicInfo.booking.primary}
+                bookingProvider={clinicInfo.booking.provider}
                 text="Book an Appointment"
                 variant="primary"
               />
