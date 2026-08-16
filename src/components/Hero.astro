@@ -104,24 +104,6 @@ const headingId = 'hero-heading';
               </p>
             )}
 
-            {renderCtas && (
-              <div
-                data-cta-zone="hero"
-                class="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 mt-6"
-              >
-                <Button href={`tel:${rawPhone}`} text={`Call ${clinicInfo.displayPhone}`} variant="primary" size="lg" />
-                <Button
-                  href={clinicInfo.booking.primary}
-                  bookingProvider={clinicInfo.booking.provider}
-                  text="Book Online"
-                  variant="outline"
-                  size="lg"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                />
-              </div>
-            )}
-
           </div>
         )}
 
@@ -158,6 +140,39 @@ const headingId = 'hero-heading';
           <div class="swiper-pagination" data-hero-pagination></div>
         </div>
         </div>
+
+        {/* Primary actions sit BELOW the image, not above it: the headline sets
+            context, the image carries it, then the visitor is asked to act.
+            Full-width stacked under sm so each is a comfortable tap target;
+            side by side from sm up. Patient Portal is deliberately absent — it
+            serves existing patients and must not compete with the two
+            revenue-generating actions on the acquisition page. */}
+        {renderCtas && (
+          <div class="container mx-auto px-4 max-w-5xl">
+            <div
+              data-cta-zone="hero"
+              class="flex flex-col sm:flex-row sm:justify-center items-stretch gap-3 mt-6"
+            >
+              <Button
+                href={`tel:${rawPhone}`}
+                text={`Call ${clinicInfo.displayPhone}`}
+                variant="primary"
+                size="lg"
+                class="w-full sm:w-auto"
+              />
+              <Button
+                href={clinicInfo.booking.primary}
+                bookingProvider={clinicInfo.booking.provider}
+                text="Book Online"
+                variant="outline"
+                size="lg"
+                class="w-full sm:w-auto"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {showAppointmentForm && (
