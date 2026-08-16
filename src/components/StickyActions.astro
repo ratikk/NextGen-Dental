@@ -17,7 +17,7 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
 
 <div
   data-cta-zone="sticky"
-  class="lg:hidden fixed bottom-0 inset-x-0 z-40 grid grid-cols-2 gap-px bg-gray-200 border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.08)] pb-[env(safe-area-inset-bottom)]"
+  class="lg:hidden fixed bottom-0 inset-x-0 z-40 grid grid-cols-2 gap-px bg-gray-200 border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.08)] pb-[env(safe-area-inset-bottom)] transition-transform duration-200 will-change-transform"
 >
   <a
     href={`tel:${rawPhone}`}
@@ -42,3 +42,29 @@ const rawPhone = clinicInfo.phone.replace(/\D/g, '');
     Book Online
   </a>
 </div>
+
+<script>
+  /*
+   * The sticky bar and the hero CTAs were visible at the same time on a phone:
+   * "Call / Book Online" appeared twice within one viewport. This hides the bar
+   * while the hero pair is on screen and slides it in once they scroll away, so
+   * there is always exactly one primary pair visible.
+   *
+   * Default is VISIBLE and JS hides it — not the reverse — so no-JS and older
+   * browsers still get a persistent bar rather than none.
+   */
+  const bar = document.querySelector('[data-cta-zone="sticky"]');
+  const heroCtas = document.querySelector('[data-cta-zone="hero"]');
+  if (bar && heroCtas && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const overlapping = entry.isIntersecting;
+        bar.classList.toggle('translate-y-full', overlapping);
+        bar.setAttribute('aria-hidden', String(overlapping));
+      },
+      { threshold: 0.25 }
+    );
+    io.observe(heroCtas);
+  }
+</script>
+
