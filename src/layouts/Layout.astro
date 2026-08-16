@@ -1,8 +1,8 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import BookingPopup from '../components/BookingPopup.astro';
 import Analytics from '../components/Analytics.astro';
+import StickyActions from '../components/StickyActions.astro';
 import { clinicInfo } from '../utils/clinicInfo';
 import '@fontsource/montserrat/700.css';
 import '@fontsource/montserrat/600.css';
@@ -19,6 +19,8 @@ export interface Props {
   seoTitle?: string;
   /** Robots directive. Omit on indexable pages; set "noindex, follow" on 404. */
   robots?: string;
+  /** Load reCAPTCHA. Only pages with a form need it. */
+  needsRecaptcha?: boolean;
   description?: string;
   image?: string;
   canonical?: string;
@@ -32,6 +34,7 @@ const {
   title,
   seoTitle,
   robots,
+  needsRecaptcha = false,
   description = "NextGen Dental is a top-rated family and cosmetic dentist in South Austin (78747). Gentle exams, cleanings, implants, Invisalign, and emergency care.",
   image,
   canonical = Astro.url.pathname,
@@ -183,13 +186,13 @@ const dentistSchema = {
       }
     </style>
   </head>
-  <body class="antialiased bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+  <body class="antialiased bg-gray-50 text-gray-800 min-h-screen flex flex-col pb-[calc(3.5rem+env(safe-area-inset-bottom))] lg:pb-0">
     <Header />
     <main class="flex-grow">
       <slot />
     </main>
     <Footer />
-    <BookingPopup />
+    <StickyActions />
 
     <!-- AOS Animation - Deferred -->
     <script>
@@ -223,7 +226,7 @@ const dentistSchema = {
     )}
 
     <!-- ✅ RECAPTCHA: LAZY LOAD (Already implemented) -->
-    {recaptchaSiteKey && (
+    {needsRecaptcha && recaptchaSiteKey && (
       <script is:inline define:vars={{ recaptchaSiteKey }}>
         window.isRecaptchaLoaded = false;
         function loadRecaptcha() {

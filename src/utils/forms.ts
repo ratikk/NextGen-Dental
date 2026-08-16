@@ -11,7 +11,6 @@ interface FormData {
   firstName?: string;
   lastName?: string;
   fullName?: string;
-  dob?: string; 
   email: string;
   phone: string;
   message?: string;
@@ -31,7 +30,6 @@ export async function submitForm(data: FormData) {
       fullName: data.fullName || `${data.firstName || ''} ${data.lastName || ''}`.trim(),
       email: data.email,
       phone: data.phone,
-      dob: data.dob, // We are sending this, but Lambda needs update to read it
       preferredDate: data.preferredDate,
       preferredTime: data.preferredTime,
       reasonForVisit: data.reasonForVisit,

@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { clinicInfo } from '../utils/clinicInfo';
+import Button from './Button.astro';
 
 export interface HeroImage {
   src: string | ImageMetadata;
@@ -14,6 +15,8 @@ export interface Props {
   subtitle?: string;
   overlay?: boolean;
   showAppointmentForm?: boolean;
+  /** Call + Book buttons directly under the hero copy. Defaults on for the homepage. */
+  showCtas?: boolean;
   isHomePage?: boolean;
   /** e.g. "⭐ 4.9 on Google · 200+ reviews" */
   trustSignal?: string;
@@ -31,6 +34,7 @@ const {
   subtitle,
   overlay = true,
   showAppointmentForm = false,
+  showCtas,
   isHomePage = false,
   trustSignal,
   height = isHomePage ? 'lg' : 'md',
@@ -63,6 +67,10 @@ const normalizedImages: HeroImage[] = images.map((img, i) => {
 
 const resolvedTitle = title || (isHomePage ? `Welcome to ${clinicInfo.name}` : '');
 const resolvedSubtitle = subtitle || (isHomePage ? 'Your trusted partner in dental care' : '');
+const rawPhone = clinicInfo.phone.replace(/\D/g, '');
+// Default on for the homepage: 60% of visitors land there and the first booking
+// action was ~2,900px down the page.
+const renderCtas = showCtas ?? (isHomePage && !showAppointmentForm);
 const headingId = 'hero-heading';
 ---
 
@@ -132,6 +140,39 @@ const headingId = 'hero-heading';
           <div class="swiper-pagination" data-hero-pagination></div>
         </div>
         </div>
+
+        {/* Primary actions sit BELOW the image, not above it: the headline sets
+            context, the image carries it, then the visitor is asked to act.
+            Full-width stacked under sm so each is a comfortable tap target;
+            side by side from sm up. Patient Portal is deliberately absent — it
+            serves existing patients and must not compete with the two
+            revenue-generating actions on the acquisition page. */}
+        {renderCtas && (
+          <div class="container mx-auto px-4 max-w-5xl">
+            <div
+              data-cta-zone="hero"
+              class="flex flex-col sm:flex-row sm:justify-center items-stretch gap-3 mt-6"
+            >
+              <Button
+                href={`tel:${rawPhone}`}
+                text={`Call ${clinicInfo.displayPhone}`}
+                variant="primary"
+                size="lg"
+                class="w-full sm:w-auto"
+              />
+              <Button
+                href={clinicInfo.booking.primary}
+                bookingProvider={clinicInfo.booking.provider}
+                text="Book Online"
+                variant="outline"
+                size="lg"
+                class="w-full sm:w-auto"
+                target="_blank"
+                rel="noopener noreferrer"
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       {showAppointmentForm && (

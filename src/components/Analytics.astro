@@ -47,8 +47,14 @@
   };
 
   const pageCategory = () => pageCategoryFor(window.location.pathname);
-  const ctaLocation = (el: Element) =>
-    el.closest('header') ? 'header' : el.closest('footer') ? 'footer' : 'body';
+  // 'hero' and 'sticky' are already valid cta_location values in the frozen
+  // registry; without this every hero and sticky click reported as 'body' and the
+  // whole point of adding them — measuring whether they work — would be lost.
+  const ctaLocation = (el: Element) => {
+    const zone = el.closest('[data-cta-zone]')?.getAttribute('data-cta-zone');
+    if (zone === 'hero' || zone === 'sticky') return zone;
+    return el.closest('header') ? 'header' : el.closest('footer') ? 'footer' : 'body';
+  };
 
   document.addEventListener('click', (e) => {
     const a = (e.target as Element | null)?.closest?.('a');
