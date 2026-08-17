@@ -99,11 +99,10 @@ reproducible.
 - Dedicated NEW instance; existing EC2s not reused (unassessed patch/exposure/roles).
 - Postgres co-located on encrypted EBS for the pilot; RDS = Option B (~$42–48/mo) if it graduates.
 - No ALB/CloudFront: Caddy terminates TLS (Let's Encrypt); traffic volume doesn't justify $16+/mo.
-- `/api/*` + `/script.js` + `/site.webmanifest` bypass the Caddy gate (the SPA's
-  fetch() calls don't carry browser basic-auth credentials; Umami's own token
-  auth protects every sensitive API route). The Caddy basic-auth layer guards
-  the dashboard pages; the STRONG Umami admin password is the primary security
-  boundary. Sharing links disabled; session replay never enabled.
+- Only `/api/send`, `/script.js`, and `/site.webmanifest` bypass the Caddy gate;
+  these are the endpoints the tracker needs. All other present and future API
+  routes remain behind Caddy basic-auth plus Umami's own authentication. Sharing
+  links are disabled; session replay is never enabled.
 - Secrets in SSM Parameter Store (SecureString); placeholders in TF with
   `ignore_changes` — real values set out-of-band after apply. No secret outputs.
 - Privacy contract enforced at the site by `trackApprovedEvent` (v2.1, 113 tests):

@@ -152,6 +152,19 @@ log "data volume resolved to $DEV"
 if ! blkid "$DEV" >/dev/null 2>&1; then
   log "formatting $DEV (blank) with label $FS_LABEL"
   mkfs -t xfs -L "$FS_LABEL" "$DEV"   # format ONLY if blank — protects data on replacement
+else
+  # Older bootstrap versions created the live XFS filesystem without a label.
+  # Adopt that volume without formatting it, so the LABEL= fstab entry below is
+  # valid after reboot. Refuse an unexpected non-empty label rather than silently
+  # changing the identity of a filesystem that may not be ours.
+  CURRENT_LABEL=$(blkid -s LABEL -o value "$DEV" 2>/dev/null || true)
+  if [ -z "$CURRENT_LABEL" ]; then
+    log "existing filesystem on $DEV has no label; assigning $FS_LABEL"
+    xfs_admin -L "$FS_LABEL" "$DEV"
+  elif [ "$CURRENT_LABEL" != "$FS_LABEL" ]; then
+    log "FATAL: unexpected filesystem label on $DEV: $CURRENT_LABEL"
+    exit 1
+  fi
 fi
 mkdir -p /data
 mountpoint -q /data || mount "$DEV" /data
