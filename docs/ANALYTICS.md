@@ -23,24 +23,62 @@ Apply is still not wired into the gated workflow: the `tf-apply` role has no
 IAM/EC2/SSM/DLM/SNS permissions, so any apply or import runs from CloudShell with
 admin credentials.
 
-## Bootstrap prerequisites (must be true BEFORE the instance is created)
+## Bootstrap sequence (the supported one)
 
-All three SSM parameters must hold real values. Terraform seeds them with a
-placeholder and `ignore_changes = [value]`; if the instance boots first, the
-placeholders are baked into `docker-compose.yml` and the `Caddyfile`, and later
-SSM edits do **not** re-render them. `user-data.sh` now refuses to continue in
-that state rather than coming up misconfigured.
+Bootstrap is two stages, because neither the volume attachment nor the secret
+population is under the boot script's control.
+
+**Stage 1** (cloud-init, once): packages, CloudWatch agent, then it registers
+`umami-bootstrap.service` and exits. Nothing here can fail for environmental
+reasons, and log shipping starts *before* anything that can, so stage 2's
+failures are visible remotely rather than trapped on the box.
+
+**Stage 2** (`/opt/umami/bootstrap.sh`, systemd, `Restart=on-failure`,
+`RestartSec=60`): waits for the data volume, waits for real secrets, renders
+config, starts the stack. Any not-yet-ready condition exits non-zero and is
+retried a minute later.
+
+**So the supported order is: whichever you like.** You may populate the SSM
+parameters before or after `terraform apply`. If the instance comes up first it
+will sit retrying, logging why, and start itself the minute the values are real.
+This replaces the earlier "populate before instance creation" instruction, which
+was impossible to satisfy given Terraform creates those same parameters.
 
     /nextgendental/analytics/pg_password          real value
     /nextgendental/analytics/app_secret           real value
     /nextgendental/analytics/dash_basicauth_hash  bcrypt hash ($2a$/$2b$/$2y$)
 
-## Reproducibility gap (open)
+Diagnose a stuck bootstrap without SSH:
 
-Container images are still floating tags. Capture the digests actually running
-and pin them before treating a rebuild as trustworthy:
+    aws logs tail /nextgendental/analytics --follow --region us-east-2
+    # or on the box: journalctl -u umami-bootstrap -f
+
+## Data volume discovery
+
+`t4g` is Nitro, so EBS attaches as `/dev/nvme<N>n1` regardless of the
+`device_name` Terraform requests; `/dev/xvdb` exists only if ec2-utils' udev
+rules are installed and fired. Stage 2 resolves the device in this order:
+existing `umami-data` filesystem label → `/dev/xvdb`/`/dev/sdb` symlink →
+NVMe namespace whose EBS mapping is xvdb/sdb via `ebsnvme-id` → exactly one
+unused, unpartitioned, non-root disk.
+
+**If the candidate is ambiguous it refuses to proceed.** Formatting the wrong
+disk is unrecoverable; waiting for a human is not. `/etc/fstab` mounts by
+`LABEL=umami-data`, not by device name, because the NVMe number is not stable
+across instance replacement.
+
+## Reproducibility gap (STILL OPEN)
+
+The compose binary is pinned; **the container images are not.** `umami` is on
+`postgresql-latest`, and postgres/caddy are on mutable major tags. A rebuild can
+pull a version nobody reviewed. Digests are not invented in this repo — capture
+the ones actually running and commit them:
 
     sudo docker images --digests | grep -E 'umami|postgres|caddy'
+
+Then replace the three tags at the top of `user-data.sh` with
+`image@sha256:<digest>`. Until that is done, do not describe this stack as
+reproducible.
 
 ## Architecture
 
