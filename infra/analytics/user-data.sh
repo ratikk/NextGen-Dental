@@ -27,6 +27,26 @@ analytics.nextgendentalaustintx.com {
   log {
     output file /data/caddy/access.log
   }
+  # robots.txt must be readable WITHOUT credentials. It previously fell through to
+  # basic_auth like everything else, so Googlebot got 401 and had no way to learn it
+  # should stay out — Search Console reported this host under "Blocked due to
+  # unauthorized request (401)" on 2026-08-10, the day after launch. The dashboard
+  # itself stays behind auth; only this one file is public.
+  # NOTE: Caddy does NOT interpret backslash-n inside quoted strings. Only an
+  # escaped quote and an escaped backslash are escapes; everything else is literal,
+  # so a backslash-n would be served as two characters and the file would contain
+  # no Disallow rule at all — i.e. it would read as "crawl everything". The
+  # newlines below are REAL, and the continuation lines MUST start at column 0 or
+  # the indentation is served as part of the file.
+  # (This comment avoids literal backslashes on purpose: it is written inside an
+  # unquoted bash heredoc, which would collapse them on the way to disk.)
+  handle /robots.txt {
+    header Content-Type "text/plain; charset=utf-8"
+    respond "User-agent: *
+Disallow: /
+" 200
+  }
+
   @public path /api/* /script.js /site.webmanifest
   handle @public {
     reverse_proxy umami:3000
