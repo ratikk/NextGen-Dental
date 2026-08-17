@@ -1,11 +1,46 @@
-# Analytics Pilot — Self-Hosted Umami (plan-only until approved)
+# Analytics — Self-Hosted Umami (LIVE; this branch is not yet on main)
 
-Status: Terraform authored for REVIEW. `terraform plan` runs automatically on the PR
-(stack added to the plan matrix). **Apply is intentionally not wired** into the
-gated workflow: the `tf-apply` role has no IAM/EC2/SSM/DLM/SNS permissions. If the
-plan is approved, first apply runs from CloudShell with admin credentials (same
-procedure as bootstrap), then the stack can be adopted into the pipeline after a
-role-permission review.
+**Status: the stack is RUNNING in production.** analytics.nextgendentalaustintx.com
+has been serving since 2026-08-09 and the site's tracker depends on it. This
+document previously read "plan-only until approved", which stopped being true the
+day the stack was applied from CloudShell.
+
+Two consequences that matter more than anything else in this file:
+
+1. **This branch has never been merged to `main`.** The Terraform and
+   `user-data.sh` describing the live instance exist only on
+   `infra/analytics-pilot`. Mainline has no record of the running
+   infrastructure.
+2. **Applying this as-is against a live stack would be wrong.** The remote state
+   may not own the running resources. Before any apply, confirm ownership with
+   `terraform state list`; if the resources are absent from state, this is an
+   **import/adoption** exercise (`terraform import` per resource, then a plan
+   that shows zero changes), not a fresh apply. A fresh apply against
+   already-existing resources will either fail on name conflicts or create
+   duplicates.
+
+Apply is still not wired into the gated workflow: the `tf-apply` role has no
+IAM/EC2/SSM/DLM/SNS permissions, so any apply or import runs from CloudShell with
+admin credentials.
+
+## Bootstrap prerequisites (must be true BEFORE the instance is created)
+
+All three SSM parameters must hold real values. Terraform seeds them with a
+placeholder and `ignore_changes = [value]`; if the instance boots first, the
+placeholders are baked into `docker-compose.yml` and the `Caddyfile`, and later
+SSM edits do **not** re-render them. `user-data.sh` now refuses to continue in
+that state rather than coming up misconfigured.
+
+    /nextgendental/analytics/pg_password          real value
+    /nextgendental/analytics/app_secret           real value
+    /nextgendental/analytics/dash_basicauth_hash  bcrypt hash ($2a$/$2b$/$2y$)
+
+## Reproducibility gap (open)
+
+Container images are still floating tags. Capture the digests actually running
+and pin them before treating a rebuild as trustworthy:
+
+    sudo docker images --digests | grep -E 'umami|postgres|caddy'
 
 ## Architecture
 
