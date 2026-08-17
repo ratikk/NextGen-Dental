@@ -103,6 +103,25 @@ reproducible.
   these are the endpoints the tracker needs. All other present and future API
   routes remain behind Caddy basic-auth plus Umami's own authentication. Sharing
   links are disabled; session replay is never enabled.
+  - **This bypass was `/api/*` until 2026-08-17, and it was wide for a reason.**
+    Rollout incident #3 (2026-08-09) on this host: the dashboard SPA's `fetch()`
+    calls did not carry browser basic-auth credentials, so API calls returned 401
+    and the app hung. Opening `/api/*` was the hot-fix. Narrowing it back is the
+    better security posture — Umami's own token auth is the real boundary on
+    those routes — but it re-enters the conditions of a failure that has already
+    happened here once. Not settled until the verification below has been run
+    against a live instance.
+  - **Known consequence, independent of the browser question:** API clients that
+    authenticate with a Bearer token and nothing else are now rejected by Caddy
+    before Umami sees them. `after-hours-analysis-v2.py` and anything shaped like
+    it must send the basic-auth credentials as well, or they 401 at
+    `/api/auth/login`.
+  - **Verify after applying, in a fresh incognito window** — cached basic-auth in
+    your normal window hides exactly this failure: (1) log into the dashboard and
+    open a report with a date range; (2) confirm a pageview and an
+    `appointment_click` land from the production site; (3) run the analysis
+    script. If (1) fails, add the specific SPA routes to `@public`; do not
+    restore the blanket `/api/*`.
 - Secrets in SSM Parameter Store (SecureString); placeholders in TF with
   `ignore_changes` — real values set out-of-band after apply. No secret outputs.
 - Privacy contract enforced at the site by `trackApprovedEvent` (v2.1, 113 tests):

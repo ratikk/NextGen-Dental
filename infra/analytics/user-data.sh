@@ -86,7 +86,16 @@ set -euo pipefail
 REGION=us-east-2
 FS_LABEL=umami-data
 
-log() { echo "[$(date -Is)] $*"; }
+# Exit 1 = "not ready yet, come back in 60s". Exit 3 = "a human must look at
+# this"; the unit's RestartPreventExitStatus stops the retry loop so the failure
+# stays legible in the log instead of scrolling past once a minute forever.
+EXIT_NEEDS_HUMAN=3
+
+# To stderr, not stdout. find_data_device() returns the device path ON STDOUT
+# and is called inside $( ) — a log line written to stdout there does not reach
+# the log at all, it lands inside DEV. The "FATAL: ambiguous data volume" line
+# was being swallowed exactly that way.
+log() { echo "[$(date -Is)] $*" >&2; }
 
 # ---- find the data volume -------------------------------------------------
 # t4g is a Nitro instance: EBS attaches as /dev/nvme<N>n1 regardless of the
@@ -95,12 +104,18 @@ log() { echo "[$(date -Is)] $*"; }
 #   1. an already-labelled filesystem  (re-attach after instance replacement)
 #   2. the ec2-utils symlink, if present
 #   3. NVMe namespace whose EBS mapping is xvdb/sdb, via ebsnvme-id
-#   4. exactly one unused, unpartitioned, non-root disk — and if the candidate
-#      is ambiguous, FAIL rather than guess. Formatting the wrong disk is
-#      unrecoverable; waiting for a human is not.
+#   4. exactly one unused, unpartitioned, non-root disk that is either blank OR
+#      an unlabelled XFS filesystem. That second case is a volume created by a
+#      bootstrap older than the FS_LABEL convention — exactly what the adoption
+#      branch below exists to handle. Requiring "blank" alone made step 4
+#      structurally incapable of finding it, so a missing ebsnvme-id would leave
+#      the unit retrying forever with the disk sitting right there. Any other
+#      filesystem type is somebody else's data: skipped, and named in the log.
+#      If the candidate is ambiguous, FAIL rather than guess. Formatting or
+#      relabelling the wrong disk is unrecoverable; waiting for a human is not.
 find_data_device() {
-  local d out root_disk
-  local -a candidates=()
+  local d out root_disk lbl name type mnt fstype
+  local -a candidates=() skipped=()
 
   if blkid -L "$FS_LABEL" >/dev/null 2>&1; then
     blkid -L "$FS_LABEL"; return 0
@@ -119,19 +134,44 @@ find_data_device() {
   fi
 
   root_disk=$(lsblk -no PKNAME "$(findmnt -no SOURCE /)" 2>/dev/null | head -1 || true)
-  while read -r name type mnt fstype; do
+  # Fields are read two-at-a-time and the rest queried individually, on purpose.
+  # `lsblk -rno NAME,TYPE,MOUNTPOINT,FSTYPE` prints an empty column as nothing,
+  # and `read` with the default IFS collapses the resulting run of spaces — so a
+  # row for an unmounted but formatted disk ("nvme1n1 disk  xfs") assigns
+  # fstype's value to mnt and leaves fstype empty. The disk is then dropped by
+  # the "already mounted" test, which is not true of it. That is precisely the
+  # disk this function needs to find, so a four-column read fails at exactly the
+  # case that matters. NAME and TYPE are never empty, so reading those two is safe.
+  while read -r name type; do
     [ "$type" = disk ] || continue
     [ "$name" = "$root_disk" ] && continue
-    [ -n "$mnt" ] && continue
-    [ -n "$fstype" ] && continue
     [ "$(lsblk -rno NAME "/dev/$name" | wc -l)" -gt 1 ] && continue   # has partitions
-    candidates+=("/dev/$name")
-  done < <(lsblk -rno NAME,TYPE,MOUNTPOINT,FSTYPE)
+    mnt=$(lsblk -dnro MOUNTPOINT "/dev/$name" 2>/dev/null || true)
+    [ -n "$mnt" ] && continue
+    fstype=$(lsblk -dnro FSTYPE "/dev/$name" 2>/dev/null || true)
+    if [ -z "$fstype" ]; then
+      candidates+=("/dev/$name")                      # blank -> format
+    elif [ "$fstype" = xfs ]; then
+      lbl=$(blkid -s LABEL -o value "/dev/$name" 2>/dev/null || true)
+      if [ -z "$lbl" ]; then
+        candidates+=("/dev/$name")                    # unlabelled xfs -> adopt
+      else
+        skipped+=("/dev/$name(xfs,label=$lbl)")
+      fi
+    else
+      skipped+=("/dev/$name($fstype)")
+    fi
+  done < <(lsblk -dnro NAME,TYPE)
 
   if [ "${#candidates[@]}" -eq 1 ]; then echo "${candidates[0]}"; return 0; fi
   if [ "${#candidates[@]}" -gt 1 ]; then
-    log "FATAL: ambiguous data volume, refusing to format: ${candidates[*]}"
+    log "FATAL: ambiguous data volume, refusing to touch any of: ${candidates[*]}"
     return 2
+  fi
+  # Nothing usable. Say what was rejected, so "not attached yet" is never a lie
+  # told about a disk that is in fact attached and simply did not qualify.
+  if [ "${#skipped[@]}" -gt 0 ]; then
+    log "no usable data volume; deliberately skipped: ${skipped[*]}"
   fi
   return 1
 }
@@ -142,7 +182,7 @@ rc=$?
 set -e
 if [ "$rc" -eq 2 ]; then
   log "stopping: a human must identify the correct data volume"
-  exit 1
+  exit "$EXIT_NEEDS_HUMAN"
 elif [ "$rc" -ne 0 ]; then
   log "data volume not attached yet — will retry"
   exit 1
@@ -160,10 +200,16 @@ else
   CURRENT_LABEL=$(blkid -s LABEL -o value "$DEV" 2>/dev/null || true)
   if [ -z "$CURRENT_LABEL" ]; then
     log "existing filesystem on $DEV has no label; assigning $FS_LABEL"
-    xfs_admin -L "$FS_LABEL" "$DEV"
+    # xfs_admin refuses a mounted filesystem. Nothing has mounted /data at this
+    # point in the script, so this should succeed; if it does not, retrying at
+    # 60s forever would only bury the reason. Stop and say so.
+    xfs_admin -L "$FS_LABEL" "$DEV" || {
+      log "FATAL: could not label $DEV (mounted elsewhere? not xfs?)"
+      exit "$EXIT_NEEDS_HUMAN"
+    }
   elif [ "$CURRENT_LABEL" != "$FS_LABEL" ]; then
     log "FATAL: unexpected filesystem label on $DEV: $CURRENT_LABEL"
-    exit 1
+    exit "$EXIT_NEEDS_HUMAN"
   fi
 fi
 mkdir -p /data
@@ -293,6 +339,10 @@ StandardOutput=append:/var/log/umami-bootstrap.log
 StandardError=append:/var/log/umami-bootstrap.log
 Restart=on-failure
 RestartSec=60
+# Exit 3 means the script decided a human is required (ambiguous data volume,
+# unexpected filesystem label). Retrying that every 60s forever buries the one
+# log line that explains the outage, so stop instead.
+RestartPreventExitStatus=3
 
 [Install]
 WantedBy=multi-user.target
