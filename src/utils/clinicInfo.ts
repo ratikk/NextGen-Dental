@@ -38,11 +38,11 @@ export const clinicInfo = {
   // name in site copy — the button says "Book Online", not "Book with Zocdoc".
   booking: {
     /** Current: zocdoc. Future: direct scheduler URL. */
-    primary: "https://www.zocdoc.com/practice/nextgen-dental-174383?lock=true&isNewPatient=false&referrerType=widget",
+    primary: "https://book.modento.io/nextgen-dental/patient-details",
     /** Typed against the analytics enum, so an unlisted vendor fails `astro check`
      *  rather than silently dropping events. normalizeBookingProvider is the
      *  runtime backstop if this ever gets past the type checker. */
-    provider: "zocdoc" as BookingProvider,
+    provider: "modento" as BookingProvider,
     patientPortal: "https://book.modento.io/nextgen-dental/patient-details"
   }
 };
