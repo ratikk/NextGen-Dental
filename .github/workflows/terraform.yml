@@ -27,6 +27,9 @@ on:
         options:
           - infra/shared
           - infra/environments/dev
+          # infra/analytics intentionally NOT applyable via this workflow yet:
+          # the tf-apply role lacks IAM/EC2/SSM/DLM/SNS permissions for it.
+          # First apply (if approved) runs via CloudShell admin, like bootstrap.
 
 permissions:
   id-token: write
@@ -45,7 +48,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        stack: [infra/shared, infra/environments/dev]
+        stack: [infra/shared, infra/environments/dev, infra/analytics]
     defaults:
       run:
         working-directory: ${{ matrix.stack }}
